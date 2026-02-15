@@ -7,7 +7,7 @@
     <aside
       ref="sidebarEl"
       :class="[
-        'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out',
+        'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out max-md:pb-[env(safe-area-inset-bottom)]',
         'max-md:w-[334px] max-md:max-w-[90vw]',
         mobileNavOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
         desktopCollapsed ? 'md:-translate-x-[110%]' : 'md:translate-x-0',
@@ -103,13 +103,12 @@
 
     <HeaderBar :on-toggle="toggleNav" :on-toggle-theme="toggleTheme" :is-dark="isDark" />
     <div
-      class="fixed inset-0 z-20 hidden bg-transparent backdrop-blur-[6px] opacity-0 pointer-events-none transition-opacity duration-300 max-md:block max-md:touch-none"
+      class="fixed left-0 right-0 top-0 bottom-0 z-20 hidden bg-transparent opacity-0 pointer-events-none transition-opacity duration-300 max-md:block max-md:touch-none"
       :class="{ 'opacity-100 pointer-events-auto': mobileNavOpen }"
       @click="closeNav"
       @touchmove.prevent
       @wheel.prevent
     />
-
     <main
       class="relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300"
       :class="[
@@ -123,6 +122,8 @@
         :class="[
           mobileNavOpen ? 'max-md:translate-x-[334px]' : '',
           mobileNavOpen ? 'max-md:pointer-events-none' : '',
+          mobileNavOpen ? 'max-md:pb-[env(safe-area-inset-bottom)]' : '',
+          mobileNavOpen ? 'max-md:blur-[3px]' : '',
         ]"
       >
         <slot />
