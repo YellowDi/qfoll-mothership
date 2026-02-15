@@ -5,8 +5,9 @@
     ]"
   >
     <aside
+      ref="sidebarEl"
       :class="[
-        'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden bg-bg transition-transform duration-300 ease-out',
+        'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out',
         'max-md:w-[334px] max-md:max-w-[90vw]',
         mobileNavOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
         desktopCollapsed ? 'md:-translate-x-[110%]' : 'md:translate-x-0',
@@ -102,9 +103,11 @@
 
     <HeaderBar :on-toggle="toggleNav" :on-toggle-theme="toggleTheme" :is-dark="isDark" />
     <div
-      class="fixed inset-0 z-20 hidden bg-transparent backdrop-blur-[6px] opacity-0 pointer-events-none transition-opacity duration-300 max-md:block"
+      class="fixed inset-0 z-20 hidden bg-transparent backdrop-blur-[6px] opacity-0 pointer-events-none transition-opacity duration-300 max-md:block max-md:touch-none"
       :class="{ 'opacity-100 pointer-events-auto': mobileNavOpen }"
       @click="closeNav"
+      @touchmove.prevent
+      @wheel.prevent
     />
 
     <main
@@ -137,6 +140,9 @@ import { useTheme } from "../composables/useTheme";
 
 const route = useRoute();
 const router = useRouter();
+const sidebarEl = ref(null);
+const lastTouchY = ref(0);
+let removeTouchGuards = null;
 const isCompanyRoute = (path) =>
   path === "/contact" ||
   path === "/pricing" ||
@@ -144,8 +150,6 @@ const isCompanyRoute = (path) =>
   path === "/design-spec";
 const desktopCollapsed = ref(route.path === "/");
 const mobileNavOpen = ref(false);
-const lockedScrollY = ref(0);
-const isScrollLocked = ref(false);
 const { isDark, toggleTheme } = useTheme();
 const navLevel = ref(
   route.path.startsWith("/project") || route.path === "/projects"
@@ -191,30 +195,51 @@ const closeNav = () => {
   mobileNavOpen.value = false;
 };
 
-const lockMobileScroll = () => {
-  if (!window.matchMedia("(max-width: 768px)").matches) return;
-  if (isScrollLocked.value) return;
-  lockedScrollY.value = window.scrollY || window.pageYOffset || 0;
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${lockedScrollY.value}px`;
-  document.body.style.left = "0";
-  document.body.style.right = "0";
-  document.body.style.width = "100%";
-  document.body.style.overflow = "hidden";
-  isScrollLocked.value = true;
+const addMobileScrollGuards = () => {
+  if (removeTouchGuards) return;
+  const onTouchStart = (event) => {
+    if (!event.touches?.length) return;
+    lastTouchY.value = event.touches[0].clientY;
+  };
+  const onTouchMove = (event) => {
+    const panel = sidebarEl.value;
+    if (!panel || !event.touches?.length) {
+      event.preventDefault();
+      return;
+    }
+    const target = event.target;
+    const insideSidebar = target instanceof Node && panel.contains(target);
+    if (!insideSidebar) {
+      event.preventDefault();
+      return;
+    }
+    const currentY = event.touches[0].clientY;
+    const deltaY = currentY - lastTouchY.value;
+    lastTouchY.value = currentY;
+    const maxScrollTop = panel.scrollHeight - panel.clientHeight;
+    if (maxScrollTop <= 0) {
+      event.preventDefault();
+      return;
+    }
+    const canScrollUp = panel.scrollTop > 0;
+    const canScrollDown = panel.scrollTop < maxScrollTop;
+    if ((deltaY > 0 && !canScrollUp) || (deltaY < 0 && !canScrollDown)) {
+      event.preventDefault();
+    }
+  };
+  document.addEventListener("touchstart", onTouchStart, { passive: true });
+  document.addEventListener("touchmove", onTouchMove, { passive: false });
+  removeTouchGuards = () => {
+    document.removeEventListener("touchstart", onTouchStart);
+    document.removeEventListener("touchmove", onTouchMove);
+    removeTouchGuards = null;
+  };
 };
 
-const unlockMobileScroll = () => {
-  if (!isScrollLocked.value) return;
-  const scrollY = lockedScrollY.value;
-  document.body.style.position = "";
-  document.body.style.top = "";
-  document.body.style.left = "";
-  document.body.style.right = "";
-  document.body.style.width = "";
-  document.body.style.overflow = "";
-  window.scrollTo(0, scrollY);
-  isScrollLocked.value = false;
+const removeMobileScrollGuards = () => {
+  if (typeof removeTouchGuards === "function") {
+    removeTouchGuards();
+  }
 };
 
 const rootBase =
@@ -281,19 +306,20 @@ watch(
   }
 );
 
-watch(
-  mobileNavOpen,
-  (open) => {
-    if (!window.matchMedia("(max-width: 768px)").matches) return;
-    if (open) {
-      lockMobileScroll();
-      return;
-    }
-    unlockMobileScroll();
+watch(mobileNavOpen, (open) => {
+  if (!window.matchMedia("(max-width: 768px)").matches) {
+    removeMobileScrollGuards();
+    return;
   }
-);
+  if (open) {
+    addMobileScrollGuards();
+    return;
+  }
+  removeMobileScrollGuards();
+});
 
 onBeforeUnmount(() => {
-  unlockMobileScroll();
+  removeMobileScrollGuards();
 });
+
 </script>
