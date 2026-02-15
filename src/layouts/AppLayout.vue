@@ -1,21 +1,25 @@
 <template>
-  <div class="min-h-screen bg-bg text-ink transition-colors duration-300">
+  <div
+    :class="[
+      'min-h-screen bg-bg text-ink transition-colors duration-300 max-md:overflow-x-hidden',
+    ]"
+  >
     <aside
       :class="[
-        'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto bg-bg transition-transform duration-300 ease-out',
+        'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden bg-bg transition-transform duration-300 ease-out',
         'max-md:w-[334px] max-md:max-w-[90vw]',
         mobileNavOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
         desktopCollapsed ? 'md:-translate-x-[110%]' : 'md:translate-x-0',
       ]"
     >
-      <div class="flex w-full flex-col gap-6 px-4 py-6 md:mt-46.75 max-md:mt-0">
-        <div class="relative w-full">
+      <div class="flex w-full flex-col gap-6 px-4 py-6 md:mt-46.75 max-md:mt-0 max-md:pt-16">
+        <div class="relative w-full overflow-x-hidden">
           <div
             class="transition-all duration-300 ease-out"
             :class="
               navLevel === 'root'
-                ? 'translate-x-0 opacity-100 pointer-events-auto'
-                : '-translate-x-full opacity-0 pointer-events-none'
+                ? 'translate-x-0 opacity-100 pointer-events-auto max-md:block'
+                : '-translate-x-full opacity-0 pointer-events-none max-md:hidden'
             "
           >
             <nav class="flex flex-col gap-2 text-sm font-medium">
@@ -48,12 +52,16 @@
             </nav>
           </div>
           <div
-            class="absolute left-full top-0 w-full transition-transform duration-300 ease-out"
-            :class="navLevel !== 'root' ? '-translate-x-full opacity-100 pointer-events-auto' : 'translate-x-full opacity-0 pointer-events-none'"
+            class="w-full transition-transform duration-300 ease-out md:absolute md:left-full md:top-0 md:w-full"
+            :class="
+              navLevel !== 'root'
+                ? 'opacity-100 pointer-events-auto max-md:block md:-translate-x-full'
+                : 'opacity-0 pointer-events-none max-md:hidden md:translate-x-full'
+            "
           >
             <div class="flex flex-col gap-4">
               <button
-                class="flex w-40 items-center gap-2 px-3 text-left text-sm font-medium text-muted"
+                class="flex w-40 items-center gap-2 px-3 text-left text-sm font-medium text-muted max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3"
                 type="button"
                 @click="goRoot"
               >
@@ -94,18 +102,25 @@
 
     <HeaderBar :on-toggle="toggleNav" :on-toggle-theme="toggleTheme" :is-dark="isDark" />
     <div
-      class="fixed inset-0 z-20 hidden bg-black/35 opacity-0 pointer-events-none transition-opacity duration-300 max-md:block"
+      class="fixed inset-0 z-20 hidden bg-transparent backdrop-blur-[6px] opacity-0 pointer-events-none transition-opacity duration-300 max-md:block"
       :class="{ 'opacity-100 pointer-events-auto': mobileNavOpen }"
       @click="closeNav"
     />
 
     <main
-      class="min-h-screen bg-bg transition-[margin-left] duration-300"
-      :class="[desktopCollapsed ? 'md:ml-0' : 'md:ml-50', route.path === '/' ? 'overflow-visible' : 'overflow-x-hidden']"
+      class="relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300"
+      :class="[
+        desktopCollapsed ? 'md:ml-0' : 'md:ml-50',
+        route.path === '/' ? 'overflow-visible' : 'overflow-x-hidden',
+      ]"
+      @click="mobileNavOpen && closeNav()"
     >
       <div
         class="flex flex-col items-center transition-transform duration-300 max-md:items-start"
-        :class="mobileNavOpen ? 'max-md:translate-x-83.5' : ''"
+        :class="[
+          mobileNavOpen ? 'max-md:translate-x-[334px]' : '',
+          mobileNavOpen ? 'max-md:pointer-events-none' : '',
+        ]"
       >
         <slot />
       </div>
@@ -114,7 +129,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { projectList } from "../data/projects";
 import HeaderBar from "../components/HeaderBar.vue";
@@ -129,6 +144,8 @@ const isCompanyRoute = (path) =>
   path === "/design-spec";
 const desktopCollapsed = ref(route.path === "/");
 const mobileNavOpen = ref(false);
+const lockedScrollY = ref(0);
+const isScrollLocked = ref(false);
 const { isDark, toggleTheme } = useTheme();
 const navLevel = ref(
   route.path.startsWith("/project") || route.path === "/projects"
@@ -174,8 +191,34 @@ const closeNav = () => {
   mobileNavOpen.value = false;
 };
 
+const lockMobileScroll = () => {
+  if (!window.matchMedia("(max-width: 768px)").matches) return;
+  if (isScrollLocked.value) return;
+  lockedScrollY.value = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${lockedScrollY.value}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+  document.body.style.overflow = "hidden";
+  isScrollLocked.value = true;
+};
+
+const unlockMobileScroll = () => {
+  if (!isScrollLocked.value) return;
+  const scrollY = lockedScrollY.value;
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  document.body.style.overflow = "";
+  window.scrollTo(0, scrollY);
+  isScrollLocked.value = false;
+};
+
 const rootBase =
-  "group rounded-md px-3 py-2 text-sm font-medium transition-colors text-left w-40";
+  "group rounded-md px-3 py-2 text-sm font-medium transition-colors text-left w-40 max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3";
 const rootLinkClass = (active) =>
   `${rootBase} ${
     active
@@ -191,13 +234,13 @@ const rootButtonClass = (active) =>
 const arrowClass = (active) =>
   active ? "opacity-0" : "opacity-0 transition-opacity group-hover:opacity-100";
 const projectLinkClass = (active) =>
-  `group rounded-md px-3 py-2 text-sm font-medium transition-colors w-40 ${
+  `group rounded-md px-3 py-2 text-sm font-medium transition-colors w-40 max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3 ${
     active
       ? "bg-black/8 text-ink dark:bg-white/10"
       : "text-ink hover:bg-black/6 dark:hover:bg-white/8"
   }`;
 const submenuLinkClass = (active) =>
-  `group rounded-md px-3 py-2 text-sm font-medium transition-colors w-40 ${
+  `group rounded-md px-3 py-2 text-sm font-medium transition-colors w-40 max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3 ${
     active
       ? "bg-black/8 text-ink dark:bg-white/10"
       : "text-ink hover:bg-black/6 dark:hover:bg-white/8"
@@ -237,4 +280,20 @@ watch(
     navLevel.value = "root";
   }
 );
+
+watch(
+  mobileNavOpen,
+  (open) => {
+    if (!window.matchMedia("(max-width: 768px)").matches) return;
+    if (open) {
+      lockMobileScroll();
+      return;
+    }
+    unlockMobileScroll();
+  }
+);
+
+onBeforeUnmount(() => {
+  unlockMobileScroll();
+});
 </script>
