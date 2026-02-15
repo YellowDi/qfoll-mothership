@@ -4,7 +4,7 @@ title: 华森 GPS
 year: 2024
 startMonth: 4
 company: 宁波高新区华森信息科技有限公司
-tag: GIS · 运营协同
+tag: 网络货运
 lead: 面向物流车队的实时感知与精细化运营管理平台
 primaryButtonText: 
 primaryButtonUrl: 
@@ -13,7 +13,7 @@ secondaryButtonUrl:
 cover: "/covers/hs-gps.webp"
 infoTags:
   - 2023
-  - GIS · 运营协同
+  - 网络货运
 ---
 
 在物流运输行业持续追求效率与安全性的背景下，车辆管理方式正从经验驱动转向数据驱动。华森 GPS 项目以车载定位与油量检测硬件为基础，将车辆运行状态转化为可实时分析的数据资产，使车队管理者能够在统一平台中完成对车辆位置、运行状态与运营成本的全面掌控，从而建立更加可持续的精细化管理模式。

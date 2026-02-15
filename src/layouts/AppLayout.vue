@@ -19,8 +19,8 @@
             class="transition-all duration-300 ease-out"
             :class="
               navLevel === 'root'
-                ? 'translate-x-0 opacity-100 pointer-events-auto max-md:block'
-                : '-translate-x-full opacity-0 pointer-events-none max-md:hidden'
+                ? 'translate-x-0 opacity-100 pointer-events-auto max-md:block md:block'
+                : '-translate-x-full opacity-0 pointer-events-none max-md:hidden md:hidden'
             "
           >
             <nav class="flex flex-col gap-2 text-sm font-medium">
@@ -53,11 +53,11 @@
             </nav>
           </div>
           <div
-            class="w-full transition-transform duration-300 ease-out md:absolute md:left-full md:top-0 md:w-full"
+            class="w-full transition-transform duration-300 ease-out"
             :class="
               navLevel !== 'root'
-                ? 'opacity-100 pointer-events-auto max-md:block md:-translate-x-full'
-                : 'opacity-0 pointer-events-none max-md:hidden md:translate-x-full'
+                ? 'opacity-100 pointer-events-auto max-md:block md:block'
+                : 'opacity-0 pointer-events-none max-md:hidden md:hidden'
             "
           >
             <div class="flex flex-col gap-4">

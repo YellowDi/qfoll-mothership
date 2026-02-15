@@ -12,7 +12,7 @@
             :key="item"
             type="button"
             class="transition-colors"
-            :class="activeFilter === item ? 'text-ink' : 'text-muted hover:text-ink'"
+            :class="activeFilter === item ? 'text-ink font-semibold' : 'text-muted hover:text-ink'"
             @click="activeFilter = item"
           >
             {{ item }}

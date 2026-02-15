@@ -5,7 +5,7 @@ sidebarTitle: 明德书院
 year: 2025
 startMonth: 10
 company: 明德书院
-tag: 会员 · 营销增长
+tag: 微信小程序
 lead: 面向校园精细化管理的过程化评价工具
 primaryButtonText: 
 primaryButtonUrl: 
@@ -14,7 +14,7 @@ secondaryButtonUrl:
 cover: "/covers/mingde-academy.webp"
 infoTags:
   - 2023
-  - 会员 · 营销增长
+  - 微信小程序
 ---
 
 在传统的校园管理模式中，学生日常表现的记录往往依赖纸质表格或事后汇总，不仅信息分散、统计滞后，也难以形成可持续追溯的数据体系。明德书院记分小程序项目正是在这一实际管理需求下启动，我们希望通过轻量化的数字工具，将学生日常行为评价转化为可实时记录、可持续沉淀、可多角色协同查看的过程化管理系统，使德育评价从阶段性统计走向日常化运行。

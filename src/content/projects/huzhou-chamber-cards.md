@@ -4,7 +4,7 @@ title: 湖州商会名片夹
 year: 2025
 startMonth: 11
 company: 宁波湖州商会
-tag: 会员 · 营销增长
+tag: 微信小程序
 lead: 面向商会会员的数字化人脉管理工具
 primaryButtonText: 
 primaryButtonUrl: 
@@ -13,7 +13,7 @@ secondaryButtonUrl:
 cover: "/covers/huzhou-chamber-cards.webp"
 infoTags:
   - 2023
-  - 会员 · 营销增长
+  - 微信小程序
 ---
 
 在以线下交流为主的商会组织中，会员之间的商业合作往往建立在熟识与信任之上，而传统纸质名片在长期使用过程中容易丢失、信息更新不及时，也难以形成可持续沉淀的人脉资源。「湖州商会名片夹」项目正是在这样的实际使用场景下启动，我们希望通过一个轻量化的微信小程序，让商会内部的人脉关系能够被系统化管理与持续复用，使每一次线下交流都能沉淀为长期可用的数字资产。

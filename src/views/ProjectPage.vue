@@ -4,7 +4,7 @@
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center gap-4 text-[13px]">
           <span class="font-medium text-ink">{{ project.year }}</span>
-          <span class="text-muted">{{ project.company }}</span>
+          <span class="text-muted">{{ project.tag || "客户案例" }}</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
@@ -79,8 +79,12 @@
             >{{ tag }}</span
           >
         </div>
+        <div v-if="project.company" class="mt-6 text-sm leading-[1.8] text-ink">
+          {{ project.company }}
+        </div>
         <div
-          class="mt-6 text-sm leading-[1.8] text-muted"
+          v-if="project.infoPanelHtml"
+          class="mt-4 text-sm leading-[1.8] text-muted"
           v-html="project.infoPanelHtml"
         ></div>
         </div>

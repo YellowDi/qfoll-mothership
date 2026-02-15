@@ -4,7 +4,7 @@ title: 企丰铺子
 year: 2023
 startMonth: 6
 company: 宁波悟农信息科技有限公司
-tag: 会员 · 营销增长
+tag: 新零售电商
 lead: 传统零售迈向线上经营的数字化实践
 primaryButtonText: 
 primaryButtonUrl: 
@@ -13,7 +13,7 @@ secondaryButtonUrl:
 cover: "/covers/qfshop.webp"
 infoTags:
   - 2023
-  - 会员 · 营销增长
+  - 新零售电商
 ---
 
 在消费方式持续向线上迁移的背景下，传统实体商家对数字化工具的需求，已经从「是否需要」转变为「如何长期稳定使用」。企丰铺子项目正是在这一转型阶段启动，我们希望构建的并不是一个简单的电商系统，而是一套能够融入日常经营流程的线上业务基础设施，使商家在不改变原有经营节奏的前提下，自然完成销售模式的延伸与升级。
