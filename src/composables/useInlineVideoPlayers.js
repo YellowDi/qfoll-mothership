@@ -132,9 +132,9 @@ const createVideoUi = (player) => {
   centerRingProgress.style.strokeDasharray = `${CENTER_RING_ARC} ${CENTER_RING_LENGTH}`;
   centerRingProgress.style.strokeDashoffset = "0";
 
-  const centerIcon = document.createElement("span");
-  centerIcon.className = "md-video-center-icon";
-  centerIcon.textContent = "▶";
+  const centerIcon = document.createElement("i");
+  centerIcon.className = "md-video-center-icon ri-play-fill";
+  centerIcon.setAttribute("aria-hidden", "true");
 
   centerRing.appendChild(centerRingProgress);
   centerBtn.appendChild(centerRing);
@@ -247,7 +247,7 @@ const syncUi = (player) => {
   if (!ui) return;
 
   const isPlaying = player.sourceLoaded && !video.paused && !video.ended;
-  ui.centerIcon.textContent = isPlaying ? "⏸" : "▶";
+  ui.centerIcon.className = `md-video-center-icon ${isPlaying ? "ri-pause-fill" : "ri-play-fill"}`;
   ui.playIcon.className = isPlaying ? "ri-pause-fill" : "ri-play-fill";
   ui.playBtn.setAttribute("aria-label", isPlaying ? "暂停" : "播放");
 
