@@ -11,7 +11,16 @@
         <div class="mx-auto w-full pb-10 pt-6 max-md:pb-8">
           <div class="grid grid-cols-12 gap-6 max-md:gap-4">
             <div class="col-span-8 self-start max-lg:col-span-12 lg:sticky lg:top-17">
-              <YgbHeroSection preview home-preview />
+              <div
+                class="cursor-pointer rounded-md"
+                role="link"
+                tabindex="0"
+                @click="goYgb"
+                @keydown.enter.prevent="goYgb"
+                @keydown.space.prevent="goYgb"
+              >
+                <YgbHeroSection preview home-preview />
+              </div>
             </div>
 
             <div class="col-span-4 flex flex-col gap-6 max-lg:col-span-12 max-md:hidden">
@@ -107,6 +116,10 @@ import TagMarqueeSection from "../components/TagMarqueeSection.vue";
 import YgbHeroSection from "../components/YgbHeroSection.vue";
 import { computed } from "vue";
 import { projectList } from "../data/projects";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const goYgb = () => router.push("/ygb");
 
 const toYearValue = (item) => {
   const year = Number.parseInt(String(item?.year ?? ""), 10);
