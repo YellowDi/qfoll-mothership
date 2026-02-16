@@ -215,6 +215,46 @@ const getDesiredCenter = (track) => {
   return track.clientWidth / 2;
 };
 
+const TRACK_ALIGN_LOCK_MS = 480;
+
+const getNow = () =>
+  typeof performance !== "undefined" ? performance.now() : Date.now();
+
+const normalizeIndex = (index, length) => {
+  if (!length) return 0;
+  return ((index % length) + length) % length;
+};
+
+const getStoredTrackIndex = (track, cards) => {
+  if (!cards.length) return null;
+  const raw = Number(track.dataset.activeIndex);
+  if (!Number.isInteger(raw)) return null;
+  if (raw < 0 || raw >= cards.length) return null;
+  return raw;
+};
+
+const setTrackIndex = (track, index, length) => {
+  if (!length) return;
+  track.dataset.activeIndex = String(normalizeIndex(index, length));
+};
+
+const lockTrackAlign = (track) => {
+  track.dataset.alignLockUntil = String(getNow() + TRACK_ALIGN_LOCK_MS);
+};
+
+const isTrackAlignLocked = (track) => {
+  const lockUntil = Number(track.dataset.alignLockUntil || "0");
+  return Number.isFinite(lockUntil) && lockUntil > getNow();
+};
+
+const resolveTrackIndex = (track, cards, desiredCenter) => {
+  const stored = getStoredTrackIndex(track, cards);
+  if (stored !== null) return stored;
+  // Before any interaction, always start from the first slide.
+  setTrackIndex(track, 0, cards.length);
+  return 0;
+};
+
 const getLandscapePeek = () => {
   const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
   if (viewportWidth <= 768) return 14;
@@ -274,9 +314,13 @@ const applyTrackEdgePadding = (track, cards, desiredCenter) => {
 
 const scrollCarouselToIndex = (track, cards, index) => {
   if (!cards.length) return;
+  const targetIndex = normalizeIndex(index, cards.length);
+  setTrackIndex(track, targetIndex, cards.length);
+  lockTrackAlign(track);
   const desiredCenter = getDesiredCenter(track);
   applyTrackEdgePadding(track, cards, desiredCenter);
-  const targetCard = cards[index];
+  const targetCard = cards[targetIndex];
+  if (!targetCard) return;
   const targetCenter = targetCard.offsetLeft + targetCard.offsetWidth / 2;
   const nextScrollLeft = Math.max(0, targetCenter - desiredCenter);
   track.scrollTo({ left: nextScrollLeft, behavior: "smooth" });
@@ -290,8 +334,7 @@ const getNextIndex = (track, cards, action) => {
   return (currentIndex + 1) % cards.length;
 };
 
-const getCurrentIndex = (track, cards) => {
-  const desiredCenter = getDesiredCenter(track);
+const getCurrentIndex = (track, cards, desiredCenter = getDesiredCenter(track)) => {
   const currentCenter = track.scrollLeft + desiredCenter;
   let currentIndex = 0;
   let minDelta = Infinity;
@@ -328,22 +371,36 @@ const alignMarkdownCarousels = () => {
     ".md-carousel-track[data-carousel-track='true']"
   );
   tracks.forEach((track) => {
+    if (isTrackAlignLocked(track)) return;
     const cards = Array.from(track.querySelectorAll(".md-carousel-card"));
-    const first = cards[0];
-    if (!first) return;
+    if (!cards.length) return;
     const trackRect = track.getBoundingClientRect();
     let desiredCenter = track.clientWidth / 2;
     if (textRect) {
       desiredCenter = textRect.left + textRect.width / 2 - trackRect.left;
     }
+    const currentIndex = resolveTrackIndex(track, cards, desiredCenter);
     applyTrackEdgePadding(track, cards, desiredCenter);
-    const firstCenter = first.offsetLeft + first.offsetWidth / 2;
-    const nextScrollLeft = Math.max(0, firstCenter - desiredCenter);
+    const targetCard = cards[currentIndex] || cards[0];
+    if (!targetCard) return;
+    const targetCenter = targetCard.offsetLeft + targetCard.offsetWidth / 2;
+    const nextScrollLeft = Math.max(0, targetCenter - desiredCenter);
     track.scrollTo({ left: nextScrollLeft });
   });
 };
 
-const handleImageLoaded = () => {
+const handleImageLoaded = (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) {
+    scheduleAlign();
+    return;
+  }
+  const track = target.closest(".md-carousel-track[data-carousel-track='true']");
+  if (track instanceof HTMLElement && track.dataset.activeIndex !== undefined) {
+    classifyMarkdownCarouselCards();
+    syncMarkdownCarouselWidths();
+    return;
+  }
   scheduleAlign();
 };
 
