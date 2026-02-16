@@ -19,7 +19,7 @@
           <p class="mt-5 text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-orange-400">
             云柜宝
           </p>
-          <h1 class="mt-1 text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-ink">
+          <h1 class="mt-1 whitespace-nowrap text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-ink">
             智能集卡物流平台
           </h1>
           <p class="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-ink">
