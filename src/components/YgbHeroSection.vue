@@ -72,13 +72,18 @@
         </div>
 
         <div v-if="!homePreview" class="w-full min-w-0 xl:self-end">
-          <div class="relative h-[26.5rem] w-full min-w-0 md:h-[34rem]">
+          <div
+            ref="heroStackRef"
+            class="relative h-[26.5rem] w-full min-w-0 md:h-[34rem]"
+            @mouseenter="pauseHeroAutoPlay"
+            @mouseleave="resumeHeroAutoPlay"
+          >
             <article
               v-for="(card, idx) in heroCards"
               :key="card.title"
               class="absolute left-0 right-0 top-0 mx-auto w-full overflow-hidden rounded-t-2xl rounded-b-none border border-line/10 bg-surface shadow-[0_18px_50px_rgba(17,17,17,0.12)] transition-all duration-300 ease-out md:left-auto md:right-0 md:mx-0 dark:shadow-[0_18px_52px_rgba(0,0,0,0.35)]"
               :class="[heroCardClass(idx), heroCardIndex !== idx ? 'h-[2.9rem] md:h-[3.1rem]' : '']"
-              @click="heroCardIndex = idx"
+              @click="setHeroCardWithReset(idx)"
             >
               <div class="flex items-center justify-between border-b border-line/10 bg-black/3 px-4 py-2 dark:bg-white/6">
                 <div class="text-xs font-medium text-ink">{{ card.badge }}</div>
@@ -100,7 +105,7 @@
               <button
                 type="button"
                 class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-muted transition-colors hover:text-ink"
-                @click.stop="shiftHero(-1)"
+                @click.stop="shiftHeroWithReset(-1)"
                 aria-label="上一张"
               >
                 <i class="ri-arrow-left-line"></i>
@@ -112,14 +117,14 @@
                   type="button"
                   class="h-1.5 rounded-full transition-all"
                   :class="heroCardIndex === dotIdx ? 'w-5 bg-ink/85' : 'w-2 bg-ink/24 hover:bg-ink/35'"
-                  @click.stop="heroCardIndex = dotIdx"
+                  @click.stop="setHeroCardWithReset(dotIdx)"
                   :aria-label="`切换到第 ${dotIdx + 1} 张`"
                 ></button>
               </div>
               <button
                 type="button"
                 class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-muted transition-colors hover:text-ink"
-                @click.stop="shiftHero(1)"
+                @click.stop="shiftHeroWithReset(1)"
                 aria-label="下一张"
               >
                 <i class="ri-arrow-right-line"></i>
@@ -177,6 +182,12 @@ const heroCards = [
 ];
 
 const heroCardIndex = ref(0);
+const HERO_AUTO_PLAY_INTERVAL_MS = 4200;
+const HERO_AUTO_PLAY_START_DELAY_MS = 360;
+const heroStackRef = ref(null);
+const isHeroHovered = ref(false);
+const isHeroInView = ref(false);
+const prefersReducedMotion = ref(false);
 const painTags = [
   "效率低下",
   "路线混乱",
@@ -188,12 +199,87 @@ const painTags = [
 const typedPain = ref(painTags[0]);
 const painIndex = ref(0);
 let painTimer = 0;
+let heroAutoPlayTimer = 0;
+let heroAutoPlayDelayTimer = 0;
+let heroVisibilityObserver = null;
 let charIndex = painTags[0].length;
 let deleting = false;
 
 const shiftHero = (step) => {
   const total = heroCards.length;
   heroCardIndex.value = (heroCardIndex.value + step + total) % total;
+};
+
+const clearHeroAutoPlay = () => {
+  if (!heroAutoPlayTimer) return;
+  window.clearInterval(heroAutoPlayTimer);
+  heroAutoPlayTimer = 0;
+};
+
+const clearHeroAutoPlayDelay = () => {
+  if (!heroAutoPlayDelayTimer) return;
+  window.clearTimeout(heroAutoPlayDelayTimer);
+  heroAutoPlayDelayTimer = 0;
+};
+
+const shouldRunHeroAutoPlay = () =>
+  !props.homePreview &&
+  !isHeroHovered.value &&
+  isHeroInView.value &&
+  !document.hidden &&
+  !prefersReducedMotion.value;
+
+const startHeroAutoPlay = ({ immediate = false } = {}) => {
+  clearHeroAutoPlay();
+  clearHeroAutoPlayDelay();
+  if (!shouldRunHeroAutoPlay()) return;
+  const startInterval = () => {
+    heroAutoPlayTimer = window.setInterval(() => {
+      shiftHero(1);
+    }, HERO_AUTO_PLAY_INTERVAL_MS);
+  };
+  if (immediate) {
+    startInterval();
+    return;
+  }
+  heroAutoPlayDelayTimer = window.setTimeout(() => {
+    heroAutoPlayDelayTimer = 0;
+    if (!shouldRunHeroAutoPlay()) return;
+    startInterval();
+  }, HERO_AUTO_PLAY_START_DELAY_MS);
+};
+
+const syncHeroAutoPlay = () => {
+  if (shouldRunHeroAutoPlay()) {
+    startHeroAutoPlay();
+    return;
+  }
+  clearHeroAutoPlayDelay();
+  clearHeroAutoPlay();
+};
+
+const pauseHeroAutoPlay = () => {
+  isHeroHovered.value = true;
+  syncHeroAutoPlay();
+};
+
+const resumeHeroAutoPlay = () => {
+  isHeroHovered.value = false;
+  syncHeroAutoPlay();
+};
+
+const setHeroCardWithReset = (index) => {
+  heroCardIndex.value = index;
+  startHeroAutoPlay({ immediate: true });
+};
+
+const shiftHeroWithReset = (step) => {
+  shiftHero(step);
+  startHeroAutoPlay({ immediate: true });
+};
+
+const onDocumentVisibilityChange = () => {
+  syncHeroAutoPlay();
 };
 
 const heroCardClass = (index) => {
@@ -236,6 +322,24 @@ const tickPain = () => {
 };
 
 onMounted(() => {
+  prefersReducedMotion.value = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.addEventListener("visibilitychange", onDocumentVisibilityChange);
+  if (!props.homePreview) {
+    if ("IntersectionObserver" in window && heroStackRef.value) {
+      heroVisibilityObserver = new IntersectionObserver(
+        ([entry]) => {
+          isHeroInView.value = Boolean(entry?.isIntersecting);
+          syncHeroAutoPlay();
+        },
+        { threshold: 0.25, rootMargin: "0px 0px -10% 0px" },
+      );
+      heroVisibilityObserver.observe(heroStackRef.value);
+    } else {
+      isHeroInView.value = true;
+    }
+  }
+  syncHeroAutoPlay();
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion) {
     typedPain.value = painTags[0];
@@ -248,6 +352,13 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  document.removeEventListener("visibilitychange", onDocumentVisibilityChange);
+  if (heroVisibilityObserver) {
+    heroVisibilityObserver.disconnect();
+    heroVisibilityObserver = null;
+  }
+  clearHeroAutoPlayDelay();
+  clearHeroAutoPlay();
   if (painTimer) window.clearTimeout(painTimer);
 });
 
