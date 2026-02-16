@@ -33,13 +33,23 @@ const router = createRouter({
 });
 
 router.afterEach((to) => {
+  const brand = "企丰科技";
+  const withBrandSuffix = (title) =>
+    title && title !== brand ? `${title}｜${brand}` : brand;
+
+  if (to.name === "home") {
+    document.title = brand;
+    return;
+  }
+
   if (to.name === "project") {
     const projectId = String(to.params.id || "");
     const projectTitle = projects[projectId]?.title;
-    document.title = projectTitle || "客户案例";
+    document.title = withBrandSuffix(projectTitle || "客户案例");
     return;
   }
-  document.title = to.meta.title || "企丰科技";
+
+  document.title = withBrandSuffix(to.meta.title || brand);
 });
 
 export default router;
