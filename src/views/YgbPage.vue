@@ -55,8 +55,8 @@
               </h2>
 
               <div class="relative mt-7 grid grid-cols-1 sm:grid-cols-2">
-                <span class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-zinc-200 sm:block dark:bg-white/8"></span>
-                <span class="pointer-events-none absolute left-0 right-0 top-1/2 hidden h-px -translate-y-1/2 bg-zinc-200 sm:block dark:bg-white/8"></span>
+                <span class="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-zinc-200/60 sm:block dark:bg-white/8"></span>
+                <span class="pointer-events-none absolute left-0 right-0 top-1/2 hidden h-px -translate-y-1/2 bg-zinc-200/60 sm:block dark:bg-white/8"></span>
                 <article
                   v-for="(feature, idx) in opsFeatures"
                   :key="feature.title"
@@ -64,7 +64,7 @@
                   :class="[
                     idx % 2 === 0 ? 'sm:pr-8' : 'sm:pl-8',
                     idx >= 2 ? 'sm:pt-6' : 'sm:pb-6',
-                    idx > 0 ? 'border-t border-zinc-200 sm:border-t-0' : '',
+                    idx > 0 ? 'border-t border-zinc-200/60 sm:border-t-0' : '',
                   ]"
                 >
                   <i :class="[feature.icon, feature.iconColor, 'text-[1.95rem] leading-none']"></i>
