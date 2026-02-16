@@ -62,11 +62,11 @@
           >
             <div class="flex flex-col gap-4">
               <button
-                class="flex w-40 items-center gap-2 px-3 text-left text-sm font-medium text-muted max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3"
+                class="sidebar-back-button flex w-40 items-center gap-2 px-3 text-left text-sm font-medium text-muted max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3"
                 type="button"
                 @click="goRoot"
               >
-                <i class="ri-arrow-left-line text-base"></i>
+                <i class="sidebar-back-icon ri-arrow-left-line text-base"></i>
                 返回
               </button>
               <nav v-if="navLevel === 'projects'" class="flex flex-col gap-2 text-sm font-medium">

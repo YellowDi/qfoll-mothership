@@ -584,6 +584,35 @@
     height: auto;
     aspect-ratio: 1103 / 621;
   }
+
+  .sidebar-back-icon {
+    display: inline-block;
+    transform: translateX(0);
+  }
+
+  .sidebar-back-button:hover .sidebar-back-icon,
+  .sidebar-back-button:focus-visible .sidebar-back-icon {
+    animation: sidebar-back-icon-nudge 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes sidebar-back-icon-nudge {
+    0% {
+      transform: translateX(0);
+    }
+    45% {
+      transform: translateX(-4px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-back-button:hover .sidebar-back-icon,
+  .sidebar-back-button:focus-visible .sidebar-back-icon {
+    animation: none;
+  }
 }
 
 @media (min-width: 768px) {
