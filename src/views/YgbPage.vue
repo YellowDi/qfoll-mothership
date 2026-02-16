@@ -82,7 +82,7 @@
               <div class="relative">
                 <div class="relative overflow-hidden rounded-lg bg-transparent">
                   <img
-                    src="/ygb-assets/dashboard.webp"
+                    :src="dashboardImage"
                     alt="云柜宝运输作业管理主界面"
                     class="block h-auto w-full object-contain object-left-top"
                     loading="lazy"
@@ -108,7 +108,7 @@
             <div class="col-span-12 order-2 xl:order-1 xl:col-span-6">
               <div class="relative overflow-hidden rounded-lg bg-transparent">
                 <img
-                  src="/ygb-assets/governance.webp"
+                  :src="governanceImage"
                   alt="政府监管平台数据界面"
                   class="block h-auto w-full object-contain object-left-top"
                   loading="lazy"
@@ -244,6 +244,18 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import AppLayout from "../layouts/AppLayout.vue";
 import YgbHeroSection from "../components/YgbHeroSection.vue";
+import dashboardImage from "../assets/ygb-assets/dashboard.webp";
+import governanceImage from "../assets/ygb-assets/governance.webp";
+import app01DesktopImage from "../assets/ygb-assets/app-01-d.webp";
+import app01MobileImage from "../assets/ygb-assets/app-01-m.webp";
+import app02DesktopImage from "../assets/ygb-assets/app-02-d.webp";
+import app02MobileImage from "../assets/ygb-assets/app-02-m.webp";
+import app03DesktopImage from "../assets/ygb-assets/app-03-d.webp";
+import app03MobileImage from "../assets/ygb-assets/app-03-m.webp";
+import app04DesktopImage from "../assets/ygb-assets/app-04-d.webp";
+import app04MobileImage from "../assets/ygb-assets/app-04-m.webp";
+import app05DesktopImage from "../assets/ygb-assets/app-05-d.webp";
+import app05MobileImage from "../assets/ygb-assets/app-05-m.webp";
 
 const summaryCards = [
   {
@@ -300,36 +312,36 @@ const isDownloadInView = ref(false);
 const isPageVisible = ref(true);
 const appScreenshots = [
   {
-    src: "/ygb-assets/app-01-d.webp",
-    srcSet: "/ygb-assets/app-01-m.webp 320w, /ygb-assets/app-01-d.webp 450w",
+    src: app01DesktopImage,
+    srcSet: `${app01MobileImage} 320w, ${app01DesktopImage} 450w`,
     alt: "云柜宝截图 1",
     title: "司机端首页",
     desc: "接单、进度与消息总览",
   },
   {
-    src: "/ygb-assets/app-02-d.webp",
-    srcSet: "/ygb-assets/app-02-m.webp 320w, /ygb-assets/app-02-d.webp 450w",
+    src: app02DesktopImage,
+    srcSet: `${app02MobileImage} 320w, ${app02DesktopImage} 450w`,
     alt: "云柜宝截图 2",
     title: "在途任务",
     desc: "关键节点与轨迹可视化",
   },
   {
-    src: "/ygb-assets/app-03-d.webp",
-    srcSet: "/ygb-assets/app-03-m.webp 320w, /ygb-assets/app-03-d.webp 450w",
+    src: app03DesktopImage,
+    srcSet: `${app03MobileImage} 320w, ${app03DesktopImage} 450w`,
     alt: "云柜宝截图 3",
     title: "异常处理",
     desc: "上报、回传与处理闭环",
   },
   {
-    src: "/ygb-assets/app-04-d.webp",
-    srcSet: "/ygb-assets/app-04-m.webp 320w, /ygb-assets/app-04-d.webp 450w",
+    src: app04DesktopImage,
+    srcSet: `${app04MobileImage} 320w, ${app04DesktopImage} 450w`,
     alt: "云柜宝截图 4",
     title: "回执签收",
     desc: "电子回单与签收上传",
   },
   {
-    src: "/ygb-assets/app-05-d.webp",
-    srcSet: "/ygb-assets/app-05-m.webp 320w, /ygb-assets/app-05-d.webp 450w",
+    src: app05DesktopImage,
+    srcSet: `${app05MobileImage} 320w, ${app05DesktopImage} 450w`,
     alt: "云柜宝截图 5",
     title: "运单详情",
     desc: "多维字段与状态同步",

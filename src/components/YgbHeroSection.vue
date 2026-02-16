@@ -134,6 +134,9 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 import YgbRoadMapBg from "./YgbRoadMapBg.vue";
+import hero01Image from "../assets/ygb-assets/hero-01.webp";
+import hero02Image from "../assets/ygb-assets/hero-02.webp";
+import hero03Image from "../assets/ygb-assets/hero-03.webp";
 
 const props = defineProps({
   preview: {
@@ -155,19 +158,19 @@ const heroCards = [
     badge: "全流程可视化管理",
     title: "智能系统追踪，实时掌控业务状态",
     desc: "实时、精准的车辆 GPS 定位，确保运输透明可控。用户可查询货物流转，系统自动记录关键节点，实时定位车辆，并智能校正数据，提升运营效率。",
-    image: "/ygb-assets/hero-01.webp",
+    image: hero01Image,
   },
   {
     badge: "数据驱动智能调度",
     title: "智能调度，高效匹配",
     desc: "云柜宝小程序通过强大的数据分析能力，结合集卡车辆定位信息，实现科学的车货匹配，优化运输路径，从而有效降低空载率，提高运输效率。",
-    image: "/ygb-assets/hero-02.webp",
+    image: hero02Image,
   },
   {
     badge: "运输安全与责任保障体系",
     title: "全链路物流保障，构建更完善的物流生态",
     desc: "云柜宝不仅专注于运输环节的优化，同时提供港口与堆场的协同延伸服务和提供全程物流责任险，最大限度保障货物安全，为客户提供更加安心的服务体验。",
-    image: "/ygb-assets/hero-03.webp",
+    image: hero03Image,
   },
 ];
 
