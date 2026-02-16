@@ -23,7 +23,7 @@
             在企丰科技，产品界面从来不是视觉包装的最后一步，而是产品能力本身的外在表达。我们更关心界面是否降低了理解成本，是否让业务流程更顺畅，是否能够在长期迭代中保持一致与可维护。这些判断标准既来自行业成熟的人机交互方法论，也来自我们在企业级项目中的长期实践。苹果在 Human Interface Guidelines 中提出的 Clarity、Deference 与 Depth，让我们意识到界面的首要任务是帮助用户理解内容，而不是制造视觉存在感；Google 在 Material Design 中强调设计系统与可实现性，则让我们更加坚定 UI 必须与工程实现保持同一套语言。因此我们在设计时首先关注信息结构与交互逻辑，而不是风格表达，优先建立稳定的栅格体系与组件模型，用可复用的设计单元替代一次性的页面视觉，从一开始就让界面具备可扩展能力。
           </p>
 
-          <div class="md-media" data-carousel-id="carousel-design-spec">
+          <div class="md-media design-spec-media" data-carousel-id="carousel-design-spec">
             <div class="md-carousel-controls">
               <button class="md-carousel-btn" data-action="prev" type="button" aria-label="上一张">
                 <i class="ri-arrow-left-line"></i>
@@ -33,26 +33,52 @@
               </button>
             </div>
             <div class="md-carousel-track" data-carousel-track="true">
-              <div class="md-carousel-card">
+              <div class="md-carousel-card is-landscape">
                 <div
                   class="md-carousel-item rounded-md"
                   data-carousel-id="carousel-design-spec"
                   data-index="0"
-                  :style="{ backgroundImage: `url(${designSpecScreen01})` }"
-                  role="img"
-                  aria-label="设计规范示意图"
-                ></div>
+                >
+                  <img
+                    :src="designSpecScreen01"
+                    alt="设计规范示意图"
+                    class="md-carousel-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <div class="md-item-caption">组件与布局规范示意图</div>
               </div>
-              <div class="md-carousel-card">
+              <div class="md-carousel-card is-portrait">
                 <div
                   class="md-carousel-item rounded-md"
                   data-carousel-id="carousel-design-spec"
                   data-index="1"
-                  :style="{ backgroundImage: `url(${designSpecScreen01})` }"
-                  role="img"
-                  aria-label="设计规范示意图"
-                ></div>
+                >
+                  <img
+                    :src="designSpecScreen02"
+                    alt="设计规范示意图"
+                    class="md-carousel-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="md-item-caption">组件与布局规范示意图</div>
+              </div>
+              <div class="md-carousel-card is-portrait">
+                <div
+                  class="md-carousel-item rounded-md"
+                  data-carousel-id="carousel-design-spec"
+                  data-index="2"
+                >
+                  <img
+                    :src="designSpecScreen03"
+                    alt="设计规范示意图"
+                    class="md-carousel-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <div class="md-item-caption">组件与布局规范示意图</div>
               </div>
               <!-- <div class="md-carousel-card">
@@ -84,17 +110,22 @@
             我们所服务的大多数产品属于管理系统、数据平台与业务工具，这类软件的核心不在于展示情绪，而在于高效传递信息。因此在界面决策中我们始终坚持信息优先于风格：先保证信息密度与可读性，再讨论视觉表现；先保证操作路径清晰，再优化动效与氛围；先确保真实业务场景可用，再考虑展示层面的设计感。视觉语言的存在是为了帮助用户理解系统，而不是让界面本身成为关注焦点。当用户能够凭借经验完成新的任务，而不需要重新学习界面时，这套 UI 才真正建立起了价值。
           </p>
 
-          <div class="md-media" data-carousel-id="carousel-design-spec">
+          <div class="md-media design-spec-media" data-carousel-id="carousel-design-spec">
             <div class="md-carousel-track" data-carousel-track="true">
-              <div class="md-carousel-card">
+              <div class="md-carousel-card is-landscape">
                 <div
                   class="md-carousel-item rounded-md"
                   data-carousel-id="carousel-design-spec"
                   data-index="0"
-                  :style="{ backgroundImage: `url(${designSpecMisans})` }"
-                  role="img"
-                  aria-label="小米发布的 MiSans 字体，可以免费使用"
-                ></div>
+                >
+                  <img
+                    :src="designSpecMisans"
+                    alt="小米发布的 MiSans 字体，可以免费使用"
+                    class="md-carousel-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <div class="md-item-caption">小米发布的 MiSans 字体，可以免费使用</div>
               </div>
             </div>
@@ -122,6 +153,8 @@ import { onMounted, onUnmounted, ref } from "vue";
 import AppLayout from "../layouts/AppLayout.vue";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 import designSpecScreen01 from "../assets/design-images/screen-01.webp";
+import designSpecScreen02 from "../assets/design-images/test-1.png";
+import designSpecScreen03 from "../assets/design-images/test-2.png";
 import designSpecMisans from "../assets/design-images/misans.webp";
 
 const markdownRef = ref(null);
@@ -176,13 +209,39 @@ const getDesiredCenter = (track) => {
   return track.clientWidth / 2;
 };
 
+const getLandscapePeek = () => {
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  if (viewportWidth <= 768) return 14;
+  if (viewportWidth <= 1024) return 18;
+  return 24;
+};
+
+const syncDesignSpecLandscapeWidths = () => {
+  if (!markdownRef.value) return;
+  const mediaNodes = markdownRef.value.querySelectorAll(".design-spec-media");
+  const peek = getLandscapePeek();
+  mediaNodes.forEach((mediaNode) => {
+    const mediaWidth = mediaNode.clientWidth;
+    if (!mediaWidth) return;
+    const landscapeWidth = Math.max(260, Math.min(1103, mediaWidth - peek * 2));
+    mediaNode.style.setProperty("--design-landscape-card-width", `${landscapeWidth}px`);
+  });
+};
+
+const applyTrackEdgePadding = (track, cards, desiredCenter) => {
+  const firstCard = cards[0];
+  const lastCard = cards[cards.length - 1];
+  if (!firstCard || !lastCard) return;
+  const leftPadding = Math.max(0, desiredCenter - firstCard.offsetWidth / 2);
+  const rightPadding = Math.max(0, desiredCenter - lastCard.offsetWidth / 2);
+  track.style.paddingLeft = `${leftPadding}px`;
+  track.style.paddingRight = `${rightPadding}px`;
+};
+
 const scrollCarouselToIndex = (track, cards, index) => {
   if (!cards.length) return;
-  const cardWidth = cards[0].offsetWidth;
   const desiredCenter = getDesiredCenter(track);
-  const padding = Math.max(0, desiredCenter - cardWidth / 2);
-  track.style.paddingLeft = `${padding}px`;
-  track.style.paddingRight = `${padding}px`;
+  applyTrackEdgePadding(track, cards, desiredCenter);
   const targetCard = cards[index];
   const targetCenter = targetCard.offsetLeft + targetCard.offsetWidth / 2;
   const nextScrollLeft = Math.max(0, targetCenter - desiredCenter);
@@ -215,6 +274,7 @@ const getCurrentIndex = (track, cards) => {
 
 const alignMarkdownCarousels = () => {
   if (!markdownRef.value) return;
+  syncDesignSpecLandscapeWidths();
   const textBlock = markdownRef.value.querySelector(
     ".markdown-body > *:not(.md-media)"
   );
@@ -223,18 +283,16 @@ const alignMarkdownCarousels = () => {
     ".md-carousel-track[data-carousel-track='true']"
   );
   tracks.forEach((track) => {
-    const first = track.querySelector(".md-carousel-card");
+    const cards = Array.from(track.querySelectorAll(".md-carousel-card"));
+    const first = cards[0];
     if (!first) return;
-    const cardWidth = first.offsetWidth;
     const trackRect = track.getBoundingClientRect();
     let desiredCenter = track.clientWidth / 2;
     if (textRect) {
       desiredCenter = textRect.left + textRect.width / 2 - trackRect.left;
     }
-    const padding = Math.max(0, desiredCenter - cardWidth / 2);
-    track.style.paddingLeft = `${padding}px`;
-    track.style.paddingRight = `${padding}px`;
-    const firstCenter = first.offsetLeft + cardWidth / 2;
+    applyTrackEdgePadding(track, cards, desiredCenter);
+    const firstCenter = first.offsetLeft + first.offsetWidth / 2;
     const nextScrollLeft = Math.max(0, firstCenter - desiredCenter);
     track.scrollTo({ left: nextScrollLeft });
   });
@@ -250,6 +308,10 @@ const scheduleAlign = () => {
   });
 };
 
+const handleImageLoaded = () => {
+  scheduleAlign();
+};
+
 const mountInlineVideoPlayers = () => {
   if (disposeInlineVideoPlayers) {
     disposeInlineVideoPlayers();
@@ -262,6 +324,7 @@ const mountInlineVideoPlayers = () => {
 onMounted(() => {
   if (markdownRef.value) {
     markdownRef.value.addEventListener("click", handleMarkdownClick, true);
+    markdownRef.value.addEventListener("load", handleImageLoaded, true);
     scheduleAlign();
     mountInlineVideoPlayers();
   }
@@ -272,6 +335,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (markdownRef.value) {
     markdownRef.value.removeEventListener("click", handleMarkdownClick, true);
+    markdownRef.value.removeEventListener("load", handleImageLoaded, true);
   }
   window.removeEventListener("resize", alignMarkdownCarousels);
   window.removeEventListener("orientationchange", scheduleAlign);
@@ -282,3 +346,66 @@ onUnmounted(() => {
   if (alignTimer) window.clearTimeout(alignTimer);
 });
 </script>
+
+<style scoped>
+.design-spec-media {
+  --design-landscape-card-width: 1103px;
+}
+
+.design-spec-media .md-carousel-item {
+  aspect-ratio: auto;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.design-spec-media .md-carousel-card {
+  width: fit-content;
+  max-width: none;
+}
+
+.design-spec-media .md-carousel-card.is-landscape {
+  width: var(--design-landscape-card-width);
+  max-width: none;
+}
+
+.design-spec-media .md-carousel-card.is-portrait {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.design-spec-media .md-carousel-image {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.design-spec-media .md-carousel-card.is-landscape .md-carousel-image {
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
+}
+
+.design-spec-media .md-carousel-card.is-portrait .md-carousel-item {
+  width: fit-content;
+}
+
+.design-spec-media .md-carousel-card.is-portrait .md-carousel-image {
+  width: auto;
+  max-width: 100%;
+  max-height: min(78vh, 56rem);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .markdown-body .md-media {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 24px auto !important;
+  }
+}
+</style>

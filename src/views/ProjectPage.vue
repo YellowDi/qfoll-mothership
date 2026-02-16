@@ -215,13 +215,67 @@ const getDesiredCenter = (track) => {
   return track.clientWidth / 2;
 };
 
+const getLandscapePeek = () => {
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  if (viewportWidth <= 768) return 14;
+  if (viewportWidth <= 1024) return 18;
+  return 24;
+};
+
+const syncMarkdownCarouselWidths = () => {
+  if (!markdownRef.value) return;
+  const mediaNodes = markdownRef.value.querySelectorAll(".md-media");
+  const peek = getLandscapePeek();
+  mediaNodes.forEach((mediaNode) => {
+    const mediaWidth = mediaNode.clientWidth;
+    if (!mediaWidth) return;
+    const landscapeWidth = Math.max(260, Math.min(1103, mediaWidth - peek * 2));
+    mediaNode.style.setProperty("--md-landscape-card-width", `${landscapeWidth}px`);
+  });
+};
+
+const classifyMarkdownCarouselCards = () => {
+  if (!markdownRef.value) return;
+  const cards = markdownRef.value.querySelectorAll(".md-carousel-card");
+  cards.forEach((card) => {
+    if (!(card instanceof HTMLElement)) return;
+    if (card.querySelector(".md-carousel-item-video")) {
+      card.classList.remove("is-portrait");
+      card.classList.add("is-video", "is-landscape");
+      return;
+    }
+    const image = card.querySelector(".md-carousel-image");
+    if (!(image instanceof HTMLImageElement)) {
+      card.classList.remove("is-video", "is-portrait");
+      card.classList.add("is-landscape");
+      return;
+    }
+    if (!image.complete || image.naturalWidth <= 0 || image.naturalHeight <= 0) {
+      card.classList.remove("is-video", "is-portrait");
+      card.classList.add("is-landscape");
+      return;
+    }
+    const isPortrait = image.naturalHeight > image.naturalWidth;
+    card.classList.remove("is-video");
+    card.classList.toggle("is-portrait", isPortrait);
+    card.classList.toggle("is-landscape", !isPortrait);
+  });
+};
+
+const applyTrackEdgePadding = (track, cards, desiredCenter) => {
+  const firstCard = cards[0];
+  const lastCard = cards[cards.length - 1];
+  if (!firstCard || !lastCard) return;
+  const leftPadding = Math.max(0, desiredCenter - firstCard.offsetWidth / 2);
+  const rightPadding = Math.max(0, desiredCenter - lastCard.offsetWidth / 2);
+  track.style.paddingLeft = `${leftPadding}px`;
+  track.style.paddingRight = `${rightPadding}px`;
+};
+
 const scrollCarouselToIndex = (track, cards, index) => {
   if (!cards.length) return;
-  const cardWidth = cards[0].offsetWidth;
   const desiredCenter = getDesiredCenter(track);
-  const padding = Math.max(0, desiredCenter - cardWidth / 2);
-  track.style.paddingLeft = `${padding}px`;
-  track.style.paddingRight = `${padding}px`;
+  applyTrackEdgePadding(track, cards, desiredCenter);
   const targetCard = cards[index];
   const targetCenter = targetCard.offsetLeft + targetCard.offsetWidth / 2;
   const nextScrollLeft = Math.max(0, targetCenter - desiredCenter);
@@ -264,6 +318,8 @@ const scheduleAlign = () => {
 
 const alignMarkdownCarousels = () => {
   if (!markdownRef.value) return;
+  classifyMarkdownCarouselCards();
+  syncMarkdownCarouselWidths();
   const textBlock = markdownRef.value.querySelector(
     ".markdown-body > *:not(.md-media)"
   );
@@ -272,21 +328,23 @@ const alignMarkdownCarousels = () => {
     ".md-carousel-track[data-carousel-track='true']"
   );
   tracks.forEach((track) => {
-    const first = track.querySelector(".md-carousel-card");
+    const cards = Array.from(track.querySelectorAll(".md-carousel-card"));
+    const first = cards[0];
     if (!first) return;
-    const cardWidth = first.offsetWidth;
     const trackRect = track.getBoundingClientRect();
     let desiredCenter = track.clientWidth / 2;
     if (textRect) {
       desiredCenter = textRect.left + textRect.width / 2 - trackRect.left;
     }
-    const padding = Math.max(0, desiredCenter - cardWidth / 2);
-    track.style.paddingLeft = `${padding}px`;
-    track.style.paddingRight = `${padding}px`;
-    const firstCenter = first.offsetLeft + cardWidth / 2;
+    applyTrackEdgePadding(track, cards, desiredCenter);
+    const firstCenter = first.offsetLeft + first.offsetWidth / 2;
     const nextScrollLeft = Math.max(0, firstCenter - desiredCenter);
     track.scrollTo({ left: nextScrollLeft });
   });
+};
+
+const handleImageLoaded = () => {
+  scheduleAlign();
 };
 
 const mountInlineVideoPlayers = () => {
@@ -301,6 +359,7 @@ const mountInlineVideoPlayers = () => {
 onMounted(() => {
   if (markdownRef.value) {
     markdownRef.value.addEventListener("click", handleMarkdownClick, true);
+    markdownRef.value.addEventListener("load", handleImageLoaded, true);
     scheduleAlign();
     mountInlineVideoPlayers();
   }
@@ -320,6 +379,7 @@ watch(
 onUnmounted(() => {
   if (markdownRef.value) {
     markdownRef.value.removeEventListener("click", handleMarkdownClick, true);
+    markdownRef.value.removeEventListener("load", handleImageLoaded, true);
   }
   window.removeEventListener("resize", alignMarkdownCarousels);
   window.removeEventListener("orientationchange", scheduleAlign);

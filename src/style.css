@@ -218,6 +218,7 @@
   }
 
   .md-media {
+    --md-landscape-card-width: 1103px;
     @apply block w-screen max-w-none;
     margin: 32px calc(50% - 50vw);
     justify-self: center;
@@ -284,11 +285,23 @@
   }
 
   .md-carousel-card {
-    @apply grid max-w-full;
+    @apply grid;
     flex: 0 0 auto;
     gap: 10px;
-    width: clamp(260px, 82vw, 1103px);
+    width: var(--md-landscape-card-width, clamp(260px, 82vw, 1103px));
+    max-width: none;
     align-items: start;
+  }
+
+  .md-carousel-card.is-landscape,
+  .md-carousel-card.is-video {
+    width: var(--md-landscape-card-width, clamp(260px, 82vw, 1103px));
+    max-width: none;
+  }
+
+  .md-carousel-card.is-portrait {
+    width: fit-content;
+    max-width: 100%;
   }
 
   .md-carousel-item {
@@ -302,6 +315,46 @@
     scroll-snap-align: center;
   }
 
+  .md-carousel-item-image {
+    aspect-ratio: auto;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    max-width: 100%;
+  }
+
+  .md-carousel-item-bg {
+    aspect-ratio: 1103 / 621;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .md-carousel-image {
+    display: block;
+    height: auto;
+    object-fit: contain;
+    border-radius: inherit;
+  }
+
+  .md-carousel-card.is-landscape .md-carousel-image,
+  .md-carousel-card.is-video .md-carousel-image {
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+  }
+
+  .md-carousel-card.is-portrait .md-carousel-item-image {
+    width: fit-content;
+  }
+
+  .md-carousel-card.is-portrait .md-carousel-image {
+    width: auto;
+    max-width: 100%;
+    max-height: min(78vh, 56rem);
+  }
+
   .md-carousel-item-video {
     --md-video-ar: 1103 / 621;
     --md-video-max-h: 72vh;
@@ -312,6 +365,12 @@
 
   .md-carousel-item-video.is-video-ready {
     background: #000;
+  }
+
+  .md-carousel-item-video {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
   }
 
   .md-carousel-video {
@@ -656,7 +715,7 @@
   }
 
   .md-carousel-card {
-    width: clamp(260px, 88vw, 1103px);
+    width: var(--md-landscape-card-width, clamp(260px, 88vw, 1103px));
   }
 
   .md-carousel-item-video {
@@ -687,7 +746,7 @@
   }
 
   .md-carousel-card {
-    width: clamp(300px, 92vw, 1103px);
+    width: var(--md-landscape-card-width, clamp(300px, 92vw, 1103px));
   }
 
   .md-carousel-item-video {

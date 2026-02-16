@@ -131,6 +131,12 @@ const toBackgroundImage = (value) => {
   return `url("${raw}")`;
 };
 
+const isCssBackgroundExpression = (value) => {
+  const raw = String(value ?? "").trim();
+  if (!raw) return false;
+  return raw.includes("url(") || raw.includes("gradient(");
+};
+
 const parseBlockLines = (block) =>
   block
     .split("\n")
@@ -171,16 +177,25 @@ const parseWideCarouselBlock = (block) => {
 const renderSlide = (slide, carouselId, idx) => {
   const caption = `<div class="md-item-caption">${escapeAttr(slide.caption || "")}</div>`;
   if (slide.video) {
-    return `<div class="md-carousel-card"><div class="md-carousel-item md-carousel-item-video" data-carousel-id="${carouselId}" data-index="${idx}"><video class="md-carousel-video" data-inline-video="true" data-video-id="${escapeAttr(
+    return `<div class="md-carousel-card is-video is-landscape"><div class="md-carousel-item md-carousel-item-video" data-carousel-id="${carouselId}" data-index="${idx}"><video class="md-carousel-video" data-inline-video="true" data-video-id="${escapeAttr(
       `${carouselId}-${idx}`
     )}" data-src="${escapeAttr(
       slide.video
     )}" muted playsinline preload="none"></video></div>${caption}</div>`;
   }
-  const background = toBackgroundImage(slide.image);
-  return `<div class="md-carousel-card"><div class="md-carousel-item" data-carousel-id="${carouselId}" data-index="${idx}" style="background-image:${escapeAttr(
-    background
-  )}"></div>${caption}</div>`;
+  const imageSource = String(slide.image ?? "").trim();
+  if (!imageSource) {
+    return `<div class="md-carousel-card is-landscape"><div class="md-carousel-item md-carousel-item-bg" data-carousel-id="${carouselId}" data-index="${idx}"></div>${caption}</div>`;
+  }
+  if (isCssBackgroundExpression(imageSource)) {
+    const background = toBackgroundImage(imageSource);
+    return `<div class="md-carousel-card is-landscape"><div class="md-carousel-item md-carousel-item-bg" data-carousel-id="${carouselId}" data-index="${idx}" style="background-image:${escapeAttr(
+      background
+    )}"></div>${caption}</div>`;
+  }
+  return `<div class="md-carousel-card is-landscape"><div class="md-carousel-item md-carousel-item-image" data-carousel-id="${carouselId}" data-index="${idx}"><img class="md-carousel-image" src="${escapeAttr(
+    imageSource
+  )}" alt="${escapeAttr(slide.caption || "项目展示图")}" loading="lazy" decoding="async" /></div>${caption}</div>`;
 };
 
 const renderSlidesHtml = (slides, carouselId) =>
