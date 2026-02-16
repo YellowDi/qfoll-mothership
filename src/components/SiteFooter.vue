@@ -4,9 +4,9 @@
       class="relative mx-auto flex w-full max-w-360 items-center justify-end px-14 py-6 text-[13px] text-muted max-lg:px-6 max-md:flex-col max-md:items-center max-md:gap-3 max-md:px-5"
     >
       <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-center max-md:static max-md:translate-x-0">
-        <span>© {{ currentYear }} 企丰科技</span>
+        <span>© {{ currentYear }} 宁波企丰信息科技有限公司</span>
         <span class="mx-2 text-muted/60">·</span>
-        <span class="text-muted/70">备案号待补充</span>
+        <span class="text-muted/70">浙ICP备2022008031号-1</span>
       </div>
       <button
         type="button"
