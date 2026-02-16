@@ -127,6 +127,7 @@
         ]"
       >
         <slot />
+        <SiteFooter />
       </div>
     </main>
   </div>
@@ -137,6 +138,7 @@ import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { projectList } from "../data/projects";
 import HeaderBar from "../components/HeaderBar.vue";
+import SiteFooter from "../components/SiteFooter.vue";
 import { useTheme } from "../composables/useTheme";
 
 const route = useRoute();

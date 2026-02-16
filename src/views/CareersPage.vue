@@ -38,7 +38,7 @@
               href="https://www.zhipin.com/gongsi/job/50c5ce276b775c5a1XR-2dy0GFI~.html?ka=company-jobs"
               target="_blank"
               rel="noreferrer"
-              class="inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-zinc-700 no-underline transition-colors hover:bg-zinc-200 hover:no-underline dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+              class="btn-neutral-pill"
             >
               前往 BOSS 直聘查看岗位
             </a>

@@ -95,7 +95,7 @@
           <div v-if="hasMoreProjects" class="mt-8 flex justify-center max-md:mt-6">
             <RouterLink
               to="/projects"
-              class="inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-zinc-700 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+              class="btn-neutral-pill"
             >
               查看更多
             </RouterLink>
