@@ -19,7 +19,7 @@ infoTags:
 布咚音乐项目是一个独具特色的在线平台，巧妙地将电子商城与音乐教育相结合，为用户打造沉浸式的音乐学习与购物体验。无论是音乐爱好者、专业乐手，还是刚刚踏入音乐世界的初学者，都能在这里找到适合自己的课程与商品。目前，平台已吸引约 25万注册用户，日均活跃用户约 2500 人，并以每天新增 200 名用户的稳健速度持续增长，展现出广泛的市场认可度和强劲的发展潜力。
 
 :::media
-- image: "/project-images/bluetonemusic/screen-01.webp"
+- image: "/project-images/bluetonemusic/keynote-01.webp"
 :::
 
 ## 核心业务板块：多维度满足用户需求
@@ -41,9 +41,9 @@ infoTags:
   通过智能推荐系统、用户行为分析、个性化学习路径等技术手段，布咚音乐持续优化用户体验，确保用户能够顺畅学习、愉快购物。此外，平台定期更新内容、优化课程质量，并提供高效的客服支持，以保障用户满意度。
 
 :::media
-- image: "/project-images/bluetonemusic/screen-02.webp"
+- image: "/project-images/bluetonemusic/keynote-02.webp"
   caption: 内容管理可在后台方便上传课程以供用户购买学习，同时后台还提供了多种运营工具帮助运营人员了解课程销售情况。
-- image: "/project-images/bluetonemusic/screen-03.webp"
+- image: "/project-images/bluetonemusic/keynote-03.webp"
   caption: 后台管理人员可轻松拖拽不同功能组件，所见即所得，打造首页内容。根据运营指标、特殊日期等提供最符合用户需求的定制体验。简便、直观，为用户呈现精准、个性化的首页内容
 :::
 
