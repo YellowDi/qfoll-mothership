@@ -1,8 +1,10 @@
 <template>
   <section :class="sectionClass">
     <div
-      class="relative overflow-hidden border border-line/10 bg-bg/95 dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-      :class="props.homePreview ? 'rounded-md p-8 max-md:p-5' : 'rounded-2xl px-8 pt-8 pb-0 max-md:px-5 max-md:pt-5 max-md:pb-0'"
+      class="relative overflow-hidden border border-line/10 bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+      :class="[
+        props.homePreview ? 'rounded-md p-8 max-md:p-5' : 'rounded-2xl px-8 pt-8 pb-0 max-md:px-5 max-md:pt-5 max-md:pb-0',
+      ]"
     >
       <YgbRoadMapBg class="pointer-events-none absolute inset-0 opacity-[0.96]" />
       <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,0.08),rgba(246,245,244,0.02)_40%,rgba(246,245,244,0.08)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015)_40%,rgba(255,255,255,0.03)_100%)]"></div>

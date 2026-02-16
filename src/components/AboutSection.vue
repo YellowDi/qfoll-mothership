@@ -20,7 +20,7 @@
     />
     <div class="about-bottom-fade pointer-events-none absolute inset-x-0 bottom-0 z-[1]" aria-hidden="true"></div>
     <div class="relative z-[2] mx-auto max-w-290 px-14 py-18 pb-16 max-md:px-5 max-md:py-11">
-      <div class="about-copy-shell max-w-245">
+      <div class="about-copy-shell max-w-245 select-none">
         <p
           ref="copyTextRef"
           class="font-medium tracking-[0.2px] text-[42px] leading-[1.22] max-md:text-[28px] max-md:leading-[1.26]"
