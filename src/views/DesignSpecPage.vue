@@ -24,6 +24,14 @@
           </p>
 
           <div class="md-media" data-carousel-id="carousel-design-spec">
+            <div class="md-carousel-controls">
+              <button class="md-carousel-btn" data-action="prev" type="button" aria-label="上一张">
+                <i class="ri-arrow-left-line"></i>
+              </button>
+              <button class="md-carousel-btn" data-action="next" type="button" aria-label="下一张">
+                <i class="ri-arrow-right-line"></i>
+              </button>
+            </div>
             <div class="md-carousel-track" data-carousel-track="true">
               <div class="md-carousel-card">
                 <div
@@ -36,6 +44,35 @@
                 ></div>
                 <div class="md-item-caption">组件与布局规范示意图</div>
               </div>
+              <div class="md-carousel-card">
+                <div
+                  class="md-carousel-item rounded-md"
+                  data-carousel-id="carousel-design-spec"
+                  data-index="1"
+                  :style="{ backgroundImage: `url(${designSpecScreen01})` }"
+                  role="img"
+                  aria-label="设计规范示意图"
+                ></div>
+                <div class="md-item-caption">组件与布局规范示意图</div>
+              </div>
+              <!-- <div class="md-carousel-card">
+                <div
+                  class="md-carousel-item md-carousel-item-video"
+                  data-carousel-id="carousel-design-spec"
+                  data-index="1"
+                >
+                  <video
+                    class="md-carousel-video"
+                    data-inline-video="true"
+                    data-video-id="carousel-design-spec-1"
+                    data-src="/获得神之眼的当晚.mp4"
+                    muted
+                    playsinline
+                    preload="none"
+                  ></video>
+                </div>
+                <div class="md-item-caption">交互流程演示视频</div>
+              </div> -->
             </div>
           </div>
 
@@ -78,10 +115,12 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import AppLayout from "../layouts/AppLayout.vue";
+import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 import designSpecScreen01 from "../assets/design-images/screen-01.webp";
 
 const markdownRef = ref(null);
 let alignTimer = null;
+let disposeInlineVideoPlayers = null;
 
 const handleMarkdownClick = (event) => {
   const target = event.target;
@@ -205,10 +244,20 @@ const scheduleAlign = () => {
   });
 };
 
+const mountInlineVideoPlayers = () => {
+  if (disposeInlineVideoPlayers) {
+    disposeInlineVideoPlayers();
+    disposeInlineVideoPlayers = null;
+  }
+  if (!markdownRef.value) return;
+  disposeInlineVideoPlayers = initInlineVideoPlayers(markdownRef.value);
+};
+
 onMounted(() => {
   if (markdownRef.value) {
     markdownRef.value.addEventListener("click", handleMarkdownClick, true);
     scheduleAlign();
+    mountInlineVideoPlayers();
   }
   window.addEventListener("resize", alignMarkdownCarousels);
   window.addEventListener("orientationchange", scheduleAlign);
@@ -220,6 +269,10 @@ onUnmounted(() => {
   }
   window.removeEventListener("resize", alignMarkdownCarousels);
   window.removeEventListener("orientationchange", scheduleAlign);
+  if (disposeInlineVideoPlayers) {
+    disposeInlineVideoPlayers();
+    disposeInlineVideoPlayers = null;
+  }
   if (alignTimer) window.clearTimeout(alignTimer);
 });
 </script>
