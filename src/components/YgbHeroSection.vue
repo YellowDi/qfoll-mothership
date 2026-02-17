@@ -96,7 +96,15 @@
               </div>
               <div class="px-4 pb-4">
                 <div class="overflow-hidden rounded-lg border border-line/10 bg-black/3 dark:bg-white/5">
-                  <img :src="card.image" :alt="card.title" class="block h-auto w-full" />
+                  <img
+                    :src="card.image"
+                    :srcset="card.imageSrcSet"
+                    :sizes="heroCardImageSizes"
+                    :alt="card.title"
+                    class="block h-auto w-full"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               </div>
             </article>
@@ -143,6 +151,9 @@ import YgbRoadMapBg from "./YgbRoadMapBg.vue";
 import hero01Image from "../assets/ygb-assets/hero-01.webp";
 import hero02Image from "../assets/ygb-assets/hero-02.webp";
 import hero03Image from "../assets/ygb-assets/hero-03.webp";
+import hero01ImageSrcSet from "../assets/ygb-assets/hero-01.webp?w=480;640;800;960;1200&format=webp&as=srcset";
+import hero02ImageSrcSet from "../assets/ygb-assets/hero-02.webp?w=480;640;800;960;1200&format=webp&as=srcset";
+import hero03ImageSrcSet from "../assets/ygb-assets/hero-03.webp?w=480;640;800;960;1200&format=webp&as=srcset";
 
 const props = defineProps({
   preview: {
@@ -158,6 +169,7 @@ const props = defineProps({
 const sectionClass = computed(() =>
   props.homePreview ? "w-full" : "mx-auto w-full max-w-360 px-14 max-lg:px-6 max-md:px-5",
 );
+const heroCardImageSizes = "(max-width: 768px) 88vw, (max-width: 1280px) 52vw, 46vw";
 
 const heroCards = [
   {
@@ -165,18 +177,21 @@ const heroCards = [
     title: "智能系统追踪，实时掌控业务状态",
     desc: "实时、精准的车辆 GPS 定位，确保运输透明可控。用户可查询货物流转，系统自动记录关键节点，实时定位车辆，并智能校正数据，提升运营效率。",
     image: hero01Image,
+    imageSrcSet: hero01ImageSrcSet,
   },
   {
     badge: "数据驱动智能调度",
     title: "智能调度，高效匹配",
     desc: "云柜宝小程序通过强大的数据分析能力，结合集卡车辆定位信息，实现科学的车货匹配，优化运输路径，从而有效降低空载率，提高运输效率。",
     image: hero02Image,
+    imageSrcSet: hero02ImageSrcSet,
   },
   {
     badge: "运输安全与责任保障体系",
     title: "全链路物流保障，构建更完善的物流生态",
     desc: "云柜宝不仅专注于运输环节的优化，同时提供港口与堆场的协同延伸服务和提供全程物流责任险，最大限度保障货物安全，为客户提供更加安心的服务体验。",
     image: hero03Image,
+    imageSrcSet: hero03ImageSrcSet,
   },
 ];
 

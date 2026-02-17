@@ -27,12 +27,44 @@
           :style="{ color: isDark ? '#ffffff' : '#1f2329' }"
         >
           我们是企丰科技
-          <img class="inline-icon inline-icon--qf mx-1.5 max-md:mx-1.25" :src="logoImage" alt="企丰科技" />
+          <img
+            class="inline-icon inline-icon--qf mx-1.5 max-md:mx-1.25"
+            :src="logoImage"
+            :srcset="logoImageSrcSet"
+            sizes="(max-width: 768px) 40px, 48px"
+            alt="企丰科技"
+            loading="lazy"
+            decoding="async"
+          />
           一家以技术驱动为核心，专注企业信息化系统开发与技术服务的团队。深耕软件研发多年，服务多家企业与品牌
           <span class="inline-flex items-center align-middle overflow-visible mx-1.5 -translate-y-0.5 -space-x-2.5 max-md:mx-1.25 max-md:-space-x-2">
-            <img class="inline-icon inline-icon--a" :src="huasenIcon" alt="华森" />
-            <img class="inline-icon inline-icon--b" :src="yunguibaoIcon" alt="云柜宝" />
-            <img class="inline-icon inline-icon--c" :src="budongIcon" alt="布咚音乐" />
+            <img
+              class="inline-icon inline-icon--a"
+              :src="huasenIcon"
+              :srcset="huasenIconSrcSet"
+              sizes="(max-width: 768px) 40px, 48px"
+              alt="华森"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="inline-icon inline-icon--b"
+              :src="yunguibaoIcon"
+              :srcset="yunguibaoIconSrcSet"
+              sizes="(max-width: 768px) 40px, 48px"
+              alt="云柜宝"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="inline-icon inline-icon--c"
+              :src="budongIcon"
+              :srcset="budongIconSrcSet"
+              sizes="(max-width: 768px) 40px, 48px"
+              alt="布咚音乐"
+              loading="lazy"
+              decoding="async"
+            />
           </span>
           。无论是初创企业开拓市场，还是成熟品牌系统升级，我们以创意融合技术，助力商业持续增长。
         </p>
@@ -69,6 +101,10 @@ import logoImage from "../assets/logo.webp";
 import huasenIcon from "../assets/huasen.webp";
 import yunguibaoIcon from "../assets/yunguibao.webp";
 import budongIcon from "../assets/budong-music.webp";
+import logoImageSrcSet from "../assets/logo.webp?w=40;48;64;96&format=webp&as=srcset";
+import huasenIconSrcSet from "../assets/huasen.webp?w=40;48;64;96&format=webp&as=srcset";
+import yunguibaoIconSrcSet from "../assets/yunguibao.webp?w=40;48;64;96&format=webp&as=srcset";
+import budongIconSrcSet from "../assets/budong-music.webp?w=40;48;64;96&format=webp&as=srcset";
 import TwinkleDotMatrixBg from "./TwinkleDotMatrixBg.vue";
 import { useTheme } from "../composables/useTheme";
 
