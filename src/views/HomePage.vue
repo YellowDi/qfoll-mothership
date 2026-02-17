@@ -23,7 +23,7 @@
               </div>
             </div>
 
-            <div class="col-span-4 flex flex-col gap-6 max-lg:col-span-12 max-md:hidden">
+            <div class="col-span-4 flex flex-col gap-6 max-lg:col-span-12 max-lg:grid max-lg:grid-cols-3 max-md:hidden">
               <RouterLink
                 v-for="item in sideProjects"
                 :key="item.id"
