@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import ProjectPage from "../views/ProjectPage.vue";
 import ProjectsPage from "../views/ProjectsPage.vue";
+import NewsPage from "../views/NewsPage.vue";
+import NewsArticlePage from "../views/NewsArticlePage.vue";
 import YgbPage from "../views/YgbPage.vue";
 import ContactPage from "../views/ContactPage.vue";
 import DesignSpecPage from "../views/DesignSpecPage.vue";
@@ -9,11 +11,14 @@ import PricingPage from "../views/PricingPage.vue";
 import CareersPage from "../views/CareersPage.vue";
 import NotFoundPage from "../views/NotFoundPage.vue";
 import { projects } from "../data/projects";
+import { newsArticles } from "../data/news";
 
 const routes = [
   { path: "/", name: "home", component: HomePage, meta: { title: "企丰科技" } },
   { path: "/projects", name: "projects", component: ProjectsPage, meta: { title: "客户案例" } },
   { path: "/project/:id", name: "project", component: ProjectPage },
+  { path: "/news", name: "news", component: NewsPage, meta: { title: "最新动态" } },
+  { path: "/news/:id", name: "news-article", component: NewsArticlePage },
   { path: "/company", redirect: "/contact" },
   { path: "/ygb", name: "ygb", component: YgbPage, meta: { title: "云柜宝" } },
   { path: "/cloud-cabinet", redirect: "/ygb" },
@@ -47,6 +52,13 @@ router.afterEach((to) => {
     const projectId = String(to.params.id || "");
     const projectTitle = projects[projectId]?.title;
     document.title = withBrandSuffix(projectTitle || "客户案例");
+    return;
+  }
+
+  if (to.name === "news-article") {
+    const articleId = String(to.params.id || "");
+    const articleTitle = newsArticles[articleId]?.title;
+    document.title = withBrandSuffix(articleTitle || "最新动态");
     return;
   }
 

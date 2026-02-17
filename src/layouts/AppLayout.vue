@@ -50,6 +50,16 @@
                   <i class="ri-arrow-right-line text-sm" :class="arrowClass(isCompanyRoute(route.path))"></i>
                 </span>
               </button>
+              <button
+                type="button"
+                :class="rootButtonClass(isNewsRoute(route.path))"
+                @click="goNews"
+              >
+                <span class="flex items-center justify-between">
+                  <span>新闻</span>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(isNewsRoute(route.path))"></i>
+                </span>
+              </button>
             </nav>
           </div>
           <div
@@ -151,6 +161,7 @@ const isCompanyRoute = (path) =>
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
+const isNewsRoute = (path) => path === "/news" || path.startsWith("/news/");
 const desktopCollapsed = ref(route.path === "/");
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
@@ -185,7 +196,6 @@ const sidebarProjectList = computed(() =>
     return String(a.title || "").localeCompare(String(b.title || ""), "zh-Hans-CN");
   })
 );
-
 const toggleNav = () => {
   if (window.matchMedia("(max-width: 768px)").matches) {
     mobileNavOpen.value = !mobileNavOpen.value;
@@ -288,6 +298,13 @@ const goCompany = () => {
   }
 };
 
+const goNews = () => {
+  navLevel.value = "root";
+  if (!isNewsRoute(route.path)) {
+    router.push("/news");
+  }
+};
+
 const goRoot = () => {
   navLevel.value = "root";
 };
@@ -298,11 +315,11 @@ watch(
     mobileNavOpen.value = false;
     desktopCollapsed.value = route.path === "/";
     if (route.path.startsWith("/project") || route.path === "/projects") {
-      navLevel.value = navLevel.value === "root" ? "projects" : navLevel.value;
+      navLevel.value = "projects";
       return;
     }
     if (isCompanyRoute(route.path)) {
-      navLevel.value = navLevel.value === "root" ? "company" : navLevel.value;
+      navLevel.value = "company";
       return;
     }
     navLevel.value = "root";

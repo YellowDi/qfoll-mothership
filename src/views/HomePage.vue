@@ -103,6 +103,45 @@
         </div>
       </div>
 
+      <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
+        <div class="mx-auto flex w-full items-center justify-between">
+          <h3 class="text-lg font-medium">最新动态</h3>
+          <RouterLink class="text-[13px] text-muted transition-colors hover:text-ink" to="/news">查看更多</RouterLink>
+        </div>
+        <div class="mx-auto w-full pt-6">
+          <div class="grid grid-flow-row grid-cols-2 gap-x-10 gap-y-8 max-md:grid-cols-1 max-md:gap-x-0 max-md:gap-y-6">
+            <RouterLink
+              v-for="item in latestNews"
+              :key="`news-${item.id}`"
+              class="group grid grid-cols-[minmax(0,12rem)_1fr] items-center gap-5 max-lg:grid-cols-[minmax(0,10.25rem)_1fr] max-md:grid-cols-[minmax(0,6.25rem)_1fr] max-md:gap-3"
+              :to="`/news/${item.id}`"
+            >
+              <div class="overflow-hidden rounded-md">
+                <div
+                  class="aspect-square w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  :style="{ backgroundImage: item.cover }"
+                ></div>
+              </div>
+              <div class="flex min-h-full max-w-[36rem] flex-col justify-center pl-4 pr-10 py-2 text-left max-lg:max-w-[30rem] max-lg:pl-3 max-lg:pr-8 max-lg:py-1.5 max-md:max-w-none max-md:pl-2.5 max-md:pr-6 max-md:py-1.5">
+                <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
+                <div class="mt-4 flex items-center gap-2 text-sm">
+                  <span class="font-medium text-ink">{{ item.category }}</span>
+                  <span class="text-muted">{{ item.publishedAt }}</span>
+                </div>
+              </div>
+            </RouterLink>
+          </div>
+          <div class="mt-8 flex justify-center max-md:mt-6">
+            <RouterLink
+              to="/news"
+              class="btn-neutral-pill"
+            >
+              查看更多
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+
       <TagMarqueeSection />
 
     </div>
@@ -116,6 +155,7 @@ import TagMarqueeSection from "../components/TagMarqueeSection.vue";
 import YgbHeroSection from "../components/YgbHeroSection.vue";
 import { computed } from "vue";
 import { projectList } from "../data/projects";
+import { newsList } from "../data/news";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -149,4 +189,9 @@ const moreProjectPool = computed(() =>
 );
 const moreProjects = computed(() => moreProjectPool.value.slice(0, 3));
 const hasMoreProjects = computed(() => moreProjectPool.value.length > 3);
+const latestNews = computed(() =>
+  [...newsList]
+    .sort((a, b) => b.publishedTimestamp - a.publishedTimestamp)
+    .slice(0, 6)
+);
 </script>
