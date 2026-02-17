@@ -48,7 +48,7 @@
               <div
                 v-if="filterOpen"
                 ref="filterPanelRef"
-                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="filter-panel list-page-panel list-page-panel-desktop list-page-filter-desktop max-md:hidden"
                 :style="filterDesktopStyle"
               >
                 <div class="filter-panel-scroll">
@@ -117,7 +117,7 @@
               <div
                 v-if="sortOpen"
                 ref="sortPanelRef"
-                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-ink shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="sort-panel list-page-panel list-page-panel-desktop list-page-sort-desktop max-md:hidden"
                 :style="sortDesktopStyle"
               >
                 <button
@@ -179,7 +179,7 @@
           <div
             v-if="filterOpen"
             ref="mobileFilterPanel"
-            class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            class="mobile-filter-panel list-page-panel list-page-panel-mobile list-page-filter-mobile"
             :style="mobileFilterPanelStyle"
           >
             <div class="min-h-0 flex-1 overflow-y-auto pr-1">
@@ -237,7 +237,7 @@
         <Transition name="dropdown-fade">
           <div
             v-if="sortOpen"
-            class="mobile-sort-panel pointer-events-auto rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            class="mobile-sort-panel list-page-panel list-page-panel-mobile list-page-sort-mobile"
           >
             <button
               type="button"
