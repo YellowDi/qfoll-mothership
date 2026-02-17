@@ -6,8 +6,8 @@ startMonth: 2
 company: 宁波云柜宝网络信息科技有限公司
 tag: 网络货运
 lead: 以数据驱动的智慧物流协同平台
-primaryButtonText: 
-primaryButtonUrl: 
+primaryButtonText: 查看详情
+primaryButtonUrl: /ygb
 secondaryButtonText: 
 secondaryButtonUrl: 
 cover: "/covers/ygb.webp"
