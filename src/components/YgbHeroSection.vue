@@ -49,17 +49,16 @@
               <i class="ri-arrow-right-line text-base"></i>
             </RouterLink>
             <template v-else>
-              <a
-                href="https://ygbonline.com/"
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
                 class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-white transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85"
+                @click="scrollToDownloadSection"
               >
                 下载 App
                 <i class="ri-download-2-line text-base"></i>
-              </a>
+              </button>
               <a
-                href="https://ygbonline.com/"
+                href="https://www.ygbonline.com/admin/#/login"
                 target="_blank"
                 rel="noreferrer"
                 class="inline-flex h-10 items-center gap-2 rounded-full border border-line/10 bg-surface px-5 text-sm font-medium text-ink transition-colors hover:bg-black/4 dark:hover:bg-white/8"
@@ -276,6 +275,12 @@ const setHeroCardWithReset = (index) => {
 const shiftHeroWithReset = (step) => {
   shiftHero(step);
   startHeroAutoPlay({ immediate: true });
+};
+
+const scrollToDownloadSection = () => {
+  const section = document.getElementById("download");
+  if (!section) return;
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 const onDocumentVisibilityChange = () => {

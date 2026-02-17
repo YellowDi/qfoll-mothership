@@ -178,7 +178,9 @@
                   rel="noreferrer"
                   class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-black transition-colors hover:bg-white/85 max-md:gap-1.5 max-md:px-3.5 max-md:text-xs"
                 >
-                  下载云柜宝司机版
+                  <i class="ri-android-fill text-base"></i>
+                  <span class="max-md:hidden">下载云柜宝司机版</span>
+                  <span class="hidden max-md:inline">下载司机端</span>
                   <i class="ri-download-2-line text-base"></i>
                 </a>
                 <div class="mt-2 text-[13px] text-white/55">或微信搜索小程序「云柜宝」</div>
