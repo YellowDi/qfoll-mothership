@@ -92,7 +92,6 @@ import AppLayout from "../layouts/AppLayout.vue";
 import DetailMetaCard from "../components/DetailMetaCard.vue";
 import RelatedContentSection from "../components/RelatedContentSection.vue";
 import { projects, projectList } from "../data/projects";
-import { newsList } from "../data/news";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 import "../styles/markdown-media.css";
 
@@ -110,15 +109,7 @@ const resolveTagTarget = (tag) => {
   if (!text) return { path: "/projects" };
   const year = parseYearTag(text);
   if (year) {
-    return { path: "/news", query: { years: String(year) } };
-  }
-  const hasProjectTag = projectList.some((item) => item.tag?.includes(text));
-  if (hasProjectTag) {
-    return { path: "/projects", query: { tags: text } };
-  }
-  const hasNewsCategory = newsList.some((item) => item.category?.includes(text));
-  if (hasNewsCategory) {
-    return { path: "/news", query: { tags: text } };
+    return { path: "/projects", query: { years: String(year) } };
   }
   return { path: "/projects", query: { tags: text } };
 };
