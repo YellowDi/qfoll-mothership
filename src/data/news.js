@@ -207,6 +207,33 @@ const toDateValue = (value) => {
   return Number.isFinite(timestamp) ? timestamp : -Infinity;
 };
 
+const toChineseDateLabel = (value) => {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  const match = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (match) {
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    return `${year}年${month}月${day}日`;
+  }
+  const date = new Date(raw);
+  const timestamp = date.getTime();
+  if (!Number.isFinite(timestamp)) return raw;
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}年${month}月${day}日`;
+};
+
+const toYearLabel = (value) => {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  const match = raw.match(/^(\d{4})/);
+  if (!match) return raw;
+  return `${match[1]} 年`;
+};
+
 const parseArticle = (raw, path) => {
   const { data, content } = parseFrontmatter(raw);
   const id = data.id || path.split("/").pop()?.replace(".md", "");
@@ -256,17 +283,19 @@ const parseArticle = (raw, path) => {
   });
 
   const infoTags = Array.isArray(data.infoTags) ? data.infoTags : [];
-  const normalizedInfoTags = infoTags.filter(Boolean);
+  const normalizedInfoTags = infoTags
+    .filter(Boolean)
+    .map((tag) => toYearLabel(tag));
   if (!normalizedInfoTags.length) {
     if (data.category) normalizedInfoTags.push(String(data.category));
-    if (data.publishedAt) normalizedInfoTags.push(String(data.publishedAt));
+    if (data.publishedAt) normalizedInfoTags.push(toYearLabel(data.publishedAt));
   }
 
   return {
     id,
     title: data.title || "",
     sidebarTitle: data.sidebarTitle || data.title || "",
-    publishedAt: data.publishedAt || "",
+    publishedAt: toChineseDateLabel(data.publishedAt),
     publishedTimestamp: toDateValue(data.publishedAt),
     year: String(data.publishedAt || "").slice(0, 4),
     startMonth: String(data.publishedAt || "").slice(5, 7),

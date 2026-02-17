@@ -68,25 +68,26 @@
       ></div>
     </article>
 
-    <div class="mx-auto w-full max-w-360 self-stretch bg-black/[0.045] py-10 dark:bg-white/[0.035]">
-      <div class="mx-auto w-full max-w-[50%] px-14 max-lg:max-w-full max-lg:px-6 max-md:px-5">
-        <div class="rounded-2xl bg-transparent py-8 max-md:px-6 max-md:py-6">
-          <div class="flex flex-wrap gap-3">
-            <span
-            v-for="tag in project.infoTags"
-            :key="tag"
-            class="rounded-full border border-line/10 bg-surface px-4 py-2 text-xs font-medium text-ink shadow-[0_1px_2px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
-            >{{ tag }}</span
-          >
-        </div>
-        <div v-if="project.company" class="mt-6 text-sm leading-[1.8] text-ink">
-          {{ project.company }}
-        </div>
-        <div
-          v-if="project.infoPanelHtml"
-          class="mt-4 text-sm leading-[1.8] text-muted"
-          v-html="project.infoPanelHtml"
-        ></div>
+    <div class="news-meta-section w-full max-w-360 self-stretch mx-auto py-10">
+      <div class="mx-auto w-full px-16 max-xl:px-6 max-md:px-5">
+        <div class="news-meta-card bg-black/[0.045] px-3 py-6 md:py-10 grid grid-cols-12 rounded-md dark:bg-white/[0.06]">
+          <div class="col-span-12 flex flex-col gap-6 md:col-span-6 md:col-start-4">
+            <section class="w-full">
+              <ul class="news-meta-tags gap-3xs flex flex-wrap">
+                <li v-for="tag in project.infoTags" :key="tag">
+                  <span class="news-meta-pill">{{ tag }}</span>
+                </li>
+              </ul>
+            </section>
+            <div v-if="project.company" class="news-meta-company text-sm leading-[1.8] text-ink">
+              {{ project.company }}
+            </div>
+            <div
+              v-if="project.infoPanelHtml"
+              class="news-info-panel-content info-panel-content text-sm leading-[1.8] text-muted"
+              v-html="project.infoPanelHtml"
+            ></div>
+          </div>
         </div>
       </div>
     </div>
