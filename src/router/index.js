@@ -7,6 +7,7 @@ import ContactPage from "../views/ContactPage.vue";
 import DesignSpecPage from "../views/DesignSpecPage.vue";
 import PricingPage from "../views/PricingPage.vue";
 import CareersPage from "../views/CareersPage.vue";
+import NotFoundPage from "../views/NotFoundPage.vue";
 import { projects } from "../data/projects";
 
 const routes = [
@@ -21,7 +22,7 @@ const routes = [
   { path: "/careers", name: "careers", component: CareersPage, meta: { title: "工作机会" } },
   { path: "/design-spec", name: "design-spec", component: DesignSpecPage, meta: { title: "设计规范" } },
   { path: "/resources", redirect: "/design-spec" },
-  { path: "/:pathMatch(.*)*", redirect: "/" },
+  { path: "/:pathMatch(.*)*", name: "not-found", component: NotFoundPage, meta: { title: "页面不存在" } },
 ];
 
 const router = createRouter({
