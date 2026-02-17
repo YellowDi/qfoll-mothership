@@ -7,17 +7,29 @@
 
       <div class="relative">
       <div class="flex flex-wrap items-center justify-between gap-4 text-sm">
-        <div class="flex flex-wrap items-center gap-6">
-          <button
-            v-for="item in filterTabs"
-            :key="item"
-            type="button"
-            class="transition-colors"
-            :class="activeFilter === item ? 'text-ink font-semibold' : 'text-muted hover:text-ink'"
-            @click="activeFilter = item"
+        <div
+          class="category-nav-mask relative min-w-0"
+          :class="{
+            'has-left-fade': categoryCanScrollLeft,
+            'has-right-fade': categoryCanScrollRight,
+          }"
+        >
+          <div
+            ref="categoryNavRef"
+            class="category-nav-scroll flex items-center gap-6 overflow-x-auto whitespace-nowrap"
+            @scroll="updateCategoryNavFades"
           >
-            {{ item }}
-          </button>
+            <button
+              v-for="item in filterTabs"
+              :key="item"
+              type="button"
+              class="shrink-0 transition-colors"
+              :class="activeFilter === item ? 'text-ink font-semibold' : 'text-muted hover:text-ink'"
+              @click="activeFilter = item"
+            >
+              {{ item }}
+            </button>
+          </div>
         </div>
 
         <div class="flex items-center gap-6 text-sm text-muted">
@@ -334,6 +346,9 @@ const activeFilter = ref("全部");
 const selectedTags = ref([]);
 const selectedYears = ref([]);
 const syncingFromQuery = ref(false);
+const categoryNavRef = ref(null);
+const categoryCanScrollLeft = ref(false);
+const categoryCanScrollRight = ref(false);
 const mobileFilterPanel = ref(null);
 const mobileFilterHeight = ref(0);
 const hasActiveFilters = computed(
@@ -426,6 +441,17 @@ const handleDocClick = (event) => {
   sortOpen.value = false;
   filterOpen.value = false;
 };
+const updateCategoryNavFades = () => {
+  const el = categoryNavRef.value;
+  if (!el) {
+    categoryCanScrollLeft.value = false;
+    categoryCanScrollRight.value = false;
+    return;
+  }
+  const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
+  categoryCanScrollLeft.value = el.scrollLeft > 1;
+  categoryCanScrollRight.value = el.scrollLeft < maxScrollLeft - 1;
+};
 const updateDesktopPanelPosition = () => {
   if (!isDesktopPanelViewport()) {
     filterDesktopStyle.value = {};
@@ -472,13 +498,18 @@ onMounted(() => {
   document.addEventListener("click", handleDocClick);
   window.addEventListener("resize", updateMobileFilterHeight);
   window.addEventListener("resize", updateDesktopPanelPosition);
+  window.addEventListener("resize", updateCategoryNavFades);
   window.addEventListener("scroll", updateDesktopPanelPosition, true);
+  nextTick(() => {
+    updateCategoryNavFades();
+  });
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener("click", handleDocClick);
   window.removeEventListener("resize", updateMobileFilterHeight);
   window.removeEventListener("resize", updateDesktopPanelPosition);
+  window.removeEventListener("resize", updateCategoryNavFades);
   window.removeEventListener("scroll", updateDesktopPanelPosition, true);
   setMobileScrollLock(false);
 });
@@ -515,6 +546,10 @@ watch(
   },
   { deep: true }
 );
+watch(filterTabs, async () => {
+  await nextTick();
+  updateCategoryNavFades();
+});
 
 watch(filterOpen, async (open) => {
   setMobileScrollLock(open);
@@ -548,6 +583,46 @@ watch(sortOpen, async (open) => {
 .dropdown-fade-leave-to {
   opacity: 0;
   transform: translateY(-6px) scale(0.98);
+}
+
+.category-nav-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.category-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-nav-mask::before,
+.category-nav-mask::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.category-nav-mask::before {
+  left: 0;
+  background: linear-gradient(to right, rgb(var(--color-bg) / 1), rgb(var(--color-bg) / 0));
+}
+
+.category-nav-mask::after {
+  right: 0;
+  background: linear-gradient(to left, rgb(var(--color-bg) / 1), rgb(var(--color-bg) / 0));
+}
+
+.category-nav-mask.has-left-fade::before {
+  opacity: 1;
+}
+
+.category-nav-mask.has-right-fade::after {
+  opacity: 1;
 }
 
 </style>
