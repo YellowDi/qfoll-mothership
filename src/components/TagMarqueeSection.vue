@@ -1,7 +1,7 @@
 <template>
   <section
     ref="sectionRef"
-    class="tilt-wall-section relative mt-14 w-screen overflow-hidden ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] max-md:mt-10"
+    class="tilt-wall-section relative mt-14 w-auto overflow-hidden -mx-14 max-lg:-mx-6 max-md:-mx-5 max-md:mt-10"
   >
     <div class="relative w-full pb-16 max-md:pb-11">
       <div

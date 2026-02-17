@@ -1,7 +1,7 @@
 <template>
   <section
     ref="sectionRef"
-    class="about relative mt-0 w-screen overflow-hidden ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]"
+    class="about relative mt-0 w-auto overflow-hidden -mx-14 max-lg:-mx-6 max-md:-mx-5"
   >
     <TwinkleDotMatrixBg
       :cell-size="dotConfig.cellSize"
