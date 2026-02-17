@@ -101,7 +101,7 @@
       <RouterLink
         v-for="item in relatedArticles"
         :key="item.id"
-        class="group overflow-hidden rounded-md max-md:snap-start max-md:min-w-[72%] max-md:flex-shrink-0"
+        class="group overflow-hidden rounded-md max-md:snap-start max-md:min-w-[72%] max-md:w-[72%] max-md:basis-[72%] max-md:flex-shrink-0"
         :to="`/news/${item.id}`"
       >
         <div class="aspect-square w-full overflow-hidden rounded-md">
@@ -110,7 +110,7 @@
         <div class="pt-4 text-left">
           <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
           <div class="mt-4 flex items-center gap-2 text-sm">
-            <span class="font-medium text-ink">{{ item.category }}</span>
+            <span class="font-medium text-ink">{{ item.tag }}</span>
             <span class="text-muted">{{ item.publishedAt }}</span>
           </div>
         </div>
