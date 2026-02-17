@@ -287,9 +287,13 @@ const parseArticle = (raw, path) => {
     .filter(Boolean)
     .map((tag) => toYearLabel(tag));
   if (!normalizedInfoTags.length) {
-    if (data.category) normalizedInfoTags.push(String(data.category));
     if (data.publishedAt) normalizedInfoTags.push(toYearLabel(data.publishedAt));
+    if (data.category) normalizedInfoTags.push(String(data.category));
   }
+  const orderedInfoTags = [
+    ...normalizedInfoTags.filter((tag) => /^\d{4}\s*年?$/.test(String(tag).trim())),
+    ...normalizedInfoTags.filter((tag) => !/^\d{4}\s*年?$/.test(String(tag).trim())),
+  ];
 
   return {
     id,
@@ -307,7 +311,7 @@ const parseArticle = (raw, path) => {
     primaryButtonUrl: data.primaryButtonUrl || "",
     secondaryButtonText: data.secondaryButtonText || "",
     secondaryButtonUrl: data.secondaryButtonUrl || "",
-    infoTags: normalizedInfoTags,
+    infoTags: orderedInfoTags,
     infoPanelHtml,
     customCarousels,
     bodyHtml: md.render(body || ""),

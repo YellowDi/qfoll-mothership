@@ -250,17 +250,31 @@ const parseProject = (raw, path) => {
   });
 
   const infoTags = Array.isArray(data.infoTags) ? data.infoTags : [];
-  const normalizedInfoTags = infoTags.filter(Boolean);
+  const toYearLabel = (value) => {
+    const rawValue = String(value ?? "").trim();
+    if (!rawValue) return "";
+    const match = rawValue.match(/^(\d{4})\s*年?$/);
+    if (!match) return rawValue;
+    return `${match[1]} 年`;
+  };
+  const normalizedInfoTags = infoTags
+    .filter(Boolean)
+    .map((tag) => toYearLabel(tag));
   if (!normalizedInfoTags.length) {
-    if (data.year) normalizedInfoTags.push(String(data.year));
+    if (data.year) normalizedInfoTags.push(toYearLabel(data.year));
     if (data.tag) normalizedInfoTags.push(String(data.tag));
   }
+  const orderedInfoTags = [
+    ...normalizedInfoTags.filter((tag) => /^\d{4}\s*年?$/.test(String(tag).trim())),
+    ...normalizedInfoTags.filter((tag) => !/^\d{4}\s*年?$/.test(String(tag).trim())),
+  ];
 
   return {
     id,
     title: data.title || "",
     sidebarTitle: data.sidebarTitle || data.title || "",
     year: data.year || "",
+    yearLabel: toYearLabel(data.year),
     startMonth: data.startMonth || "",
     company: data.company || "",
     tag: data.tag || "",
@@ -270,7 +284,7 @@ const parseProject = (raw, path) => {
     primaryButtonUrl: data.primaryButtonUrl || "",
     secondaryButtonText: data.secondaryButtonText || "",
     secondaryButtonUrl: data.secondaryButtonUrl || "",
-    infoTags: normalizedInfoTags,
+    infoTags: orderedInfoTags,
     infoPanelHtml,
     customCarousels,
     bodyHtml: md.render(body || ""),
