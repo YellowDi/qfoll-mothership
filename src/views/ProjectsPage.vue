@@ -275,46 +275,27 @@
       </div>
 
       <div v-if="layout === 'grid'" class="mt-8 grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
-        <RouterLink
+        <ContentGridCard
           v-for="item in filteredProjects"
           :key="item.id"
-          class="group"
           :to="`/project/${item.id}`"
-        >
-          <div class="overflow-hidden rounded-sm">
-            <CoverImage
-              class="aspect-square w-full rounded-sm"
-              :src="item.cover"
-              :alt="item.title"
-              image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-            />
-          </div>
-          <div class="pt-4 text-left">
-            <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
-            <div class="mt-4 flex items-center gap-2 text-sm">
-              <span class="font-medium text-ink">{{ item.tag }}</span>
-              <span class="text-muted">{{ item.yearLabel || item.year }}</span>
-            </div>
-          </div>
-        </RouterLink>
+          :title="item.title"
+          :cover="item.cover"
+          :primary-meta="item.tag"
+          :secondary-meta="item.yearLabel || item.year"
+        />
       </div>
 
       <div v-else class="mt-8 border-y border-line/12">
-        <RouterLink
+        <ContentListRow
           v-for="item in filteredProjects"
           :key="item.id"
-          class="group grid grid-cols-12 gap-6 border-b border-line/12 py-7 transition-colors hover:border-ink/55 hover:text-ink"
           :to="`/project/${item.id}`"
-        >
-          <div class="col-span-12 text-sm text-muted max-md:col-span-12 md:col-span-3">
-            <div class="text-[15px] font-medium text-ink">{{ item.tag || '客户案例' }}</div>
-            <div class="mt-2 text-[13px] text-muted">{{ item.yearLabel || item.year }}</div>
-          </div>
-          <div class="col-span-12 md:col-span-9">
-            <div class="text-[17px] font-medium text-ink">{{ item.title }}</div>
-            <div class="mt-2 text-sm text-muted">{{ item.lead }}</div>
-          </div>
-        </RouterLink>
+          :title="item.title"
+          :lead="item.lead"
+          :primary-meta="item.tag || '客户案例'"
+          :secondary-meta="item.yearLabel || item.year"
+        />
       </div>
     </div>
   </AppLayout>
@@ -324,7 +305,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getAnchoredPanelStyle, isDesktopPanelViewport } from "../composables/anchoredPanel";
-import CoverImage from "../components/CoverImage.vue";
+import ContentGridCard from "../components/ContentGridCard.vue";
+import ContentListRow from "../components/ContentListRow.vue";
 import { projectList } from "../data/projects";
 import AppLayout from "../layouts/AppLayout.vue";
 

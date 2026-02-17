@@ -68,70 +68,30 @@
       ></div>
     </article>
 
-    <div class="news-meta-section w-full max-w-360 self-stretch mx-auto py-10">
-      <div class="mx-auto w-full px-16 max-xl:px-6 max-md:px-5">
-        <div class="news-meta-card bg-black/[0.045] px-3 py-6 md:py-10 grid grid-cols-12 rounded-md dark:bg-white/[0.06]">
-          <div class="col-span-12 flex flex-col gap-6 md:col-span-6 md:col-start-4">
-            <section class="w-full">
-              <ul class="news-meta-tags gap-3xs flex flex-wrap">
-                <li v-for="tagItem in infoTagLinks" :key="tagItem.label">
-                  <RouterLink :to="tagItem.to" class="news-meta-pill">{{ tagItem.label }}</RouterLink>
-                </li>
-              </ul>
-            </section>
-          <div v-if="article.company" class="news-meta-company text-sm leading-[1.8] text-ink">
-            {{ article.company }}
-          </div>
-          <div
-            v-if="article.infoPanelHtml"
-            class="news-info-panel-content info-panel-content text-sm leading-[1.8] text-muted"
-            v-html="article.infoPanelHtml"
-          ></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DetailMetaCard
+      :info-tag-links="infoTagLinks"
+      :company="article.company"
+      :info-panel-html="article.infoPanelHtml"
+    />
 
-    <div class="w-full max-w-360 self-stretch mx-auto mt-10 overflow-x-hidden max-md:max-w-none max-md:w-screen max-md:ml-[calc(50%-50vw)] max-md:mr-[calc(50%-50vw)]">
-      <div class="mx-auto flex w-full items-center justify-between px-16 max-xl:px-6 max-md:px-5">
-        <h3 class="text-lg font-medium">继续阅读</h3>
-        <RouterLink class="text-[13px] text-muted transition-colors hover:text-ink" to="/news">查看全部</RouterLink>
-      </div>
-      <div class="mx-auto w-full px-16 pb-20 pt-6 max-xl:px-6 max-md:pl-5 max-md:pr-0">
-        <div class="no-scrollbar grid grid-cols-3 gap-6 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:pb-4 max-md:pr-6 max-md:scroll-pl-5 max-md:scroll-pr-6 max-md:-ml-5 max-md:pl-5">
-      <RouterLink
-        v-for="item in relatedArticles"
-        :key="item.id"
-        class="group overflow-hidden rounded-md max-md:snap-start max-md:min-w-[72%] max-md:w-[72%] max-md:basis-[72%] max-md:flex-shrink-0"
-        :to="`/news/${item.id}`"
-      >
-        <div class="aspect-square w-full overflow-hidden rounded-md">
-          <CoverImage
-            class="h-full w-full rounded-md"
-            :src="item.cover"
-            :alt="item.title"
-            image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-          />
-        </div>
-        <div class="pt-4 text-left">
-          <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
-          <div class="mt-4 flex items-center gap-2 text-sm">
-            <span class="font-medium text-ink">{{ item.tag }}</span>
-            <span class="text-muted">{{ item.publishedAt }}</span>
-          </div>
-        </div>
-      </RouterLink>
-        </div>
-      </div>
-    </div>
+    <RelatedContentSection
+      title="继续阅读"
+      view-all-to="/news"
+      :items="relatedArticles"
+      :item-to="articleRelatedTo"
+      :primary-meta="articleRelatedPrimaryMeta"
+      :secondary-meta="articleRelatedSecondaryMeta"
+      item-class="max-md:w-[72%] max-md:basis-[72%]"
+    />
   </AppLayout>
 </template>
 
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import CoverImage from "../components/CoverImage.vue";
 import AppLayout from "../layouts/AppLayout.vue";
+import DetailMetaCard from "../components/DetailMetaCard.vue";
+import RelatedContentSection from "../components/RelatedContentSection.vue";
 import { newsArticles, newsList } from "../data/news";
 import { projectList } from "../data/projects";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
@@ -173,6 +133,9 @@ const infoTagLinks = computed(() =>
     to: resolveTagTarget(tag),
   }))
 );
+const articleRelatedTo = (item) => `/news/${item.id}`;
+const articleRelatedPrimaryMeta = (item) => item.tag;
+const articleRelatedSecondaryMeta = (item) => item.publishedAt;
 
 const markdownRef = ref(null);
 const copiedVisible = ref(false);
