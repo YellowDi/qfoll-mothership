@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="list-page-shell mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
+    <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
       <div class="mb-6 flex items-center justify-between">
         <h1 class="text-4xl font-medium tracking-tight">最新动态</h1>
       </div>
@@ -559,3 +559,58 @@ watch(sortOpen, async (open) => {
   updateDesktopPanelPosition();
 });
 </script>
+
+<style scoped>
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform-origin: top right;
+}
+
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+}
+
+.category-nav-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.category-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-nav-mask::before,
+.category-nav-mask::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.category-nav-mask::before {
+  left: 0;
+  background: linear-gradient(to right, rgb(var(--color-bg) / 1), rgb(var(--color-bg) / 0));
+}
+
+.category-nav-mask::after {
+  right: 0;
+  background: linear-gradient(to left, rgb(var(--color-bg) / 1), rgb(var(--color-bg) / 0));
+}
+
+.category-nav-mask.has-left-fade::before {
+  opacity: 1;
+}
+
+.category-nav-mask.has-right-fade::after {
+  opacity: 1;
+}
+
+</style>
