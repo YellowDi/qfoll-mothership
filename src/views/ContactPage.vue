@@ -47,6 +47,7 @@
 <script setup>
 import { ref } from "vue";
 import AppLayout from "../layouts/AppLayout.vue";
+import "../styles/markdown-media.css";
 import wecomQrCode from "../assets/wecom-qrcode.webp";
 
 const qrCardRef = ref(null);

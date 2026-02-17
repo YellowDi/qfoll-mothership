@@ -81,24 +81,6 @@
                 </div>
                 <div class="md-item-caption">组件与布局规范示意图</div>
               </div>
-              <!-- <div class="md-carousel-card">
-                <div
-                  class="md-carousel-item md-carousel-item-video"
-                  data-carousel-id="carousel-design-spec"
-                  data-index="1"
-                >
-                  <video
-                    class="md-carousel-video"
-                    data-inline-video="true"
-                    data-video-id="carousel-design-spec-1"
-                    data-src="/获得神之眼的当晚.mp4"
-                    muted
-                    playsinline
-                    preload="none"
-                  ></video>
-                </div>
-                <div class="md-item-caption">交互流程演示视频</div>
-              </div> -->
             </div>
           </div>
 
@@ -143,6 +125,29 @@
             企业软件不会停留在某一个版本，因此我们在设计之初就会思考未来三到五年的演进路径：当新的业务模块接入时结构是否依然稳定，是否能够自然扩展到多端形态，是否可以承载新的数据模型与交互方式。界面的价值不在上线那一刻，而在多年之后仍然不需要被推翻重做。也正因如此，我们将 UI 视为产品能力的一部分，而不是视觉层面的附属；将设计视为系统构建，而不是风格输出；将规范视为支持长期进化的基础，而不是限制创造力的边界。这些标准与坚持，构成了我们设计每一个产品界面的出发点。
           </p>
 
+          <div class="md-media design-spec-media" data-carousel-id="carousel-design-spec">
+            <div class="md-carousel-track" data-carousel-track="true">
+              <div class="md-carousel-card is-landscape">
+                <div
+                  class="md-carousel-item md-carousel-item-video"
+                  data-carousel-id="carousel-design-spec"
+                  data-index="0"
+                >
+                  <video
+                    class="md-carousel-video"
+                    data-inline-video="true"
+                    data-video-id="carousel-design-spec-1"
+                    data-src="https://video.cdn.queniuqe.com/store_trailers/256878929/movie_max_vp9.webm"
+                    muted
+                    playsinline
+                    preload="none"
+                  ></video>
+                </div>
+                <div class="md-item-caption">交互流程演示视频</div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </article>
   </AppLayout>
@@ -152,6 +157,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import AppLayout from "../layouts/AppLayout.vue";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
+import "../styles/markdown-media.css";
 import designSpecScreen01 from "../assets/design-images/screen-01.webp";
 import designSpecScreen02 from "../assets/design-images/test-1.png";
 import designSpecScreen03 from "../assets/design-images/test-2.png";

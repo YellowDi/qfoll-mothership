@@ -51,4 +51,5 @@
 
 <script setup>
 import AppLayout from "../layouts/AppLayout.vue";
+import "../styles/markdown-media.css";
 </script>

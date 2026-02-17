@@ -95,6 +95,7 @@ import RelatedContentSection from "../components/RelatedContentSection.vue";
 import { newsArticles, newsList } from "../data/news";
 import { projectList } from "../data/projects";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
+import "../styles/markdown-media.css";
 
 const route = useRoute();
 const article = computed(() => newsArticles[route.params.id] || newsList[0]);

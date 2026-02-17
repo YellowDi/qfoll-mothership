@@ -1,33 +1,22 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../views/HomePage.vue";
-import ProjectPage from "../views/ProjectPage.vue";
-import ProjectsPage from "../views/ProjectsPage.vue";
-import NewsPage from "../views/NewsPage.vue";
-import NewsArticlePage from "../views/NewsArticlePage.vue";
-import YgbPage from "../views/YgbPage.vue";
-import ContactPage from "../views/ContactPage.vue";
-import DesignSpecPage from "../views/DesignSpecPage.vue";
-import PricingPage from "../views/PricingPage.vue";
-import CareersPage from "../views/CareersPage.vue";
-import NotFoundPage from "../views/NotFoundPage.vue";
 import { projects } from "../data/projects";
 import { newsArticles } from "../data/news";
 
 const routes = [
-  { path: "/", name: "home", component: HomePage, meta: { title: "企丰科技" } },
-  { path: "/projects", name: "projects", component: ProjectsPage, meta: { title: "客户案例" } },
-  { path: "/project/:id", name: "project", component: ProjectPage },
-  { path: "/news", name: "news", component: NewsPage, meta: { title: "最新动态" } },
-  { path: "/news/:id", name: "news-article", component: NewsArticlePage },
+  { path: "/", name: "home", component: () => import("../views/HomePage.vue"), meta: { title: "企丰科技" } },
+  { path: "/projects", name: "projects", component: () => import("../views/ProjectsPage.vue"), meta: { title: "客户案例" } },
+  { path: "/project/:id", name: "project", component: () => import("../views/ProjectPage.vue") },
+  { path: "/news", name: "news", component: () => import("../views/NewsPage.vue"), meta: { title: "最新动态" } },
+  { path: "/news/:id", name: "news-article", component: () => import("../views/NewsArticlePage.vue") },
   { path: "/company", redirect: "/contact" },
-  { path: "/ygb", name: "ygb", component: YgbPage, meta: { title: "云柜宝" } },
+  { path: "/ygb", name: "ygb", component: () => import("../views/YgbPage.vue"), meta: { title: "云柜宝" } },
   { path: "/cloud-cabinet", redirect: "/ygb" },
-  { path: "/contact", name: "contact", component: ContactPage, meta: { title: "联系我们" } },
-  { path: "/pricing", name: "pricing", component: PricingPage, meta: { title: "定价" } },
-  { path: "/careers", name: "careers", component: CareersPage, meta: { title: "工作机会" } },
-  { path: "/design-spec", name: "design-spec", component: DesignSpecPage, meta: { title: "设计规范" } },
+  { path: "/contact", name: "contact", component: () => import("../views/ContactPage.vue"), meta: { title: "联系我们" } },
+  { path: "/pricing", name: "pricing", component: () => import("../views/PricingPage.vue"), meta: { title: "定价" } },
+  { path: "/careers", name: "careers", component: () => import("../views/CareersPage.vue"), meta: { title: "工作机会" } },
+  { path: "/design-spec", name: "design-spec", component: () => import("../views/DesignSpecPage.vue"), meta: { title: "设计规范" } },
   { path: "/resources", redirect: "/design-spec" },
-  { path: "/:pathMatch(.*)*", name: "not-found", component: NotFoundPage, meta: { title: "页面不存在" } },
+  { path: "/:pathMatch(.*)*", name: "not-found", component: () => import("../views/NotFoundPage.vue"), meta: { title: "页面不存在" } },
 ];
 
 const router = createRouter({

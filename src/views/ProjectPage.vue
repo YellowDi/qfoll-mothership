@@ -94,6 +94,7 @@ import RelatedContentSection from "../components/RelatedContentSection.vue";
 import { projects, projectList } from "../data/projects";
 import { newsList } from "../data/news";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
+import "../styles/markdown-media.css";
 
 const route = useRoute();
 const project = computed(() => projects[route.params.id] || projects.hzhst);

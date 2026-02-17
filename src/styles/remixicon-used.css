@@ -1,0 +1,54 @@
+/*
+* Remix Icon v4.9.1 (subset)
+* https://remixicon.com
+* https://github.com/Remix-Design/RemixIcon
+*/
+@font-face {
+  font-family: "remixicon";
+  src: url("../assets/fonts/remixicon.woff2") format("woff2");
+  font-display: swap;
+}
+
+[class^="ri-"],
+[class*=" ri-"] {
+  font-family: 'remixicon' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ri-android-fill:before { content: "\ea35"; }
+.ri-arrow-down-s-line:before { content: "\ea4e"; }
+.ri-arrow-left-line:before { content: "\ea60"; }
+.ri-arrow-left-s-line:before { content: "\ea64"; }
+.ri-arrow-right-line:before { content: "\ea6c"; }
+.ri-arrow-right-s-fill:before { content: "\ea6d"; }
+.ri-arrow-right-s-line:before { content: "\ea6e"; }
+.ri-arrow-right-up-line:before { content: "\ea70"; }
+.ri-arrow-up-line:before { content: "\ea76"; }
+.ri-arrow-up-s-line:before { content: "\ea78"; }
+.ri-check-line:before { content: "\eb7b"; }
+.ri-close-line:before { content: "\eb99"; }
+.ri-download-2-line:before { content: "\ec54"; }
+.ri-equalizer-2-line:before { content: "\f404"; }
+.ri-fullscreen-exit-line:before { content: "\ed9a"; }
+.ri-fullscreen-line:before { content: "\ed9c"; }
+.ri-grid-fill:before { content: "\edde"; }
+.ri-layout-left-2-line:before { content: "\ee92"; }
+.ri-list-check-2:before { content: "\eeb9"; }
+.ri-map-pin-fill:before { content: "\ef13"; }
+.ri-moon-clear-line:before { content: "\ef6f"; }
+.ri-more-2-fill:before { content: "\ef76"; }
+.ri-notification-2-line:before { content: "\ef92"; }
+.ri-pause-fill:before { content: "\efd7"; }
+.ri-play-fill:before { content: "\f00a"; }
+.ri-share-box-line:before { content: "\f0f4"; }
+.ri-share-line:before { content: "\f0fe"; }
+.ri-shield-check-fill:before { content: "\f0ff"; }
+.ri-shining-line:before { content: "\f35e"; }
+.ri-star-line:before { content: "\f18b"; }
+.ri-sun-line:before { content: "\f1bf"; }
+.ri-time-line:before { content: "\f20f"; }
+.ri-truck-fill:before { content: "\f230"; }
+.ri-volume-mute-fill:before { content: "\f29d"; }
+.ri-volume-up-fill:before { content: "\f2a1"; }
