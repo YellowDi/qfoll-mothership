@@ -52,12 +52,12 @@
               </button>
               <button
                 type="button"
-                :class="rootButtonClass(isNewsRoute(route.path))"
+                :class="rootButtonClass(route.path === '/news')"
                 @click="goNews"
               >
                 <span class="flex items-center justify-between">
                   <span>新闻</span>
-                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(isNewsRoute(route.path))"></i>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/news')"></i>
                 </span>
               </button>
             </nav>
@@ -300,7 +300,7 @@ const goCompany = () => {
 
 const goNews = () => {
   navLevel.value = "root";
-  if (!isNewsRoute(route.path)) {
+  if (route.path !== "/news") {
     router.push("/news");
   }
 };
