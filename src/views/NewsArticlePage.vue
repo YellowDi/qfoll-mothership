@@ -3,8 +3,8 @@
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center gap-4 text-[13px]">
-          <span class="font-medium text-ink">{{ article.category || "最新动态" }}</span>
-          <span class="text-muted">{{ article.publishedAt }}</span>
+          <span class="font-medium text-ink">{{ article.publishedAt }}</span>
+          <span class="text-muted">{{ article.category || "最新动态" }}</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
