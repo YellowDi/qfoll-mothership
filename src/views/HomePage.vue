@@ -34,6 +34,8 @@
                   <CoverImage
                     class="aspect-square w-full rounded-md"
                     :src="item.cover"
+                    :src-set="item.coverSrcSet"
+                    sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
                     :alt="item.title"
                     image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                   />
@@ -60,6 +62,8 @@
                 <CoverImage
                   class="h-full w-full rounded-md"
                   :src="item.cover"
+                  :src-set="item.coverSrcSet"
+                  sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />
@@ -86,6 +90,8 @@
                   <CoverImage
                     class="aspect-square w-full rounded-md"
                     :src="item.cover"
+                    :src-set="item.coverSrcSet"
+                    sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
                     :alt="item.title"
                     image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                   />
@@ -129,6 +135,8 @@
                 <CoverImage
                   class="aspect-square w-full rounded-md"
                   :src="item.cover"
+                  :src-set="item.coverSrcSet"
+                  sizes="(max-width: 768px) 6.25rem, (max-width: 1024px) 10.25rem, 12rem"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />

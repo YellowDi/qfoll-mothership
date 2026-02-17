@@ -1,4 +1,5 @@
 import MarkdownIt from "markdown-it";
+import { resolveCoverAsset } from "./coverAssets";
 
 const md = new MarkdownIt({
   html: true,
@@ -269,6 +270,8 @@ const parseProject = (raw, path) => {
     ...normalizedInfoTags.filter((tag) => !/^\d{4}\s*年?$/.test(String(tag).trim())),
   ];
 
+  const coverAsset = resolveCoverAsset(data.cover || "");
+
   return {
     id,
     title: data.title || "",
@@ -279,7 +282,8 @@ const parseProject = (raw, path) => {
     company: data.company || "",
     tag: data.tag || "",
     lead: data.lead || "",
-    cover: toBackgroundImage(data.cover || ""),
+    cover: coverAsset.src,
+    coverSrcSet: coverAsset.srcSet,
     primaryButtonText: data.primaryButtonText || "",
     primaryButtonUrl: data.primaryButtonUrl || "",
     secondaryButtonText: data.secondaryButtonText || "",

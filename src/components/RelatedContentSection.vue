@@ -19,6 +19,8 @@
             <CoverImage
               class="h-full w-full rounded-md"
               :src="item.cover"
+              :src-set="item.coverSrcSet"
+              sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
               :alt="item.title"
               image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />

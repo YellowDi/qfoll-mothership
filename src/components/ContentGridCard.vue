@@ -4,6 +4,8 @@
       <CoverImage
         class="aspect-square w-full rounded-sm"
         :src="cover"
+        :src-set="coverSrcSet"
+        :sizes="coverSizes"
         :alt="title"
         image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
       />
@@ -31,6 +33,14 @@ defineProps({
     default: "",
   },
   cover: {
+    type: String,
+    default: "",
+  },
+  coverSrcSet: {
+    type: String,
+    default: "",
+  },
+  coverSizes: {
     type: String,
     default: "",
   },

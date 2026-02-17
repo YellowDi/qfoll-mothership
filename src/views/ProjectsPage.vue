@@ -281,6 +281,8 @@
           :to="`/project/${item.id}`"
           :title="item.title"
           :cover="item.cover"
+          :cover-src-set="item.coverSrcSet"
+          cover-sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
           :primary-meta="item.tag"
           :secondary-meta="item.yearLabel || item.year"
         />

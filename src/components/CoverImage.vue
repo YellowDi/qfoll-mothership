@@ -10,6 +10,8 @@
     <img
       v-if="imageSrc"
       :src="imageSrc"
+      :srcset="imageSrcSet || undefined"
+      :sizes="imageSizes || undefined"
       :alt="alt"
       loading="lazy"
       decoding="async"
@@ -26,6 +28,14 @@ import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   src: {
+    type: String,
+    default: "",
+  },
+  srcSet: {
+    type: String,
+    default: "",
+  },
+  sizes: {
     type: String,
     default: "",
   },
@@ -52,6 +62,8 @@ const imageSrc = computed(() => {
   if (raw.includes("gradient(")) return "";
   return raw;
 });
+const imageSrcSet = computed(() => String(props.srcSet || "").trim());
+const imageSizes = computed(() => String(props.sizes || "").trim());
 
 const showImage = computed(
   () => Boolean(imageSrc.value) && imageLoaded.value && !imageError.value
@@ -72,7 +84,7 @@ const handleError = () => {
 };
 
 watch(
-  () => props.src,
+  () => [props.src, props.srcSet],
   () => {
     resetState();
   },
