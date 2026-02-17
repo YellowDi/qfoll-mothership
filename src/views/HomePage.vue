@@ -31,16 +31,18 @@
                 :to="`/project/${item.id}`"
               >
                 <div class="overflow-hidden rounded-md">
-                  <div
-                    class="aspect-square w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                    :style="{ backgroundImage: item.cover }"
-                  ></div>
+                  <CoverImage
+                    class="aspect-square w-full rounded-md"
+                    :src="item.cover"
+                    :alt="item.title"
+                    image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  />
                 </div>
                 <div class="pt-3 text-left">
                   <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
                   <div class="mt-4 flex items-center gap-2 text-sm">
                     <span class="font-medium text-ink">{{ item.tag }}</span>
-                    <span class="text-muted">{{ item.year }}</span>
+                    <span class="text-muted">{{ item.yearLabel || item.year }}</span>
                   </div>
                 </div>
               </RouterLink>
@@ -55,13 +57,18 @@
               :to="`/project/${item.id}`"
             >
               <div class="aspect-square w-full overflow-hidden rounded-md">
-                <div class="h-full w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]" :style="{ backgroundImage: item.cover }"></div>
+                <CoverImage
+                  class="h-full w-full rounded-md"
+                  :src="item.cover"
+                  :alt="item.title"
+                  image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                />
               </div>
               <div class="pt-4 text-left">
                 <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
                   <span class="font-medium text-ink">{{ item.tag }}</span>
-                  <span class="text-muted">{{ item.year }}</span>
+                  <span class="text-muted">{{ item.yearLabel || item.year }}</span>
                 </div>
               </div>
             </RouterLink>
@@ -76,16 +83,18 @@
                 :to="`/project/${item.id}`"
               >
                 <div class="overflow-hidden rounded-md">
-                  <div
-                    class="aspect-square w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                    :style="{ backgroundImage: item.cover }"
-                  ></div>
+                  <CoverImage
+                    class="aspect-square w-full rounded-md"
+                    :src="item.cover"
+                    :alt="item.title"
+                    image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                  />
                 </div>
                 <div class="pt-3 text-left">
                   <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
                   <div class="mt-4 flex items-center gap-2 text-sm">
                     <span class="font-medium text-ink">{{ item.tag }}</span>
-                    <span class="text-muted">{{ item.year }}</span>
+                    <span class="text-muted">{{ item.yearLabel || item.year }}</span>
                   </div>
                 </div>
               </RouterLink>
@@ -117,10 +126,12 @@
               :to="`/news/${item.id}`"
             >
               <div class="overflow-hidden rounded-md">
-                <div
-                  class="aspect-square w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                  :style="{ backgroundImage: item.cover }"
-                ></div>
+                <CoverImage
+                  class="aspect-square w-full rounded-md"
+                  :src="item.cover"
+                  :alt="item.title"
+                  image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                />
               </div>
               <div class="flex min-h-full max-w-[36rem] flex-col justify-center pl-4 pr-10 py-2 text-left max-lg:max-w-[30rem] max-lg:pl-3 max-lg:pr-8 max-lg:py-1.5 max-md:max-w-none max-md:pl-2.5 max-md:pr-6 max-md:py-1.5">
                 <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
@@ -151,6 +162,7 @@
 <script setup>
 import AppLayout from "../layouts/AppLayout.vue";
 import AboutSection from "../components/AboutSection.vue";
+import CoverImage from "../components/CoverImage.vue";
 import TagMarqueeSection from "../components/TagMarqueeSection.vue";
 import YgbHeroSection from "../components/YgbHeroSection.vue";
 import { computed } from "vue";

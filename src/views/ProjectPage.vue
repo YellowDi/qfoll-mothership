@@ -3,7 +3,7 @@
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center gap-4 text-[13px]">
-          <span class="font-medium text-ink">{{ project.year }}</span>
+          <span class="font-medium text-ink">{{ project.yearLabel || project.year }}</span>
           <span class="text-muted">{{ project.tag || "客户案例" }}</span>
         </div>
         <h1
@@ -74,8 +74,8 @@
           <div class="col-span-12 flex flex-col gap-6 md:col-span-6 md:col-start-4">
             <section class="w-full">
               <ul class="news-meta-tags gap-3xs flex flex-wrap">
-                <li v-for="tag in project.infoTags" :key="tag">
-                  <span class="news-meta-pill">{{ tag }}</span>
+                <li v-for="tagItem in infoTagLinks" :key="tagItem.label">
+                  <RouterLink :to="tagItem.to" class="news-meta-pill">{{ tagItem.label }}</RouterLink>
                 </li>
               </ul>
             </section>
@@ -106,13 +106,18 @@
         :to="`/project/${item.id}`"
       >
         <div class="aspect-square w-full overflow-hidden rounded-md">
-          <div class="h-full w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]" :style="{ backgroundImage: item.cover }"></div>
+          <CoverImage
+            class="h-full w-full rounded-md"
+            :src="item.cover"
+            :alt="item.title"
+            image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
         </div>
         <div class="pt-4 text-left">
           <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
           <div class="mt-4 flex items-center gap-2 text-sm">
             <span class="font-medium text-ink">{{ item.tag }}</span>
-            <span class="text-muted">{{ item.year }}</span>
+            <span class="text-muted">{{ item.yearLabel || item.year }}</span>
           </div>
         </div>
       </RouterLink>
@@ -125,14 +130,43 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import CoverImage from "../components/CoverImage.vue";
 import AppLayout from "../layouts/AppLayout.vue";
 import { projects, projectList } from "../data/projects";
+import { newsList } from "../data/news";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 
 const route = useRoute();
 const project = computed(() => projects[route.params.id] || projects.hzhst);
 const relatedProjects = computed(() =>
   projectList.filter((item) => item.id !== project.value.id).slice(0, 3)
+);
+const parseYearTag = (tag) => {
+  const match = String(tag || "").trim().match(/^(\d{4})\s*年?$/);
+  return match ? Number(match[1]) : null;
+};
+const resolveTagTarget = (tag) => {
+  const text = String(tag || "").trim();
+  if (!text) return { path: "/projects" };
+  const year = parseYearTag(text);
+  if (year) {
+    return { path: "/news", query: { years: String(year) } };
+  }
+  const hasProjectTag = projectList.some((item) => item.tag?.includes(text));
+  if (hasProjectTag) {
+    return { path: "/projects", query: { tags: text } };
+  }
+  const hasNewsCategory = newsList.some((item) => item.category?.includes(text));
+  if (hasNewsCategory) {
+    return { path: "/news", query: { tags: text } };
+  }
+  return { path: "/projects", query: { tags: text } };
+};
+const infoTagLinks = computed(() =>
+  (project.value.infoTags || []).map((tag) => ({
+    label: tag,
+    to: resolveTagTarget(tag),
+  }))
 );
 
 const markdownRef = ref(null);

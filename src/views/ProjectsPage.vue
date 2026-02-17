@@ -282,7 +282,12 @@
           :to="`/project/${item.id}`"
         >
           <div class="overflow-hidden rounded-sm">
-            <div class="aspect-square w-full rounded-sm bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]" :style="{ backgroundImage: item.cover }"></div>
+            <CoverImage
+              class="aspect-square w-full rounded-sm"
+              :src="item.cover"
+              :alt="item.title"
+              image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            />
           </div>
           <div class="pt-4 text-left">
             <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
@@ -319,6 +324,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getAnchoredPanelStyle, isDesktopPanelViewport } from "../composables/anchoredPanel";
+import CoverImage from "../components/CoverImage.vue";
 import { projectList } from "../data/projects";
 import AppLayout from "../layouts/AppLayout.vue";
 
