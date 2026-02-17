@@ -1,11 +1,11 @@
 <template>
   <div
-    class="relative h-full w-full overflow-hidden bg-zinc-200/75 dark:bg-zinc-700/45"
+    class="relative h-full w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800/35"
   >
     <div
       v-if="showSkeleton"
       aria-hidden="true"
-      class="absolute inset-0 animate-pulse bg-zinc-200/80 transition-opacity duration-300 dark:bg-zinc-700/55"
+      class="absolute inset-0 animate-pulse bg-zinc-100/70 transition-opacity duration-300 dark:bg-zinc-700/40"
     ></div>
     <img
       v-if="imageSrc"
