@@ -5,6 +5,7 @@
         <h1 class="text-4xl font-medium tracking-tight">客户案例</h1>
       </div>
 
+      <div class="relative">
       <div class="flex flex-wrap items-center justify-between gap-4 text-sm">
         <div class="flex flex-wrap items-center gap-6">
           <button
@@ -22,111 +23,123 @@
         <div class="flex items-center gap-6 text-sm text-muted">
           <div class="relative">
             <button
+              ref="filterToggleRef"
               type="button"
               class="filter-toggle flex items-center gap-2 text-muted hover:text-ink transition-colors"
-              @click="filterOpen = !filterOpen"
+              @click="filterOpen = !filterOpen; if (filterOpen) sortOpen = false"
             >
-              <span class="font-medium text-ink">筛选</span>
-              <i v-if="filterOpen" class="ri-close-line text-base"></i>
-              <i v-else class="ri-equalizer-2-line text-base"></i>
+              <span class="font-medium text-ink">{{ filterButtonText }}</span>
+              <i v-if="filterOpen" class="ri-close-line pointer-events-none text-base"></i>
+              <i v-else class="ri-equalizer-2-line pointer-events-none text-base"></i>
             </button>
-            <div
-              v-if="filterOpen"
-              class="filter-panel absolute right-0 mt-3 w-90 rounded-xl border border-line/10 bg-surface px-6 py-5 text-[15px] text-ink shadow-sm dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)]"
-            >
-              <div class="grid grid-cols-2 gap-6">
-                <div>
-                  <div class="mb-3 text-sm text-muted">主题</div>
-                  <div class="max-h-55 space-y-2 overflow-auto pr-2">
-                    <label
-                      v-for="item in tagOptions"
-                      :key="item"
-                      class="flex items-center gap-3 text-[15px]"
-                    >
-                      <input
-                        type="checkbox"
-                        class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
-                        :value="item"
-                        v-model="selectedTags"
-                      />
-                      <span>{{ item }}</span>
-                    </label>
+            <Transition name="dropdown-fade">
+              <div
+                v-if="filterOpen"
+                ref="filterPanelRef"
+                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md bg-zinc-100 px-6 py-5 text-[15px] text-ink max-md:hidden"
+                :style="filterDesktopStyle"
+              >
+                <div class="filter-panel-scroll">
+                  <div class="grid grid-cols-2 gap-6 max-md:grid-cols-1">
+                    <div>
+                      <div class="mb-3 text-sm text-muted">主题</div>
+                      <div class="max-h-55 space-y-2 overflow-auto pr-2">
+                        <label
+                          v-for="item in tagOptions"
+                          :key="item"
+                          class="flex items-center gap-3 text-[15px]"
+                        >
+                          <input
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                            :value="item"
+                            v-model="selectedTags"
+                          />
+                          <span>{{ item }}</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="mb-3 text-sm text-muted">年份</div>
+                      <div class="max-h-55 space-y-2 overflow-auto pr-2">
+                        <label
+                          v-for="item in yearOptions"
+                          :key="item"
+                          class="flex items-center gap-3 text-[15px]"
+                        >
+                          <input
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                            :value="item"
+                            v-model="selectedYears"
+                          />
+                          <span>{{ item }} 年</span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div class="mb-3 text-sm text-muted">年份</div>
-                  <div class="max-h-55 space-y-2 overflow-auto pr-2">
-                    <label
-                      v-for="item in yearOptions"
-                      :key="item"
-                      class="flex items-center gap-3 text-[15px]"
-                    >
-                      <input
-                        type="checkbox"
-                        class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
-                        :value="item"
-                        v-model="selectedYears"
-                      />
-                      <span>{{ item }} 年</span>
-                    </label>
-                  </div>
+                <div class="filter-panel-footer mt-5 flex justify-end">
+                  <button
+                    type="button"
+                    class="text-[15px] font-medium text-ink"
+                    @click="handleFilterAction"
+                  >
+                    {{ hasActiveFilters ? "清除筛选" : "取消" }}
+                  </button>
                 </div>
               </div>
-              <div class="mt-5 flex justify-end">
-                <button
-                  type="button"
-                  class="text-[15px] font-medium text-ink"
-                  @click="clearFilters"
-                >
-                  取消
-                </button>
-              </div>
-            </div>
+            </Transition>
           </div>
           <div class="relative">
             <button
+              ref="sortToggleRef"
               type="button"
               class="sort-toggle flex items-center gap-2 text-muted hover:text-ink transition-colors"
-              @click="sortOpen = !sortOpen"
+              @click="sortOpen = !sortOpen; if (sortOpen) filterOpen = false"
             >
               <span class="font-medium text-ink">排序</span>
               <i :class="sortOpen ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" class="text-base"></i>
             </button>
-            <div
-              v-if="sortOpen"
-              class="sort-panel absolute right-0 mt-3 w-55 rounded-lg border border-line/10 bg-surface px-5 py-4 text-[15px] text-ink shadow-sm dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)]"
-            >
-              <button
-                type="button"
-                class="flex w-full items-center gap-3 py-1.5"
-                @click="sortMode = '最新'; sortOpen = false"
+            <Transition name="dropdown-fade">
+              <div
+                v-if="sortOpen"
+                ref="sortPanelRef"
+                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md bg-zinc-100 px-5 py-4 text-[15px] text-ink max-md:hidden"
+                :style="sortDesktopStyle"
               >
-                <span
-                  class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-3 py-1.5"
+                  @click="sortMode = '最新'; sortOpen = false"
                 >
                   <span
-                    v-if="sortMode === '最新'"
-                    class="h-2.5 w-2.5 rounded-full bg-ink"
-                  ></span>
-                </span>
-                最新 → 最旧
-              </button>
-              <button
-                type="button"
-                class="flex w-full items-center gap-3 py-1.5"
-                @click="sortMode = '最早'; sortOpen = false"
-              >
-                <span
-                  class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                    class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                  >
+                    <span
+                      v-if="sortMode === '最新'"
+                      class="h-2.5 w-2.5 rounded-full bg-ink"
+                    ></span>
+                  </span>
+                  最新 → 最旧
+                </button>
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-3 py-1.5"
+                  @click="sortMode = '最早'; sortOpen = false"
                 >
                   <span
-                    v-if="sortMode === '最早'"
-                    class="h-2.5 w-2.5 rounded-full bg-ink"
-                  ></span>
-                </span>
-                最旧 → 最新
-              </button>
-            </div>
+                    class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                  >
+                    <span
+                      v-if="sortMode === '最早'"
+                      class="h-2.5 w-2.5 rounded-full bg-ink"
+                    ></span>
+                  </span>
+                  最旧 → 最新
+                </button>
+              </div>
+            </Transition>
           </div>
           <div class="flex items-center gap-2">
             <button
@@ -149,6 +162,106 @@
         </div>
       </div>
 
+      <div class="pointer-events-none hidden max-md:absolute max-md:-mx-6 max-md:mt-3 max-md:block max-md:left-0 max-md:right-0 max-md:top-full max-md:z-30">
+        <Transition name="dropdown-fade">
+          <div
+            v-if="filterOpen"
+            ref="mobileFilterPanel"
+            class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-sm max-md:shadow-none dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            :style="mobileFilterPanelStyle"
+          >
+            <div class="min-h-0 flex-1 overflow-y-auto pr-1">
+              <div class="grid grid-cols-1 gap-6">
+                <div>
+                  <div class="mb-3 text-sm text-muted">主题</div>
+                  <div class="space-y-2">
+                    <label
+                      v-for="item in tagOptions"
+                      :key="`m-tag-${item}`"
+                      class="flex items-center gap-3 text-[15px]"
+                    >
+                      <input
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                        :value="item"
+                        v-model="selectedTags"
+                      />
+                      <span>{{ item }}</span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div class="mb-3 text-sm text-muted">年份</div>
+                  <div class="space-y-2">
+                    <label
+                      v-for="item in yearOptions"
+                      :key="`m-year-${item}`"
+                      class="flex items-center gap-3 text-[15px]"
+                    >
+                      <input
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                        :value="item"
+                        v-model="selectedYears"
+                      />
+                      <span>{{ item }} 年</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pointer-events-none -mt-10 h-10 bg-gradient-to-b from-transparent to-[#f5f5f5] dark:to-[#222226]"></div>
+            <div class="mt-6 flex justify-end border-t border-line/10 pt-5 pb-1">
+              <button
+                type="button"
+                class="min-h-11 px-2 text-[15px] font-medium text-ink"
+                @click="handleFilterAction"
+              >
+                {{ hasActiveFilters ? "清除筛选" : "取消" }}
+              </button>
+            </div>
+          </div>
+        </Transition>
+        <Transition name="dropdown-fade">
+          <div
+            v-if="sortOpen"
+            class="mobile-sort-panel pointer-events-auto rounded-md bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-sm max-md:shadow-none dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+          >
+            <button
+              type="button"
+              class="flex w-full items-center gap-3 py-1.5"
+              @click="sortMode = '最新'; sortOpen = false"
+            >
+              <span
+                class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+              >
+                <span
+                  v-if="sortMode === '最新'"
+                  class="h-2.5 w-2.5 rounded-full bg-ink"
+                ></span>
+              </span>
+              最新 → 最旧
+            </button>
+            <button
+              type="button"
+              class="flex w-full items-center gap-3 py-1.5"
+              @click="sortMode = '最早'; sortOpen = false"
+            >
+              <span
+                class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+              >
+                <span
+                  v-if="sortMode === '最早'"
+                  class="h-2.5 w-2.5 rounded-full bg-ink"
+                ></span>
+              </span>
+              最旧 → 最新
+            </button>
+          </div>
+        </Transition>
+      </div>
+      </div>
+
       <div v-if="layout === 'grid'" class="mt-8 grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
         <RouterLink
           v-for="item in filteredProjects"
@@ -156,14 +269,14 @@
           class="group"
           :to="`/project/${item.id}`"
         >
-          <div class="overflow-hidden rounded-md">
-            <div class="aspect-square w-full rounded-md bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]" :style="{ backgroundImage: item.cover }"></div>
+          <div class="overflow-hidden rounded-sm">
+            <div class="aspect-square w-full rounded-sm bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03]" :style="{ backgroundImage: item.cover }"></div>
           </div>
           <div class="pt-4 text-left">
             <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
             <div class="mt-4 flex items-center gap-2 text-sm">
               <span class="font-medium text-ink">{{ item.tag }}</span>
-              <span class="text-muted">{{ item.year }}</span>
+              <span class="text-muted">{{ item.yearLabel || item.year }}</span>
             </div>
           </div>
         </RouterLink>
@@ -178,7 +291,7 @@
         >
           <div class="col-span-12 text-sm text-muted max-md:col-span-12 md:col-span-3">
             <div class="text-[15px] font-medium text-ink">{{ item.tag || '客户案例' }}</div>
-            <div class="mt-2 text-[13px] text-muted">{{ item.year }}</div>
+            <div class="mt-2 text-[13px] text-muted">{{ item.yearLabel || item.year }}</div>
           </div>
           <div class="col-span-12 md:col-span-9">
             <div class="text-[17px] font-medium text-ink">{{ item.title }}</div>
@@ -191,14 +304,24 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { getAnchoredPanelStyle, isDesktopPanelViewport } from "../composables/anchoredPanel";
 import { projectList } from "../data/projects";
 import AppLayout from "../layouts/AppLayout.vue";
 
+const route = useRoute();
+const router = useRouter();
 const layout = ref("grid");
 const sortMode = ref("最新");
 const sortOpen = ref(false);
 const filterOpen = ref(false);
+const filterToggleRef = ref(null);
+const filterPanelRef = ref(null);
+const sortToggleRef = ref(null);
+const sortPanelRef = ref(null);
+const filterDesktopStyle = ref({});
+const sortDesktopStyle = ref({});
 
 const filterTabs = computed(() => {
   const tags = projectList
@@ -210,6 +333,39 @@ const filterTabs = computed(() => {
 const activeFilter = ref("全部");
 const selectedTags = ref([]);
 const selectedYears = ref([]);
+const syncingFromQuery = ref(false);
+const mobileFilterPanel = ref(null);
+const mobileFilterHeight = ref(0);
+const hasActiveFilters = computed(
+  () => selectedTags.value.length > 0 || selectedYears.value.length > 0
+);
+const filterButtonText = computed(() => {
+  const parts = [
+    ...selectedTags.value.map((item) => String(item)),
+    ...selectedYears.value.map((item) => `${item}年`),
+  ];
+  if (!parts.length) return "筛选";
+  if (parts.length <= 2) return parts.join(" · ");
+  return `${parts.slice(0, 2).join(" · ")} +${parts.length - 2}`;
+});
+const toStringList = (value) => {
+  if (Array.isArray(value)) return value.map((item) => String(item));
+  if (value == null) return [];
+  return String(value)
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+};
+const applyQueryFilters = () => {
+  syncingFromQuery.value = true;
+  const queryFilter = String(route.query.filter || "全部");
+  activeFilter.value = queryFilter;
+  selectedTags.value = toStringList(route.query.tags);
+  selectedYears.value = toStringList(route.query.years)
+    .map((item) => Number(item))
+    .filter((item) => Number.isFinite(item));
+  syncingFromQuery.value = false;
+};
 const toYearValue = (item) => {
   const year = Number.parseInt(String(item?.year ?? ""), 10);
   return Number.isFinite(year) ? year : -Infinity;
@@ -226,6 +382,13 @@ const yearOptions = computed(() => {
     .map((item) => Number(item.year))
     .filter((value) => !Number.isNaN(value));
   return Array.from(new Set(years)).sort((a, b) => b - a);
+});
+const mobileFilterPanelStyle = computed(() => {
+  if (!mobileFilterHeight.value) return {};
+  return {
+    minHeight: `${mobileFilterHeight.value}px`,
+    maxHeight: `${mobileFilterHeight.value}px`,
+  };
 });
 
 const filteredProjects = computed(() => {
@@ -269,8 +432,10 @@ const handleDocClick = (event) => {
   if (!(target instanceof Element)) return;
   if (
     target.closest(".filter-panel") ||
+    target.closest(".mobile-filter-panel") ||
     target.closest(".filter-toggle") ||
     target.closest(".sort-panel") ||
+    target.closest(".mobile-sort-panel") ||
     target.closest(".sort-toggle")
   ) {
     return;
@@ -278,13 +443,61 @@ const handleDocClick = (event) => {
   sortOpen.value = false;
   filterOpen.value = false;
 };
+const updateDesktopPanelPosition = () => {
+  if (!isDesktopPanelViewport()) {
+    filterDesktopStyle.value = {};
+    sortDesktopStyle.value = {};
+    return;
+  }
+  if (filterOpen.value) {
+    filterDesktopStyle.value = getAnchoredPanelStyle({
+      triggerEl: filterToggleRef.value,
+      panelEl: filterPanelRef.value,
+      align: "end",
+    });
+  }
+  if (sortOpen.value) {
+    sortDesktopStyle.value = getAnchoredPanelStyle({
+      triggerEl: sortToggleRef.value,
+      panelEl: sortPanelRef.value,
+      align: "end",
+    });
+  }
+};
+const updateMobileFilterHeight = () => {
+  if (typeof window === "undefined") return;
+  if (window.innerWidth > 768) {
+    mobileFilterHeight.value = 0;
+    return;
+  }
+  const panel = mobileFilterPanel.value;
+  if (!panel) return;
+  const rect = panel.getBoundingClientRect();
+  const available = Math.floor(window.innerHeight - rect.top);
+  mobileFilterHeight.value = Math.max(260, available);
+};
+const setMobileScrollLock = (locked) => {
+  if (typeof window === "undefined") return;
+  if (window.innerWidth > 768) return;
+  const overflow = locked ? "hidden" : "";
+  document.documentElement.style.overflow = overflow;
+  document.body.style.overflow = overflow;
+};
 
 onMounted(() => {
+  applyQueryFilters();
   document.addEventListener("click", handleDocClick);
+  window.addEventListener("resize", updateMobileFilterHeight);
+  window.addEventListener("resize", updateDesktopPanelPosition);
+  window.addEventListener("scroll", updateDesktopPanelPosition, true);
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener("click", handleDocClick);
+  window.removeEventListener("resize", updateMobileFilterHeight);
+  window.removeEventListener("resize", updateDesktopPanelPosition);
+  window.removeEventListener("scroll", updateDesktopPanelPosition, true);
+  setMobileScrollLock(false);
 });
 
 const clearFilters = () => {
@@ -292,4 +505,66 @@ const clearFilters = () => {
   selectedYears.value = [];
   filterOpen.value = false;
 };
+const handleFilterAction = () => {
+  if (hasActiveFilters.value) {
+    clearFilters();
+    return;
+  }
+  filterOpen.value = false;
+};
+
+watch(
+  () => route.query,
+  () => {
+    applyQueryFilters();
+  }
+);
+
+watch(
+  [activeFilter, selectedTags, selectedYears],
+  () => {
+    if (syncingFromQuery.value) return;
+    const query = {};
+    if (activeFilter.value && activeFilter.value !== "全部") query.filter = activeFilter.value;
+    if (selectedTags.value.length) query.tags = selectedTags.value.join(",");
+    if (selectedYears.value.length) query.years = selectedYears.value.join(",");
+    router.replace({ path: route.path, query });
+  },
+  { deep: true }
+);
+
+watch(filterOpen, async (open) => {
+  setMobileScrollLock(open);
+  if (!open) {
+    filterDesktopStyle.value = {};
+    return;
+  }
+  await nextTick();
+  updateMobileFilterHeight();
+  updateDesktopPanelPosition();
+});
+
+watch(sortOpen, async (open) => {
+  if (!open) {
+    sortDesktopStyle.value = {};
+    return;
+  }
+  await nextTick();
+  updateDesktopPanelPosition();
+});
 </script>
+
+<style scoped>
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform-origin: top right;
+}
+
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+}
+
+</style>
