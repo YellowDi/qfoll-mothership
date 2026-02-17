@@ -6,7 +6,14 @@
       <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-center max-md:static max-md:translate-x-0">
         <span class="block md:inline">© {{ currentYear }} 宁波企丰信息科技有限公司</span>
         <span class="mx-2 text-muted/60 max-md:hidden">·</span>
-        <span class="block text-muted/70 max-md:mt-1 md:inline">浙ICP备2022008031号-1</span>
+        <a
+          href="https://beian.miit.gov.cn/"
+          target="_blank"
+          rel="noreferrer"
+          class="pointer-events-auto block text-muted/70 transition-colors hover:text-ink max-md:mt-1 md:inline"
+        >
+          浙ICP备2022008031号-1
+        </a>
       </div>
       <button
         type="button"
