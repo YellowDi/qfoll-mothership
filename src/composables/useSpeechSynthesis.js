@@ -2,6 +2,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 const RATE_OPTIONS = [0.5, 1, 1.5, 2];
 const RATE_STORAGE_KEY = "qfoll.article.speech.rate";
+const PARAGRAPH_GAP_MS = 520;
 
 const normalizeText = (text) => String(text || "").replace(/\s+/g, " ").trim();
 
@@ -36,12 +37,15 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
   const isVoicesReady = ref(false);
 
   let queue = [];
+  let cachedParagraphs = [];
+  let cachedContainer = null;
   let voiceListener = null;
   let voiceReadyTimer = null;
+  let idleInitTimer = null;
+  let isVoiceInitBound = false;
+  let nextParagraphTimer = null;
+  let pendingNextIndex = null;
   let sessionToken = 0;
-
-  const clearHighlight = () => {};
-  const applyHighlight = () => {};
 
   const resolveContainer = () => {
     const root = containerRef?.value;
@@ -54,9 +58,12 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     return root.querySelector("article") || root.querySelector(".prose") || root;
   };
 
-  const extractParagraphQueue = () => {
+  const extractParagraphQueue = ({ force = false } = {}) => {
     const container = resolveContainer();
     if (!container) return [];
+    if (!force && cachedContainer === container && cachedParagraphs.length) {
+      return cachedParagraphs;
+    }
 
     const candidateNodes = Array.from(
       container.querySelectorAll("p, li, blockquote, h2, h3, h4, h5, h6")
@@ -70,7 +77,11 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     const mapped = candidateNodes
       .map((node) => ({ text: normalizeText(node.innerText), node }))
       .filter((item) => item.text);
-    if (mapped.length) return mapped;
+    if (mapped.length) {
+      cachedContainer = container;
+      cachedParagraphs = mapped;
+      return mapped;
+    }
 
     // Fallback for non-p content: keep only readable text blocks and skip code/navigation nodes.
     const clone = container.cloneNode(true);
@@ -79,11 +90,14 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
         "nav,aside,footer,header,button,[role='button'],pre,code,.md-media,.md-carousel-controls"
       )
       .forEach((node) => node.remove());
-    return String(clone.innerText || "")
+    const fallback = String(clone.innerText || "")
       .split(/\n{2,}/)
       .map(normalizeText)
       .filter(Boolean)
       .map((text) => ({ text, node: null }));
+    cachedContainer = container;
+    cachedParagraphs = fallback;
+    return fallback;
   };
 
   const loadVoices = () => {
@@ -115,8 +129,18 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     return Math.max(1, Math.ceil(totalChars / (baseCharsPerSecond * speed)));
   };
 
+  const invalidateContentCache = () => {
+    cachedParagraphs = [];
+    cachedContainer = null;
+    queue = [];
+  };
+
   const finishPlayback = () => {
-    clearHighlight();
+    if (nextParagraphTimer) {
+      window.clearTimeout(nextParagraphTimer);
+      nextParagraphTimer = null;
+    }
+    pendingNextIndex = null;
     isPlaying.value = false;
     isPaused.value = false;
     currentParagraphIndex.value = -1;
@@ -125,10 +149,14 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
 
   const stop = ({ keepQueue = false, keepIndex = false } = {}) => {
     sessionToken += 1;
+    if (nextParagraphTimer) {
+      window.clearTimeout(nextParagraphTimer);
+      nextParagraphTimer = null;
+    }
+    pendingNextIndex = null;
     if (isSupported.value) {
       window.speechSynthesis.cancel();
     }
-    clearHighlight();
     isPlaying.value = false;
     isPaused.value = false;
     if (!keepQueue) queue = [];
@@ -149,7 +177,6 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     }
 
     currentParagraphIndex.value = index;
-    applyHighlight(next.node);
     const utterance = new SpeechSynthesisUtterance(next.text);
     utterance.lang = currentVoice.value?.lang || "zh-CN";
     if (currentVoice.value) {
@@ -158,15 +185,26 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     utterance.rate = rate.value;
     utterance.pitch = pitch.value;
     utterance.volume = volume.value;
+    const queueNextParagraph = () => {
+      pendingNextIndex = index + 1;
+      if (nextParagraphTimer) {
+        window.clearTimeout(nextParagraphTimer);
+      }
+      nextParagraphTimer = window.setTimeout(() => {
+        if (token !== sessionToken || isPaused.value) return;
+        const nextIndex = pendingNextIndex;
+        pendingNextIndex = null;
+        nextParagraphTimer = null;
+        speakFrom(nextIndex, token);
+      }, PARAGRAPH_GAP_MS);
+    };
     utterance.onend = () => {
       if (token !== sessionToken) return;
-      clearHighlight();
-      speakFrom(index + 1, token);
+      queueNextParagraph();
     };
     utterance.onerror = () => {
       if (token !== sessionToken) return;
-      clearHighlight();
-      speakFrom(index + 1, token);
+      queueNextParagraph();
     };
     window.speechSynthesis.speak(utterance);
   };
@@ -199,6 +237,10 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
 
   const pause = () => {
     if (!isSupported.value || !isPlaying.value || isPaused.value) return;
+    if (nextParagraphTimer) {
+      window.clearTimeout(nextParagraphTimer);
+      nextParagraphTimer = null;
+    }
     window.speechSynthesis.pause();
     isPaused.value = true;
   };
@@ -207,6 +249,12 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     if (!isSupported.value || !isPlaying.value || !isPaused.value) return;
     window.speechSynthesis.resume();
     isPaused.value = false;
+    if (pendingNextIndex !== null && !window.speechSynthesis.speaking) {
+      const token = sessionToken;
+      const nextIndex = pendingNextIndex;
+      pendingNextIndex = null;
+      speakFrom(nextIndex, token);
+    }
   };
 
   const setRate = (nextRate) => {
@@ -239,22 +287,36 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     } catch {}
 
     if (!isSupported.value) return;
-    loadVoices();
-    voiceReadyTimer = window.setTimeout(() => {
-      if (!isVoicesReady.value) {
-        isVoicesReady.value = true;
+    const initVoicesAsync = () => {
+      if (isVoiceInitBound) return;
+      isVoiceInitBound = true;
+      loadVoices();
+      voiceReadyTimer = window.setTimeout(() => {
+        if (!isVoicesReady.value) {
+          isVoicesReady.value = true;
+        }
+      }, 1200);
+      voiceListener = () => loadVoices();
+      if (typeof window.speechSynthesis.addEventListener === "function") {
+        window.speechSynthesis.addEventListener("voiceschanged", voiceListener);
+      } else {
+        window.speechSynthesis.onvoiceschanged = voiceListener;
       }
-    }, 1200);
-    voiceListener = () => loadVoices();
-    if (typeof window.speechSynthesis.addEventListener === "function") {
-      window.speechSynthesis.addEventListener("voiceschanged", voiceListener);
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => initVoicesAsync(), { timeout: 1200 });
     } else {
-      window.speechSynthesis.onvoiceschanged = voiceListener;
+      idleInitTimer = window.setTimeout(() => initVoicesAsync(), 180);
     }
   });
 
   onUnmounted(() => {
     stop();
+    if (idleInitTimer) {
+      window.clearTimeout(idleInitTimer);
+      idleInitTimer = null;
+    }
     if (voiceReadyTimer) {
       window.clearTimeout(voiceReadyTimer);
       voiceReadyTimer = null;
@@ -286,5 +348,6 @@ export const useSpeechSynthesis = ({ containerRef } = {}) => {
     setVoice,
     isVoicesReady,
     estimateDurationSeconds,
+    invalidateContentCache,
   };
 };

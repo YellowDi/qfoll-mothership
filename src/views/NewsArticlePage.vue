@@ -39,45 +39,7 @@
       <div class="pt-20 w-full">
         <div class="mx-auto w-full max-w-[50%] max-md:max-w-full">
           <div class="flex w-full items-center justify-between gap-4 border-t border-line/12 pt-3 max-md:flex-wrap">
-            <div class="article-speech-panel">
-              <button
-                class="article-speech-play-btn"
-                type="button"
-                :disabled="speechPrimaryDisabled"
-                @click="handlePrimarySpeechAction"
-                :aria-label="speechPrimaryLabel"
-              >
-                <i :class="speechPrimaryIcon" aria-hidden="true"></i>
-              </button>
-              <div class="article-speech-status">
-                <div v-if="!isPlaying && !isPaused" class="article-speech-text article-speech-text--idle">
-                  <span class="article-speech-label">朗读本文</span>
-                  <span class="article-speech-separator">｜</span>
-                  <span class="article-speech-meta">{{ formatClock(estimatedSeconds) }}</span>
-                </div>
-                <div v-else class="article-speech-text article-speech-text--active">
-                  {{ formatClock(elapsedSeconds) }}
-                </div>
-              </div>
-              <div
-                v-if="isPlaying || isPaused"
-                class="article-speech-rate"
-                role="group"
-                aria-label="朗读倍速"
-              >
-                <button
-                  v-for="option in rateOptions"
-                  :key="option"
-                  class="article-speech-rate-btn"
-                  type="button"
-                  :class="{ 'is-active': option === rate }"
-                  :disabled="speechRateDisabled"
-                  @click="setRate(option)"
-                >
-                  {{ option }}x
-                </button>
-              </div>
-            </div>
+            <ArticleSpeechPlayer :container-ref="articleContentRef" :content-key="route.params.id" />
             <button
               class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-sm text-ink transition-colors hover:text-muted"
               type="button"
@@ -126,15 +88,18 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import AppLayout from "../layouts/AppLayout.vue";
 import DetailMetaCard from "../components/DetailMetaCard.vue";
 import RelatedContentSection from "../components/RelatedContentSection.vue";
 import { newsArticles, newsList } from "../data/news";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
-import { useSpeechSynthesis } from "../composables/useSpeechSynthesis";
 import "../styles/markdown-media.css";
+
+const ArticleSpeechPlayer = defineAsyncComponent(() =>
+  import("../components/ArticleSpeechPlayer.vue")
+);
 
 const route = useRoute();
 const article = computed(() => newsArticles[route.params.id] || newsList[0]);
@@ -179,83 +144,6 @@ const copiedVisible = ref(false);
 let copiedTimer = null;
 let alignTimer = null;
 let disposeInlineVideoPlayers = null;
-const rateOptions = [0.5, 1, 1.5, 2];
-
-const {
-  play,
-  pause,
-  resume,
-  stop,
-  isSupported,
-  isPlaying,
-  isPaused,
-  rate,
-  setRate,
-  isVoicesReady,
-  estimateDurationSeconds,
-} = useSpeechSynthesis({
-  containerRef: articleContentRef,
-});
-const elapsedSeconds = ref(0);
-const estimatedSeconds = ref(0);
-let elapsedTimer = null;
-let elapsedStartAt = 0;
-let elapsedBase = 0;
-
-const speechPrimaryDisabled = computed(
-  () => !isSupported.value || !isVoicesReady.value
-);
-const speechRateDisabled = computed(
-  () => !isSupported.value || !isVoicesReady.value
-);
-const speechPrimaryLabel = computed(() => {
-  if (!isSupported.value) return "当前浏览器不支持朗读";
-  if (!isVoicesReady.value) return "正在加载语音";
-  if (!isPlaying.value) return "开始朗读";
-  return isPaused.value ? "继续朗读" : "暂停朗读";
-});
-const speechPrimaryIcon = computed(() => {
-  if (!isPlaying.value) return "ri-play-fill";
-  return isPaused.value ? "ri-play-fill" : "ri-pause-fill";
-});
-const handlePrimarySpeechAction = () => {
-  if (!isSupported.value || !isVoicesReady.value) return;
-  if (!isPlaying.value) {
-    play();
-    return;
-  }
-  if (isPaused.value) {
-    resume();
-    return;
-  }
-  pause();
-};
-
-const formatClock = (seconds) => {
-  const safe = Math.max(0, Math.floor(Number(seconds) || 0));
-  const m = Math.floor(safe / 60);
-  const s = safe % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-};
-
-const refreshEstimatedDuration = () => {
-  estimatedSeconds.value = estimateDurationSeconds();
-};
-
-const stopElapsedTimer = () => {
-  if (elapsedTimer) {
-    window.clearInterval(elapsedTimer);
-    elapsedTimer = null;
-  }
-};
-
-const startElapsedTimer = () => {
-  stopElapsedTimer();
-  elapsedStartAt = Date.now();
-  elapsedTimer = window.setInterval(() => {
-    elapsedSeconds.value = elapsedBase + Math.floor((Date.now() - elapsedStartAt) / 1000);
-  }, 250);
-};
 
 const isExternalLink = (url) => /^https?:\/\//i.test(url || "");
 const linkTarget = (url) => (isExternalLink(url) ? "_blank" : "_self");
@@ -544,41 +432,11 @@ onMounted(() => {
 watch(
   () => route.params.id,
   async () => {
-    stop();
-    elapsedSeconds.value = 0;
-    elapsedBase = 0;
-    stopElapsedTimer();
     await nextTick();
     scheduleAlign();
     mountInlineVideoPlayers();
-    refreshEstimatedDuration();
   }
 );
-
-watch(
-  [isPlaying, isPaused],
-  ([playing, paused]) => {
-    if (playing && !paused) {
-      startElapsedTimer();
-      return;
-    }
-    if (playing && paused) {
-      elapsedBase = elapsedSeconds.value;
-      stopElapsedTimer();
-      return;
-    }
-    if (!playing) {
-      stopElapsedTimer();
-      elapsedSeconds.value = 0;
-      elapsedBase = 0;
-    }
-  },
-  { immediate: true }
-);
-
-watch(rate, () => {
-  refreshEstimatedDuration();
-});
 
 onUnmounted(() => {
   if (markdownRef.value) {
@@ -593,126 +451,5 @@ onUnmounted(() => {
   }
   if (copiedTimer) window.clearTimeout(copiedTimer);
   if (alignTimer) window.clearTimeout(alignTimer);
-  stopElapsedTimer();
-});
-
-onMounted(() => {
-  refreshEstimatedDuration();
 });
 </script>
-
-<style scoped>
-.article-speech-panel {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  min-height: 48px;
-}
-
-.article-speech-play-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 9999px;
-  border: 0;
-  background: rgb(var(--color-ink) / 0.08);
-  color: rgb(var(--color-ink) / 1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  position: relative;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.article-speech-play-btn > i {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  line-height: 1;
-}
-
-/* Optical centering: triangle play icon needs slight right shift vs geometric center. */
-.article-speech-play-btn > i.ri-play-fill {
-  transform: translate(-42%, -50%);
-}
-
-.article-speech-play-btn:hover:not(:disabled) {
-  background: rgb(var(--color-ink) / 0.14);
-}
-
-.article-speech-play-btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.article-speech-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-}
-
-.article-speech-text {
-  font-size: 16px;
-  color: rgb(var(--color-ink) / 1);
-  letter-spacing: -0.01em;
-}
-
-.article-speech-text--idle {
-  color: rgb(var(--color-ink) / 1);
-}
-
-.article-speech-label {
-  color: rgb(var(--color-ink) / 1);
-}
-
-.article-speech-separator,
-.article-speech-meta {
-  color: rgb(var(--color-ink) / 0.56);
-}
-
-.article-speech-text--active {
-  color: rgb(var(--color-ink) / 1);
-}
-
-.article-speech-rate-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.article-speech-rate {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-left: 1px solid rgb(var(--color-line) / 0.12);
-  padding-left: 14px;
-}
-
-.article-speech-rate-btn {
-  border: 0;
-  background: transparent;
-  color: rgb(var(--color-ink) / 0.4);
-  padding: 0 4px;
-  font-size: 14px;
-  line-height: 1;
-  transition: color 0.2s ease;
-}
-
-.article-speech-rate-btn.is-active {
-  color: rgb(var(--color-ink) / 1);
-  font-weight: 600;
-}
-
-@media (max-width: 768px) {
-  .article-speech-panel {
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .article-speech-rate {
-    border-left: 0;
-    padding-left: 0;
-  }
-}
-
-</style>

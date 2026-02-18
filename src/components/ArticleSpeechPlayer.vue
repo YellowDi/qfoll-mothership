@@ -68,6 +68,7 @@ const {
   setRate,
   isVoicesReady,
   estimateDurationSeconds,
+  invalidateContentCache,
 } = useSpeechSynthesis({
   containerRef: props.containerRef,
 });
@@ -76,6 +77,7 @@ const estimatedSeconds = ref(0);
 let elapsedTimer = null;
 let elapsedStartAt = 0;
 let elapsedBase = 0;
+let estimateIdleTimer = null;
 
 const speechPrimaryDisabled = computed(
   () => !isSupported.value || !isVoicesReady.value
@@ -118,6 +120,19 @@ const refreshEstimatedDuration = () => {
   estimatedSeconds.value = estimateDurationSeconds();
 };
 
+const scheduleEstimateRefresh = () => {
+  if (estimateIdleTimer) {
+    window.clearTimeout(estimateIdleTimer);
+    estimateIdleTimer = null;
+  }
+  const run = () => refreshEstimatedDuration();
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(run, { timeout: 1200 });
+  } else {
+    estimateIdleTimer = window.setTimeout(run, 180);
+  }
+};
+
 const stopElapsedTimer = () => {
   if (!elapsedTimer) return;
   window.clearInterval(elapsedTimer);
@@ -152,27 +167,32 @@ watch(
 );
 
 watch(rate, () => {
-  refreshEstimatedDuration();
+  scheduleEstimateRefresh();
 });
 
 watch(
   () => props.contentKey,
   async () => {
     stop();
+    invalidateContentCache();
     elapsedSeconds.value = 0;
     elapsedBase = 0;
     stopElapsedTimer();
     await nextTick();
-    refreshEstimatedDuration();
+    scheduleEstimateRefresh();
   }
 );
 
 onMounted(() => {
-  refreshEstimatedDuration();
+  scheduleEstimateRefresh();
 });
 
 onUnmounted(() => {
   stopElapsedTimer();
+  if (estimateIdleTimer) {
+    window.clearTimeout(estimateIdleTimer);
+    estimateIdleTimer = null;
+  }
 });
 </script>
 

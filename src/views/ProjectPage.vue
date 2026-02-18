@@ -87,15 +87,18 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import AppLayout from "../layouts/AppLayout.vue";
 import DetailMetaCard from "../components/DetailMetaCard.vue";
 import RelatedContentSection from "../components/RelatedContentSection.vue";
-import ArticleSpeechPlayer from "../components/ArticleSpeechPlayer.vue";
 import { projects, projectList } from "../data/projects";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 import "../styles/markdown-media.css";
+
+const ArticleSpeechPlayer = defineAsyncComponent(() =>
+  import("../components/ArticleSpeechPlayer.vue")
+);
 
 const route = useRoute();
 const project = computed(() => projects[route.params.id] || projects.hzhst);
