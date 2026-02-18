@@ -13,8 +13,6 @@
     --color-text-on-dark-secondary: 229 231 235;
     --color-brand: 251 146 60;
     --color-ink: var(--color-text-primary);
-    --color-muted: var(--color-text-primary);
-    --color-muted-opacity: var(--color-text-secondary-opacity);
     --color-line: var(--color-text-primary);
     --color-line-opacity: 0.04;
     --color-edge: 229 231 235;
@@ -33,8 +31,6 @@
     --color-text-on-dark-secondary: 229 231 235;
     --color-brand: 251 146 60;
     --color-ink: var(--color-text-primary);
-    --color-muted: var(--color-text-primary);
-    --color-muted-opacity: var(--color-text-secondary-opacity);
     --color-line: var(--color-text-primary);
     --color-line-opacity: 0.12;
     --color-edge: 255 255 255;

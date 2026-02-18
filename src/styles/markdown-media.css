@@ -668,7 +668,7 @@
   .md-item-caption {
     @apply block text-center;
     font-size: 14px;
-    color: rgb(var(--color-muted) / var(--color-muted-opacity, 1));
+    color: rgb(var(--color-text-secondary) / var(--color-text-secondary-opacity, 1));
     line-height: 1.5;
     margin-top: 2px;
   }
