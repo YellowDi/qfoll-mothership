@@ -1,6 +1,7 @@
 import { computed, ref } from "vue";
 
-const storageKey = "qf-theme";
+const userStorageKey = "qf-theme-user";
+const legacyStorageKey = "qf-theme";
 const theme = ref("light");
 let initialized = false;
 
@@ -16,14 +17,20 @@ const applyTheme = (value) => {
 const initTheme = () => {
   if (initialized || typeof window === "undefined") return;
   initialized = true;
-  const saved = window.localStorage.getItem(storageKey);
-  applyTheme(saved === "dark" || saved === "light" ? saved : getPreferredTheme());
+  applyTheme(getPreferredTheme());
+  const mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+  const onSystemThemeChange = (event) => {
+    // System setting always has higher priority than manual choice.
+    applyTheme(event.matches ? "dark" : "light");
+  };
+  mediaQueryList.addEventListener("change", onSystemThemeChange);
 };
 
 const setTheme = (value) => {
   applyTheme(value);
   if (typeof window !== "undefined") {
-    window.localStorage.setItem(storageKey, theme.value);
+    window.localStorage.setItem(userStorageKey, theme.value);
+    window.localStorage.removeItem(legacyStorageKey);
   }
 };
 
