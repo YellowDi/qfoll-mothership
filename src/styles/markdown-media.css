@@ -13,23 +13,43 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: 0;
     row-gap: 0;
-    --md-quote-card-bg: rgb(var(--color-line) / 0.045);
+    --md-card-bg: rgb(var(--color-line) / 0.045);
+    --md-card-radius: 0.375rem;
+    --md-card-pad: 16px;
     --md-quote-card-fg: rgb(var(--color-ink) / 0.92);
-    --md-quote-card-radius: 0.375rem;
-    --md-quote-pad: 24px;
     --md-quote-paragraph-gap: clamp(1.05rem, 2.05vw, 1.5rem);
     --md-list-indent: 1.35em;
     --md-list-gap: 0.35em;
     --md-list-block-gap: 1rem;
     --md-p-before-list-gap: 0.75rem;
     --md-marker: rgb(0 0 0 / 0.42);
+    --md-code-border: rgb(var(--color-line) / 0.08);
+    --md-code-toolbar-fg: rgb(var(--color-ink) / 0.52);
+    --md-hljs-fg: rgb(var(--color-ink) / 0.92);
+    --md-hljs-comment: rgb(var(--color-ink) / 0.45);
+    --md-hljs-keyword: #355fd4;
+    --md-hljs-string: #146c2e;
+    --md-hljs-number: #a53a8a;
+    --md-hljs-title: #8a4b0f;
+    --md-hljs-attr: #8c5a0a;
+    --md-hljs-literal: #0b8e88;
     line-height: 1.68;
   }
 
   .dark .markdown-body {
-    --md-quote-card-bg: rgb(var(--color-line) / 0.06);
+    --md-card-bg: rgb(var(--color-line) / 0.06);
     --md-quote-card-fg: rgb(var(--color-ink) / 0.92);
     --md-marker: rgb(255 255 255 / 0.42);
+    --md-code-border: rgb(255 255 255 / 0.16);
+    --md-code-toolbar-fg: rgb(var(--color-ink) / 0.58);
+    --md-hljs-fg: rgb(var(--color-ink) / 0.9);
+    --md-hljs-comment: rgb(var(--color-ink) / 0.5);
+    --md-hljs-keyword: #79a6ff;
+    --md-hljs-string: #7fce8f;
+    --md-hljs-number: #ee9bde;
+    --md-hljs-title: #ffb969;
+    --md-hljs-attr: #f1c16d;
+    --md-hljs-literal: #64d6d0;
   }
 
   .markdown-body.detail-markdown-body p {
@@ -121,6 +141,149 @@
   .markdown-body p:has(+ ul),
   .markdown-body p:has(+ ol) {
     margin-bottom: var(--md-p-before-list-gap);
+  }
+
+  .markdown-body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.86em;
+    padding: 0.14em 0.44em;
+    border-radius: var(--md-card-radius);
+    border: 1px solid var(--md-code-border);
+    background: var(--md-card-bg);
+    color: rgb(var(--color-ink) / 0.9);
+  }
+
+  .markdown-body .md-code-block {
+    margin: 0 0 var(--md-list-block-gap);
+    border: 0;
+    border-radius: var(--md-card-radius);
+    background: var(--md-card-bg);
+    overflow: hidden;
+  }
+
+  .markdown-body > .md-code-block {
+    margin-top: 0;
+  }
+
+  .markdown-body .md-code-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    color: var(--md-code-toolbar-fg);
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+
+  .markdown-body .md-code-lang {
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+    font-weight: 450;
+  }
+
+  .markdown-body .md-code-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 4px 2px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .markdown-body .md-code-copy:hover {
+    color: rgb(var(--color-ink) / 0.74);
+  }
+
+  .markdown-body .md-code-copy[data-copied="true"] {
+    color: rgb(var(--color-ink) / 0.82);
+  }
+
+  .markdown-body .md-code-pre {
+    margin: 0;
+    padding: 16px;
+    overflow-x: auto;
+    line-height: 1.62;
+    font-size: 0.95rem;
+  }
+
+  .markdown-body .md-code-pre code,
+  .markdown-body pre code {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+    color: var(--md-hljs-fg);
+    white-space: pre;
+  }
+
+  .markdown-body .md-code-pre code.hljs {
+    color: var(--md-hljs-fg);
+  }
+
+  .markdown-body .md-code-pre code .hljs-comment,
+  .markdown-body .md-code-pre code .hljs-quote {
+    color: var(--md-hljs-comment);
+    font-style: italic;
+  }
+
+  .markdown-body .md-code-pre code .hljs-keyword,
+  .markdown-body .md-code-pre code .hljs-selector-tag,
+  .markdown-body .md-code-pre code .hljs-subst {
+    color: var(--md-hljs-keyword);
+  }
+
+  .markdown-body .md-code-pre code .hljs-string,
+  .markdown-body .md-code-pre code .hljs-template-variable,
+  .markdown-body .md-code-pre code .hljs-doctag {
+    color: var(--md-hljs-string);
+  }
+
+  .markdown-body .md-code-pre code .hljs-number,
+  .markdown-body .md-code-pre code .hljs-literal,
+  .markdown-body .md-code-pre code .hljs-symbol,
+  .markdown-body .md-code-pre code .hljs-bullet {
+    color: var(--md-hljs-number);
+  }
+
+  .markdown-body .md-code-pre code .hljs-title,
+  .markdown-body .md-code-pre code .hljs-title.class_,
+  .markdown-body .md-code-pre code .hljs-title.function_ {
+    color: var(--md-hljs-title);
+  }
+
+  .markdown-body .md-code-pre code .hljs-attr,
+  .markdown-body .md-code-pre code .hljs-attribute,
+  .markdown-body .md-code-pre code .hljs-property,
+  .markdown-body .md-code-pre code .hljs-variable {
+    color: var(--md-hljs-attr);
+  }
+
+  .markdown-body .md-code-pre code .hljs-built_in,
+  .markdown-body .md-code-pre code .hljs-type,
+  .markdown-body .md-code-pre code .hljs-link {
+    color: var(--md-hljs-literal);
+  }
+
+  .markdown-body .md-code-pre::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .markdown-body .md-code-pre::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-ink) / 0.18);
+    border-radius: 999px;
   }
 
   .markdown-body ul,
@@ -222,10 +385,10 @@
 
   .markdown-body blockquote {
     margin: var(--md-list-block-gap) 0;
-    padding: var(--md-quote-pad);
+    padding: var(--md-card-pad);
     border: 0;
-    border-radius: var(--md-quote-card-radius);
-    background: var(--md-quote-card-bg);
+    border-radius: var(--md-card-radius);
+    background: var(--md-card-bg);
     color: var(--md-quote-card-fg);
     font-size: 0.9rem;
     font-style: normal;
@@ -235,8 +398,8 @@
 
   /* Keep quote card inner padding fixed; generic markdown gutters should not override it. */
   .markdown-body > blockquote:not(.md-media) {
-    padding-left: var(--md-quote-pad);
-    padding-right: var(--md-quote-pad);
+    padding-left: var(--md-card-pad);
+    padding-right: var(--md-card-pad);
   }
 
   .markdown-body blockquote::before {

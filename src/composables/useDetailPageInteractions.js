@@ -8,24 +8,30 @@ export const useDetailPageInteractions = ({
   const articleContentRef = ref(null);
   const copiedVisible = ref(false);
   let copiedTimer = null;
+  let codeCopyTimer = null;
+  let lastCodeCopyButton = null;
   let alignTimer = null;
   let alignSettleTimer = null;
   let disposeInlineVideoPlayers = null;
   let resizeObserver = null;
 
+  const writeTextToClipboard = async (text) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const input = document.createElement("input");
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+  };
+
   const copyShareLink = async () => {
     const text = window.location.href;
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const input = document.createElement("input");
-        input.value = text;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand("copy");
-        document.body.removeChild(input);
-      }
+      await writeTextToClipboard(text);
       copiedVisible.value = true;
       if (copiedTimer) window.clearTimeout(copiedTimer);
       copiedTimer = window.setTimeout(() => {
@@ -36,9 +42,49 @@ export const useDetailPageInteractions = ({
     }
   };
 
+  const setCodeCopyButtonState = (button, copied) => {
+    button.dataset.copied = copied ? "true" : "false";
+    const textNode = button.querySelector(".md-code-copy-text");
+    if (textNode) {
+      textNode.textContent = copied ? "已复制" : "复制";
+    }
+  };
+
+  const handleCodeCopy = async (button) => {
+    const block = button.closest(".md-code-block");
+    const codeNode = block?.querySelector(".md-code-pre code");
+    if (!(codeNode instanceof HTMLElement)) return;
+    const text = codeNode.textContent || "";
+    if (!text.trim()) return;
+    try {
+      await writeTextToClipboard(text);
+      if (codeCopyTimer) window.clearTimeout(codeCopyTimer);
+      if (lastCodeCopyButton && lastCodeCopyButton !== button) {
+        setCodeCopyButtonState(lastCodeCopyButton, false);
+      }
+      setCodeCopyButtonState(button, true);
+      lastCodeCopyButton = button;
+      codeCopyTimer = window.setTimeout(() => {
+        setCodeCopyButtonState(button, false);
+        if (lastCodeCopyButton === button) {
+          lastCodeCopyButton = null;
+        }
+      }, 1400);
+    } catch {
+      setCodeCopyButtonState(button, false);
+    }
+  };
+
   const handleMarkdownClick = (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
+    const copyButton = target.closest(".md-code-copy");
+    if (copyButton instanceof HTMLButtonElement) {
+      event.preventDefault();
+      event.stopPropagation();
+      void handleCodeCopy(copyButton);
+      return;
+    }
     const button = target.closest(".md-carousel-btn");
     if (button) {
       const action = button.dataset.action;
@@ -360,6 +406,11 @@ export const useDetailPageInteractions = ({
       resizeObserver = null;
     }
     if (copiedTimer) window.clearTimeout(copiedTimer);
+    if (codeCopyTimer) window.clearTimeout(codeCopyTimer);
+    if (lastCodeCopyButton) {
+      setCodeCopyButtonState(lastCodeCopyButton, false);
+      lastCodeCopyButton = null;
+    }
     if (alignTimer) window.clearTimeout(alignTimer);
     if (alignSettleTimer) window.clearTimeout(alignSettleTimer);
   });

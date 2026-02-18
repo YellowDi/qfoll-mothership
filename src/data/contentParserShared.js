@@ -1,4 +1,5 @@
 import MarkdownIt from "markdown-it";
+import hljs from "highlight.js";
 import { resolveCoverAsset } from "./coverAssets";
 
 const md = new MarkdownIt({
@@ -116,6 +117,70 @@ const escapeAttr = (value) =>
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll("'", "&#39;");
+
+const normalizeCodeLanguage = (value) => {
+  const trimmed = String(value || "").trim().toLowerCase();
+  if (!trimmed) return "text";
+  const language = trimmed.split(/\s+/)[0].replace(/^language-/, "");
+  return language || "text";
+};
+
+const highlightCode = (code, language, hasExplicitLanguage) => {
+  const source = String(code || "");
+  const normalized = normalizeCodeLanguage(language);
+  if (!source) {
+    return { language: normalized, html: "" };
+  }
+  if (hasExplicitLanguage && normalized !== "text" && hljs.getLanguage(normalized)) {
+    try {
+      return {
+        language: normalized,
+        html: hljs.highlight(source, {
+          language: normalized,
+          ignoreIllegals: true,
+        }).value,
+      };
+    } catch {
+      return { language: normalized, html: md.utils.escapeHtml(source) };
+    }
+  }
+  if (!hasExplicitLanguage) {
+    try {
+      const detected = hljs.highlightAuto(source);
+      return {
+        language: detected.language || "text",
+        html: detected.value,
+      };
+    } catch {
+      return { language: "text", html: md.utils.escapeHtml(source) };
+    }
+  }
+  return { language: normalized, html: md.utils.escapeHtml(source) };
+};
+
+const renderMarkdownCodeBlock = (code, language) => {
+  const rawInfo = String(language || "").trim();
+  const hasExplicitLanguage = rawInfo.length > 0;
+  const highlighted = highlightCode(code, rawInfo, hasExplicitLanguage);
+  const lang = highlighted.language || normalizeCodeLanguage(rawInfo);
+  return `<div class="md-code-block" data-code-lang="${escapeAttr(
+    lang
+  )}"><div class="md-code-toolbar"><span class="md-code-lang">${escapeAttr(
+    lang
+  )}</span><button class="md-code-copy" type="button" aria-label="复制代码"><i class="ri-file-copy-line" aria-hidden="true"></i><span class="md-code-copy-text">复制</span></button></div><pre class="md-code-pre"><code class="language-${escapeAttr(
+    lang
+  )} hljs">${highlighted.html}</code></pre></div>`;
+};
+
+md.renderer.rules.fence = (tokens, idx) => {
+  const token = tokens[idx];
+  return renderMarkdownCodeBlock(token.content, token.info);
+};
+
+md.renderer.rules.code_block = (tokens, idx) => {
+  const token = tokens[idx];
+  return renderMarkdownCodeBlock(token.content, "text");
+};
 
 const toBackgroundImage = (value) => {
   const raw = String(value ?? "").trim();

@@ -35,6 +35,8 @@ infoTags:
 
 ## 段落
 
+要创建段落，请使用空白行将一行或多行文本进行分隔。
+
 这是一个普通段落。在这里展示一段用于排版测试的示例文字内容，仅作为设计布局参考，并不代表最终文案。通过这种方式可以更好地观察段落之间的留白、字体大小与行间距效果，从而专注在整体界面视觉与信息层级的调整上，而不必纠结实际内容本身。当前这段文字长度适中，适合用于展示多行文本在不同设备与屏幕宽度下的换行情况。
 
 这是第二个段落，用于测试段落间距。在这里展示一段用于排版测试的示例文字内容，仅作为设计布局参考，并不代表最终文案。通过这种方式可以更好地观察段落之间的留白、字体大小与行间距效果，从而专注在整体界面视觉与信息层级的调整上，而不必纠结实际内容本身。当前这段文字长度适中，适合用于展示多行文本在不同设备与屏幕宽度下的换行情况。
@@ -42,13 +44,13 @@ infoTags:
 这一行  
 通过在行尾添加两个空格实现换行。
 
-## 文本样式
-
-**粗体** *斜体* ***粗斜体*** ~~删除线~~ `行内代码`
+**粗体** *斜体* ***粗斜体*** ~~删除线~~ `行内代码` [这是一个链接](https://example.com)
 
 ## 引用
 
 > 在这里展示一段用于排版测试的示例文字内容，仅作为设计布局参考，并不代表最终文案。通过这种方式可以更好地观察段落之间的留白、字体大小与行间距效果，从而专注在整体界面视觉与信息层级的调整上，而不必纠结实际内容本身。当前这段文字长度适中，适合用于展示多行文本在不同设备与屏幕宽度下的换行情况。
+
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ## 无序列表
 
@@ -69,17 +71,12 @@ infoTags:
    1. 子项 3.1
    2. 子项 3.2
 
-## 链接
-
-[这是一个链接](https://example.com)
-
 ## 代码块
+要创建代码块，请将代码块的每一行缩进至少四个空格或一个制表符。
 
     这是使用缩进方式创建的代码块
     保留原始格式
     不指定语言
-
-## 围栏代码块
 
 ```
 普通代码块
