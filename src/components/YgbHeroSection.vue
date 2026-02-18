@@ -36,7 +36,7 @@
               <span class="ml-1 inline-block h-[1.05em] w-[2px] animate-pulse rounded-full bg-violet-500/85"></span>
             </span>
           </div>
-          <p class="mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed text-secondary md:pr-0 md:break-words xl:max-w-136">
+          <p class="text-primary mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed md:pr-0 md:break-words xl:max-w-136">
             云柜宝立足国际物流运输场景，融合物流网络与大数据技术，围绕车货匹配、在途监管、时间节点记录和异常预警，构建一体化运输管理能力。
           </p>
           <div class="mt-7 flex flex-wrap items-center gap-3">

@@ -133,7 +133,7 @@
                 <br />
                 数据共享与监管支持
               </h2>
-              <p class="mt-5 text-[clamp(0.94rem,1.04vw,1.1rem)] leading-[1.86] text-secondary dark:text-secondary">
+              <p class="text-primary mt-5 text-[clamp(0.94rem,1.04vw,1.1rem)] leading-[1.86]">
                 云柜宝通过对接网络货运接口，实现了与政府部门的数据共享，保证了数据的真实性、准确性、及时性，符合政府监管要求。平台还可以根据政府部门的需求，随时为政府提供数据与业务支持，包括运输信息、运费结算、安全监控等方面，协助政府部门进行有效的监管和管理。
               </p>
 
@@ -144,7 +144,7 @@
                   >
                     <i class="ri-check-line text-sm"></i>
                   </span>
-                  <span class="text-[clamp(0.95rem,1.02vw,1.1rem)] leading-[1.34] font-medium text-secondary dark:text-primary">
+                  <span class="text-[clamp(0.95rem,1.02vw,1.1rem)] leading-[1.34] font-medium text-primary">
                     {{ item }}
                   </span>
                 </li>

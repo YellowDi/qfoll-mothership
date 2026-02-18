@@ -10,7 +10,7 @@
         >
           我们如何设计产品 UI
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
+        <p class="text-primary mt-6 text-center text-base leading-[1.8]">
           从人机交互原则出发，构建可长期维护的界面语言
         </p>
       </div>

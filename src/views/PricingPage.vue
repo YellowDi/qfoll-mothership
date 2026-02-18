@@ -10,7 +10,7 @@
         >
           定价
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
+        <p class="text-primary mt-6 text-center text-base leading-[1.8]">
           我们是如何给出项目合作报价的？
         </p>
       </div>

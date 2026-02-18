@@ -10,7 +10,7 @@
         >
           联系我们
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
+        <p class="text-primary mt-6 text-center text-base leading-[1.8]">
           欢迎通过以下方式与我们取得联系，我们会尽快回复您。
         </p>
       </div>

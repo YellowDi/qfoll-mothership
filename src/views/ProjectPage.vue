@@ -11,7 +11,7 @@
         >
           {{ project.title }}
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
+        <p class="text-primary mt-6 text-center text-base leading-[1.8]">
           {{ project.lead }}
         </p>
         <div v-if="project.primaryButtonText || project.secondaryButtonText" class="mt-5 flex items-center justify-center gap-1.5">

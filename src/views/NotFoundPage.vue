@@ -8,7 +8,7 @@
         >
           页面不存在
         </h1>
-        <p class="mx-auto mt-6 max-w-160 text-base leading-[1.8] text-secondary">
+        <p class="text-primary mx-auto mt-6 max-w-160 text-base leading-[1.8]">
           你访问的链接可能已失效、地址输入有误，或该内容已被移动。
         </p>
         <div class="mt-8 flex items-center justify-center gap-3 max-md:flex-col">

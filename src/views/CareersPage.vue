@@ -10,7 +10,7 @@
         >
           工作机会
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
+        <p class="text-primary mt-6 text-center text-base leading-[1.8]">
           我们在寻找对产品体验与工程质量有要求的伙伴，一起构建可持续演进的软件产品
         </p>
       </div>
