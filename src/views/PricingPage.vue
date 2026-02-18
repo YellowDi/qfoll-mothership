@@ -3,19 +3,19 @@
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center text-sm">
-          <span class="text-muted">公司</span>
+          <span class="text-secondary">公司</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
         >
           定价
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-muted">
+        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
           我们是如何给出项目合作报价的？
         </p>
       </div>
 
-      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-ink max-lg:max-w-full">
+      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-primary max-lg:max-w-full">
         <div class="markdown-body detail-markdown-body">
           <p>
             在项目合作初期，价格往往是最先被提及的话题。但在我们看来，价格从来不是起点，真正的起点是对项目本身的理解。我们始终坚持，任何一份报价都必须建立在充分理解需求的基础之上，而不是凭经验给出一个大概区间。只有在明确项目目标、业务结构、使用场景以及未来扩展方向之后，报价才具备现实意义。

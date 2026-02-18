@@ -9,7 +9,7 @@
   }
 
   .markdown-body {
-    @apply grid w-full max-w-full min-w-0 overflow-x-hidden font-sans text-base text-ink;
+    @apply grid w-full max-w-full min-w-0 overflow-x-hidden font-sans text-base text-primary;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: 0;
     row-gap: 0;
@@ -90,14 +90,14 @@
   }
 
   .markdown-body p {
-    @apply w-full max-w-full text-ink;
+    @apply w-full max-w-full text-primary;
     font-weight: 330;
     margin: 0 0 1.35rem;
     line-height: 1.72;
   }
 
   .markdown-body ul {
-    @apply block text-ink;
+    @apply block text-primary;
     margin: 0 0 1.5rem;
     padding-inline-start: 0;
     padding-inline-end: 0;
@@ -118,7 +118,7 @@
   }
 
   .markdown-body ul li::marker {
-    @apply text-ink;
+    @apply text-primary;
     font-size: 1.02em;
   }
 
@@ -127,7 +127,7 @@
   }
 
   .markdown-body a {
-    @apply text-ink underline;
+    @apply text-primary underline;
     text-decoration-thickness: 1px;
     text-decoration-color: rgb(var(--color-ink) / 0.88);
     text-underline-offset: 0.2em;
@@ -140,7 +140,7 @@
   }
 
   .markdown-body a:visited {
-    @apply text-ink;
+    @apply text-primary;
   }
 
   .markdown-body blockquote {
@@ -270,7 +270,7 @@
   }
 
   .md-carousel-btn:hover {
-    @apply text-ink;
+    @apply text-primary;
   }
 
   .md-carousel-track {
@@ -446,7 +446,7 @@
     height: 72px;
     border: 0;
     background: transparent;
-    color: #fff;
+    color: rgb(var(--color-text-on-dark) / 1);
     padding: 0;
     margin: 0;
     pointer-events: auto;
@@ -495,7 +495,7 @@
     transform: translate(-50%, -50%);
     font-size: clamp(32px, 4vw, 50px);
     line-height: 1;
-    color: #fff;
+    color: rgb(var(--color-text-on-dark) / 1);
   }
 
   .md-video-controls-shell {
@@ -525,7 +525,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #fff;
+    color: rgb(var(--color-text-on-dark) / 1);
   }
 
   .md-video-btn {
@@ -552,7 +552,7 @@
     min-width: 88px;
     font-size: 14px;
     line-height: 1;
-    color: rgb(255 255 255 / 0.96);
+    color: rgb(var(--color-text-on-dark-secondary) / 1);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
@@ -622,7 +622,7 @@
   .md-video-menu-item {
     border: 0;
     background: transparent;
-    color: rgb(255 255 255 / 0.9);
+    color: rgb(var(--color-text-on-dark-secondary) / 1);
     text-align: left;
     padding: 6px 8px;
     border-radius: 6px;
@@ -638,7 +638,7 @@
 
   .md-video-menu-item.is-active {
     background: rgb(255 255 255 / 0.16);
-    color: #fff;
+    color: rgb(var(--color-text-on-dark) / 1);
   }
 
   .md-item-caption {

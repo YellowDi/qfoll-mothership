@@ -6,7 +6,7 @@
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
           <h3 class="text-lg font-medium">客户案例</h3>
-          <RouterLink class="text-sm text-muted transition-colors hover:text-ink" to="/projects">查看全部</RouterLink>
+          <RouterLink class="text-sm text-secondary transition-colors hover:text-primary" to="/projects">查看全部</RouterLink>
         </div>
         <div class="mx-auto w-full pb-10 pt-6 max-md:pb-8">
           <div class="grid grid-cols-12 gap-6 max-md:gap-4">
@@ -41,10 +41,10 @@
                   />
                 </div>
                 <div class="pt-3 text-left">
-                  <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
+                  <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
                   <div class="mt-4 flex items-center gap-2 text-sm">
-                    <span class="font-medium text-ink">{{ item.tag }}</span>
-                    <span class="text-muted">{{ item.yearLabel || item.year }}</span>
+                    <span class="font-medium text-primary">{{ item.tag }}</span>
+                    <span class="text-secondary">{{ item.yearLabel || item.year }}</span>
                   </div>
                 </div>
               </RouterLink>
@@ -69,10 +69,10 @@
                 />
               </div>
               <div class="pt-4 text-left">
-                <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
+                <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
-                  <span class="font-medium text-ink">{{ item.tag }}</span>
-                  <span class="text-muted">{{ item.yearLabel || item.year }}</span>
+                  <span class="font-medium text-primary">{{ item.tag }}</span>
+                  <span class="text-secondary">{{ item.yearLabel || item.year }}</span>
                 </div>
               </div>
             </RouterLink>
@@ -97,10 +97,10 @@
                   />
                 </div>
                 <div class="pt-3 text-left">
-                  <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
+                  <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
                   <div class="mt-4 flex items-center gap-2 text-sm">
-                    <span class="font-medium text-ink">{{ item.tag }}</span>
-                    <span class="text-muted">{{ item.yearLabel || item.year }}</span>
+                    <span class="font-medium text-primary">{{ item.tag }}</span>
+                    <span class="text-secondary">{{ item.yearLabel || item.year }}</span>
                   </div>
                 </div>
               </RouterLink>
@@ -121,7 +121,7 @@
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
           <h3 class="text-lg font-medium">最新动态</h3>
-          <RouterLink class="text-sm text-muted transition-colors hover:text-ink" to="/news">查看更多</RouterLink>
+          <RouterLink class="text-sm text-secondary transition-colors hover:text-primary" to="/news">查看更多</RouterLink>
         </div>
         <div class="mx-auto w-full pt-6">
           <div class="grid grid-flow-row grid-cols-2 gap-x-10 gap-y-8 max-md:grid-cols-1 max-md:gap-x-0 max-md:gap-y-6">
@@ -142,10 +142,10 @@
                 />
               </div>
               <div class="flex min-h-full max-w-[36rem] flex-col justify-center pl-4 pr-10 py-2 text-left max-lg:max-w-[30rem] max-lg:pl-3 max-lg:pr-8 max-lg:py-1.5 max-md:max-w-none max-md:pl-2.5 max-md:pr-6 max-md:py-1.5">
-                <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
+                <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
-                  <span class="font-medium text-ink">{{ item.category }}</span>
-                  <span class="text-muted">{{ item.publishedAt }}</span>
+                  <span class="font-medium text-primary">{{ item.category }}</span>
+                  <span class="text-secondary">{{ item.publishedAt }}</span>
                 </div>
               </div>
             </RouterLink>

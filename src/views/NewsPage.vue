@@ -24,7 +24,7 @@
               :key="item"
               type="button"
               class="shrink-0 transition-colors"
-              :class="activeFilter === item ? 'text-ink font-semibold' : 'text-muted hover:text-ink'"
+              :class="activeFilter === item ? 'text-primary font-semibold' : 'text-secondary hover:text-primary'"
               @click="activeFilter = item"
             >
               {{ item }}
@@ -32,15 +32,15 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-6 text-sm text-muted">
+        <div class="flex items-center gap-6 text-sm text-secondary">
           <div class="relative">
             <button
               ref="filterToggleRef"
               type="button"
-              class="filter-toggle flex items-center gap-2 text-muted hover:text-ink transition-colors"
+              class="filter-toggle flex items-center gap-2 text-secondary hover:text-primary transition-colors"
               @click="filterOpen = !filterOpen; if (filterOpen) sortOpen = false"
             >
-              <span class="font-medium text-ink">{{ filterButtonText }}</span>
+              <span class="font-medium text-primary">{{ filterButtonText }}</span>
               <i v-if="filterOpen" class="ri-close-line pointer-events-none text-base"></i>
               <i v-else class="ri-equalizer-2-line pointer-events-none text-base"></i>
             </button>
@@ -48,13 +48,13 @@
               <div
                 v-if="filterOpen"
                 ref="filterPanelRef"
-                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
                 :style="filterDesktopStyle"
               >
                 <div class="filter-panel-scroll">
                   <div class="grid grid-cols-2 gap-6 max-md:grid-cols-1">
                     <div>
-                      <div class="mb-3 text-sm text-muted">分类</div>
+                      <div class="mb-3 text-sm text-secondary">分类</div>
                       <div class="max-h-55 space-y-2 overflow-auto pr-2">
                         <label
                           v-for="item in tagOptions"
@@ -63,7 +63,7 @@
                         >
                           <input
                             type="checkbox"
-                            class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                            class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
                             :value="item"
                             v-model="selectedTags"
                           />
@@ -72,7 +72,7 @@
                       </div>
                     </div>
                     <div>
-                      <div class="mb-3 text-sm text-muted">年份</div>
+                      <div class="mb-3 text-sm text-secondary">年份</div>
                       <div class="max-h-55 space-y-2 overflow-auto pr-2">
                         <label
                           v-for="item in yearOptions"
@@ -81,7 +81,7 @@
                         >
                           <input
                             type="checkbox"
-                            class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                            class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
                             :value="item"
                             v-model="selectedYears"
                           />
@@ -94,7 +94,7 @@
                 <div class="filter-panel-footer mt-5 flex justify-end">
                   <button
                     type="button"
-                    class="text-[15px] font-medium text-ink"
+                    class="text-[15px] font-medium text-primary"
                     @click="handleFilterAction"
                   >
                     {{ hasActiveFilters ? "清除筛选" : "取消" }}
@@ -107,17 +107,17 @@
             <button
               ref="sortToggleRef"
               type="button"
-              class="sort-toggle flex items-center gap-2 text-muted hover:text-ink transition-colors"
+              class="sort-toggle flex items-center gap-2 text-secondary hover:text-primary transition-colors"
               @click="sortOpen = !sortOpen; if (sortOpen) filterOpen = false"
             >
-              <span class="font-medium text-ink">排序</span>
+              <span class="font-medium text-primary">排序</span>
               <i :class="sortOpen ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" class="text-base"></i>
             </button>
             <Transition name="dropdown-fade">
               <div
                 v-if="sortOpen"
                 ref="sortPanelRef"
-                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-ink shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
                 :style="sortDesktopStyle"
               >
                 <button
@@ -157,7 +157,7 @@
             <button
               type="button"
               class="p-2.5 transition-colors"
-              :class="layout === 'grid' ? 'text-ink' : 'text-ink/32 hover:text-ink dark:text-ink/35 dark:hover:text-ink'"
+              :class="layout === 'grid' ? 'text-primary' : 'text-secondary hover:text-primary dark:text-secondary dark:hover:text-primary'"
               @click="layout = 'grid'"
             >
               <i class="ri-grid-fill text-lg"></i>
@@ -165,7 +165,7 @@
             <button
               type="button"
               class="p-2.5 transition-colors"
-              :class="layout === 'list' ? 'text-ink' : 'text-ink/32 hover:text-ink dark:text-ink/35 dark:hover:text-ink'"
+              :class="layout === 'list' ? 'text-primary' : 'text-secondary hover:text-primary dark:text-secondary dark:hover:text-primary'"
               @click="layout = 'list'"
             >
               <i class="ri-list-check-2 text-lg"></i>
@@ -179,13 +179,13 @@
           <div
             v-if="filterOpen"
             ref="mobileFilterPanel"
-            class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
             :style="mobileFilterPanelStyle"
           >
             <div class="min-h-0 flex-1 overflow-y-auto pr-1">
               <div class="grid grid-cols-1 gap-6">
                 <div>
-                  <div class="mb-3 text-sm text-muted">分类</div>
+                  <div class="mb-3 text-sm text-secondary">分类</div>
                   <div class="space-y-2">
                     <label
                       v-for="item in tagOptions"
@@ -194,7 +194,7 @@
                     >
                       <input
                         type="checkbox"
-                        class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                        class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
                         :value="item"
                         v-model="selectedTags"
                       />
@@ -203,7 +203,7 @@
                   </div>
                 </div>
                 <div>
-                  <div class="mb-3 text-sm text-muted">年份</div>
+                  <div class="mb-3 text-sm text-secondary">年份</div>
                   <div class="space-y-2">
                     <label
                       v-for="item in yearOptions"
@@ -212,7 +212,7 @@
                     >
                       <input
                         type="checkbox"
-                        class="h-4 w-4 rounded border-line/35 bg-transparent text-ink"
+                        class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
                         :value="item"
                         v-model="selectedYears"
                       />
@@ -226,7 +226,7 @@
             <div class="mt-6 flex justify-end border-t border-line/10 pt-5 pb-1">
               <button
                 type="button"
-                class="min-h-11 px-2 text-[15px] font-medium text-ink"
+                class="min-h-11 px-2 text-[15px] font-medium text-primary"
                 @click="handleFilterAction"
               >
                 {{ hasActiveFilters ? "清除筛选" : "取消" }}
@@ -237,7 +237,7 @@
         <Transition name="dropdown-fade">
           <div
             v-if="sortOpen"
-            class="mobile-sort-panel pointer-events-auto rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-ink shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            class="mobile-sort-panel pointer-events-auto rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
           >
             <button
               type="button"

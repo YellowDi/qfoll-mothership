@@ -11,10 +11,10 @@
       />
     </div>
     <div class="pt-4 text-left">
-      <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ title }}</div>
+      <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ title }}</div>
       <div class="mt-4 flex items-center gap-2 text-sm">
-        <span class="font-medium text-ink">{{ primaryMeta }}</span>
-        <span class="text-muted">{{ secondaryMeta }}</span>
+        <span class="font-medium text-primary">{{ primaryMeta }}</span>
+        <span class="text-secondary">{{ secondaryMeta }}</span>
       </div>
     </div>
   </RouterLink>

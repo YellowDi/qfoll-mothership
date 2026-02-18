@@ -23,8 +23,7 @@
       <div class="about-copy-shell max-w-245 select-none">
         <p
           ref="copyTextRef"
-          class="font-medium tracking-[0.2px] text-[42px] leading-[1.22] max-md:text-[28px] max-md:leading-[1.26]"
-          :style="{ color: isDark ? '#ffffff' : '#1f2329' }"
+          class="font-medium tracking-[0.2px] text-[42px] leading-[1.22] text-primary max-md:text-[28px] max-md:leading-[1.26]"
         >
           我们是企丰科技
           <img
@@ -77,14 +76,12 @@
         <template v-for="item in features" :key="item.title">
           <div class="about-feature-row flex flex-wrap items-baseline gap-3.5 py-4.5">
             <span
-              class="whitespace-nowrap text-[19px] font-medium leading-[1.32] max-md:text-base"
-              :style="{ color: isDark ? '#efeff4' : '#1b2026' }"
+              class="whitespace-nowrap text-[19px] font-medium leading-[1.32] text-primary max-md:text-base"
             >
               {{ item.title }}
             </span>
             <span
-              class="text-[15px] font-normal leading-[1.64] max-md:text-sm"
-              :style="{ color: isDark ? '#b4b4be' : '#6a727d' }"
+              class="text-[15px] font-normal leading-[1.64] text-secondary max-md:text-sm"
             >
               {{ item.desc }}
             </span>

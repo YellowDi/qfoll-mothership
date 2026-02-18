@@ -7,7 +7,7 @@
           <div class="text-sm font-medium">企丰科技</div>
         </RouterLink>
         <button
-          class="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-black/44 transition-colors hover:text-ink dark:text-white/56 dark:hover:text-ink"
+          class="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary dark:text-secondary dark:hover:text-primary"
           type="button"
           @click="onToggle"
           aria-label="打开菜单"
@@ -17,7 +17,7 @@
       </div>
       <div class="flex items-center gap-1">
         <button
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-black/44 transition-colors hover:text-ink dark:text-white/56 dark:hover:text-ink"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary dark:text-secondary dark:hover:text-primary"
           type="button"
           @click="onToggleTheme"
           aria-label="切换深色模式"
@@ -25,7 +25,7 @@
           <i :class="isDark ? 'ri-sun-line text-lg' : 'ri-moon-clear-line text-lg'"></i>
         </button>
         <button
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-black/44 transition-colors hover:text-ink dark:text-white/56 dark:hover:text-ink md:hidden"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary dark:text-secondary dark:hover:text-primary md:hidden"
           type="button"
           @click="onToggle"
           aria-label="打开菜单"

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'min-h-screen bg-bg text-ink transition-colors duration-300 max-md:overflow-x-hidden',
+      'min-h-screen bg-bg text-primary transition-colors duration-300 max-md:overflow-x-hidden',
     ]"
   >
     <aside
@@ -72,7 +72,7 @@
           >
             <div class="flex flex-col gap-4">
               <button
-                class="sidebar-back-button flex w-40 items-center gap-2 px-3 text-left text-sm font-medium text-muted max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3"
+                class="sidebar-back-button flex w-40 items-center gap-2 px-3 text-left text-sm font-medium text-secondary max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3"
                 type="button"
                 @click="goRoot"
               >
@@ -260,28 +260,28 @@ const rootBase =
 const rootLinkClass = (active) =>
   `${rootBase} ${
     active
-      ? "bg-black/8 text-ink dark:bg-white/10"
-      : "text-ink hover:bg-black/6 dark:hover:bg-white/8"
+      ? "bg-black/8 text-primary dark:bg-white/10"
+      : "text-primary hover:bg-black/6 dark:hover:bg-white/8"
   }`;
 const rootButtonClass = (active) =>
   `${rootBase} ${
     active
-      ? "bg-black/8 text-ink dark:bg-white/10"
-      : "text-ink hover:bg-black/6 dark:hover:bg-white/8"
+      ? "bg-black/8 text-primary dark:bg-white/10"
+      : "text-primary hover:bg-black/6 dark:hover:bg-white/8"
   }`;
 const arrowClass = (active) =>
   active ? "opacity-0" : "opacity-0 transition-opacity group-hover:opacity-100";
 const projectLinkClass = (active) =>
   `group rounded-md px-3 py-2 text-sm font-medium transition-colors w-40 max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3 ${
     active
-      ? "bg-black/8 text-ink dark:bg-white/10"
-      : "text-ink hover:bg-black/6 dark:hover:bg-white/8"
+      ? "bg-black/8 text-primary dark:bg-white/10"
+      : "text-primary hover:bg-black/6 dark:hover:bg-white/8"
   }`;
 const submenuLinkClass = (active) =>
   `group rounded-md px-3 py-2 text-sm font-medium transition-colors w-40 max-md:w-full max-md:min-h-11 max-md:px-4 max-md:py-3 ${
     active
-      ? "bg-black/8 text-ink dark:bg-white/10"
-      : "text-ink hover:bg-black/6 dark:hover:bg-white/8"
+      ? "bg-black/8 text-primary dark:bg-white/10"
+      : "text-primary hover:bg-black/6 dark:hover:bg-white/8"
   }`;
 
 const goProjects = () => {

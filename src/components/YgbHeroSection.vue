@@ -13,7 +13,7 @@
       <div class="relative grid w-full min-w-0 max-w-full grid-cols-1 gap-8 xl:grid-cols-2 xl:items-end">
         <div :class="homePreview ? 'w-full min-w-0 max-w-full' : 'w-full min-w-0 max-w-full xl:self-start'">
           <div
-            class="inline-flex max-w-full items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-muted"
+            class="inline-flex max-w-full items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-secondary"
           >
             <i class="ri-shining-line text-sm"></i>
             智能化车货匹配 · 全球货运定位 · 实时推荐预警
@@ -21,13 +21,13 @@
           <p class="mt-5 text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-orange-400">
             云柜宝
           </p>
-          <h1 class="mt-1 whitespace-nowrap text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-ink">
+          <h1 class="mt-1 whitespace-nowrap text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-primary">
             智能集卡物流平台
           </h1>
-          <p class="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-ink">
+          <p class="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary">
             让运输管理更简单、更高效
           </p>
-          <div class="relative mt-1 flex w-full min-w-0 max-w-full flex-nowrap items-center gap-2 overflow-hidden whitespace-nowrap text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-ink max-md:text-[clamp(1rem,4.4vw,1.18rem)]">
+          <div class="relative mt-1 flex w-full min-w-0 max-w-full flex-nowrap items-center gap-2 overflow-hidden whitespace-nowrap text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary max-md:text-[clamp(1rem,4.4vw,1.18rem)]">
             <span class="shrink-0">物流运输管理再也不会</span>
             <span
               class="inline-flex min-w-0 items-center bg-[linear-gradient(90deg,#ff6f5f,#fe8348,#8f48ff)] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(143,72,255,0.15)] md:min-w-[5.8em]"
@@ -36,14 +36,14 @@
               <span class="ml-1 inline-block h-[1.05em] w-[2px] animate-pulse rounded-full bg-violet-500/85"></span>
             </span>
           </div>
-          <p class="mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed text-muted md:pr-0 md:break-words xl:max-w-136">
+          <p class="mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed text-secondary md:pr-0 md:break-words xl:max-w-136">
             云柜宝立足国际物流运输场景，融合物流网络与大数据技术，围绕车货匹配、在途监管、时间节点记录和异常预警，构建一体化运输管理能力。
           </p>
           <div class="mt-7 flex flex-wrap items-center gap-3">
             <RouterLink
               v-if="preview"
               to="/ygb"
-              class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-white transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85"
+              class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
             >
               了解更多
               <i class="ri-arrow-right-line text-base"></i>
@@ -51,7 +51,7 @@
             <template v-else>
               <button
                 type="button"
-                class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-white transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85"
+                class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
                 @click="scrollToDownloadSection"
               >
                 下载 App
@@ -61,7 +61,7 @@
                 href="https://www.ygbonline.com/admin/#/login"
                 target="_blank"
                 rel="noreferrer"
-                class="inline-flex h-10 items-center gap-2 rounded-full border border-line/10 bg-surface px-5 text-sm font-medium text-ink transition-colors hover:bg-black/4 dark:hover:bg-white/8"
+                class="inline-flex h-10 items-center gap-2 rounded-full border border-line/10 bg-surface px-5 text-sm font-medium text-primary transition-colors hover:bg-black/4 dark:hover:bg-white/8"
               >
                 管理后台
                 <i class="ri-arrow-right-line text-base"></i>
@@ -85,12 +85,12 @@
               @click="setHeroCardWithReset(idx)"
             >
               <div class="flex items-center justify-between border-b border-line/10 bg-black/3 px-4 py-2 dark:bg-white/6">
-                <div class="text-sm font-medium text-ink">{{ card.badge }}</div>
-                <i class="ri-arrow-right-up-line text-sm text-muted"></i>
+                <div class="text-sm font-medium text-primary">{{ card.badge }}</div>
+                <i class="ri-arrow-right-up-line text-sm text-secondary"></i>
               </div>
               <div class="px-4 pt-3 pb-2">
-                <h3 class="text-lg leading-[1.28] font-medium text-ink max-md:text-[17px]">{{ card.title }}</h3>
-                <p class="mt-1 text-sm leading-[1.7] text-muted">
+                <h3 class="text-lg leading-[1.28] font-medium text-primary max-md:text-[17px]">{{ card.title }}</h3>
+                <p class="mt-1 text-sm leading-[1.7] text-secondary">
                   {{ card.desc }}
                 </p>
               </div>
@@ -111,7 +111,7 @@
             <div class="absolute bottom-3 left-1/2 z-70 flex -translate-x-1/2 items-center gap-2 rounded-full border border-line/10 bg-surface/95 px-2 py-1 shadow-[0_4px_16px_rgba(17,17,17,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.3)]">
               <button
                 type="button"
-                class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-muted transition-colors hover:text-ink"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary"
                 @click.stop="shiftHeroWithReset(-1)"
                 aria-label="上一张"
               >
@@ -130,7 +130,7 @@
               </div>
               <button
                 type="button"
-                class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-muted transition-colors hover:text-ink"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary"
                 @click.stop="shiftHeroWithReset(1)"
                 aria-label="下一张"
               >

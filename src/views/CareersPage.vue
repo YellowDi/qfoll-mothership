@@ -3,19 +3,19 @@
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center text-sm">
-          <span class="text-muted">公司</span>
+          <span class="text-secondary">公司</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
         >
           工作机会
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-muted">
+        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
           我们在寻找对产品体验与工程质量有要求的伙伴，一起构建可持续演进的软件产品
         </p>
       </div>
 
-      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-ink max-lg:max-w-full">
+      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-primary max-lg:max-w-full">
         <div class="markdown-body detail-markdown-body">
           <p>
             在企丰科技，我们的工作并不是短期拼接功能，而是为客户建设真正可维护、可演进、可持续运转的系统。我们相信，好的数字化项目不只是上线那一刻的完成，而是在多年之后依然稳定运行，能够随着业务发展不断扩展与优化。系统的价值来自长期可用性，而不是短期速度。

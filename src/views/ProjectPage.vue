@@ -3,21 +3,21 @@
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center gap-4 text-sm">
-          <span class="font-medium text-ink">{{ project.yearLabel || project.year }}</span>
-          <span class="text-muted">{{ project.tag || "客户案例" }}</span>
+          <span class="font-medium text-primary">{{ project.yearLabel || project.year }}</span>
+          <span class="text-secondary">{{ project.tag || "客户案例" }}</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
         >
           {{ project.title }}
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-muted">
+        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
           {{ project.lead }}
         </p>
         <div v-if="project.primaryButtonText || project.secondaryButtonText" class="mt-5 flex items-center justify-center gap-1.5">
           <a
             v-if="project.primaryButtonText && project.primaryButtonUrl"
-            class="inline-flex h-9 items-center justify-center rounded-full bg-black px-5 text-sm font-medium text-white transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85"
+            class="inline-flex h-9 items-center justify-center rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
             :href="project.primaryButtonUrl"
             :target="linkTarget(project.primaryButtonUrl)"
             :rel="linkRel(project.primaryButtonUrl)"
@@ -26,7 +26,7 @@
           </a>
           <a
             v-if="project.secondaryButtonText && project.secondaryButtonUrl"
-            class="inline-flex h-9 items-center justify-center gap-1 rounded-full bg-black/8 px-5 text-sm font-medium text-ink transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20"
+            class="inline-flex h-9 items-center justify-center gap-1 rounded-full bg-black/8 px-5 text-sm font-medium text-primary transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20"
             :href="project.secondaryButtonUrl"
             :target="linkTarget(project.secondaryButtonUrl)"
             :rel="linkRel(project.secondaryButtonUrl)"
@@ -41,7 +41,7 @@
           <div class="flex w-full items-center justify-between gap-4 border-t border-line/12 pt-3 max-md:flex-wrap">
             <ArticleSpeechPlayer :container-ref="articleContentRef" :content-key="route.params.id" />
             <button
-              class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-sm text-ink transition-colors hover:text-muted"
+              class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-sm text-primary transition-colors hover:text-secondary"
               type="button"
               @click="copyShareLink"
             >
@@ -51,7 +51,7 @@
                 v-if="copiedVisible"
                 role="dialog"
                 aria-live="polite"
-                class="absolute left-1/2 top-full z-20 mt-2 inline-flex min-w-21 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-xl border border-line/10 bg-surface px-4 py-3 text-sm font-medium leading-none text-ink shadow-[0_1px_2px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.35)]"
+                class="absolute left-1/2 top-full z-20 mt-2 inline-flex min-w-21 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-xl border border-line/10 bg-surface px-4 py-3 text-sm font-medium leading-none text-primary shadow-[0_1px_2px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.35)]"
               >
                 已复制
               </span>
@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <article ref="articleContentRef" class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-6 font-sans text-base leading-relaxed text-ink">
+    <article ref="articleContentRef" class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-6 font-sans text-base leading-relaxed text-primary">
       <div
         class="markdown-body detail-markdown-body"
         v-html="project.bodyHtml"

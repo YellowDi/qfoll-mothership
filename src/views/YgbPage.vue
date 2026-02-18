@@ -17,19 +17,19 @@
               <span class="relative inline-flex h-13 w-13 shrink-0 items-center justify-center">
                 <span class="absolute inset-0 rounded-full bg-orange-400/30 blur-[9px] transition-opacity duration-300 ease-out group-hover:opacity-0"></span>
                 <span class="relative inline-flex h-13 w-13 items-center justify-center rounded-full border border-white/88 bg-white/96 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.88),inset_0_-10px_18px_rgba(254,131,72,0.16),0_4px_12px_rgba(17,17,17,0.12)] transition-[background-color,border-color,box-shadow] duration-300 ease-out group-hover:border-white/68 group-hover:bg-white/12 group-hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.3),inset_0_-8px_14px_rgba(255,255,255,0.12),0_2px_8px_rgba(17,17,17,0.08)] dark:border-white/78 dark:bg-white/90">
-                  <i :class="[card.icon, 'text-3xl text-orange-400 transition-colors duration-300 ease-out group-hover:text-white dark:group-hover:text-orange-400']"></i>
+                  <i :class="[card.icon, 'text-3xl text-orange-400 transition-colors duration-300 ease-out group-hover:text-on-dark dark:group-hover:text-orange-400']"></i>
                 </span>
               </span>
               <div class="min-w-0">
-                <h3 class="text-lg leading-[1.2] font-medium tracking-[-0.015em] text-ink transition-colors duration-300 ease-out group-hover:text-white">
+                <h3 class="text-lg leading-[1.2] font-medium tracking-[-0.015em] text-primary transition-colors duration-300 ease-out group-hover:text-on-dark">
                   {{ card.title }}
                 </h3>
-                <div class="mt-1 text-sm font-medium text-muted transition-colors duration-300 ease-out group-hover:text-white/86">
+                <div class="mt-1 text-sm font-medium text-secondary transition-colors duration-300 ease-out group-hover:text-on-dark">
                   {{ card.stats }}
                 </div>
               </div>
             </div>
-            <p class="relative mt-3 text-sm leading-[1.75] text-muted transition-colors duration-300 ease-out group-hover:text-white/86">
+            <p class="relative mt-3 text-sm leading-[1.75] text-secondary transition-colors duration-300 ease-out group-hover:text-on-dark">
               {{ card.desc }}
             </p>
           </article>
@@ -43,12 +43,12 @@
           <div class="grid grid-cols-12 gap-10 max-md:gap-6">
             <div class="col-span-12 xl:col-span-5">
               <div
-                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-muted"
+                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-secondary"
               >
                 <i class="ri-shining-line text-sm"></i>
                 运输作业管理
               </div>
-              <h2 class="mt-5 text-[clamp(1.65rem,2.7vw,2.9rem)] leading-[1.08] tracking-[-0.03em] font-medium text-slate-950 dark:text-ink">
+              <h2 class="mt-5 text-[clamp(1.65rem,2.7vw,2.9rem)] leading-[1.08] tracking-[-0.03em] font-medium text-primary dark:text-primary">
                 订单统一管理
                 <br />
                 调度井然有序
@@ -68,10 +68,10 @@
                   ]"
                 >
                   <i :class="[feature.icon, feature.iconColor, 'text-[1.95rem] leading-none']"></i>
-                  <h3 class="mt-3 text-[clamp(1.06rem,1.35vw,1.32rem)] leading-[1.32] font-medium tracking-[-0.01em] text-slate-900 dark:text-ink">
+                  <h3 class="mt-3 text-[clamp(1.06rem,1.35vw,1.32rem)] leading-[1.32] font-medium tracking-[-0.01em] text-primary dark:text-primary">
                     {{ feature.title }}
                   </h3>
-                  <p class="mt-1.5 text-[15px] leading-[1.72] text-gray-500 dark:text-muted">
+                  <p class="mt-1.5 text-[15px] leading-[1.72] text-secondary dark:text-secondary">
                     {{ feature.desc }}
                   </p>
                 </article>
@@ -123,28 +123,28 @@
 
             <div class="col-span-12 order-1 xl:order-2 xl:col-span-6">
               <div
-                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-muted"
+                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-secondary"
               >
                 <i class="ri-shining-line text-sm"></i>
                 政府监管
               </div>
-              <h2 class="mt-5 text-[clamp(1.65rem,2.95vw,3.35rem)] leading-[1.06] tracking-[-0.03em] font-medium text-slate-950 dark:text-ink">
+              <h2 class="mt-5 text-[clamp(1.65rem,2.95vw,3.35rem)] leading-[1.06] tracking-[-0.03em] font-medium text-primary dark:text-primary">
                 平台对接政府系统，
                 <br />
                 数据共享与监管支持
               </h2>
-              <p class="mt-5 text-[clamp(0.94rem,1.04vw,1.1rem)] leading-[1.86] text-gray-500 dark:text-muted">
+              <p class="mt-5 text-[clamp(0.94rem,1.04vw,1.1rem)] leading-[1.86] text-secondary dark:text-secondary">
                 云柜宝通过对接网络货运接口，实现了与政府部门的数据共享，保证了数据的真实性、准确性、及时性，符合政府监管要求。平台还可以根据政府部门的需求，随时为政府提供数据与业务支持，包括运输信息、运费结算、安全监控等方面，协助政府部门进行有效的监管和管理。
               </p>
 
               <ul class="mt-5 grid grid-cols-2 gap-x-6 gap-y-2.5">
                 <li v-for="item in governancePoints" :key="item" class="flex items-center gap-2">
                   <span
-                    class="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-gray-800 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_6px_12px_rgba(0,0,0,0.2)]"
+                    class="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-gray-800 text-on-dark shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_6px_12px_rgba(0,0,0,0.2)]"
                   >
                     <i class="ri-check-line text-sm"></i>
                   </span>
-                  <span class="text-[clamp(0.95rem,1.02vw,1.1rem)] leading-[1.34] font-medium text-slate-700 dark:text-ink">
+                  <span class="text-[clamp(0.95rem,1.02vw,1.1rem)] leading-[1.34] font-medium text-secondary dark:text-primary">
                     {{ item }}
                   </span>
                 </li>
@@ -155,19 +155,19 @@
       </section>
 
       <section id="download" ref="downloadSectionRef" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
-        <div class="relative overflow-hidden rounded-2xl bg-neutral-900 p-8 text-white dark:bg-zinc-900 max-md:p-5">
+        <div class="relative overflow-hidden rounded-2xl bg-neutral-900 p-8 text-on-dark dark:bg-zinc-900 max-md:p-5">
           <div class="download-material pointer-events-none absolute inset-0 z-0"></div>
           <div class="relative z-20 max-w-136 lg:max-w-none xl:pr-88">
             <div
-              class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/80"
+              class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-on-dark"
             >
-              <i class="ri-shining-line text-sm text-white/85"></i>
+              <i class="ri-shining-line text-sm text-on-dark"></i>
               应用下载
             </div>
             <h2 class="mt-4 text-[clamp(1.7rem,2.4vw,2.6rem)] leading-[1.15] tracking-[-0.02em] font-medium">
               下载云柜宝 App
             </h2>
-            <p class="mt-4 max-w-136 text-[15px] leading-[1.9] text-white/72">
+            <p class="mt-4 max-w-136 text-[15px] leading-[1.9] text-on-dark">
               支持 iOS、Android 与微信小程序。司机端可实时接单、反馈状态，管理端可同步查看车辆轨迹、回执与异常信息。
             </p>
             <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 xl:static xl:pr-0 max-xl:gap-2">
@@ -176,20 +176,20 @@
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
                   target="_blank"
                   rel="noreferrer"
-                  class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-black transition-colors hover:bg-white/85 max-md:gap-1.5 max-md:px-3.5 max-md:text-sm"
+                  class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-primary transition-colors hover:bg-white/85 max-md:gap-1.5 max-md:px-3.5 max-md:text-sm"
                 >
                   <i class="ri-android-fill text-base"></i>
                   <span class="max-md:hidden">下载云柜宝司机版</span>
                   <span class="hidden max-md:inline">下载司机端</span>
                   <i class="ri-download-2-line text-base"></i>
                 </a>
-                <div class="mt-2 text-sm text-white/55">或搜索小程序「云柜宝」</div>
+                <div class="mt-2 text-sm text-on-dark">或搜索小程序「云柜宝」</div>
               </div>
               <div class="w-[19.8rem] shrink-0 max-md:w-[13.2rem] lg:absolute lg:right-0 lg:top-0">
                 <div class="flex items-center justify-center gap-2">
                   <button
                     type="button"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/16 text-base text-white/80 transition-colors hover:bg-white/14"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/16 text-base text-on-dark transition-colors hover:bg-white/14"
                     @click="prevAppShot"
                     aria-label="上一张截图"
                   >
@@ -197,7 +197,7 @@
                   </button>
                   <button
                     type="button"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/16 text-base text-white/80 transition-colors hover:bg-white/14"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/16 text-base text-on-dark transition-colors hover:bg-white/14"
                     @click="nextAppShot"
                     aria-label="下一张截图"
                   >
@@ -205,8 +205,8 @@
                   </button>
                 </div>
                 <div class="mt-2 text-center">
-                  <div class="text-sm font-medium text-white/90">{{ appScreenshots[activeAppShot].title }}</div>
-                  <div class="mt-0.5 text-sm leading-[1.55] text-white/62">{{ appScreenshots[activeAppShot].desc }}</div>
+                  <div class="text-sm font-medium text-on-dark">{{ appScreenshots[activeAppShot].title }}</div>
+                  <div class="mt-0.5 text-sm leading-[1.55] text-on-dark">{{ appScreenshots[activeAppShot].desc }}</div>
                 </div>
               </div>
             </div>

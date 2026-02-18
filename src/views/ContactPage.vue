@@ -3,19 +3,19 @@
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center text-sm">
-          <span class="text-muted">公司</span>
+          <span class="text-secondary">公司</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
         >
           联系我们
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-muted">
+        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
           欢迎通过以下方式与我们取得联系，我们会尽快回复您。
         </p>
       </div>
 
-      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-ink max-lg:max-w-full">
+      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-primary max-lg:max-w-full">
         <div class="markdown-body detail-markdown-body contact-markdown">
           <p>
             感谢你关注企丰科技。无论你是希望咨询项目合作、了解产品方案，还是希望讨论长期技术支持，我们都欢迎你随时联系我们。我们重视每一次沟通，会尽快响应并给出明确反馈。

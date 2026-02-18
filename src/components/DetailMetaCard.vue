@@ -10,12 +10,12 @@
               </li>
             </ul>
           </section>
-          <div v-if="company" class="news-meta-company text-sm leading-[1.8] text-ink">
+          <div v-if="company" class="news-meta-company text-sm leading-[1.8] text-primary">
             {{ company }}
           </div>
           <div
             v-if="infoPanelHtml"
-            class="news-info-panel-content info-panel-content text-sm leading-[1.8] text-muted"
+            class="news-info-panel-content info-panel-content text-sm leading-[1.8] text-secondary"
             v-html="infoPanelHtml"
           ></div>
         </div>

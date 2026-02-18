@@ -3,20 +3,20 @@
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
       <div class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center text-sm">
-          <span class="text-muted">公司</span>
+          <span class="text-secondary">公司</span>
         </div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium text-center"
         >
           我们如何设计产品 UI
         </h1>
-        <p class="mt-6 text-center text-base leading-[1.8] text-muted">
+        <p class="mt-6 text-center text-base leading-[1.8] text-secondary">
           从人机交互原则出发，构建可长期维护的界面语言
         </p>
       </div>
     </section>
 
-    <article class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-10 font-sans text-base leading-relaxed text-ink">
+    <article class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-10 font-sans text-base leading-relaxed text-primary">
         <div class="markdown-body detail-markdown-body" ref="markdownRef">
           <p>
             在企丰科技，产品界面从来不是视觉包装的最后一步，而是产品能力本身的外在表达。我们更关心界面是否降低了理解成本，是否让业务流程更顺畅，是否能够在长期迭代中保持一致与可维护。这些判断标准既来自行业成熟的人机交互方法论，也来自我们在企业级项目中的长期实践。苹果在 Human Interface Guidelines 中提出的 Clarity、Deference 与 Depth，让我们意识到界面的首要任务是帮助用户理解内容，而不是制造视觉存在感；Google 在 Material Design 中强调设计系统与可实现性，则让我们更加坚定 UI 必须与工程实现保持同一套语言。因此我们在设计时首先关注信息结构与交互逻辑，而不是风格表达，优先建立稳定的栅格体系与组件模型，用可复用的设计单元替代一次性的页面视觉，从一开始就让界面具备可扩展能力。

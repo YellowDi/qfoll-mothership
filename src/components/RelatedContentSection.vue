@@ -2,7 +2,7 @@
   <div class="w-full max-w-360 self-stretch mx-auto mt-10 overflow-x-hidden max-md:max-w-none max-md:w-screen max-md:ml-[calc(50%-50vw)] max-md:mr-[calc(50%-50vw)]">
     <div class="mx-auto flex w-full items-center justify-between px-16 max-xl:px-6 max-md:px-5">
       <h3 class="text-lg font-medium">{{ title }}</h3>
-      <RouterLink class="text-sm text-muted transition-colors hover:text-ink" :to="viewAllTo">
+      <RouterLink class="text-sm text-secondary transition-colors hover:text-primary" :to="viewAllTo">
         查看全部
       </RouterLink>
     </div>
@@ -26,10 +26,10 @@
             />
           </div>
           <div class="pt-4 text-left">
-            <div class="text-xl leading-[1.3] font-medium text-ink max-md:text-lg">{{ item.title }}</div>
+            <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
             <div class="mt-4 flex items-center gap-2 text-sm">
-              <span class="font-medium text-ink">{{ primaryMeta(item) }}</span>
-              <span class="text-muted">{{ secondaryMeta(item) }}</span>
+              <span class="font-medium text-primary">{{ primaryMeta(item) }}</span>
+              <span class="text-secondary">{{ secondaryMeta(item) }}</span>
             </div>
           </div>
         </RouterLink>

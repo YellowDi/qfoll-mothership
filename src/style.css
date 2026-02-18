@@ -6,8 +6,13 @@
     --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     --color-bg: 255 255 255;
     --color-surface: 255 255 255;
-    --color-ink: 20 20 20;
-    --color-muted: 106 106 106;
+    --color-text-primary: 24 24 27;
+    --color-text-secondary: 82 82 91;
+    --color-text-on-dark: 255 255 255;
+    --color-text-on-dark-secondary: 229 231 235;
+    --color-brand: 251 146 60;
+    --color-ink: var(--color-text-primary);
+    --color-muted: var(--color-text-secondary);
     --color-line: 20 20 20;
     --md-video-placeholder: #dcdcdc;
     color-scheme: light;
@@ -16,8 +21,13 @@
   .dark {
     --color-bg: 14 14 16;
     --color-surface: 24 24 28;
-    --color-ink: 236 236 239;
-    --color-muted: 163 163 173;
+    --color-text-primary: 244 244 245;
+    --color-text-secondary: 161 161 170;
+    --color-text-on-dark: 255 255 255;
+    --color-text-on-dark-secondary: 229 231 235;
+    --color-brand: 251 146 60;
+    --color-ink: var(--color-text-primary);
+    --color-muted: var(--color-text-secondary);
     --color-line: 255 255 255;
     --md-video-placeholder: #2a2a2f;
     color-scheme: dark;
@@ -29,7 +39,7 @@
   }
 
   body {
-    @apply m-0 bg-bg font-sans text-ink;
+    @apply m-0 bg-bg font-sans text-primary;
   }
 
   .is-mac {
@@ -70,7 +80,7 @@
 
 @layer components {
   .btn-neutral-pill {
-    @apply inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-zinc-700 no-underline transition-colors hover:bg-zinc-200 hover:no-underline dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700;
+    @apply inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-secondary no-underline transition-colors hover:bg-zinc-200 hover:no-underline dark:bg-zinc-800 dark:text-secondary dark:hover:bg-zinc-700;
   }
 
   .sidebar-back-icon {
