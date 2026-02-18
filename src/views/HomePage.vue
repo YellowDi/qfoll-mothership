@@ -1,26 +1,20 @@
 <template>
   <AppLayout>
     <div class="w-full px-14 pt-14 pb-20 max-lg:px-6 max-md:px-5 max-md:pt-14 max-md:pb-12">
+      <h1 class="sr-only">企丰科技</h1>
       <AboutSection />
 
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
-          <h3 class="text-lg font-medium">客户案例</h3>
+          <h2 class="text-lg font-medium">客户案例</h2>
           <RouterLink class="text-sm btn-text" to="/projects">查看全部</RouterLink>
         </div>
         <div class="mx-auto w-full pb-10 pt-6 max-md:pb-8">
           <div class="grid grid-cols-12 gap-6 max-md:gap-4">
             <div class="col-span-8 self-start max-lg:col-span-12 lg:sticky lg:top-17">
-              <div
-                class="cursor-pointer rounded-md"
-                role="link"
-                tabindex="0"
-                @click="goYgb"
-                @keydown.enter.prevent="goYgb"
-                @keydown.space.prevent="goYgb"
-              >
+              <RouterLink class="cursor-pointer rounded-md" to="/ygb">
                 <YgbHeroSection preview home-preview />
-              </div>
+              </RouterLink>
             </div>
 
             <div class="col-span-4 flex flex-col gap-6 max-lg:col-span-12 max-lg:grid max-lg:grid-cols-3 max-md:hidden">
@@ -120,7 +114,7 @@
 
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
-          <h3 class="text-lg font-medium">最新动态</h3>
+          <h2 class="text-lg font-medium">最新动态</h2>
           <RouterLink class="text-sm btn-text" to="/news">查看更多</RouterLink>
         </div>
         <div class="mx-auto w-full pt-6">
@@ -176,10 +170,6 @@ import YgbHeroSection from "../components/YgbHeroSection.vue";
 import { computed } from "vue";
 import { projectList } from "../data/projects";
 import { newsList } from "../data/news";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const goYgb = () => router.push("/ygb");
 
 const toYearValue = (item) => {
   const year = Number.parseInt(String(item?.year ?? ""), 10);

@@ -6,6 +6,7 @@
   >
     <aside
       ref="sidebarEl"
+      aria-label="站点导航"
       :class="[
         'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out max-md:pb-[env(safe-area-inset-bottom)]',
         'max-md:w-[334px] max-md:max-w-[90vw]',
@@ -23,41 +24,48 @@
                 : '-translate-x-full opacity-0 pointer-events-none max-md:hidden md:hidden'
             "
           >
-            <nav class="flex flex-col gap-2 text-sm font-medium">
+            <nav class="flex flex-col gap-2 text-sm font-medium" aria-label="主导航">
               <button
                 type="button"
                 :class="rootButtonClass(route.path.startsWith('/project') || route.path === '/projects')"
+                :aria-pressed="route.path.startsWith('/project') || route.path === '/projects'"
+                aria-controls="projects-submenu"
+                :aria-expanded="navLevel === 'projects' ? 'true' : 'false'"
                 @click="goProjects"
               >
                 <span class="flex items-center justify-between">
                   <span>客户案例</span>
-                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path.startsWith('/project') || route.path === '/projects')"></i>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path.startsWith('/project') || route.path === '/projects')" aria-hidden="true"></i>
                 </span>
               </button>
-              <RouterLink to="/ygb" :class="rootLinkClass(route.path === '/ygb')">
+              <RouterLink to="/ygb" :class="rootLinkClass(route.path === '/ygb')" :aria-current="route.path === '/ygb' ? 'page' : undefined">
                 <span class="flex items-center justify-between">
                   <span>云柜宝</span>
-                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/ygb')"></i>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/ygb')" aria-hidden="true"></i>
                 </span>
               </RouterLink>
               <button
                 type="button"
                 :class="rootButtonClass(isCompanyRoute(route.path))"
+                :aria-pressed="isCompanyRoute(route.path)"
+                aria-controls="company-submenu"
+                :aria-expanded="navLevel === 'company' ? 'true' : 'false'"
                 @click="goCompany"
               >
                 <span class="flex items-center justify-between">
                   <span>公司</span>
-                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(isCompanyRoute(route.path))"></i>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(isCompanyRoute(route.path))" aria-hidden="true"></i>
                 </span>
               </button>
               <button
                 type="button"
                 :class="rootButtonClass(route.path === '/news')"
+                :aria-pressed="route.path === '/news'"
                 @click="goNews"
               >
                 <span class="flex items-center justify-between">
                   <span>新闻</span>
-                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/news')"></i>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/news')" aria-hidden="true"></i>
                 </span>
               </button>
             </nav>
@@ -76,32 +84,34 @@
                 type="button"
                 @click="goRoot"
               >
-                <i class="sidebar-back-icon ri-arrow-left-line text-base"></i>
+                <i class="sidebar-back-icon ri-arrow-left-line text-base" aria-hidden="true"></i>
                 返回
               </button>
-              <nav v-if="navLevel === 'projects'" class="flex flex-col gap-2 text-sm font-medium">
+              <nav v-if="navLevel === 'projects'" id="projects-submenu" class="flex flex-col gap-2 text-sm font-medium" aria-label="项目导航">
                 <RouterLink
                   v-for="item in sidebarProjectList"
                   :key="item.id"
                   :to="`/project/${item.id}`"
                   :class="projectLinkClass(route.params.id === item.id)"
+                  :aria-current="route.params.id === item.id ? 'page' : undefined"
                 >
                   <span class="flex items-center justify-between">
                     <span class="truncate">{{ item.sidebarTitle }}</span>
-                    <i class="ri-arrow-right-line text-sm opacity-0 transition-opacity group-hover:opacity-100"></i>
+                    <i class="ri-arrow-right-line text-sm opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true"></i>
                   </span>
                 </RouterLink>
               </nav>
-              <nav v-else-if="navLevel === 'company'" class="flex flex-col gap-2 text-sm font-medium">
+              <nav v-else-if="navLevel === 'company'" id="company-submenu" class="flex flex-col gap-2 text-sm font-medium" aria-label="公司导航">
                 <RouterLink
                   v-for="item in companyMenu"
                   :key="item.path"
                   :to="item.path"
                   :class="submenuLinkClass(route.path === item.path)"
+                  :aria-current="route.path === item.path ? 'page' : undefined"
                 >
                   <span class="flex items-center justify-between">
                     <span>{{ item.label }}</span>
-                    <i class="ri-arrow-right-line text-sm opacity-0 transition-opacity group-hover:opacity-100"></i>
+                    <i class="ri-arrow-right-line text-sm opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true"></i>
                   </span>
                 </RouterLink>
               </nav>
@@ -161,7 +171,6 @@ const isCompanyRoute = (path) =>
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
-const isNewsRoute = (path) => path === "/news" || path.startsWith("/news/");
 const desktopCollapsed = ref(route.path === "/");
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();

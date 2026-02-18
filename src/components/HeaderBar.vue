@@ -10,9 +10,9 @@
           class="hidden md:inline-flex btn-icon btn-icon-md btn-icon-muted"
           type="button"
           @click="onToggle"
-          aria-label="打开菜单"
+          aria-label="切换侧边导航"
         >
-          <i class="ri-layout-left-2-line text-lg"></i>
+          <i class="ri-layout-left-2-line text-lg" aria-hidden="true"></i>
         </button>
       </div>
       <div class="flex items-center gap-1">
@@ -20,17 +20,17 @@
           class="inline-flex btn-icon btn-icon-md btn-icon-muted"
           type="button"
           @click="onToggleTheme"
-          aria-label="切换深色模式"
+          :aria-label="isDark ? '切换到浅色模式' : '切换到深色模式'"
         >
-          <i :class="isDark ? 'ri-sun-line text-lg' : 'ri-moon-clear-line text-lg'"></i>
+          <i :class="isDark ? 'ri-sun-line text-lg' : 'ri-moon-clear-line text-lg'" aria-hidden="true"></i>
         </button>
         <button
           class="inline-flex btn-icon btn-icon-md btn-icon-muted md:hidden"
           type="button"
           @click="onToggle"
-          aria-label="打开菜单"
+          aria-label="切换侧边导航"
         >
-          <i class="ri-layout-left-2-line text-lg"></i>
+          <i class="ri-layout-left-2-line text-lg" aria-hidden="true"></i>
         </button>
       </div>
     </div>
