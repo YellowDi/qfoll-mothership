@@ -16,7 +16,7 @@
             class="inline-flex max-w-full items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-secondary"
           >
             <i class="ri-shining-line text-sm"></i>
-            智能化车货匹配 · 全球货运定位 · 实时推荐预警
+            车货智能匹配 · 全球定位 · 实时预警
           </div>
           <p class="mt-5 text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-orange-400">
             云柜宝
