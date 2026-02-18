@@ -2,9 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import "./style.css";
-import "./styles/misans-split-local.css";
 import "./styles/remixicon-used.css";
 import { useTheme } from "./composables/useTheme";
+import { loadMiSansFonts } from "./utils/loadMiSansFonts";
 
 const applyPlatformClass = () => {
   const ua = navigator.userAgent || "";
@@ -20,6 +20,7 @@ const applyPlatformClass = () => {
   if (isMac) {
     root.classList.add("is-mac");
     body.classList.add("is-mac");
+    loadMiSansFonts();
     return;
   }
 
