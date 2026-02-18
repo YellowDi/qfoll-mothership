@@ -14,13 +14,13 @@
         <div class="mt-8 flex items-center justify-center gap-3 max-md:flex-col">
           <RouterLink
             to="/"
-            class="inline-flex h-10 items-center justify-center rounded-full bg-black px-6 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
+            class="btn-primary btn-md"
           >
             返回首页
           </RouterLink>
           <RouterLink
             to="/projects"
-            class="inline-flex h-10 items-center justify-center gap-1 rounded-full bg-black/8 px-6 text-sm font-medium text-primary transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20"
+            class="btn-secondary btn-md gap-1"
           >
             查看客户案例
             <i class="ri-arrow-right-s-line text-base"></i>

@@ -263,7 +263,7 @@ const parseArticle = (raw, path) => {
     const singleClass = slides.length <= 1 ? " is-single" : "";
     const controlsHtml =
       slides.length > 1
-        ? '<div class="md-carousel-controls"><button class="md-carousel-btn" data-action="prev"><i class="ri-arrow-left-line"></i></button><button class="md-carousel-btn" data-action="next"><i class="ri-arrow-right-line"></i></button></div>'
+        ? '<div class="md-carousel-controls"><button class="md-carousel-btn inline-flex btn-icon btn-icon-sm btn-icon-muted" data-action="prev"><i class="ri-arrow-left-line"></i></button><button class="md-carousel-btn inline-flex btn-icon btn-icon-sm btn-icon-muted" data-action="next"><i class="ri-arrow-right-line"></i></button></div>'
         : "";
     const itemsHtml = renderSlidesHtml(slides, carouselId);
     carouselIndex += 1;
@@ -276,7 +276,7 @@ const parseArticle = (raw, path) => {
     const singleClass = slides.length <= 1 ? " is-single" : "";
     const controlsHtml =
       slides.length > 1
-        ? '<div class="md-carousel-controls"><button class="md-carousel-btn" data-action="prev"><i class="ri-arrow-left-line"></i></button><button class="md-carousel-btn" data-action="next"><i class="ri-arrow-right-line"></i></button></div>'
+        ? '<div class="md-carousel-controls"><button class="md-carousel-btn inline-flex btn-icon btn-icon-sm btn-icon-muted" data-action="prev"><i class="ri-arrow-left-line"></i></button><button class="md-carousel-btn inline-flex btn-icon btn-icon-sm btn-icon-muted" data-action="next"><i class="ri-arrow-right-line"></i></button></div>'
         : "";
     const itemsHtml = renderSlidesHtml(slides, carouselId);
     carouselIndex += 1;

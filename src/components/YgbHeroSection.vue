@@ -43,7 +43,7 @@
             <RouterLink
               v-if="preview"
               to="/ygb"
-              class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
+              class="btn-primary btn-md gap-2 px-5"
             >
               了解更多
               <i class="ri-arrow-right-line text-base"></i>
@@ -51,7 +51,7 @@
             <template v-else>
               <button
                 type="button"
-                class="inline-flex h-10 items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
+                class="btn-primary btn-md gap-2 px-5"
                 @click="scrollToDownloadSection"
               >
                 下载 App
@@ -61,7 +61,7 @@
                 href="https://www.ygbonline.com/admin/#/login"
                 target="_blank"
                 rel="noreferrer"
-                class="inline-flex h-10 items-center gap-2 rounded-full border border-line/10 bg-surface px-5 text-sm font-medium text-primary transition-colors hover:bg-black/4 dark:hover:bg-white/8"
+                class="btn-base btn-md gap-2 border border-line/10 bg-surface px-5 text-primary hover:bg-black/4 dark:hover:bg-white/8"
               >
                 管理后台
                 <i class="ri-arrow-right-line text-base"></i>
@@ -111,7 +111,7 @@
             <div class="absolute bottom-3 left-1/2 z-70 flex -translate-x-1/2 items-center gap-2 rounded-full border border-line/10 bg-surface/95 px-2 py-1 shadow-[0_4px_16px_rgba(17,17,17,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.3)]">
               <button
                 type="button"
-                class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary"
+                class="inline-flex btn-icon btn-icon-sm btn-icon-muted"
                 @click.stop="shiftHeroWithReset(-1)"
                 aria-label="上一张"
               >
@@ -130,7 +130,7 @@
               </div>
               <button
                 type="button"
-                class="inline-flex h-8 w-8 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary"
+                class="inline-flex btn-icon btn-icon-sm btn-icon-muted"
                 @click.stop="shiftHeroWithReset(1)"
                 aria-label="下一张"
               >

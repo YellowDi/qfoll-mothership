@@ -37,7 +37,7 @@
             <button
               ref="filterToggleRef"
               type="button"
-              class="filter-toggle flex items-center gap-2 text-secondary hover:text-primary transition-colors"
+              class="filter-toggle btn-text"
               @click="filterOpen = !filterOpen; if (filterOpen) sortOpen = false"
             >
               <span class="font-medium text-primary">{{ filterButtonText }}</span>
@@ -107,7 +107,7 @@
             <button
               ref="sortToggleRef"
               type="button"
-              class="sort-toggle flex items-center gap-2 text-secondary hover:text-primary transition-colors"
+              class="sort-toggle btn-text"
               @click="sortOpen = !sortOpen; if (sortOpen) filterOpen = false"
             >
               <span class="font-medium text-primary">排序</span>

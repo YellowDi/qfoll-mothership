@@ -189,7 +189,7 @@
                 <div class="flex items-center justify-center gap-2">
                   <button
                     type="button"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/16 text-base text-on-dark transition-colors hover:bg-white/14"
+                    class="inline-flex btn-icon btn-icon-sm border border-white/16 text-on-dark hover:bg-white/14"
                     @click="prevAppShot"
                     aria-label="上一张截图"
                   >
@@ -197,7 +197,7 @@
                   </button>
                   <button
                     type="button"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/16 text-base text-on-dark transition-colors hover:bg-white/14"
+                    class="inline-flex btn-icon btn-icon-sm border border-white/16 text-on-dark hover:bg-white/14"
                     @click="nextAppShot"
                     aria-label="下一张截图"
                   >

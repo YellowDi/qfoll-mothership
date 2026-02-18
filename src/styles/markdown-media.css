@@ -2,9 +2,9 @@
 
 /* Non-home markdown and rich-media styles (route-level import) */
 @layer components {
-  .markdown-body a.btn-neutral-pill,
-  .markdown-body a.btn-neutral-pill:hover,
-  .markdown-body a.btn-neutral-pill:visited {
+  .markdown-body a.btn-neutral,
+  .markdown-body a.btn-neutral:hover,
+  .markdown-body a.btn-neutral:visited {
     text-decoration: none;
   }
 
@@ -201,6 +201,7 @@
     max-width: 100%;
   }
 
+  .btn-chip,
   .news-meta-pill {
     display: inline-flex;
     align-items: center;
@@ -214,6 +215,7 @@
     transition: background-color 0.25s ease;
   }
 
+  .btn-chip:hover,
   .news-meta-pill:hover {
     background: rgb(var(--color-line) / 0.08);
   }
@@ -742,6 +744,7 @@
     max-width: 100%;
   }
 
+  .btn-chip,
   .news-meta-pill {
     font-size: 0.875rem;
     line-height: 1rem;

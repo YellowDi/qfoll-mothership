@@ -79,6 +79,54 @@
 }
 
 @layer components {
+  .btn-base {
+    @apply inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors;
+  }
+
+  .btn-sm {
+    @apply h-9 px-5;
+  }
+
+  .btn-md {
+    @apply h-10 px-6;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-black text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full bg-black/8 text-sm font-medium text-primary transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20;
+  }
+
+  .btn-neutral {
+    @apply inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-secondary no-underline transition-colors hover:bg-zinc-200 hover:no-underline dark:bg-zinc-800 dark:text-secondary dark:hover:bg-zinc-700;
+  }
+
+  .btn-icon {
+    @apply items-center justify-center rounded-full text-base transition-colors;
+  }
+
+  .btn-icon-sm {
+    @apply h-8 w-8;
+  }
+
+  .btn-icon-md {
+    @apply h-9 w-9;
+  }
+
+  .btn-icon-muted {
+    @apply text-secondary hover:text-primary dark:text-secondary dark:hover:text-primary;
+  }
+
+  .btn-text {
+    @apply inline-flex items-center gap-2 text-secondary transition-colors hover:text-primary;
+  }
+
+  .btn-chip {
+    @apply inline-flex items-center rounded-full bg-line/4 px-4 py-2 text-sm font-medium leading-4 text-primary transition-colors hover:bg-line/8;
+  }
+
   .btn-neutral-pill {
     @apply inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-secondary no-underline transition-colors hover:bg-zinc-200 hover:no-underline dark:bg-zinc-800 dark:text-secondary dark:hover:bg-zinc-700;
   }

@@ -38,7 +38,7 @@
               href="https://www.zhipin.com/gongsi/job/50c5ce276b775c5a1XR-2dy0GFI~.html?ka=company-jobs"
               target="_blank"
               rel="noreferrer"
-              class="btn-neutral-pill"
+              class="btn-neutral"
             >
               前往 BOSS 直聘查看岗位
             </a>

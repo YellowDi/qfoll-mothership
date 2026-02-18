@@ -17,7 +17,7 @@
         <div v-if="project.primaryButtonText || project.secondaryButtonText" class="mt-5 flex items-center justify-center gap-1.5">
           <a
             v-if="project.primaryButtonText && project.primaryButtonUrl"
-            class="inline-flex h-9 items-center justify-center rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85"
+            class="btn-primary btn-sm"
             :href="project.primaryButtonUrl"
             :target="linkTarget(project.primaryButtonUrl)"
             :rel="linkRel(project.primaryButtonUrl)"
@@ -26,7 +26,7 @@
           </a>
           <a
             v-if="project.secondaryButtonText && project.secondaryButtonUrl"
-            class="inline-flex h-9 items-center justify-center gap-1 rounded-full bg-black/8 px-5 text-sm font-medium text-primary transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20"
+            class="btn-secondary btn-sm gap-1"
             :href="project.secondaryButtonUrl"
             :target="linkTarget(project.secondaryButtonUrl)"
             :rel="linkRel(project.secondaryButtonUrl)"
@@ -41,7 +41,7 @@
           <div class="flex w-full items-center justify-between gap-4 border-t border-line/12 pt-3 max-md:flex-wrap">
             <ArticleSpeechPlayer :container-ref="articleContentRef" :content-key="route.params.id" />
             <button
-              class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-sm text-primary transition-colors hover:text-secondary"
+              class="btn-base relative gap-2 px-2 py-1 text-primary hover:text-secondary"
               type="button"
               @click="copyShareLink"
             >

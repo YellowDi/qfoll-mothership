@@ -24,10 +24,10 @@
 
           <div class="md-media design-spec-media" data-carousel-id="carousel-design-spec">
             <div class="md-carousel-controls">
-              <button class="md-carousel-btn" data-action="prev" type="button" aria-label="上一张">
+              <button class="md-carousel-btn inline-flex btn-icon btn-icon-sm btn-icon-muted" data-action="prev" type="button" aria-label="上一张">
                 <i class="ri-arrow-left-line"></i>
               </button>
-              <button class="md-carousel-btn" data-action="next" type="button" aria-label="下一张">
+              <button class="md-carousel-btn inline-flex btn-icon btn-icon-sm btn-icon-muted" data-action="next" type="button" aria-label="下一张">
                 <i class="ri-arrow-right-line"></i>
               </button>
             </div>

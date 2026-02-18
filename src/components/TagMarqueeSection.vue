@@ -74,7 +74,7 @@
 
               <RouterLink
                 to="/contact"
-                class="pointer-events-auto mt-8 inline-flex h-10 items-center justify-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85 max-md:mt-6"
+                class="pointer-events-auto mt-8 btn-primary btn-md gap-2 px-5 max-md:mt-6"
               >
                 联系我们
                 <i class="ri-arrow-right-line text-base"></i>

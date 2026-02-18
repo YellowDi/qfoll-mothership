@@ -7,7 +7,7 @@
           <div class="text-sm font-medium">企丰科技</div>
         </RouterLink>
         <button
-          class="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary dark:text-secondary dark:hover:text-primary"
+          class="hidden md:inline-flex btn-icon btn-icon-md btn-icon-muted"
           type="button"
           @click="onToggle"
           aria-label="打开菜单"
@@ -17,7 +17,7 @@
       </div>
       <div class="flex items-center gap-1">
         <button
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary dark:text-secondary dark:hover:text-primary"
+          class="inline-flex btn-icon btn-icon-md btn-icon-muted"
           type="button"
           @click="onToggleTheme"
           aria-label="切换深色模式"
@@ -25,7 +25,7 @@
           <i :class="isDark ? 'ri-sun-line text-lg' : 'ri-moon-clear-line text-lg'"></i>
         </button>
         <button
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-secondary transition-colors hover:text-primary dark:text-secondary dark:hover:text-primary md:hidden"
+          class="inline-flex btn-icon btn-icon-md btn-icon-muted md:hidden"
           type="button"
           @click="onToggle"
           aria-label="打开菜单"

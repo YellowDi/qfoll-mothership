@@ -146,7 +146,7 @@ const createVideoUi = (player) => {
   controlsBar.className = "md-video-controls";
 
   const { button: playBtn, icon: playIcon } = createIconButton(
-    "md-video-btn",
+    "md-video-btn inline-flex btn-icon btn-icon-sm",
     "ri-play-fill",
     "播放"
   );
@@ -165,13 +165,13 @@ const createVideoUi = (player) => {
   progress.setAttribute("aria-label", "播放进度");
 
   const { button: muteBtn, icon: muteIcon } = createIconButton(
-    "md-video-btn",
+    "md-video-btn inline-flex btn-icon btn-icon-sm",
     "ri-volume-mute-fill",
     "取消静音"
   );
 
   const { button: fullscreenBtn, icon: fullscreenIcon } = createIconButton(
-    "md-video-btn",
+    "md-video-btn inline-flex btn-icon btn-icon-sm",
     "ri-fullscreen-line",
     "全屏"
   );
@@ -179,7 +179,7 @@ const createVideoUi = (player) => {
   const moreWrap = document.createElement("div");
   moreWrap.className = "md-video-more";
   const { button: moreBtn } = createIconButton(
-    "md-video-btn",
+    "md-video-btn inline-flex btn-icon btn-icon-sm",
     "ri-more-2-fill",
     "更多操作"
   );

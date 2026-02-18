@@ -2,7 +2,7 @@
   <div class="w-full max-w-360 self-stretch mx-auto mt-10 overflow-x-hidden max-md:max-w-none max-md:w-screen max-md:ml-[calc(50%-50vw)] max-md:mr-[calc(50%-50vw)]">
     <div class="mx-auto flex w-full items-center justify-between px-16 max-xl:px-6 max-md:px-5">
       <h3 class="text-lg font-medium">{{ title }}</h3>
-      <RouterLink class="text-sm text-secondary transition-colors hover:text-primary" :to="viewAllTo">
+      <RouterLink class="text-sm btn-text" :to="viewAllTo">
         查看全部
       </RouterLink>
     </div>

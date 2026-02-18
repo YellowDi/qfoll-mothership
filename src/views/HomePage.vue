@@ -6,7 +6,7 @@
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
           <h3 class="text-lg font-medium">客户案例</h3>
-          <RouterLink class="text-sm text-secondary transition-colors hover:text-primary" to="/projects">查看全部</RouterLink>
+          <RouterLink class="text-sm btn-text" to="/projects">查看全部</RouterLink>
         </div>
         <div class="mx-auto w-full pb-10 pt-6 max-md:pb-8">
           <div class="grid grid-cols-12 gap-6 max-md:gap-4">
@@ -110,7 +110,7 @@
           <div v-if="hasMoreProjects" class="mt-8 flex justify-center max-md:mt-6">
             <RouterLink
               to="/projects"
-              class="btn-neutral-pill"
+              class="btn-neutral"
             >
               查看更多
             </RouterLink>
@@ -121,7 +121,7 @@
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
           <h3 class="text-lg font-medium">最新动态</h3>
-          <RouterLink class="text-sm text-secondary transition-colors hover:text-primary" to="/news">查看更多</RouterLink>
+          <RouterLink class="text-sm btn-text" to="/news">查看更多</RouterLink>
         </div>
         <div class="mx-auto w-full pt-6">
           <div class="grid grid-flow-row grid-cols-2 gap-x-10 gap-y-8 max-md:grid-cols-1 max-md:gap-x-0 max-md:gap-y-6">
@@ -153,7 +153,7 @@
           <div class="mt-8 flex justify-center max-md:mt-6">
             <RouterLink
               to="/news"
-              class="btn-neutral-pill"
+              class="btn-neutral"
             >
               查看更多
             </RouterLink>

@@ -6,7 +6,7 @@
           <section class="w-full">
             <ul class="news-meta-tags gap-3xs flex flex-wrap">
               <li v-for="tagItem in infoTagLinks" :key="tagItem.label">
-                <RouterLink :to="tagItem.to" class="news-meta-pill">{{ tagItem.label }}</RouterLink>
+                <RouterLink :to="tagItem.to" class="btn-chip">{{ tagItem.label }}</RouterLink>
               </li>
             </ul>
           </section>
