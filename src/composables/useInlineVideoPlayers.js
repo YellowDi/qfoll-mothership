@@ -51,6 +51,66 @@ const isElementFullscreen = (element) => {
   return active === element;
 };
 
+const canUseVideoNativeFullscreen = (video) =>
+  typeof video?.webkitEnterFullscreen === "function";
+
+const isVideoNativeFullscreen = (video) => Boolean(video?.webkitDisplayingFullscreen);
+
+const restoreInlineVideoPresentation = (player) => {
+  const { video } = player;
+  video.controls = false;
+  video.playsInline = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.removeAttribute("style");
+};
+
+const normalizeViewportAfterFullscreenExit = () => {
+  const scrollRoot = document.scrollingElement || document.documentElement;
+  if (!scrollRoot) return;
+
+  const clampScrollTop = () => {
+    const maxTop = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
+    const currentTop = Number(window.scrollY || window.pageYOffset || 0);
+    const safeTop = Number.isFinite(currentTop) ? currentTop : 0;
+    if (safeTop < 0) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (safeTop > maxTop) {
+      window.scrollTo(0, maxTop);
+    }
+  };
+
+  const applyViewportOffsetCompensation = () => {
+    const offsetTop = Number(window.visualViewport?.offsetTop || 0);
+    if (offsetTop > 0.5) {
+      const currentTop = Number(window.scrollY || window.pageYOffset || 0);
+      const maxTop = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
+      const nextTop = Math.max(0, Math.min(maxTop, currentTop + offsetTop));
+      window.scrollTo(0, nextTop);
+    }
+  };
+
+  const nudgeRepaint = () => {
+    const maxTop = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
+    const currentTop = Number(window.scrollY || window.pageYOffset || 0);
+    if (!Number.isFinite(currentTop)) return;
+    if (currentTop < maxTop) {
+      window.scrollTo(0, Math.min(maxTop, currentTop + 1));
+    }
+    window.scrollTo(0, Math.max(0, Math.min(maxTop, currentTop)));
+  };
+
+  clampScrollTop();
+  applyViewportOffsetCompensation();
+  window.requestAnimationFrame(() => {
+    clampScrollTop();
+    applyViewportOffsetCompensation();
+    nudgeRepaint();
+  });
+};
+
 const getPlayableScore = (player) => {
   const rect = player.host.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
@@ -296,7 +356,7 @@ const syncUi = (player) => {
   const isMuted = video.muted || video.volume === 0;
   ui.muteIcon.className = isMuted ? "ri-volume-mute-fill" : "ri-volume-up-fill";
   ui.muteBtn.setAttribute("aria-label", isMuted ? "取消静音" : "静音");
-  ui.fullscreenIcon.className = isElementFullscreen(player.host)
+  ui.fullscreenIcon.className = isElementFullscreen(player.host) || isVideoNativeFullscreen(video)
     ? "ri-fullscreen-exit-line"
     : "ri-fullscreen-line";
 
@@ -400,6 +460,7 @@ const copyVideoLink = async (player) => {
 };
 
 const toggleFullscreen = (player) => {
+  const { video, host } = player;
   const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
   if (fullscreenElement) {
     const exit = document.exitFullscreen || document.webkitExitFullscreen;
@@ -409,10 +470,25 @@ const toggleFullscreen = (player) => {
     }
     return;
   }
-  const request = player.host.requestFullscreen || player.host.webkitRequestFullscreen;
+  if (isVideoNativeFullscreen(video) && typeof video.webkitExitFullscreen === "function") {
+    try {
+      video.webkitExitFullscreen();
+    } catch {}
+    return;
+  }
+  if (canUseVideoNativeFullscreen(video)) {
+    ensureVideoSource(player);
+    restoreInlineVideoPresentation(player);
+    try {
+      video.webkitEnterFullscreen();
+    } catch {}
+    return;
+  }
+  const request = host.requestFullscreen || host.webkitRequestFullscreen;
   if (typeof request === "function") {
-    const task = request.call(player.host);
+    const task = request.call(host);
     if (task && typeof task.catch === "function") task.catch(() => {});
+    return;
   }
 };
 
@@ -577,6 +653,8 @@ export const initInlineVideoPlayers = (root) => {
     video.loop = true;
     video.preload = "none";
     video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
     video.removeAttribute("src");
     setHostVideoState(player);
 
@@ -616,6 +694,20 @@ export const initInlineVideoPlayers = (root) => {
     addEvent(disposers, video, "durationchange", () => syncUi(player));
     addEvent(disposers, video, "volumechange", () => syncUi(player));
     addEvent(disposers, video, "ratechange", () => syncUi(player));
+    addEvent(disposers, video, "webkitbeginfullscreen", () => syncUi(player));
+    addEvent(disposers, video, "webkitendfullscreen", () => {
+      restoreInlineVideoPresentation(player);
+      const ratio = applyVideoAspectRatio(player);
+      if (ratio) {
+        setTrackAspectRatio(player.track, ratio);
+      }
+      syncUi(player);
+      scheduleSync();
+      normalizeViewportAfterFullscreenExit();
+      window.setTimeout(normalizeViewportAfterFullscreenExit, 140);
+      window.setTimeout(normalizeViewportAfterFullscreenExit, 320);
+      window.dispatchEvent(new CustomEvent("inline-video-fullscreen-end"));
+    });
     addEvent(disposers, video, "canplay", () => {
       if (!player.hasFirstFrame) {
         player.hasFirstFrame = true;

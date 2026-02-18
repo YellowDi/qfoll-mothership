@@ -133,6 +133,7 @@ const articleContentRef = ref(null);
 const copiedVisible = ref(false);
 let copiedTimer = null;
 let alignTimer = null;
+let alignSettleTimer = null;
 let disposeInlineVideoPlayers = null;
 
 const isExternalLink = (url) => /^https?:\/\//i.test(url || "");
@@ -351,6 +352,10 @@ const scheduleAlign = () => {
     alignTimer = window.setTimeout(() => {
       alignMarkdownCarousels();
     }, 80);
+    if (alignSettleTimer) window.clearTimeout(alignSettleTimer);
+    alignSettleTimer = window.setTimeout(() => {
+      alignMarkdownCarousels();
+    }, 280);
   });
 };
 
@@ -415,8 +420,9 @@ onMounted(() => {
     scheduleAlign();
     mountInlineVideoPlayers();
   }
-  window.addEventListener("resize", alignMarkdownCarousels);
+  window.addEventListener("resize", scheduleAlign);
   window.addEventListener("orientationchange", scheduleAlign);
+  window.addEventListener("inline-video-fullscreen-end", scheduleAlign);
 });
 
 watch(
@@ -433,13 +439,15 @@ onUnmounted(() => {
     markdownRef.value.removeEventListener("click", handleMarkdownClick, true);
     markdownRef.value.removeEventListener("load", handleImageLoaded, true);
   }
-  window.removeEventListener("resize", alignMarkdownCarousels);
+  window.removeEventListener("resize", scheduleAlign);
   window.removeEventListener("orientationchange", scheduleAlign);
+  window.removeEventListener("inline-video-fullscreen-end", scheduleAlign);
   if (disposeInlineVideoPlayers) {
     disposeInlineVideoPlayers();
     disposeInlineVideoPlayers = null;
   }
   if (copiedTimer) window.clearTimeout(copiedTimer);
   if (alignTimer) window.clearTimeout(alignTimer);
+  if (alignSettleTimer) window.clearTimeout(alignSettleTimer);
 });
 </script>
