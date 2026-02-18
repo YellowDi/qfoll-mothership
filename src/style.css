@@ -17,6 +17,8 @@
     --color-muted-opacity: var(--color-text-secondary-opacity);
     --color-line: var(--color-text-primary);
     --color-line-opacity: 0.04;
+    --color-edge: 229 231 235;
+    --color-edge-opacity: 1;
     --md-video-placeholder: #dcdcdc;
     color-scheme: light;
   }
@@ -35,6 +37,8 @@
     --color-muted-opacity: var(--color-text-secondary-opacity);
     --color-line: var(--color-text-primary);
     --color-line-opacity: 0.12;
+    --color-edge: 255 255 255;
+    --color-edge-opacity: 0.12;
     --md-video-placeholder: #2a2a2f;
     color-scheme: dark;
   }

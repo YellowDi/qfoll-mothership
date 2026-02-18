@@ -1,7 +1,7 @@
 <template>
   <section :class="sectionClass">
     <div
-      class="relative overflow-hidden border border-line bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+      class="relative overflow-hidden border border-edge bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
       :class="[
         props.homePreview ? 'rounded-md p-8 max-md:p-5' : 'rounded-2xl px-8 pt-8 pb-0 max-md:px-5 max-md:pt-5 max-md:pb-0',
       ]"
@@ -13,7 +13,7 @@
       <div class="relative grid w-full min-w-0 max-w-full grid-cols-1 gap-8 xl:grid-cols-2 xl:items-end">
         <div :class="homePreview ? 'w-full min-w-0 max-w-full' : 'w-full min-w-0 max-w-full xl:self-start'">
           <div
-            class="inline-flex max-w-full items-center gap-2 rounded-full border border-line bg-surface/90 px-3 py-1 text-sm text-secondary"
+            class="inline-flex max-w-full items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"
           >
             <i class="ri-shining-line text-sm"></i>
             车货智能匹配 · 全球定位 · 实时预警
@@ -61,7 +61,7 @@
                 href="https://www.ygbonline.com/admin/#/login"
                 target="_blank"
                 rel="noreferrer"
-                class="btn-base btn-md gap-2 border border-line bg-surface px-5 text-primary hover:bg-black/4 dark:hover:bg-white/8"
+                class="btn-base btn-md gap-2 border border-edge bg-surface px-5 text-primary hover:bg-black/4 dark:hover:bg-white/8"
               >
                 管理后台
                 <i class="ri-arrow-right-line text-base"></i>
@@ -80,7 +80,7 @@
             <article
               v-for="(card, idx) in heroCards"
               :key="card.title"
-              class="absolute left-0 right-0 top-0 mx-auto w-full overflow-hidden rounded-t-2xl rounded-b-none border border-line bg-surface shadow-[0_18px_50px_rgba(17,17,17,0.12)] transition-all duration-300 ease-out md:left-auto md:right-0 md:mx-0 dark:shadow-[0_18px_52px_rgba(0,0,0,0.35)]"
+              class="absolute left-0 right-0 top-0 mx-auto w-full overflow-hidden rounded-t-2xl rounded-b-none border border-edge bg-surface shadow-[0_18px_50px_rgba(17,17,17,0.12)] transition-all duration-300 ease-out md:left-auto md:right-0 md:mx-0 dark:shadow-[0_18px_52px_rgba(0,0,0,0.35)]"
               :class="[heroCardClass(idx), heroCardIndex !== idx ? 'h-[2.9rem] md:h-[3.1rem]' : '']"
               @click="setHeroCardWithReset(idx)"
             >
@@ -95,7 +95,7 @@
                 </p>
               </div>
               <div class="px-4 pb-4">
-                <div class="overflow-hidden rounded-lg border border-line bg-black/3 dark:bg-white/5">
+                <div class="overflow-hidden rounded-lg border border-edge bg-black/3 dark:bg-white/5">
                   <img
                     :src="card.image"
                     :srcset="card.imageSrcSet"
@@ -108,7 +108,7 @@
                 </div>
               </div>
             </article>
-            <div class="absolute bottom-3 left-1/2 z-70 flex -translate-x-1/2 items-center gap-2 rounded-full border border-line bg-surface/95 px-2 py-1 shadow-[0_4px_16px_rgba(17,17,17,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.3)]">
+            <div class="absolute bottom-3 left-1/2 z-70 flex -translate-x-1/2 items-center gap-2 rounded-full border border-edge bg-surface/95 px-2 py-1 shadow-[0_4px_16px_rgba(17,17,17,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.3)]">
               <button
                 type="button"
                 class="inline-flex btn-icon btn-icon-sm btn-icon-muted"

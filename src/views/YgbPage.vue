@@ -8,7 +8,7 @@
           <article
             v-for="card in summaryCards"
             :key="card.title"
-            class="group relative overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-[0_1px_0_rgba(17,17,17,0.02)] transition-[background-color,border-color] duration-300 ease-out hover:border-orange-400 hover:bg-orange-400 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)]"
+            class="group relative overflow-hidden rounded-2xl border border-edge bg-surface p-4 shadow-[0_1px_0_rgba(17,17,17,0.02)] transition-[background-color,border-color] duration-300 ease-out hover:border-orange-400 hover:bg-orange-400 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)]"
           >
             <div class="pointer-events-none absolute inset-y-0 left-0 w-[58%] bg-[radial-gradient(115%_105%_at_0%_0%,rgba(254,131,72,0.26)_0%,rgba(254,131,72,0.14)_34%,rgba(254,131,72,0.05)_64%,rgba(255,255,255,0)_100%)] transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
             <div class="pointer-events-none absolute inset-y-0 left-0 w-[52%] bg-[linear-gradient(90deg,rgba(254,131,72,0.16)_1px,transparent_1px),linear-gradient(0deg,rgba(254,131,72,0.12)_1px,transparent_1px)] bg-[size:18px_18px] opacity-35 transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
@@ -43,7 +43,7 @@
           <div class="grid grid-cols-12 gap-10 max-md:gap-6">
             <div class="col-span-12 xl:col-span-5">
               <div
-                class="inline-flex items-center gap-2 rounded-full border border-line bg-surface/90 px-3 py-1 text-sm text-secondary"
+                class="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"
               >
                 <i class="ri-shining-line text-sm"></i>
                 运输作业管理
@@ -123,7 +123,7 @@
 
             <div class="col-span-12 order-1 xl:order-2 xl:col-span-6">
               <div
-                class="inline-flex items-center gap-2 rounded-full border border-line bg-surface/90 px-3 py-1 text-sm text-secondary"
+                class="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"
               >
                 <i class="ri-shining-line text-sm"></i>
                 政府监管

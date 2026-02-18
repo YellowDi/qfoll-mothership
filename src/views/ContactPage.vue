@@ -34,7 +34,7 @@
             <img
               :src="wecomQrCode"
               alt="企业微信二维码"
-              class="block h-auto w-full rounded-xl border border-line bg-white p-3"
+              class="block h-auto w-full rounded-xl border border-edge bg-white p-3"
             />
             <span class="qr-tilt-glare" aria-hidden="true"></span>
           </div>
