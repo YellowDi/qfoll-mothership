@@ -3,6 +3,7 @@
 
 @layer base {
   :root {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     --color-bg: 255 255 255;
     --color-surface: 255 255 255;
     --color-ink: 20 20 20;
@@ -29,6 +30,18 @@
 
   body {
     @apply m-0 bg-bg font-sans text-ink;
+  }
+
+  .is-mac {
+    --font-sans: "MiSans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: "MiSans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+  }
+
+  .is-windows {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   a {

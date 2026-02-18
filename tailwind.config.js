@@ -5,19 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          "MiSans",
-          "ui-sans-serif",
-          "-apple-system",
-          "system-ui",
-          "Segoe UI",
-          "Helvetica",
-          "Apple Color Emoji",
-          "Arial",
-          "sans-serif",
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-        ],
+        sans: ["var(--font-sans)", "sans-serif"],
         display: ["Space Grotesk", "IBM Plex Sans", "sans-serif"],
       },
       colors: {
