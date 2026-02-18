@@ -7,13 +7,14 @@ export default {
       fontFamily: {
         sans: [
           "MiSans",
+          "PingFang SC",
+          "Microsoft YaHei UI",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
-          "Segoe UI",
-          "PingFang SC",
           "Hiragino Sans GB",
           "Microsoft YaHei",
+          "Segoe UI",
           "Noto Sans CJK SC",
           "WenQuanYi Micro Hei",
           "Arial",
