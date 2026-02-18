@@ -11,6 +11,7 @@ export const useDetailPageInteractions = ({
   let alignTimer = null;
   let alignSettleTimer = null;
   let disposeInlineVideoPlayers = null;
+  let resizeObserver = null;
 
   const copyShareLink = async () => {
     const text = window.location.href;
@@ -129,14 +130,29 @@ export const useDetailPageInteractions = ({
     return 24;
   };
 
+  const getMediaAvailableWidth = (mediaNode) => {
+    const widths = [
+      mediaNode.clientWidth,
+      mediaNode.parentElement?.clientWidth ?? 0,
+      markdownRef.value?.clientWidth ?? 0,
+      articleContentRef.value?.clientWidth ?? 0,
+      mediaNode.closest("main")?.clientWidth ?? 0,
+    ].filter((value) => Number.isFinite(value) && value > 0);
+    if (!widths.length) return 0;
+    return Math.min(...widths);
+  };
+
   const syncMarkdownCarouselWidths = () => {
     if (!markdownRef.value) return;
     const mediaNodes = markdownRef.value.querySelectorAll(".md-media");
     const peek = getLandscapePeek();
     mediaNodes.forEach((mediaNode) => {
-      const mediaWidth = mediaNode.clientWidth;
-      if (!mediaWidth) return;
-      const landscapeWidth = Math.max(260, Math.min(1103, mediaWidth - peek * 2));
+      const availableWidth = getMediaAvailableWidth(mediaNode);
+      if (!availableWidth) return;
+      const landscapeWidth = Math.max(
+        260,
+        Math.min(1103, availableWidth - peek * 2)
+      );
       mediaNode.style.setProperty("--md-landscape-card-width", `${landscapeWidth}px`);
     });
   };
@@ -260,6 +276,26 @@ export const useDetailPageInteractions = ({
     });
   };
 
+  const observeLayoutSize = () => {
+    if (typeof ResizeObserver === "undefined") return;
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver = null;
+    }
+    const targets = new Set();
+    if (markdownRef.value) targets.add(markdownRef.value);
+    if (articleContentRef.value) targets.add(articleContentRef.value);
+    const mainNode =
+      articleContentRef.value?.closest("main") ??
+      markdownRef.value?.closest("main");
+    if (mainNode) targets.add(mainNode);
+    if (!targets.size) return;
+    resizeObserver = new ResizeObserver(() => {
+      scheduleAlign();
+    });
+    targets.forEach((target) => resizeObserver.observe(target));
+  };
+
   const handleImageLoaded = (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) {
@@ -290,6 +326,7 @@ export const useDetailPageInteractions = ({
       markdownRef.value.addEventListener("load", handleImageLoaded, true);
       scheduleAlign();
       mountInlineVideoPlayers();
+      observeLayoutSize();
     }
     window.addEventListener("resize", scheduleAlign);
     window.addEventListener("orientationchange", scheduleAlign);
@@ -302,6 +339,7 @@ export const useDetailPageInteractions = ({
       await nextTick();
       scheduleAlign();
       mountInlineVideoPlayers();
+      observeLayoutSize();
     }
   );
 
@@ -316,6 +354,10 @@ export const useDetailPageInteractions = ({
     if (disposeInlineVideoPlayers) {
       disposeInlineVideoPlayers();
       disposeInlineVideoPlayers = null;
+    }
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver = null;
     }
     if (copiedTimer) window.clearTimeout(copiedTimer);
     if (alignTimer) window.clearTimeout(alignTimer);
