@@ -56,7 +56,7 @@
                 v-if="filterOpen"
                 :id="filterPanelId"
                 ref="filterPanelRef"
-                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-[767px]:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
                 role="region"
                 aria-label="案例筛选面板"
                 :style="filterDesktopStyle"
@@ -132,7 +132,7 @@
                 v-if="sortOpen"
                 :id="sortPanelId"
                 ref="sortPanelRef"
-                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-[767px]:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
                 role="menu"
                 aria-label="案例排序"
                 :style="sortDesktopStyle"
@@ -199,7 +199,7 @@
         </div>
       </div>
 
-      <div class="pointer-events-none hidden max-md:absolute max-md:-mx-6 max-md:mt-3 max-md:block max-md:left-0 max-md:right-0 max-md:top-full max-md:z-30">
+      <div class="pointer-events-none hidden max-[767px]:absolute max-[767px]:-mx-6 max-[767px]:mt-3 max-[767px]:block max-[767px]:left-0 max-[767px]:right-0 max-[767px]:top-full max-[767px]:z-30">
         <Transition name="dropdown-fade">
           <div
             v-if="filterOpen"

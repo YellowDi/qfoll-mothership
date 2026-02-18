@@ -3,13 +3,14 @@ const DEFAULT_MARGIN = 12;
 
 export const isDesktopPanelViewport = (breakpoint = 768) => {
   if (typeof window === "undefined") return false;
-  return window.innerWidth > breakpoint;
+  return window.innerWidth >= breakpoint;
 };
 
 export const getAnchoredPanelStyle = ({
   triggerEl,
   panelEl,
   align = "end",
+  preferBelow = false,
   gap = DEFAULT_GAP,
   margin = DEFAULT_MARGIN,
 }) => {
@@ -28,7 +29,7 @@ export const getAnchoredPanelStyle = ({
   const aboveTop = triggerRect.top - gap - naturalHeight;
   const spaceBelow = viewportHeight - belowTop - margin;
   const spaceAbove = triggerRect.top - gap - margin;
-  const placeAbove = spaceBelow < naturalHeight && spaceAbove > spaceBelow;
+  const placeAbove = !preferBelow && spaceBelow < naturalHeight && spaceAbove > spaceBelow;
 
   let top = placeAbove ? aboveTop : belowTop;
   top = Math.max(margin, Math.min(top, viewportHeight - margin - Math.min(naturalHeight, maxHeight)));

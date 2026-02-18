@@ -122,25 +122,31 @@ export const useFilterSortListPage = ({
       sortDesktopStyle.value = {};
       return;
     }
+    const isTabletViewport =
+      typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth <= 1024;
+    const panelAlign = isTabletViewport ? "start" : "end";
+    const preferBelow = isTabletViewport;
     if (filterOpen.value) {
       filterDesktopStyle.value = getAnchoredPanelStyle({
         triggerEl: filterToggleRef.value,
         panelEl: filterPanelRef.value,
-        align: "end",
+        align: panelAlign,
+        preferBelow,
       });
     }
     if (sortOpen.value) {
       sortDesktopStyle.value = getAnchoredPanelStyle({
         triggerEl: sortToggleRef.value,
         panelEl: sortPanelRef.value,
-        align: "end",
+        align: panelAlign,
+        preferBelow,
       });
     }
   };
 
   const updateMobileFilterHeight = () => {
     if (typeof window === "undefined") return;
-    if (window.innerWidth > 768) {
+    if (window.innerWidth >= 768) {
       mobileFilterHeight.value = 0;
       return;
     }
@@ -153,7 +159,7 @@ export const useFilterSortListPage = ({
 
   const setMobileScrollLock = (locked) => {
     if (typeof window === "undefined") return;
-    if (window.innerWidth > 768) return;
+    if (window.innerWidth >= 768) return;
     const overflow = locked ? "hidden" : "";
     document.documentElement.style.overflow = overflow;
     document.body.style.overflow = overflow;
