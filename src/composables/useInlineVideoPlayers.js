@@ -189,6 +189,35 @@ const createVideoUi = (player) => {
   const moreMenu = document.createElement("div");
   moreMenu.className = "md-video-more-menu";
   moreMenu.setAttribute("role", "menu");
+  moreMenu.dataset.view = "main";
+
+  const mainMenu = document.createElement("div");
+  mainMenu.className = "md-video-more-panel md-video-more-main";
+
+  const speedEntryBtn = document.createElement("button");
+  speedEntryBtn.className = "md-video-menu-item has-submenu";
+  speedEntryBtn.type = "button";
+  speedEntryBtn.dataset.action = "open-speed-menu";
+  speedEntryBtn.textContent = "播放速度";
+  const speedEntryArrow = document.createElement("i");
+  speedEntryArrow.className = "ri-arrow-right-s-line";
+  speedEntryArrow.setAttribute("aria-hidden", "true");
+  speedEntryBtn.appendChild(speedEntryArrow);
+  mainMenu.appendChild(speedEntryBtn);
+
+  const speedMenu = document.createElement("div");
+  speedMenu.className = "md-video-more-panel md-video-more-speed";
+
+  const speedBackBtn = document.createElement("button");
+  speedBackBtn.className = "md-video-menu-item is-back";
+  speedBackBtn.type = "button";
+  speedBackBtn.dataset.action = "back-main-menu";
+  speedBackBtn.textContent = "返回";
+  const speedBackIcon = document.createElement("i");
+  speedBackIcon.className = "ri-arrow-left-s-line";
+  speedBackIcon.setAttribute("aria-hidden", "true");
+  speedBackBtn.prepend(speedBackIcon);
+  speedMenu.appendChild(speedBackBtn);
 
   const speedButtons = ["0.5", "1", "1.25", "1.5", "2"].map((rate) => {
     const button = document.createElement("button");
@@ -196,7 +225,7 @@ const createVideoUi = (player) => {
     button.type = "button";
     button.dataset.speed = rate;
     button.textContent = `${rate}x`;
-    moreMenu.appendChild(button);
+    speedMenu.appendChild(button);
     return button;
   });
 
@@ -205,7 +234,10 @@ const createVideoUi = (player) => {
   copyBtn.type = "button";
   copyBtn.dataset.action = "copy-link";
   copyBtn.textContent = "复制链接";
-  moreMenu.appendChild(copyBtn);
+  mainMenu.appendChild(copyBtn);
+
+  moreMenu.appendChild(mainMenu);
+  moreMenu.appendChild(speedMenu);
 
   moreWrap.appendChild(moreBtn);
   moreWrap.appendChild(moreMenu);
@@ -237,6 +269,8 @@ const createVideoUi = (player) => {
     moreWrap,
     moreBtn,
     moreMenu,
+    speedEntryBtn,
+    speedBackBtn,
     speedButtons,
     copyBtn,
   };
@@ -278,6 +312,8 @@ const syncUi = (player) => {
 const closeMoreMenu = (player) => {
   if (!player.menuOpen) return;
   player.menuOpen = false;
+  player.menuView = "main";
+  player.ui.moreMenu.dataset.view = "main";
   player.ui.moreWrap.classList.remove("is-open");
   player.ui.moreBtn.setAttribute("aria-expanded", "false");
 };
@@ -287,6 +323,8 @@ const openMoreMenu = (players, player) => {
     if (item !== player) closeMoreMenu(item);
   });
   player.menuOpen = true;
+  player.menuView = "main";
+  player.ui.moreMenu.dataset.view = "main";
   player.ui.moreWrap.classList.add("is-open");
   player.ui.moreBtn.setAttribute("aria-expanded", "true");
   player.host.classList.add("is-ui-visible");
@@ -511,6 +549,7 @@ export const initInlineVideoPlayers = (root) => {
       trackRatio: track ? 0 : 1,
       userPaused: false,
       menuOpen: false,
+      menuView: "main",
       scrubbing: false,
       hideTimer: null,
       copyTimer: null,
@@ -679,6 +718,22 @@ export const initInlineVideoPlayers = (root) => {
       } else {
         openMoreMenu(players, player);
       }
+      syncUi(player);
+    });
+
+    addEvent(disposers, player.ui.speedEntryBtn, "click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      player.menuView = "speed";
+      player.ui.moreMenu.dataset.view = "speed";
+      syncUi(player);
+    });
+
+    addEvent(disposers, player.ui.speedBackBtn, "click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      player.menuView = "main";
+      player.ui.moreMenu.dataset.view = "main";
       syncUi(player);
     });
 
