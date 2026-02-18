@@ -783,7 +783,11 @@
   }
 
   .md-item-caption {
-    @apply block text-center;
+    @apply block;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: left;
     font-size: 14px;
     color: rgb(var(--color-text-secondary) / var(--color-text-secondary-opacity, 1));
     line-height: 1.5;

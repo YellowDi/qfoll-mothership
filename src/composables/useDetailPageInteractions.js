@@ -125,9 +125,9 @@ export const useDetailPageInteractions = ({
 
   const getLandscapePeek = () => {
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-    if (viewportWidth <= 768) return 26;
-    if (viewportWidth <= 1024) return 30;
-    return 36;
+    if (viewportWidth <= 768) return 22;
+    if (viewportWidth <= 1024) return 26;
+    return 32;
   };
 
   const getMediaAvailableWidth = (mediaNode) => {
