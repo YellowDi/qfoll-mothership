@@ -38,7 +38,8 @@
       </div>
       <div class="pt-20 w-full">
         <div class="mx-auto w-full max-w-[50%] max-md:max-w-full">
-          <div class="flex w-full items-center justify-end border-t border-line/12 pt-3">
+          <div class="flex w-full items-center justify-between gap-4 border-t border-line/12 pt-3 max-md:flex-wrap">
+            <ArticleSpeechPlayer :container-ref="articleContentRef" :content-key="route.params.id" />
             <button
               class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-sm text-ink transition-colors hover:text-muted"
               type="button"
@@ -60,7 +61,7 @@
       </div>
     </div>
 
-    <article class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-6 font-sans text-base leading-relaxed text-ink">
+    <article ref="articleContentRef" class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-6 font-sans text-base leading-relaxed text-ink">
       <div
         class="markdown-body detail-markdown-body"
         v-html="project.bodyHtml"
@@ -91,6 +92,7 @@ import { useRoute } from "vue-router";
 import AppLayout from "../layouts/AppLayout.vue";
 import DetailMetaCard from "../components/DetailMetaCard.vue";
 import RelatedContentSection from "../components/RelatedContentSection.vue";
+import ArticleSpeechPlayer from "../components/ArticleSpeechPlayer.vue";
 import { projects, projectList } from "../data/projects";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 import "../styles/markdown-media.css";
@@ -124,6 +126,7 @@ const projectRelatedPrimaryMeta = (item) => item.tag;
 const projectRelatedSecondaryMeta = (item) => item.yearLabel || item.year;
 
 const markdownRef = ref(null);
+const articleContentRef = ref(null);
 const copiedVisible = ref(false);
 let copiedTimer = null;
 let alignTimer = null;

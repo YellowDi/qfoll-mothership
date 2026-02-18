@@ -16,7 +16,7 @@
       </div>
 
       <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-ink max-lg:max-w-full">
-        <div class="markdown-body">
+        <div class="markdown-body detail-markdown-body">
           <p>
             在项目合作初期，价格往往是最先被提及的话题。但在我们看来，价格从来不是起点，真正的起点是对项目本身的理解。我们始终坚持，任何一份报价都必须建立在充分理解需求的基础之上，而不是凭经验给出一个大概区间。只有在明确项目目标、业务结构、使用场景以及未来扩展方向之后，报价才具备现实意义。
           </p>

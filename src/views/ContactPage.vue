@@ -16,7 +16,7 @@
       </div>
 
       <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-ink max-lg:max-w-full">
-        <div class="markdown-body contact-markdown">
+        <div class="markdown-body detail-markdown-body contact-markdown">
           <p>
             感谢你关注企丰科技。无论你是希望咨询项目合作、了解产品方案，还是希望讨论长期技术支持，我们都欢迎你随时联系我们。我们重视每一次沟通，会尽快响应并给出明确反馈。
           </p>
@@ -88,6 +88,7 @@ const resetQrTilt = () => {
     "--glare-opacity": "0",
   };
 };
+
 </script>
 
 <style scoped>
