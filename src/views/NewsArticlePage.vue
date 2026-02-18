@@ -2,7 +2,7 @@
   <AppLayout>
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">
       <div class="mx-auto w-full max-w-208">
-        <div class="mb-8 flex items-center justify-center gap-4 text-[13px]">
+        <div class="mb-8 flex items-center justify-center gap-4 text-sm">
           <span class="font-medium text-ink">{{ article.publishedAt }}</span>
           <span class="text-muted">{{ article.category || "最新动态" }}</span>
         </div>
@@ -17,7 +17,7 @@
         <div v-if="article.primaryButtonText || article.secondaryButtonText" class="mt-5 flex items-center justify-center gap-1.5">
           <a
             v-if="article.primaryButtonText && article.primaryButtonUrl"
-            class="inline-flex h-9 items-center justify-center rounded-full bg-black px-5 text-[13px] font-medium text-white transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85"
+            class="inline-flex h-9 items-center justify-center rounded-full bg-black px-5 text-sm font-medium text-white transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85"
             :href="article.primaryButtonUrl"
             :target="linkTarget(article.primaryButtonUrl)"
             :rel="linkRel(article.primaryButtonUrl)"
@@ -26,7 +26,7 @@
           </a>
           <a
             v-if="article.secondaryButtonText && article.secondaryButtonUrl"
-            class="inline-flex h-9 items-center justify-center gap-1 rounded-full bg-black/8 px-5 text-[13px] font-medium text-ink transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20"
+            class="inline-flex h-9 items-center justify-center gap-1 rounded-full bg-black/8 px-5 text-sm font-medium text-ink transition-colors hover:bg-black/12 dark:bg-white/14 dark:hover:bg-white/20"
             :href="article.secondaryButtonUrl"
             :target="linkTarget(article.secondaryButtonUrl)"
             :rel="linkRel(article.secondaryButtonUrl)"
@@ -40,7 +40,7 @@
         <div class="mx-auto w-full max-w-[50%] max-md:max-w-full">
           <div class="flex w-full items-center justify-end border-t border-line/12 pt-3">
             <button
-              class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-[13px] text-ink transition-colors hover:text-muted"
+              class="relative inline-flex items-center gap-2 rounded-full px-2 py-1 text-sm text-ink transition-colors hover:text-muted"
               type="button"
               @click="copyShareLink"
             >
@@ -62,7 +62,7 @@
 
     <article class="mx-auto w-full max-w-full overflow-x-clip px-0 pb-20 pt-6 font-sans text-base leading-relaxed text-ink">
       <div
-        class="markdown-body"
+        class="markdown-body detail-markdown-body"
         v-html="article.bodyHtml"
         ref="markdownRef"
       ></div>

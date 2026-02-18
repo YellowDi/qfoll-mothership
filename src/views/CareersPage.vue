@@ -2,7 +2,7 @@
   <AppLayout>
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
       <div class="mx-auto w-full max-w-208">
-        <div class="mb-8 flex items-center justify-center text-[13px]">
+        <div class="mb-8 flex items-center justify-center text-sm">
           <span class="text-muted">公司</span>
         </div>
         <h1

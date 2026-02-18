@@ -43,7 +43,7 @@
           <div class="grid grid-cols-12 gap-10 max-md:gap-6">
             <div class="col-span-12 xl:col-span-5">
               <div
-                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-xs text-muted"
+                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-muted"
               >
                 <i class="ri-shining-line text-sm"></i>
                 运输作业管理
@@ -123,7 +123,7 @@
 
             <div class="col-span-12 order-1 xl:order-2 xl:col-span-6">
               <div
-                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-xs text-muted"
+                class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-muted"
               >
                 <i class="ri-shining-line text-sm"></i>
                 政府监管
@@ -159,7 +159,7 @@
           <div class="download-material pointer-events-none absolute inset-0 z-0"></div>
           <div class="relative z-20 max-w-136 xl:max-w-none xl:pr-88">
             <div
-              class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/80"
+              class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/80"
             >
               <i class="ri-shining-line text-sm text-white/85"></i>
               应用下载
@@ -176,14 +176,14 @@
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
                   target="_blank"
                   rel="noreferrer"
-                  class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-black transition-colors hover:bg-white/85 max-md:gap-1.5 max-md:px-3.5 max-md:text-xs"
+                  class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-black transition-colors hover:bg-white/85 max-md:gap-1.5 max-md:px-3.5 max-md:text-sm"
                 >
                   <i class="ri-android-fill text-base"></i>
                   <span class="max-md:hidden">下载云柜宝司机版</span>
                   <span class="hidden max-md:inline">下载司机端</span>
                   <i class="ri-download-2-line text-base"></i>
                 </a>
-                <div class="mt-2 text-[13px] text-white/55">或微信搜索小程序「云柜宝」</div>
+                <div class="mt-2 text-sm text-white/55">或微信搜索小程序「云柜宝」</div>
               </div>
               <div class="w-[19.8rem] shrink-0 max-md:w-[13.2rem] xl:absolute xl:right-0 xl:top-0">
                 <div class="flex items-center justify-center gap-2">
@@ -206,7 +206,7 @@
                 </div>
                 <div class="mt-2 text-center">
                   <div class="text-sm font-medium text-white/90">{{ appScreenshots[activeAppShot].title }}</div>
-                  <div class="mt-0.5 text-xs leading-[1.55] text-white/62">{{ appScreenshots[activeAppShot].desc }}</div>
+                  <div class="mt-0.5 text-sm leading-[1.55] text-white/62">{{ appScreenshots[activeAppShot].desc }}</div>
                 </div>
               </div>
             </div>

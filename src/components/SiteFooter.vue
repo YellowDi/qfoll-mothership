@@ -1,7 +1,7 @@
 <template>
   <footer class="w-full bg-bg/92 backdrop-blur-md">
     <div
-      class="relative mx-auto flex w-full max-w-360 items-center justify-end px-14 py-6 text-[13px] text-muted max-lg:px-6 max-md:flex-col max-md:items-center max-md:gap-3 max-md:px-5"
+      class="relative mx-auto flex w-full max-w-360 items-center justify-end px-14 py-6 text-sm text-muted max-lg:px-6 max-md:flex-col max-md:items-center max-md:gap-3 max-md:px-5"
     >
       <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-center max-md:static max-md:translate-x-0">
         <span class="block md:inline">© {{ currentYear }} 宁波企丰信息科技有限公司</span>

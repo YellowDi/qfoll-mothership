@@ -16,6 +16,10 @@
     line-height: 1.68;
   }
 
+  .markdown-body.detail-markdown-body p {
+    font-size: 1.0625rem;
+  }
+
   .markdown-body > * {
     grid-column: 1 / -1;
     margin-top: 16px;
@@ -80,7 +84,7 @@
 
   .markdown-body h6 {
     @apply font-medium;
-    font-size: 0.82rem;
+    font-size: 0.875rem;
     line-height: 1.45;
     margin: 20px 0 8px;
   }
@@ -202,7 +206,7 @@
     border-radius: 999px;
     background: rgb(var(--color-line) / 0.04);
     color: rgb(var(--color-ink));
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 500;
     line-height: 1rem;
     padding: 0.5rem 1rem;
@@ -545,7 +549,7 @@
 
   .md-video-time {
     min-width: 88px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1;
     color: rgb(255 255 255 / 0.96);
     white-space: nowrap;
@@ -621,7 +625,7 @@
     text-align: left;
     padding: 6px 8px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.2;
     cursor: pointer;
     transition: background-color 0.16s ease;
@@ -638,7 +642,7 @@
 
   .md-item-caption {
     @apply block text-center;
-    font-size: 12px;
+    font-size: 14px;
     color: rgb(var(--color-muted) / 1);
     line-height: 1.5;
     margin-top: 2px;
@@ -738,7 +742,7 @@
   }
 
   .news-meta-pill {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     line-height: 1rem;
     padding: 0.5rem 1rem;
   }
@@ -782,6 +786,6 @@
 
   .md-video-time {
     min-width: 72px;
-    font-size: 11px;
+    font-size: 14px;
   }
 }

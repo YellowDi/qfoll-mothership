@@ -13,7 +13,7 @@
       <div class="relative grid w-full min-w-0 max-w-full grid-cols-1 gap-8 xl:grid-cols-2 xl:items-end">
         <div :class="homePreview ? 'w-full min-w-0 max-w-full' : 'w-full min-w-0 max-w-full xl:self-start'">
           <div
-            class="inline-flex max-w-full items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-xs text-muted"
+            class="inline-flex max-w-full items-center gap-2 rounded-full border border-line/10 bg-surface/90 px-3 py-1 text-sm text-muted"
           >
             <i class="ri-shining-line text-sm"></i>
             智能化车货匹配 · 全球货运定位 · 实时推荐预警
@@ -85,12 +85,12 @@
               @click="setHeroCardWithReset(idx)"
             >
               <div class="flex items-center justify-between border-b border-line/10 bg-black/3 px-4 py-2 dark:bg-white/6">
-                <div class="text-xs font-medium text-ink">{{ card.badge }}</div>
+                <div class="text-sm font-medium text-ink">{{ card.badge }}</div>
                 <i class="ri-arrow-right-up-line text-sm text-muted"></i>
               </div>
               <div class="px-4 pt-3 pb-2">
                 <h3 class="text-lg leading-[1.28] font-medium text-ink max-md:text-[17px]">{{ card.title }}</h3>
-                <p class="mt-1 text-xs leading-[1.7] text-muted">
+                <p class="mt-1 text-sm leading-[1.7] text-muted">
                   {{ card.desc }}
                 </p>
               </div>

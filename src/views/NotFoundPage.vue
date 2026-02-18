@@ -2,7 +2,7 @@
   <AppLayout>
     <section class="mx-auto flex min-h-[calc(100dvh-11rem)] w-full max-w-360 flex-col px-14 pt-24 pb-20 max-lg:px-6 max-md:min-h-[calc(100dvh-9.5rem)] max-md:px-5">
       <div class="mx-auto w-full max-w-208 text-center">
-        <div class="mb-8 text-[13px] text-muted">错误 404</div>
+        <div class="mb-8 text-sm text-muted">错误 404</div>
         <h1
           class="text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),4rem)] leading-[clamp(2.28rem,calc(2.28rem+1.72*((100vw-23.4375rem)/66.5625)),4rem)] tracking-[-0.03em] font-medium"
         >
