@@ -183,7 +183,7 @@
                   <span class="hidden max-md:inline">下载司机端</span>
                   <i class="ri-download-2-line text-base"></i>
                 </a>
-                <div class="mt-2 text-sm text-white/55">或微信搜索小程序「云柜宝」</div>
+                <div class="mt-2 text-sm text-white/55">或搜索小程序「云柜宝」</div>
               </div>
               <div class="w-[19.8rem] shrink-0 max-md:w-[13.2rem] lg:absolute lg:right-0 lg:top-0">
                 <div class="flex items-center justify-center gap-2">
