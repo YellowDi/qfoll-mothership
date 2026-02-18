@@ -91,6 +91,7 @@
 
   .markdown-body p {
     @apply w-full max-w-full text-ink;
+    font-weight: 330;
     margin: 0 0 1.35rem;
     line-height: 1.72;
   }

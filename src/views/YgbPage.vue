@@ -157,7 +157,7 @@
       <section id="download" ref="downloadSectionRef" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
         <div class="relative overflow-hidden rounded-2xl bg-neutral-900 p-8 text-white dark:bg-zinc-900 max-md:p-5">
           <div class="download-material pointer-events-none absolute inset-0 z-0"></div>
-          <div class="relative z-20 max-w-136 xl:max-w-none xl:pr-88">
+          <div class="relative z-20 max-w-136 lg:max-w-none">
             <div
               class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/80"
             >
@@ -170,7 +170,7 @@
             <p class="mt-4 max-w-136 text-[15px] leading-[1.9] text-white/72">
               支持 iOS、Android 与微信小程序。司机端可实时接单、反馈状态，管理端可同步查看车辆轨迹、回执与异常信息。
             </p>
-            <div class="mt-4 flex items-start justify-between gap-3 max-xl:gap-2">
+            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 max-xl:gap-2">
               <div class="min-w-0 flex-1">
                 <a
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
@@ -185,7 +185,7 @@
                 </a>
                 <div class="mt-2 text-sm text-white/55">或微信搜索小程序「云柜宝」</div>
               </div>
-              <div class="w-[19.8rem] shrink-0 max-md:w-[13.2rem] xl:absolute xl:right-0 xl:top-0">
+              <div class="w-[19.8rem] shrink-0 max-md:w-[13.2rem] lg:absolute lg:right-0 lg:top-0">
                 <div class="flex items-center justify-center gap-2">
                   <button
                     type="button"
