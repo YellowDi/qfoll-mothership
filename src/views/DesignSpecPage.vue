@@ -258,9 +258,9 @@ const resolveTrackIndex = (track, cards, desiredCenter) => {
 
 const getLandscapePeek = () => {
   const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  if (viewportWidth <= 768) return 14;
-  if (viewportWidth <= 1024) return 18;
-  return 24;
+  if (viewportWidth <= 768) return 26;
+  if (viewportWidth <= 1024) return 30;
+  return 36;
 };
 
 const getMediaAvailableWidth = (mediaNode) => {
