@@ -174,6 +174,7 @@ const isCompanyRoute = (path) =>
 const desktopCollapsed = ref(route.path === "/");
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
+const mobileNavMediaQuery = "(max-width: 767.98px)";
 const navLevel = ref(
   route.path.startsWith("/project") || route.path === "/projects"
     ? "projects"
@@ -206,7 +207,7 @@ const sidebarProjectList = computed(() =>
   })
 );
 const toggleNav = () => {
-  if (window.matchMedia("(max-width: 768px)").matches) {
+  if (window.matchMedia(mobileNavMediaQuery).matches) {
     mobileNavOpen.value = !mobileNavOpen.value;
     return;
   }
@@ -336,7 +337,7 @@ watch(
 );
 
 watch(mobileNavOpen, (open) => {
-  if (!window.matchMedia("(max-width: 768px)").matches) {
+  if (!window.matchMedia(mobileNavMediaQuery).matches) {
     removeMobileScrollGuards();
     return;
   }
