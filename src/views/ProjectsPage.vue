@@ -17,6 +17,8 @@
           <div
             ref="categoryNavRef"
             class="category-nav-scroll flex items-center gap-6 overflow-x-auto whitespace-nowrap"
+            role="group"
+            aria-label="案例分类"
             @scroll="updateCategoryNavFades"
           >
             <button
@@ -24,7 +26,8 @@
               :key="item"
               type="button"
               class="shrink-0 transition-colors"
-              :class="activeFilter === item ? 'text-primary font-semibold' : 'text-secondary hover:text-primary'"
+              :class="activeFilter === item ? 'text-primary font-medium' : 'text-secondary hover:text-primary'"
+              :aria-pressed="activeFilter === item"
               @click="activeFilter = item"
             >
               {{ item }}
@@ -38,17 +41,24 @@
               ref="filterToggleRef"
               type="button"
               class="filter-toggle btn-text"
+              aria-haspopup="menu"
+              :aria-expanded="filterOpen ? 'true' : 'false'"
+              :aria-controls="`${filterPanelId} ${mobileFilterPanelId}`"
+              aria-label="打开筛选选项"
               @click="filterOpen = !filterOpen; if (filterOpen) sortOpen = false"
             >
               <span class="font-medium text-primary">{{ filterButtonText }}</span>
-              <i v-if="filterOpen" class="ri-close-line pointer-events-none text-base"></i>
-              <i v-else class="ri-equalizer-2-line pointer-events-none text-base"></i>
+              <i v-if="filterOpen" class="ri-close-line pointer-events-none text-base" aria-hidden="true"></i>
+              <i v-else class="ri-equalizer-2-line pointer-events-none text-base" aria-hidden="true"></i>
             </button>
             <Transition name="dropdown-fade">
               <div
                 v-if="filterOpen"
+                :id="filterPanelId"
                 ref="filterPanelRef"
                 class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                role="region"
+                aria-label="案例筛选面板"
                 :style="filterDesktopStyle"
               >
                 <div class="filter-panel-scroll">
@@ -108,21 +118,30 @@
               ref="sortToggleRef"
               type="button"
               class="sort-toggle btn-text"
+              aria-haspopup="menu"
+              :aria-expanded="sortOpen ? 'true' : 'false'"
+              :aria-controls="`${sortPanelId} ${mobileSortPanelId}`"
+              aria-label="打开排序选项"
               @click="sortOpen = !sortOpen; if (sortOpen) filterOpen = false"
             >
               <span class="font-medium text-primary">排序</span>
-              <i :class="sortOpen ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" class="text-base"></i>
+              <i :class="sortOpen ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" class="text-base" aria-hidden="true"></i>
             </button>
             <Transition name="dropdown-fade">
               <div
                 v-if="sortOpen"
+                :id="sortPanelId"
                 ref="sortPanelRef"
                 class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-md:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                role="menu"
+                aria-label="案例排序"
                 :style="sortDesktopStyle"
               >
                 <button
                   type="button"
                   class="flex w-full items-center gap-3 py-1.5"
+                  role="menuitemradio"
+                  :aria-checked="sortMode === '最新'"
                   @click="sortMode = '最新'; sortOpen = false"
                 >
                   <span
@@ -138,6 +157,8 @@
                 <button
                   type="button"
                   class="flex w-full items-center gap-3 py-1.5"
+                  role="menuitemradio"
+                  :aria-checked="sortMode === '最早'"
                   @click="sortMode = '最早'; sortOpen = false"
                 >
                   <span
@@ -158,17 +179,21 @@
               type="button"
               class="p-2.5 transition-colors"
               :class="layout === 'grid' ? 'text-primary' : 'text-secondary hover:text-primary dark:text-secondary dark:hover:text-primary'"
+              :aria-pressed="layout === 'grid'"
+              aria-label="网格视图"
               @click="layout = 'grid'"
             >
-              <i class="ri-grid-fill text-lg"></i>
+              <i class="ri-grid-fill text-lg" aria-hidden="true"></i>
             </button>
             <button
               type="button"
               class="p-2.5 transition-colors"
               :class="layout === 'list' ? 'text-primary' : 'text-secondary hover:text-primary dark:text-secondary dark:hover:text-primary'"
+              :aria-pressed="layout === 'list'"
+              aria-label="列表视图"
               @click="layout = 'list'"
             >
-              <i class="ri-list-check-2 text-lg"></i>
+              <i class="ri-list-check-2 text-lg" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -178,8 +203,11 @@
         <Transition name="dropdown-fade">
           <div
             v-if="filterOpen"
+            :id="mobileFilterPanelId"
             ref="mobileFilterPanel"
             class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            role="region"
+            aria-label="案例筛选面板（移动端）"
             :style="mobileFilterPanelStyle"
           >
             <div class="min-h-0 flex-1 overflow-y-auto pr-1">
@@ -237,11 +265,16 @@
         <Transition name="dropdown-fade">
           <div
             v-if="sortOpen"
+            :id="mobileSortPanelId"
             class="mobile-sort-panel pointer-events-auto rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            role="menu"
+            aria-label="案例排序（移动端）"
           >
             <button
               type="button"
               class="flex w-full items-center gap-3 py-1.5"
+              role="menuitemradio"
+              :aria-checked="sortMode === '最新'"
               @click="sortMode = '最新'; sortOpen = false"
             >
               <span
@@ -257,6 +290,8 @@
             <button
               type="button"
               class="flex w-full items-center gap-3 py-1.5"
+              role="menuitemradio"
+              :aria-checked="sortMode === '最早'"
               @click="sortMode = '最早'; sortOpen = false"
             >
               <span
@@ -304,9 +339,10 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getAnchoredPanelStyle, isDesktopPanelViewport } from "../composables/anchoredPanel";
+import { useFilterSortListPage } from "../composables/useFilterSortListPage";
 import ContentGridCard from "../components/ContentGridCard.vue";
 import ContentListRow from "../components/ContentListRow.vue";
 import { projectList } from "../data/projects";
@@ -314,63 +350,46 @@ import AppLayout from "../layouts/AppLayout.vue";
 
 const route = useRoute();
 const router = useRouter();
-const layout = ref("grid");
-const sortMode = ref("最新");
-const sortOpen = ref(false);
-const filterOpen = ref(false);
-const filterToggleRef = ref(null);
-const filterPanelRef = ref(null);
-const sortToggleRef = ref(null);
-const sortPanelRef = ref(null);
-const filterDesktopStyle = ref({});
-const sortDesktopStyle = ref({});
-
-const filterTabs = computed(() => {
-  const tags = projectList
-    .map((item) => item.tag)
-    .filter(Boolean);
-  return ["全部", ...Array.from(new Set(tags))];
+const filterPanelId = "projects-filter-panel";
+const mobileFilterPanelId = "projects-filter-panel-mobile";
+const sortPanelId = "projects-sort-panel";
+const mobileSortPanelId = "projects-sort-panel-mobile";
+const {
+  layout,
+  sortMode,
+  sortOpen,
+  filterOpen,
+  filterToggleRef,
+  filterPanelRef,
+  sortToggleRef,
+  sortPanelRef,
+  filterDesktopStyle,
+  sortDesktopStyle,
+  filterTabs,
+  activeFilter,
+  selectedTags,
+  selectedYears,
+  tagOptions,
+  yearOptions,
+  categoryNavRef,
+  categoryCanScrollLeft,
+  categoryCanScrollRight,
+  mobileFilterPanel,
+  mobileFilterPanelStyle,
+  hasActiveFilters,
+  filterButtonText,
+  updateCategoryNavFades,
+  handleFilterAction,
+} = useFilterSortListPage({
+  route,
+  router,
+  items: projectList,
+  getFilterTag: (item) => item.tag,
+  getYear: (item) => item.year,
+  getAnchoredPanelStyle,
+  isDesktopPanelViewport,
 });
 
-const activeFilter = ref("全部");
-const selectedTags = ref([]);
-const selectedYears = ref([]);
-const syncingFromQuery = ref(false);
-const categoryNavRef = ref(null);
-const categoryCanScrollLeft = ref(false);
-const categoryCanScrollRight = ref(false);
-const mobileFilterPanel = ref(null);
-const mobileFilterHeight = ref(0);
-const hasActiveFilters = computed(
-  () => selectedTags.value.length > 0 || selectedYears.value.length > 0
-);
-const filterButtonText = computed(() => {
-  const parts = [
-    ...selectedTags.value.map((item) => String(item)),
-    ...selectedYears.value.map((item) => `${item}年`),
-  ];
-  if (!parts.length) return "筛选";
-  if (parts.length <= 2) return parts.join(" · ");
-  return `${parts.slice(0, 2).join(" · ")} +${parts.length - 2}`;
-});
-const toStringList = (value) => {
-  if (Array.isArray(value)) return value.map((item) => String(item));
-  if (value == null) return [];
-  return String(value)
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-};
-const applyQueryFilters = () => {
-  syncingFromQuery.value = true;
-  const queryFilter = String(route.query.filter || "全部");
-  activeFilter.value = queryFilter;
-  selectedTags.value = toStringList(route.query.tags);
-  selectedYears.value = toStringList(route.query.years)
-    .map((item) => Number(item))
-    .filter((item) => Number.isFinite(item));
-  syncingFromQuery.value = false;
-};
 const toYearValue = (item) => {
   const year = Number.parseInt(String(item?.year ?? ""), 10);
   return Number.isFinite(year) ? year : -Infinity;
@@ -380,21 +399,6 @@ const toMonthValue = (item) => {
   if (!Number.isFinite(month)) return 0;
   return Math.min(12, Math.max(1, month));
 };
-
-const tagOptions = computed(() => filterTabs.value.filter((item) => item !== "全部"));
-const yearOptions = computed(() => {
-  const years = projectList
-    .map((item) => Number(item.year))
-    .filter((value) => !Number.isNaN(value));
-  return Array.from(new Set(years)).sort((a, b) => b - a);
-});
-const mobileFilterPanelStyle = computed(() => {
-  if (!mobileFilterHeight.value) return {};
-  return {
-    minHeight: `${mobileFilterHeight.value}px`,
-    maxHeight: `${mobileFilterHeight.value}px`,
-  };
-});
 
 const filteredProjects = computed(() => {
   let items = [...projectList];
@@ -430,152 +434,6 @@ const filteredProjects = computed(() => {
     return String(a.title || "").localeCompare(String(b.title || ""), "zh-Hans-CN");
   });
   return items;
-});
-
-const handleDocClick = (event) => {
-  const target = event.target;
-  if (!(target instanceof Element)) return;
-  if (
-    target.closest(".filter-panel") ||
-    target.closest(".mobile-filter-panel") ||
-    target.closest(".filter-toggle") ||
-    target.closest(".sort-panel") ||
-    target.closest(".mobile-sort-panel") ||
-    target.closest(".sort-toggle")
-  ) {
-    return;
-  }
-  sortOpen.value = false;
-  filterOpen.value = false;
-};
-const updateCategoryNavFades = () => {
-  const el = categoryNavRef.value;
-  if (!el) {
-    categoryCanScrollLeft.value = false;
-    categoryCanScrollRight.value = false;
-    return;
-  }
-  const maxScrollLeft = Math.max(0, el.scrollWidth - el.clientWidth);
-  categoryCanScrollLeft.value = el.scrollLeft > 1;
-  categoryCanScrollRight.value = el.scrollLeft < maxScrollLeft - 1;
-};
-const updateDesktopPanelPosition = () => {
-  if (!isDesktopPanelViewport()) {
-    filterDesktopStyle.value = {};
-    sortDesktopStyle.value = {};
-    return;
-  }
-  if (filterOpen.value) {
-    filterDesktopStyle.value = getAnchoredPanelStyle({
-      triggerEl: filterToggleRef.value,
-      panelEl: filterPanelRef.value,
-      align: "end",
-    });
-  }
-  if (sortOpen.value) {
-    sortDesktopStyle.value = getAnchoredPanelStyle({
-      triggerEl: sortToggleRef.value,
-      panelEl: sortPanelRef.value,
-      align: "end",
-    });
-  }
-};
-const updateMobileFilterHeight = () => {
-  if (typeof window === "undefined") return;
-  if (window.innerWidth > 768) {
-    mobileFilterHeight.value = 0;
-    return;
-  }
-  const panel = mobileFilterPanel.value;
-  if (!panel) return;
-  const rect = panel.getBoundingClientRect();
-  const available = Math.floor(window.innerHeight - rect.top);
-  mobileFilterHeight.value = Math.max(260, available);
-};
-const setMobileScrollLock = (locked) => {
-  if (typeof window === "undefined") return;
-  if (window.innerWidth > 768) return;
-  const overflow = locked ? "hidden" : "";
-  document.documentElement.style.overflow = overflow;
-  document.body.style.overflow = overflow;
-};
-
-onMounted(() => {
-  applyQueryFilters();
-  document.addEventListener("click", handleDocClick);
-  window.addEventListener("resize", updateMobileFilterHeight);
-  window.addEventListener("resize", updateDesktopPanelPosition);
-  window.addEventListener("resize", updateCategoryNavFades);
-  window.addEventListener("scroll", updateDesktopPanelPosition, true);
-  nextTick(() => {
-    updateCategoryNavFades();
-  });
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener("click", handleDocClick);
-  window.removeEventListener("resize", updateMobileFilterHeight);
-  window.removeEventListener("resize", updateDesktopPanelPosition);
-  window.removeEventListener("resize", updateCategoryNavFades);
-  window.removeEventListener("scroll", updateDesktopPanelPosition, true);
-  setMobileScrollLock(false);
-});
-
-const clearFilters = () => {
-  selectedTags.value = [];
-  selectedYears.value = [];
-  filterOpen.value = false;
-};
-const handleFilterAction = () => {
-  if (hasActiveFilters.value) {
-    clearFilters();
-    return;
-  }
-  filterOpen.value = false;
-};
-
-watch(
-  () => route.query,
-  () => {
-    applyQueryFilters();
-  }
-);
-
-watch(
-  [activeFilter, selectedTags, selectedYears],
-  () => {
-    if (syncingFromQuery.value) return;
-    const query = {};
-    if (activeFilter.value && activeFilter.value !== "全部") query.filter = activeFilter.value;
-    if (selectedTags.value.length) query.tags = selectedTags.value.join(",");
-    if (selectedYears.value.length) query.years = selectedYears.value.join(",");
-    router.replace({ path: route.path, query });
-  },
-  { deep: true }
-);
-watch(filterTabs, async () => {
-  await nextTick();
-  updateCategoryNavFades();
-});
-
-watch(filterOpen, async (open) => {
-  setMobileScrollLock(open);
-  if (!open) {
-    filterDesktopStyle.value = {};
-    return;
-  }
-  await nextTick();
-  updateMobileFilterHeight();
-  updateDesktopPanelPosition();
-});
-
-watch(sortOpen, async (open) => {
-  if (!open) {
-    sortDesktopStyle.value = {};
-    return;
-  }
-  await nextTick();
-  updateDesktopPanelPosition();
 });
 </script>
 
