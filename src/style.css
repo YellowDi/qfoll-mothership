@@ -6,14 +6,17 @@
     --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     --color-bg: 255 255 255;
     --color-surface: 255 255 255;
-    --color-text-primary: 24 24 27;
-    --color-text-secondary: 82 82 91;
+    --color-text-primary: 0 0 0;
+    --color-text-secondary: var(--color-text-primary);
+    --color-text-secondary-opacity: 0.44;
     --color-text-on-dark: 255 255 255;
     --color-text-on-dark-secondary: 229 231 235;
     --color-brand: 251 146 60;
     --color-ink: var(--color-text-primary);
-    --color-muted: var(--color-text-secondary);
-    --color-line: 20 20 20;
+    --color-muted: var(--color-text-primary);
+    --color-muted-opacity: var(--color-text-secondary-opacity);
+    --color-line: var(--color-text-primary);
+    --color-line-opacity: 0.04;
     --md-video-placeholder: #dcdcdc;
     color-scheme: light;
   }
@@ -21,14 +24,17 @@
   .dark {
     --color-bg: 14 14 16;
     --color-surface: 24 24 28;
-    --color-text-primary: 244 244 245;
-    --color-text-secondary: 161 161 170;
+    --color-text-primary: 255 255 255;
+    --color-text-secondary: var(--color-text-primary);
+    --color-text-secondary-opacity: 0.44;
     --color-text-on-dark: 255 255 255;
     --color-text-on-dark-secondary: 229 231 235;
     --color-brand: 251 146 60;
     --color-ink: var(--color-text-primary);
-    --color-muted: var(--color-text-secondary);
-    --color-line: 255 255 255;
+    --color-muted: var(--color-text-primary);
+    --color-muted-opacity: var(--color-text-secondary-opacity);
+    --color-line: var(--color-text-primary);
+    --color-line-opacity: 0.12;
     --md-video-placeholder: #2a2a2f;
     color-scheme: dark;
   }
@@ -103,6 +109,10 @@
     @apply inline-flex h-10 items-center justify-center rounded-full bg-zinc-100 px-8 text-sm font-medium tracking-[-0.005em] text-secondary no-underline transition-colors hover:bg-zinc-200 hover:no-underline dark:bg-zinc-800 dark:text-secondary dark:hover:bg-zinc-700;
   }
 
+  .btn-neutral-primary {
+    @apply text-primary dark:text-primary;
+  }
+
   .btn-icon {
     @apply items-center justify-center rounded-full text-base transition-colors;
   }
@@ -123,8 +133,12 @@
     @apply inline-flex items-center gap-2 text-secondary transition-colors hover:text-primary;
   }
 
+  .btn-text-primary {
+    @apply text-primary hover:text-primary dark:text-primary dark:hover:text-primary;
+  }
+
   .btn-chip {
-    @apply inline-flex items-center rounded-full bg-line/4 px-4 py-2 text-sm font-medium leading-4 text-primary transition-colors hover:bg-line/8;
+    @apply inline-flex items-center rounded-full bg-line px-4 py-2 text-sm font-medium leading-4 text-primary transition-colors hover:bg-line;
   }
 
   .sidebar-back-icon {

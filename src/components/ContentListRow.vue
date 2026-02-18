@@ -1,6 +1,6 @@
 <template>
   <RouterLink
-    class="group grid grid-cols-12 gap-6 border-b border-line/12 py-7 transition-colors hover:border-primary/55 hover:text-primary"
+    class="group grid grid-cols-12 gap-6 border-b border-line py-7 transition-colors hover:border-primary/55 hover:text-primary"
     :to="to"
   >
     <div class="col-span-12 text-sm text-secondary max-md:col-span-12 md:col-span-3">

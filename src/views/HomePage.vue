@@ -104,7 +104,7 @@
           <div v-if="hasMoreProjects" class="mt-8 flex justify-center max-md:mt-6">
             <RouterLink
               to="/projects"
-              class="btn-neutral"
+              class="btn-neutral btn-neutral-primary"
             >
               查看更多
             </RouterLink>
@@ -115,7 +115,7 @@
       <div class="mt-16 w-full max-w-360 self-stretch mx-auto">
         <div class="mx-auto flex w-full items-center justify-between">
           <h2 class="text-lg font-medium">最新动态</h2>
-          <RouterLink class="text-sm btn-text" to="/news">查看更多</RouterLink>
+          <RouterLink class="text-sm btn-text btn-text-primary" to="/news">查看更多</RouterLink>
         </div>
         <div class="mx-auto w-full pt-6">
           <div class="grid grid-flow-row grid-cols-2 gap-x-10 gap-y-8 max-md:grid-cols-1 max-md:gap-x-0 max-md:gap-y-6">
@@ -147,7 +147,7 @@
           <div class="mt-8 flex justify-center max-md:mt-6">
             <RouterLink
               to="/news"
-              class="btn-neutral"
+              class="btn-neutral btn-neutral-primary"
             >
               查看更多
             </RouterLink>

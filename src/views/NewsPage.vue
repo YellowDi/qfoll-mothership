@@ -56,7 +56,7 @@
                 v-if="filterOpen"
                 :id="filterPanelId"
                 ref="filterPanelRef"
-                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-[767px]:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="filter-panel absolute right-0 z-30 mt-3 w-90 rounded-md border border-line bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-[767px]:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
                 role="region"
                 aria-label="动态筛选面板"
                 :style="filterDesktopStyle"
@@ -73,7 +73,7 @@
                         >
                           <input
                             type="checkbox"
-                            class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
+                            class="h-4 w-4 rounded border-line bg-transparent text-primary"
                             :value="item"
                             v-model="selectedTags"
                           />
@@ -91,7 +91,7 @@
                         >
                           <input
                             type="checkbox"
-                            class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
+                            class="h-4 w-4 rounded border-line bg-transparent text-primary"
                             :value="item"
                             v-model="selectedYears"
                           />
@@ -132,7 +132,7 @@
                 v-if="sortOpen"
                 :id="sortPanelId"
                 ref="sortPanelRef"
-                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line/10 bg-zinc-100 px-5 py-4 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-[767px]:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
+                class="sort-panel absolute right-0 z-30 mt-3 w-55 rounded-md border border-line bg-zinc-100 px-5 py-4 text-[15px] text-primary shadow-[0_8px_24px_rgba(17,17,17,0.08)] max-[767px]:hidden dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_14px_34px_rgba(0,0,0,0.45)]"
                 role="menu"
                 aria-label="动态排序"
                 :style="sortDesktopStyle"
@@ -145,7 +145,7 @@
                   @click="sortMode = '最新'; sortOpen = false"
                 >
                   <span
-                    class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                    class="flex h-4 w-4 items-center justify-center rounded-full border border-line"
                   >
                     <span
                       v-if="sortMode === '最新'"
@@ -162,7 +162,7 @@
                   @click="sortMode = '最早'; sortOpen = false"
                 >
                   <span
-                    class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                    class="flex h-4 w-4 items-center justify-center rounded-full border border-line"
                   >
                     <span
                       v-if="sortMode === '最早'"
@@ -205,7 +205,7 @@
             v-if="filterOpen"
             :id="mobileFilterPanelId"
             ref="mobileFilterPanel"
-            class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            class="mobile-filter-panel pointer-events-auto flex flex-col rounded-md border border-line bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
             role="region"
             aria-label="动态筛选面板（移动端）"
             :style="mobileFilterPanelStyle"
@@ -222,7 +222,7 @@
                     >
                       <input
                         type="checkbox"
-                        class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
+                        class="h-4 w-4 rounded border-line bg-transparent text-primary"
                         :value="item"
                         v-model="selectedTags"
                       />
@@ -240,7 +240,7 @@
                     >
                       <input
                         type="checkbox"
-                        class="h-4 w-4 rounded border-line/35 bg-transparent text-primary"
+                        class="h-4 w-4 rounded border-line bg-transparent text-primary"
                         :value="item"
                         v-model="selectedYears"
                       />
@@ -251,7 +251,7 @@
               </div>
             </div>
             <div class="pointer-events-none -mt-10 h-10 bg-gradient-to-b from-transparent to-[#f5f5f5] dark:to-[#222226]"></div>
-            <div class="mt-6 flex justify-end border-t border-line/10 pt-5 pb-1">
+            <div class="mt-6 flex justify-end border-t border-line pt-5 pb-1">
               <button
                 type="button"
                 class="min-h-11 px-2 text-[15px] font-medium text-primary"
@@ -266,7 +266,7 @@
           <div
             v-if="sortOpen"
             :id="mobileSortPanelId"
-            class="mobile-sort-panel pointer-events-auto rounded-md border border-line/10 bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
+            class="mobile-sort-panel pointer-events-auto rounded-md border border-line bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm max-md:shadow-none dark:border-white/10 dark:bg-zinc-900 dark:shadow-[0_8px_28px_rgba(0,0,0,0.35)] dark:max-md:shadow-none"
             role="menu"
             aria-label="动态排序（移动端）"
           >
@@ -278,7 +278,7 @@
               @click="sortMode = '最新'; sortOpen = false"
             >
               <span
-                class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                class="flex h-4 w-4 items-center justify-center rounded-full border border-line"
               >
                 <span
                   v-if="sortMode === '最新'"
@@ -295,7 +295,7 @@
               @click="sortMode = '最早'; sortOpen = false"
             >
               <span
-                class="flex h-4 w-4 items-center justify-center rounded-full border border-line/35"
+                class="flex h-4 w-4 items-center justify-center rounded-full border border-line"
               >
                 <span
                   v-if="sortMode === '最早'"
@@ -323,7 +323,7 @@
         />
       </div>
 
-      <div v-else class="mt-8 border-y border-line/12">
+      <div v-else class="mt-8 border-y border-line">
         <ContentListRow
           v-for="item in filteredNews"
           :key="item.id"

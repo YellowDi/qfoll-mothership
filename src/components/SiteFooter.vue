@@ -17,7 +17,7 @@
       </div>
       <button
         type="button"
-        class="btn-neutral gap-1 px-5 max-lg:hidden"
+        class="btn-neutral btn-neutral-primary gap-1 px-5 max-lg:hidden"
         @click="scrollToTop"
       >
         返回顶部
