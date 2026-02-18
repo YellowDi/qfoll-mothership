@@ -92,7 +92,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-black text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-primary dark:hover:bg-white/85;
+    @apply inline-flex items-center justify-center rounded-full bg-black text-sm font-medium text-on-dark transition-colors hover:bg-black/85 dark:bg-white dark:text-zinc-900 dark:hover:bg-white/85;
   }
 
   .btn-secondary {

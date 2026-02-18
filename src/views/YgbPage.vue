@@ -176,7 +176,7 @@
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
                   target="_blank"
                   rel="noreferrer"
-                  class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-primary transition-colors hover:bg-white/85 max-md:gap-1.5 max-md:px-3.5 max-md:text-sm"
+                  class="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-sm font-medium text-primary transition-colors hover:bg-white/85 dark:text-zinc-900 max-md:gap-1.5 max-md:px-3.5 max-md:text-sm"
                 >
                   <i class="ri-android-fill text-base"></i>
                   <span class="max-md:hidden">下载云柜宝司机版</span>
