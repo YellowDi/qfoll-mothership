@@ -157,7 +157,7 @@
       <section id="download" ref="downloadSectionRef" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
         <div class="relative overflow-hidden rounded-2xl bg-neutral-900 p-8 text-white dark:bg-zinc-900 max-md:p-5">
           <div class="download-material pointer-events-none absolute inset-0 z-0"></div>
-          <div class="relative z-20 max-w-136 lg:max-w-none">
+          <div class="relative z-20 max-w-136 lg:max-w-none xl:pr-88">
             <div
               class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white/80"
             >
@@ -170,7 +170,7 @@
             <p class="mt-4 max-w-136 text-[15px] leading-[1.9] text-white/72">
               支持 iOS、Android 与微信小程序。司机端可实时接单、反馈状态，管理端可同步查看车辆轨迹、回执与异常信息。
             </p>
-            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 max-xl:gap-2">
+            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 xl:static xl:pr-0 max-xl:gap-2">
               <div class="min-w-0 flex-1">
                 <a
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
