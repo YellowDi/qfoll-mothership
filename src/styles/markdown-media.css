@@ -25,6 +25,10 @@
     --md-marker: rgb(0 0 0 / 0.42);
     --md-code-border: rgb(var(--color-line) / 0.08);
     --md-code-toolbar-fg: rgb(var(--color-ink) / 0.52);
+    --md-table-border: rgb(var(--color-line) / 0.14);
+    --md-table-head-bg: rgb(var(--color-line) / 0.06);
+    --md-table-row-hover: rgb(var(--color-line) / 0.075);
+    --md-table-text-muted: rgb(var(--color-ink) / 0.62);
     --md-hljs-fg: rgb(var(--color-ink) / 0.92);
     --md-hljs-comment: rgb(var(--color-ink) / 0.45);
     --md-hljs-keyword: #355fd4;
@@ -42,6 +46,10 @@
     --md-marker: rgb(255 255 255 / 0.42);
     --md-code-border: rgb(255 255 255 / 0.16);
     --md-code-toolbar-fg: rgb(var(--color-ink) / 0.58);
+    --md-table-border: rgb(255 255 255 / 0.16);
+    --md-table-head-bg: rgb(255 255 255 / 0.06);
+    --md-table-row-hover: rgb(255 255 255 / 0.045);
+    --md-table-text-muted: rgb(var(--color-ink) / 0.66);
     --md-hljs-fg: rgb(var(--color-ink) / 0.9);
     --md-hljs-comment: rgb(var(--color-ink) / 0.5);
     --md-hljs-keyword: #79a6ff;
@@ -65,7 +73,7 @@
     margin-top: 0;
   }
 
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
     width: 100%;
     max-width: none;
     padding-left: clamp(16px, 4vw, 56px);
@@ -286,6 +294,72 @@
     border-radius: 999px;
   }
 
+  .markdown-body .md-table {
+    margin: 0 0 var(--md-list-block-gap);
+    border: 1px solid var(--md-table-border);
+    border-radius: var(--md-card-radius);
+    background: var(--md-card-bg);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .markdown-body > .md-table {
+    grid-column: 1 / -1;
+  }
+
+  .markdown-body .md-table table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+    background: transparent;
+  }
+
+  .markdown-body .md-table thead th {
+    background: var(--md-table-head-bg);
+    color: var(--md-table-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .markdown-body .md-table th,
+  .markdown-body .md-table td {
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--md-table-border);
+    font-size: 0.9375rem;
+    line-height: 1.58;
+  }
+
+  .markdown-body .md-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .markdown-body .md-table tbody tr:hover td {
+    background: var(--md-table-row-hover);
+  }
+
+  .markdown-body .md-table th + th,
+  .markdown-body .md-table td + td {
+    border-left: 1px solid var(--md-table-border);
+  }
+
+  .markdown-body .md-table p {
+    margin: 0;
+  }
+
+  .markdown-body .md-table::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .markdown-body .md-table::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-ink) / 0.18);
+    border-radius: 999px;
+  }
+
   .markdown-body ul,
   .markdown-body ol {
     @apply block text-primary;
@@ -347,7 +421,8 @@
 
   .markdown-body li > pre,
   .markdown-body li > blockquote,
-  .markdown-body li > table {
+  .markdown-body li > table,
+  .markdown-body li > .md-table {
     margin: 0.6em 0;
   }
 
@@ -432,6 +507,10 @@
     padding-left: 1.2em;
   }
 
+  .markdown-body blockquote .md-table {
+    margin: 0.7em 0;
+  }
+
   .markdown-body blockquote blockquote {
     margin: 0.9rem 0 0;
     padding: 0;
@@ -475,6 +554,7 @@
   .info-panel-content img,
   .info-panel-content video,
   .info-panel-content iframe,
+  .info-panel-content .md-table,
   .info-panel-content table,
   .info-panel-content pre,
   .info-panel-content code {
@@ -1007,11 +1087,29 @@
     justify-self: center;
   }
 
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
     grid-column: 1 / -1;
     width: min(100%, 40rem);
     padding-left: 0;
     padding-right: 0;
+    justify-self: center;
+  }
+
+  .markdown-body > .md-code-block:not(.md-media) {
+    grid-column: 1 / -1;
+    width: min(100%, 40rem);
+    max-width: min(100%, 40rem);
+    margin-left: auto;
+    margin-right: auto;
+    justify-self: center;
+  }
+
+  .markdown-body > .md-table:not(.md-media) {
+    grid-column: 1 / -1;
+    width: min(100%, 40rem);
+    max-width: min(100%, 40rem);
+    margin-left: auto;
+    margin-right: auto;
     justify-self: center;
   }
 }
@@ -1036,8 +1134,26 @@
     justify-self: center;
   }
 
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
     width: min(100%, 40rem);
+    justify-self: center;
+  }
+
+  .markdown-body > .md-code-block:not(.md-media) {
+    --md-code-outer-gap: clamp(16px, 4vw, 24px);
+    width: min(40rem, calc(100% - (var(--md-code-outer-gap) * 2)));
+    max-width: calc(100% - (var(--md-code-outer-gap) * 2));
+    margin-left: auto;
+    margin-right: auto;
+    justify-self: center;
+  }
+
+  .markdown-body > .md-table:not(.md-media) {
+    --md-table-outer-gap: clamp(16px, 4vw, 24px);
+    width: min(40rem, calc(100% - (var(--md-table-outer-gap) * 2)));
+    max-width: calc(100% - (var(--md-table-outer-gap) * 2));
+    margin-left: auto;
+    margin-right: auto;
     justify-self: center;
   }
 
@@ -1075,7 +1191,7 @@
 }
 
 @media (max-width: 839px) {
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
     max-width: 100%;
   }
 

@@ -12,6 +12,8 @@ export const useDetailPageInteractions = ({
   let lastCodeCopyButton = null;
   let alignTimer = null;
   let alignSettleTimer = null;
+  let enhanceTableTimer = null;
+  let enhanceTableRaf = null;
   let disposeInlineVideoPlayers = null;
   let resizeObserver = null;
 
@@ -366,10 +368,42 @@ export const useDetailPageInteractions = ({
     disposeInlineVideoPlayers = initInlineVideoPlayers(markdownRef.value);
   };
 
+  const enhanceMarkdownTables = () => {
+    if (!markdownRef.value) return;
+    const tables = markdownRef.value.querySelectorAll("table");
+    tables.forEach((table) => {
+      if (!(table instanceof HTMLTableElement)) return;
+      if (table.closest(".md-media")) return;
+      const parent = table.parentElement;
+      if (!parent) return;
+      if (parent.classList.contains("md-table")) return;
+      const wrapper = document.createElement("div");
+      wrapper.className = "md-table";
+      parent.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+  };
+
+  const scheduleEnhanceMarkdownTables = () => {
+    if (enhanceTableRaf) {
+      window.cancelAnimationFrame(enhanceTableRaf);
+      enhanceTableRaf = null;
+    }
+    enhanceTableRaf = window.requestAnimationFrame(() => {
+      enhanceTableRaf = null;
+      enhanceMarkdownTables();
+    });
+    if (enhanceTableTimer) window.clearTimeout(enhanceTableTimer);
+    enhanceTableTimer = window.setTimeout(() => {
+      enhanceMarkdownTables();
+    }, 120);
+  };
+
   onMounted(() => {
     if (markdownRef.value) {
       markdownRef.value.addEventListener("click", handleMarkdownClick, true);
       markdownRef.value.addEventListener("load", handleImageLoaded, true);
+      scheduleEnhanceMarkdownTables();
       scheduleAlign();
       mountInlineVideoPlayers();
       observeLayoutSize();
@@ -383,6 +417,7 @@ export const useDetailPageInteractions = ({
     watchSource,
     async () => {
       await nextTick();
+      scheduleEnhanceMarkdownTables();
       scheduleAlign();
       mountInlineVideoPlayers();
       observeLayoutSize();
@@ -413,6 +448,8 @@ export const useDetailPageInteractions = ({
     }
     if (alignTimer) window.clearTimeout(alignTimer);
     if (alignSettleTimer) window.clearTimeout(alignSettleTimer);
+    if (enhanceTableTimer) window.clearTimeout(enhanceTableTimer);
+    if (enhanceTableRaf) window.cancelAnimationFrame(enhanceTableRaf);
   });
 
   return {
