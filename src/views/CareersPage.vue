@@ -15,7 +15,7 @@
         </p>
       </div>
 
-      <article class="mx-auto mt-10 w-full max-w-[50%] overflow-x-clip font-sans text-base leading-relaxed text-primary max-lg:max-w-full">
+      <article class="mx-auto mt-10 w-full max-w-[40rem] overflow-x-clip font-sans text-base leading-relaxed text-primary">
         <div class="markdown-body detail-markdown-body">
           <p>
             在企丰科技，我们的工作并不是短期拼接功能，而是为客户建设真正可维护、可演进、可持续运转的系统。我们相信，好的数字化项目不只是上线那一刻的完成，而是在多年之后依然稳定运行，能够随着业务发展不断扩展与优化。系统的价值来自长期可用性，而不是短期速度。
