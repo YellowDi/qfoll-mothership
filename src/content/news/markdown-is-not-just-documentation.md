@@ -103,9 +103,15 @@ md.renderer.rules.code_block = (tokens, idx) => {
 media 组件是本次升级的重点，它负责把多媒体内容纳入同一阅读流，而不是额外拼装一个孤立模块。
 
 :::media
-- video: https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4
+- video: https://video.cdn.queniuqe.com/store_trailers/256878929/movie_max_vp9.webm
   caption: 视频卡片展示媒体组件对内嵌视频的支持效果。
-- image: /project-images/hs-erp/keynote-02.webp
+- image: https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/1850570/ss_f64a1140651ff5af30eb63bb6e5b41753d00a98e.1920x1080.jpg?t=1764081491
+  caption: 图片卡片展示统一尺寸与对齐策略。
+- image: https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/1850570/ss_4b6d7d010d1701b2b57bf8ef1b4975a04b3d632f.1920x1080.jpg?t=1764081491
+  caption: 图片卡片展示统一尺寸与对齐策略。
+- image: https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/1850570/ss_bc8812817c074772822c1d1e8a6b016983cf05e8.1920x1080.jpg?t=1764081491
+  caption: 图片卡片展示统一尺寸与对齐策略。
+- image: https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/1850570/ss_d47bde2e349606b3ef1f641e2d8fb7ccf1adba77.1920x1080.jpg?t=1764081491
   caption: 图片卡片展示统一尺寸与对齐策略。
 :::
 

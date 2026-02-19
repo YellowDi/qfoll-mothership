@@ -92,11 +92,12 @@
     margin: clamp(18px, 2vw, 22px) 0 10px;
   }
 
-  .markdown-body p + h2,
-  .markdown-body ul + h2,
-  .markdown-body ol + h2,
-  .markdown-body blockquote + h2 {
-    margin-top: 8px;
+  .markdown-body :where(p, ul, ol, blockquote, .md-code-block, .md-table) + :where(h1, h2, h3, h4, h5, h6) {
+    margin-top: clamp(20px, 2.4vw, 30px);
+  }
+
+  .markdown-body > :where(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0;
   }
 
   .markdown-body h1 {
