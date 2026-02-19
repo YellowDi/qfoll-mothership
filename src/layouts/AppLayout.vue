@@ -11,7 +11,7 @@
         'fixed left-0 top-0 bottom-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out max-md:pb-[env(safe-area-inset-bottom)]',
         'max-md:w-[334px] max-md:max-w-[90vw]',
         mobileNavOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
-        desktopCollapsed ? 'md:-translate-x-[110%]' : 'md:translate-x-0',
+        sidebarCollapsed ? 'md:-translate-x-[110%]' : 'md:translate-x-0',
       ]"
     >
       <div class="flex w-full flex-col gap-6 px-4 py-6 md:mt-46.75 max-md:mt-0 max-md:pt-16">
@@ -132,7 +132,7 @@
     <main
       class="relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300"
       :class="[
-        desktopCollapsed ? 'md:ml-0' : 'md:ml-50',
+        sidebarCollapsed ? 'md:ml-0' : 'md:ml-50',
         route.path === '/' ? 'overflow-visible' : 'overflow-x-hidden',
       ]"
       @click="mobileNavOpen && closeNav()"
@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { projectList } from "../data/projects";
 import HeaderBar from "../components/HeaderBar.vue";
@@ -175,6 +175,13 @@ const desktopCollapsed = ref(route.path === "/");
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
 const mobileNavMediaQuery = "(max-width: 767.98px)";
+const ygbDesktopAutoCollapseQuery = "(min-width: 1024px) and (max-width: 1279.98px)";
+const isYgbLgViewport = ref(false);
+let ygbDesktopAutoCollapseMql = null;
+const isYgbRoute = computed(() => route.path === "/ygb");
+const sidebarCollapsed = computed(
+  () => desktopCollapsed.value || (isYgbRoute.value && isYgbLgViewport.value),
+);
 const navLevel = ref(
   route.path.startsWith("/project") || route.path === "/projects"
     ? "projects"
@@ -209,6 +216,10 @@ const sidebarProjectList = computed(() =>
 const toggleNav = () => {
   if (window.matchMedia(mobileNavMediaQuery).matches) {
     mobileNavOpen.value = !mobileNavOpen.value;
+    return;
+  }
+  if (isYgbRoute.value && isYgbLgViewport.value) {
+    desktopCollapsed.value = true;
     return;
   }
   desktopCollapsed.value = !desktopCollapsed.value;
@@ -350,6 +361,29 @@ watch(mobileNavOpen, (open) => {
 
 onBeforeUnmount(() => {
   removeMobileScrollGuards();
+  if (!ygbDesktopAutoCollapseMql) return;
+  if (typeof ygbDesktopAutoCollapseMql.removeEventListener === "function") {
+    ygbDesktopAutoCollapseMql.removeEventListener("change", syncYgbDesktopViewport);
+  } else if (typeof ygbDesktopAutoCollapseMql.removeListener === "function") {
+    ygbDesktopAutoCollapseMql.removeListener(syncYgbDesktopViewport);
+  }
+  ygbDesktopAutoCollapseMql = null;
+});
+
+const syncYgbDesktopViewport = () => {
+  isYgbLgViewport.value = Boolean(ygbDesktopAutoCollapseMql?.matches);
+};
+
+onMounted(() => {
+  ygbDesktopAutoCollapseMql = window.matchMedia(ygbDesktopAutoCollapseQuery);
+  syncYgbDesktopViewport();
+  if (typeof ygbDesktopAutoCollapseMql.addEventListener === "function") {
+    ygbDesktopAutoCollapseMql.addEventListener("change", syncYgbDesktopViewport);
+    return;
+  }
+  if (typeof ygbDesktopAutoCollapseMql.addListener === "function") {
+    ygbDesktopAutoCollapseMql.addListener(syncYgbDesktopViewport);
+  }
 });
 
 </script>

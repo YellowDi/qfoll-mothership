@@ -41,7 +41,7 @@
           class="overflow-hidden bg-transparent"
         >
           <div class="grid grid-cols-12 gap-10 max-md:gap-6">
-            <div class="col-span-12 xl:col-span-5">
+            <div class="col-span-12 lg:col-span-5">
               <div
                 class="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"
               >
@@ -78,7 +78,7 @@
               </div>
             </div>
 
-            <div class="col-span-12 xl:col-span-7">
+            <div class="col-span-12 lg:col-span-7">
               <div class="relative">
                 <div class="relative overflow-hidden rounded-lg bg-transparent">
                   <img
@@ -105,7 +105,7 @@
           class="overflow-hidden bg-transparent"
         >
           <div class="grid grid-cols-12 items-center gap-8 max-md:gap-5">
-            <div class="col-span-12 order-2 xl:order-1 xl:col-span-6">
+            <div class="col-span-12 order-2 lg:order-1 lg:col-span-6">
               <div class="relative overflow-hidden rounded-lg bg-transparent">
                 <img
                   :src="governanceImage"
@@ -121,7 +121,7 @@
               </div>
             </div>
 
-            <div class="col-span-12 order-1 xl:order-2 xl:col-span-6">
+            <div class="col-span-12 order-1 lg:order-2 lg:col-span-6">
               <div
                 class="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"
               >
@@ -157,7 +157,7 @@
       <section id="download" ref="downloadSectionRef" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
         <div class="relative overflow-hidden rounded-2xl bg-neutral-900 p-8 text-on-dark dark:bg-zinc-900 max-md:p-5">
           <div class="download-material pointer-events-none absolute inset-0 z-0"></div>
-          <div class="relative z-20 max-w-136 lg:max-w-none xl:pr-88">
+          <div class="relative z-20 max-w-136 lg:max-w-none lg:pr-88">
             <div
               class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-on-dark"
             >
@@ -170,7 +170,7 @@
             <p class="mt-4 max-w-136 text-[15px] leading-[1.9] text-on-dark">
               支持 iOS、Android 与微信小程序。司机端可实时接单、反馈状态，管理端可同步查看车辆轨迹、回执与异常信息。
             </p>
-            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 xl:static xl:pr-0 max-xl:gap-2">
+            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 lg:static lg:pr-0 max-lg:gap-2">
               <div class="min-w-0 flex-1">
                 <a
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
@@ -212,8 +212,8 @@
             </div>
           </div>
 
-          <div class="relative z-10 -mt-40 -mx-8 -mb-1 max-xl:-mt-8 max-md:-mt-12 max-md:-mx-5 max-md:-mb-1">
-            <div class="mt-2 flex h-160 items-end justify-end gap-3 overflow-hidden px-8 pb-0 max-xl:mt-12 max-md:h-120 max-md:gap-2 max-md:px-5">
+          <div class="relative z-10 -mt-40 -mx-8 -mb-1 max-lg:-mt-8 max-md:-mt-12 max-md:-mx-5 max-md:-mb-1">
+            <div class="mt-2 flex h-160 items-end justify-end gap-3 overflow-hidden px-8 pb-0 max-lg:mt-12 max-md:h-120 max-md:gap-2 max-md:px-5">
               <article
                 v-for="(shot, idx) in appScreenshots"
                 :key="shot.src"
