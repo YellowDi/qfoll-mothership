@@ -11,13 +11,13 @@
         </div>
         <div class="mx-auto w-full pb-10 pt-6 max-md:pb-8">
           <div class="grid grid-cols-12 gap-6 max-md:gap-4">
-            <div class="col-span-8 self-start max-lg:col-span-12 lg:sticky lg:top-17">
+            <div class="col-span-8 self-start max-[1380px]:col-span-12 min-[1381px]:sticky min-[1381px]:top-17">
               <RouterLink class="cursor-pointer rounded-md" to="/ygb">
                 <YgbHeroSection preview home-preview />
               </RouterLink>
             </div>
 
-            <div class="col-span-4 flex flex-col gap-6 max-lg:col-span-12 max-lg:grid max-lg:grid-cols-3 max-md:hidden">
+            <div class="col-span-4 flex flex-col gap-6 max-[1380px]:col-span-12 max-[1380px]:grid max-[1380px]:grid-cols-3 max-md:hidden">
               <RouterLink
                 v-for="item in sideProjects"
                 :key="item.id"
