@@ -58,18 +58,6 @@
     @apply m-0 bg-bg font-sans text-primary;
   }
 
-  .is-mac {
-    --font-sans: "MiSans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    font-family: "MiSans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
-  }
-
-  .is-windows {
-    --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
   a {
     color: inherit;
     transition: color 0.2s ease;
