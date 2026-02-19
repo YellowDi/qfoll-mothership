@@ -212,8 +212,8 @@
             </div>
           </div>
 
-          <div class="relative z-10 -mt-40 -mx-8 -mb-1 max-lg:-mt-8 max-md:-mt-12 max-md:-mx-5 max-md:-mb-1">
-            <div class="mt-2 flex h-160 items-end justify-end gap-3 overflow-hidden px-8 pb-0 max-lg:mt-12 max-md:h-120 max-md:gap-2 max-md:px-5">
+          <div class="relative z-10 -mt-32 -mx-8 -mb-1 max-lg:-mt-8 max-md:-mt-12 max-md:-mx-5 max-md:-mb-1">
+            <div class="mt-4 flex h-[41rem] items-end justify-end gap-3 overflow-visible px-8 pb-0 max-lg:mt-12 max-md:h-128 max-md:gap-2 max-md:px-5">
               <article
                 v-for="(shot, idx) in appScreenshots"
                 :key="shot.src"
