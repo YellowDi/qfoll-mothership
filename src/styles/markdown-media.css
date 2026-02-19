@@ -26,8 +26,7 @@
     --md-code-border: rgb(var(--color-line) / 0.08);
     --md-code-toolbar-fg: rgb(var(--color-ink) / 0.52);
     --md-table-divider: rgb(var(--color-line) / 0.09);
-    --md-table-head-bg: rgb(var(--color-line) / 0.04);
-    --md-table-row-hover: rgb(var(--color-line) / 0.05);
+    --md-table-hover-bg: rgb(var(--color-line) / 0.018);
     --md-table-text-muted: rgb(var(--color-ink) / 0.62);
     --md-hljs-fg: rgb(var(--color-ink) / 0.92);
     --md-hljs-comment: rgb(var(--color-ink) / 0.45);
@@ -47,8 +46,7 @@
     --md-code-border: rgb(255 255 255 / 0.16);
     --md-code-toolbar-fg: rgb(var(--color-ink) / 0.58);
     --md-table-divider: rgb(255 255 255 / 0.12);
-    --md-table-head-bg: rgb(255 255 255 / 0.04);
-    --md-table-row-hover: rgb(255 255 255 / 0.032);
+    --md-table-hover-bg: rgb(255 255 255 / 0.018);
     --md-table-text-muted: rgb(var(--color-ink) / 0.66);
     --md-hljs-fg: rgb(var(--color-ink) / 0.9);
     --md-hljs-comment: rgb(var(--color-ink) / 0.5);
@@ -297,8 +295,8 @@
   .markdown-body .md-table {
     margin: 0 0 var(--md-list-block-gap);
     border: 0;
-    border-radius: var(--md-card-radius);
-    background: var(--md-card-bg);
+    border-radius: 0;
+    background: transparent;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
@@ -318,10 +316,22 @@
   }
 
   .markdown-body .md-table thead th {
-    background: var(--md-table-head-bg);
+    background: var(--md-card-bg);
     color: var(--md-table-text-muted);
     font-weight: 500;
     white-space: nowrap;
+    border-bottom: 0;
+    background-clip: padding-box;
+  }
+
+  .markdown-body .md-table thead th:first-child {
+    border-top-left-radius: var(--md-card-radius);
+    border-bottom-left-radius: var(--md-card-radius);
+  }
+
+  .markdown-body .md-table thead th:last-child {
+    border-top-right-radius: var(--md-card-radius);
+    border-bottom-right-radius: var(--md-card-radius);
   }
 
   .markdown-body .md-table th,
@@ -339,7 +349,7 @@
   }
 
   .markdown-body .md-table tbody tr:hover td {
-    background: var(--md-table-row-hover);
+    background: var(--md-table-hover-bg);
   }
 
   .markdown-body .md-table p {
