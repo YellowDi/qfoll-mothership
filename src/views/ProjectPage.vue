@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="pt-20 w-full">
-        <div class="mx-auto w-full max-w-[50%] max-md:max-w-full">
+        <div class="mx-auto w-full max-w-[40rem]">
           <div class="flex w-full items-center justify-between gap-4 border-t border-line pt-3 max-md:flex-wrap">
             <ArticleSpeechPlayer :container-ref="articleContentRef" :content-key="route.params.id" />
             <button
