@@ -91,31 +91,6 @@
             我们所服务的大多数产品属于管理系统、数据平台与业务工具，这类软件的核心不在于展示情绪，而在于高效传递信息。因此在界面决策中我们始终坚持信息优先于风格：先保证信息密度与可读性，再讨论视觉表现；先保证操作路径清晰，再优化动效与氛围；先确保真实业务场景可用，再考虑展示层面的设计感。视觉语言的存在是为了帮助用户理解系统，而不是让界面本身成为关注焦点。当用户能够凭借经验完成新的任务，而不需要重新学习界面时，这套 UI 才真正建立起了价值。
           </p>
 
-          <div class="md-media design-spec-media" data-carousel-id="carousel-design-spec">
-            <div class="md-carousel-track" data-carousel-track="true">
-              <div class="md-carousel-card is-landscape">
-                <div
-                  class="md-carousel-item rounded-md"
-                  data-carousel-id="carousel-design-spec"
-                  data-index="0"
-                >
-                  <img
-                    :src="designSpecMisans"
-                    alt="小米发布的 MiSans 字体，可以免费使用"
-                    class="md-carousel-image"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <div class="md-item-caption">小米发布的 MiSans 字体，可以免费使用</div>
-              </div>
-            </div>
-          </div>
-
-          <p>
-            在字体选择上，我们同样遵循系统化与工程化的思路。MiSans 并不是一个单纯的视觉偏好，而是一项基础设施层面的决定。作为为屏幕阅读优化的现代中文字体，它在不同字号下都具备稳定的识别度与清晰的字面结构，能够支撑长时间的数据阅读场景；完整且过渡自然的字重体系，让信息层级可以通过字体本身建立，而不需要依赖额外装饰；在中英文与数字混排频繁出现的企业界面中，它的节奏统一且克制，能够保持整体版面的秩序感。同时，MiSans 的开源属性使我们在保证设计品质的前提下不增加商业授权成本，并且可以通过本地化或 CDN 策略控制加载性能。这使它在设计标准与工程现实之间取得了良好的平衡。
-          </p>
-
           <p>
             我们始终认为一致性高于所谓的设计感。单个页面的精致并不能代表系统层面的优秀，真正重要的是同一种操作在不同模块中的行为是否一致，同一类信息是否始终以相同方式呈现，用户是否可以在新的功能中复用既有认知完成操作。当界面不再需要被刻意关注，而是成为用户完成工作的自然媒介时，UI 才达到了理想状态。基于这一点，我们所有的设计方案都会在阶段早期同步考虑前端实现方式，包括组件结构、响应式规则、暗黑模式映射策略以及动效的性能成本，因为设计稿从来不是最终交付物，可运行的界面才是。
           </p>
@@ -160,7 +135,6 @@ import "../styles/markdown-media.css";
 import designSpecScreen01 from "../assets/design-images/screen-01.webp";
 import designSpecScreen02 from "../assets/design-images/test-1.png";
 import designSpecScreen03 from "../assets/design-images/test-2.png";
-import designSpecMisans from "../assets/design-images/misans.webp";
 
 const markdownRef = ref(null);
 let alignTimer = null;
