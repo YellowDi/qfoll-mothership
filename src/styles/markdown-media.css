@@ -25,9 +25,9 @@
     --md-marker: rgb(0 0 0 / 0.42);
     --md-code-border: rgb(var(--color-line) / 0.08);
     --md-code-toolbar-fg: rgb(var(--color-ink) / 0.52);
-    --md-table-border: rgb(var(--color-line) / 0.14);
-    --md-table-head-bg: rgb(var(--color-line) / 0.06);
-    --md-table-row-hover: rgb(var(--color-line) / 0.075);
+    --md-table-divider: rgb(var(--color-line) / 0.09);
+    --md-table-head-bg: rgb(var(--color-line) / 0.04);
+    --md-table-row-hover: rgb(var(--color-line) / 0.05);
     --md-table-text-muted: rgb(var(--color-ink) / 0.62);
     --md-hljs-fg: rgb(var(--color-ink) / 0.92);
     --md-hljs-comment: rgb(var(--color-ink) / 0.45);
@@ -46,9 +46,9 @@
     --md-marker: rgb(255 255 255 / 0.42);
     --md-code-border: rgb(255 255 255 / 0.16);
     --md-code-toolbar-fg: rgb(var(--color-ink) / 0.58);
-    --md-table-border: rgb(255 255 255 / 0.16);
-    --md-table-head-bg: rgb(255 255 255 / 0.06);
-    --md-table-row-hover: rgb(255 255 255 / 0.045);
+    --md-table-divider: rgb(255 255 255 / 0.12);
+    --md-table-head-bg: rgb(255 255 255 / 0.04);
+    --md-table-row-hover: rgb(255 255 255 / 0.032);
     --md-table-text-muted: rgb(var(--color-ink) / 0.66);
     --md-hljs-fg: rgb(var(--color-ink) / 0.9);
     --md-hljs-comment: rgb(var(--color-ink) / 0.5);
@@ -296,7 +296,7 @@
 
   .markdown-body .md-table {
     margin: 0 0 var(--md-list-block-gap);
-    border: 1px solid var(--md-table-border);
+    border: 0;
     border-radius: var(--md-card-radius);
     background: var(--md-card-bg);
     overflow-x: auto;
@@ -329,7 +329,7 @@
     padding: 10px 14px;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid var(--md-table-border);
+    border-bottom: 1px solid var(--md-table-divider);
     font-size: 0.9375rem;
     line-height: 1.58;
   }
@@ -340,11 +340,6 @@
 
   .markdown-body .md-table tbody tr:hover td {
     background: var(--md-table-row-hover);
-  }
-
-  .markdown-body .md-table th + th,
-  .markdown-body .md-table td + td {
-    border-left: 1px solid var(--md-table-border);
   }
 
   .markdown-body .md-table p {
