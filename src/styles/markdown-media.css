@@ -1249,3 +1249,27 @@
     font-size: 14px;
   }
 }
+
+@media (min-width: 744px) and (max-width: 839px) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
+    grid-column: 1 / -1;
+    width: min(100%, 40rem);
+    max-width: min(100%, 40rem);
+    padding-left: 0;
+    padding-right: 0;
+    justify-self: center;
+  }
+
+  .markdown-body > blockquote:not(.md-media),
+  .markdown-body > ul:not(.md-media),
+  .markdown-body > ol:not(.md-media),
+  .markdown-body > .md-code-block:not(.md-media),
+  .markdown-body > .md-table:not(.md-media) {
+    grid-column: 1 / -1;
+    width: min(100%, 40rem);
+    max-width: min(100%, 40rem);
+    margin-left: auto;
+    margin-right: auto;
+    justify-self: center;
+  }
+}
