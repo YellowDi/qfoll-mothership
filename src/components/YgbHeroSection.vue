@@ -27,7 +27,7 @@
           <p class="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary">
             让运输管理更简单、更高效
           </p>
-          <div class="relative mt-1 flex w-full min-w-0 max-w-full flex-nowrap items-center gap-2 overflow-hidden whitespace-nowrap text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary max-md:text-[clamp(1rem,4.4vw,1.18rem)]">
+          <div class="relative mt-1 flex w-full min-w-0 max-w-full flex-nowrap items-center gap-2 whitespace-nowrap text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary max-md:text-[clamp(1rem,4.4vw,1.18rem)]">
             <span class="shrink-0">物流运输管理再也不会</span>
             <span
               class="inline-flex min-w-0 items-center bg-[linear-gradient(90deg,#ff6f5f,#fe8348,#8f48ff)] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(143,72,255,0.15)] md:min-w-[5.8em]"
