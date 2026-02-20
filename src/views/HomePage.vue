@@ -126,10 +126,13 @@
               :to="`/news/${item.id}`"
             >
               <div class="overflow-hidden rounded-md">
-                <CoverImage
+                <SquareCoverMedia
                   class="aspect-square w-full rounded-md"
                   :src="item.cover"
                   :src-set="item.coverSrcSet"
+                  :video-src="item.coverVideo"
+                  :icon-class="item.coverIcon"
+                  :enable-video-cover="true"
                   sizes="(max-width: 768px) 6.25rem, (max-width: 1024px) 10.25rem, 12rem"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
@@ -165,6 +168,7 @@
 import AppLayout from "../layouts/AppLayout.vue";
 import AboutSection from "../components/AboutSection.vue";
 import CoverImage from "../components/CoverImage.vue";
+import SquareCoverMedia from "../components/SquareCoverMedia.vue";
 import TagMarqueeSection from "../components/TagMarqueeSection.vue";
 import YgbHeroSection from "../components/YgbHeroSection.vue";
 import { computed } from "vue";

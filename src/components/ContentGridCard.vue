@@ -1,12 +1,17 @@
 <template>
   <RouterLink class="group" :to="to">
     <div class="overflow-hidden rounded-sm">
-      <CoverImage
+      <SquareCoverMedia
         class="aspect-square w-full rounded-sm"
+        :class="coverMediaClass"
         :src="cover"
         :src-set="coverSrcSet"
         :sizes="coverSizes"
         :alt="title"
+        :video-src="coverVideo"
+        :icon-class="coverIcon"
+        :icon-scale="coverIconScale"
+        :enable-video-cover="enableVideoCover"
         image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
       />
     </div>
@@ -21,7 +26,7 @@
 </template>
 
 <script setup>
-import CoverImage from "./CoverImage.vue";
+import SquareCoverMedia from "./SquareCoverMedia.vue";
 
 defineProps({
   to: {
@@ -43,6 +48,26 @@ defineProps({
   coverSizes: {
     type: String,
     default: "",
+  },
+  coverVideo: {
+    type: String,
+    default: "",
+  },
+  coverIcon: {
+    type: String,
+    default: "",
+  },
+  coverIconScale: {
+    type: Number,
+    default: 1,
+  },
+  coverMediaClass: {
+    type: String,
+    default: "",
+  },
+  enableVideoCover: {
+    type: Boolean,
+    default: false,
   },
   primaryMeta: {
     type: String,

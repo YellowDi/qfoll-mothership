@@ -11,6 +11,11 @@ const coverSrcSets = import.meta.glob(
   }
 );
 
+const coverVideos = import.meta.glob("../assets/covers/*.{mp4,webm,mov,m4v}", {
+  eager: true,
+  import: "default",
+});
+
 const toPublicCoverPath = (fullPath) => {
   const fileName = String(fullPath || "").split("/").pop();
   return fileName ? `/covers/${fileName}` : "";
@@ -25,6 +30,16 @@ const COVER_BY_PATH = Object.fromEntries(
       const srcSetPath = `${fullPath}?w=320;480;640;800;960;1200&format=webp&as=srcset`;
       const srcSet = coverSrcSets[srcSetPath] || "";
       return [publicPath, { src, srcSet }];
+    })
+    .filter(Boolean)
+);
+
+const COVER_VIDEO_BY_PATH = Object.fromEntries(
+  Object.entries(coverVideos)
+    .map(([fullPath, src]) => {
+      const publicPath = toPublicCoverPath(fullPath);
+      if (!publicPath) return null;
+      return [publicPath, src];
     })
     .filter(Boolean)
 );
@@ -50,4 +65,12 @@ export const resolveCoverAsset = (value) => {
   const mapped = COVER_BY_PATH[coverPath];
   if (mapped) return mapped;
   return { src: coverPath, srcSet: "" };
+};
+
+export const resolveCoverVideoAsset = (value) => {
+  const videoPath = extractCoverPath(value);
+  if (!videoPath) return "";
+  const mapped = COVER_VIDEO_BY_PATH[videoPath];
+  if (mapped) return mapped;
+  return videoPath;
 };

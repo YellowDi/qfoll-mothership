@@ -1,4 +1,5 @@
 import { parseMarkdownModule } from "./contentParserShared";
+import { resolveCoverVideoAsset } from "./coverAssets";
 
 const modules = import.meta.glob("../content/news/*.md", {
   query: "?raw",
@@ -80,6 +81,8 @@ const parseArticle = (raw, path) => {
     lead: data.lead || "",
     cover: coverAsset.src,
     coverSrcSet: coverAsset.srcSet,
+    coverVideo: resolveCoverVideoAsset(data.coverVideo || ""),
+    coverIcon: String(data.coverIcon || "").trim(),
     primaryButtonText: data.primaryButtonText || "",
     primaryButtonUrl: data.primaryButtonUrl || "",
     secondaryButtonText: data.secondaryButtonText || "",

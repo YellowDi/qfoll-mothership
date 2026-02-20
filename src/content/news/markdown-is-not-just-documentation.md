@@ -5,6 +5,8 @@ publishedAt: 2026-02-19
 category: 技术分享
 lead: 我们如何实现内容到页面的一体化生成
 cover: /covers/markdown-is-not-just-documentation.webp
+coverVideo: /covers/markdown-is-not-just-documentation.mp4
+coverIcon: ri-markdown-fill
 infoTags:
   - 技术分享
   - 2026-02-19

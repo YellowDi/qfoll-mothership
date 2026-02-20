@@ -38,6 +38,16 @@
 .ri-list-check-2:before { content: "\eeb9"; }
 .ri-map-pin-fill:before { content: "\ef13"; }
 .ri-moon-clear-line:before { content: "\ef6f"; }
+.ri-markdown-fill:before {
+  content: "";
+  display: inline-block;
+  width: 1.28em;
+  height: 0.92em;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  -webkit-mask: url("../assets/icons/ri-markdown-fill.svg") no-repeat center / contain;
+  mask: url("../assets/icons/ri-markdown-fill.svg") no-repeat center / contain;
+}
 .ri-more-2-fill:before { content: "\ef76"; }
 .ri-notification-2-line:before { content: "\ef92"; }
 .ri-pause-fill:before { content: "\efd7"; }
