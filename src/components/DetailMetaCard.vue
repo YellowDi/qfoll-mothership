@@ -1,7 +1,7 @@
 <template>
   <div class="news-meta-section w-full max-w-360 self-stretch mx-auto py-10">
     <div class="mx-auto w-full px-16 max-xl:px-6 max-md:px-5">
-      <div class="news-meta-card bg-black/[0.045] px-3 py-6 md:py-10 grid grid-cols-12 rounded-md dark:bg-white/[0.06]">
+      <div class="news-meta-card bg-black/4.5 px-3 py-6 md:py-10 grid grid-cols-12 rounded-md dark:bg-white/6">
         <div class="col-span-12 flex flex-col gap-6 md:col-span-6 md:col-start-4">
           <section class="w-full">
             <ul class="news-meta-tags gap-3xs flex flex-wrap">

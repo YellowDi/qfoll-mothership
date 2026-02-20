@@ -250,7 +250,7 @@
                 </div>
               </div>
             </div>
-            <div class="pointer-events-none -mt-10 h-10 bg-gradient-to-b from-transparent to-[#f5f5f5] dark:to-[#222226]"></div>
+            <div class="pointer-events-none -mt-10 h-10 bg-linear-to-b from-transparent to-[#f5f5f5] dark:to-[#222226]"></div>
             <div class="mt-6 flex justify-end border-t border-line pt-5 pb-1">
               <button
                 type="button"

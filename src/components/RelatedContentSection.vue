@@ -11,7 +11,7 @@
         <RouterLink
           v-for="item in items"
           :key="item.id"
-          class="group overflow-hidden rounded-md max-md:snap-start max-md:min-w-[72%] max-md:flex-shrink-0"
+          class="group overflow-hidden rounded-md max-md:snap-start max-md:min-w-[72%] max-md:shrink-0"
           :class="itemClass"
           :to="itemTo(item)"
         >

@@ -39,7 +39,7 @@
         v-if="isMarkdownIcon"
         :src="markdownIconSrc"
         alt=""
-        class="block w-[clamp(3.4rem,11vw,6.8rem)] h-auto [aspect-ratio:1/1]"
+        class="block w-[clamp(3.4rem,11vw,6.8rem)] h-auto aspect-square"
         draggable="false"
       />
       <i v-else :class="resolvedIconClass" class="text-[clamp(3.4rem,11vw,6.8rem)] leading-none"></i>

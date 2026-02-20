@@ -8,7 +8,7 @@
     >
       <YgbRoadMapBg class="pointer-events-none absolute inset-0 opacity-[0.96]" />
       <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,0.08),rgba(246,245,244,0.02)_40%,rgba(246,245,244,0.08)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015)_40%,rgba(255,255,255,0.03)_100%)]"></div>
-      <div class="pointer-events-none absolute inset-0 [mask-image:radial-gradient(88%_80%_at_15%_12%,#000_0%,rgba(0,0,0,0.92)_34%,rgba(0,0,0,0.56)_58%,rgba(0,0,0,0.2)_74%,transparent_92%)] bg-[radial-gradient(112%_92%_at_14%_8%,rgba(246,245,244,0.88)_0%,rgba(246,245,244,0.62)_34%,rgba(246,245,244,0.24)_62%,rgba(246,245,244,0)_90%)] dark:bg-[radial-gradient(112%_92%_at_14%_8%,rgba(18,18,22,0.92)_0%,rgba(18,18,22,0.72)_34%,rgba(18,18,22,0.34)_62%,rgba(18,18,22,0)_90%)]"></div>
+      <div class="pointer-events-none absolute inset-0 mask-[radial-gradient(88%_80%_at_15%_12%,#000_0%,rgba(0,0,0,0.92)_34%,rgba(0,0,0,0.56)_58%,rgba(0,0,0,0.2)_74%,transparent_92%)] bg-[radial-gradient(112%_92%_at_14%_8%,rgba(246,245,244,0.88)_0%,rgba(246,245,244,0.62)_34%,rgba(246,245,244,0.24)_62%,rgba(246,245,244,0)_90%)] dark:bg-[radial-gradient(112%_92%_at_14%_8%,rgba(18,18,22,0.92)_0%,rgba(18,18,22,0.72)_34%,rgba(18,18,22,0.34)_62%,rgba(18,18,22,0)_90%)]"></div>
 
       <div class="relative grid w-full min-w-0 max-w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:items-end">
         <div :class="homePreview ? 'w-full min-w-0 max-w-full' : 'w-full min-w-0 max-w-full lg:self-start'">
@@ -36,7 +36,7 @@
               <span class="ml-1 inline-block h-[1.05em] w-[2px] animate-pulse rounded-full bg-violet-500/85"></span>
             </span>
           </div>
-          <p class="text-primary mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed md:pr-0 md:break-words lg:max-w-136">
+          <p class="text-primary mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed md:pr-0 md:wrap-break-words lg:max-w-136">
             云柜宝立足国际物流运输场景，融合物流网络与大数据技术，围绕车货匹配、在途监管、时间节点记录和异常预警，构建一体化运输管理能力。
           </p>
           <div class="mt-7 flex flex-wrap items-center gap-3">

@@ -11,7 +11,7 @@
             class="group relative overflow-hidden rounded-2xl border border-edge bg-surface p-4 shadow-[0_1px_0_rgba(17,17,17,0.02)] transition-[background-color,border-color] duration-300 ease-out hover:border-orange-400 hover:bg-orange-400 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)]"
           >
             <div class="pointer-events-none absolute inset-y-0 left-0 w-[58%] bg-[radial-gradient(115%_105%_at_0%_0%,rgba(254,131,72,0.26)_0%,rgba(254,131,72,0.14)_34%,rgba(254,131,72,0.05)_64%,rgba(255,255,255,0)_100%)] transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
-            <div class="pointer-events-none absolute inset-y-0 left-0 w-[52%] bg-[linear-gradient(90deg,rgba(254,131,72,0.16)_1px,transparent_1px),linear-gradient(0deg,rgba(254,131,72,0.12)_1px,transparent_1px)] bg-[size:18px_18px] opacity-35 transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
+            <div class="pointer-events-none absolute inset-y-0 left-0 w-[52%] bg-[linear-gradient(90deg,rgba(254,131,72,0.16)_1px,transparent_1px),linear-gradient(0deg,rgba(254,131,72,0.12)_1px,transparent_1px)] bg-size-[18px_18px] opacity-35 transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
 
             <div class="relative flex items-center gap-3">
               <span class="relative inline-flex h-13 w-13 shrink-0 items-center justify-center">
@@ -84,13 +84,13 @@
                   <img
                     :src="dashboardImage"
                     alt="云柜宝运输作业管理主界面"
-                    class="block h-auto w-full object-contain object-left-top"
+                    class="block h-auto w-full object-contain object-top-left"
                     loading="lazy"
                   />
                   <div
-                    class="pointer-events-none absolute inset-0 rounded-lg border border-zinc-300 shadow-[0_10px_22px_rgba(28,38,52,0.14)] [mask-image:linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] [-webkit-mask-image:linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] dark:border-white/14 dark:shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+                    class="pointer-events-none absolute inset-0 rounded-lg border border-zinc-300 shadow-[0_10px_22px_rgba(28,38,52,0.14)] mask-[linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] [-webkit-mask-image:linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] dark:border-white/14 dark:shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
                   ></div>
-                  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-b from-transparent via-bg/60 to-bg"></div>
+                  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-linear-to-b from-transparent via-bg/60 to-bg"></div>
                   <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[14%] bg-bg/60 blur-[10px]"></div>
                 </div>
 
@@ -110,13 +110,13 @@
                 <img
                   :src="governanceImage"
                   alt="政府监管平台数据界面"
-                  class="block h-auto w-full object-contain object-left-top"
+                  class="block h-auto w-full object-contain object-top-left"
                   loading="lazy"
                 />
                 <div
-                  class="pointer-events-none absolute inset-0 rounded-lg border border-zinc-300 shadow-[0_10px_22px_rgba(28,38,52,0.14)] [mask-image:linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] [-webkit-mask-image:linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] dark:border-white/14 dark:shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+                  class="pointer-events-none absolute inset-0 rounded-lg border border-zinc-300 shadow-[0_10px_22px_rgba(28,38,52,0.14)] mask-[linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] [-webkit-mask-image:linear-gradient(180deg,#000_0%,#000_58%,transparent_100%)] dark:border-white/14 dark:shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
                 ></div>
-                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-b from-transparent via-bg/60 to-bg"></div>
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-linear-to-b from-transparent via-bg/60 to-bg"></div>
                 <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[14%] bg-bg/60 blur-[10px]"></div>
               </div>
             </div>
@@ -170,7 +170,7 @@
             <p class="mt-4 max-w-136 text-[15px] leading-[1.9] text-on-dark">
               支持 iOS、Android 与微信小程序。司机端可实时接单、反馈状态，管理端可同步查看车辆轨迹、回执与异常信息。
             </p>
-            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 lg:static lg:pr-0 max-lg:gap-2">
+            <div class="relative mt-4 flex items-start justify-between gap-3 lg:pr-88 lg:static max-lg:gap-2">
               <div class="min-w-0 flex-1">
                 <a
                   href="https://yunguibao-1321524436.cos.ap-shanghai.myqcloud.com/images/45c957800a8760898ce846ba89dc46ef.apk"
