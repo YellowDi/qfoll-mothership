@@ -18,10 +18,10 @@
         <div class="relative grid w-full min-w-0 max-w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:items-end">
           <div :class="props.homePreview ? 'w-full min-w-0 max-w-full' : 'w-full min-w-0 max-w-full lg:self-start'">
             <div
-              class="inline-flex max-w-full items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"
+              class="inline-flex max-w-full items-center gap-2 rounded-full border border-zinc-300/50 bg-white/60 px-3 py-1 text-sm text-secondary backdrop-blur-sm dark:border-white/20 dark:bg-white/10 dark:text-on-dark"
             >
-              <i class="ri-drop-line text-sm"></i>
-              水质监测 · 数据可视化 · 智能预警
+              <i class="ri-drop-line text-sm text-sky-500 dark:text-on-dark"></i>
+              统一数据平台 · 动态预警 · 污染源追溯
             </div>
             <p class="mt-5 text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-sky-500">
               水环境
@@ -30,10 +30,10 @@
               智慧监控平台
             </h1>
             <p class="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary">
-              让水域监管更透明、更高效
+              面向排水管网全生命周期管理的数字化监测与预警
             </p>
             <p class="text-primary mt-4 w-full min-w-0 max-w-full pr-2 whitespace-normal break-all text-sm leading-relaxed md:pr-0 md:wrap-break-words lg:max-w-136">
-              融合物联网、大数据与人工智能技术，实时采集水质指标，构建水域智能监控与预警体系，为环保部门与企业提供全流程数据支撑。
+              以统一的数据体系连接分散的监测节点，让排水管网从「看不见」走向「可感知、可分析、可预警」，为水环境治理构建面向长期运行的数字化基础。
             </p>
             <div class="mt-7 flex flex-wrap items-center gap-3">
               <RouterLink
