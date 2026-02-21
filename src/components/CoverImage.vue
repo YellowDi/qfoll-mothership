@@ -50,11 +50,11 @@
     <button
       v-if="shouldRenderVideo"
       type="button"
-      class="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 focus:opacity-100"
+      class="cover-play-btn absolute inline-flex items-center justify-center rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 focus:opacity-100"
       :aria-label="isVideoPaused ? '播放封面视频' : '暂停封面视频'"
       @click.stop.prevent="toggleManualPlayback"
     >
-      <i :class="isVideoPaused ? 'ri-play-fill' : 'ri-pause-fill'" class="text-lg"></i>
+      <i :class="isVideoPaused ? 'ri-play-fill' : 'ri-pause-fill'" class="leading-none"></i>
     </button>
   </div>
 </template>
@@ -304,5 +304,13 @@ watch(shouldRenderVideo, async () => {
 }
 .cover-icon {
   font-size: calc(clamp(1.25rem, 50cqw, 10rem) * var(--cover-icon-scale, 1));
+}
+/* 暂停/播放按钮按封面尺寸比例缩放，以新闻页三列布局下的封面为基准（约 7.5cqw ≈ 32px） */
+.cover-play-btn {
+  right: clamp(0.5rem, 2cqw, 1rem);
+  top: clamp(0.5rem, 2cqw, 1rem);
+  width: clamp(1.5rem, 7.5cqw, 2.5rem);
+  height: clamp(1.5rem, 7.5cqw, 2.5rem);
+  font-size: clamp(0.75rem, 3.75cqw, 1.25rem);
 }
 </style>
