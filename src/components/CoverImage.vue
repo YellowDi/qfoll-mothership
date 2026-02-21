@@ -45,7 +45,7 @@
       :style="iconWrapStyle"
       aria-hidden="true"
     >
-      <i :class="resolvedIconClass" class="cover-icon leading-none"></i>
+      <i :class="resolvedIconClass" class="cover-icon leading-none transition-transform duration-500 ease-out group-hover:scale-[1.03]"></i>
     </div>
     <button
       v-if="shouldRenderVideo"
