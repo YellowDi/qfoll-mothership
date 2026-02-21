@@ -1,14 +1,14 @@
 <template>
   <AppLayout>
-    <div class="w-full bg-bg pt-18 pb-16">
+    <div class="w-full bg-bg pt-14 pb-16">
       <YgbHeroSection />
 
-      <section class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
+      <section class="mx-auto mt-8 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
           <article
             v-for="card in summaryCards"
             :key="card.title"
-            class="group relative overflow-hidden rounded-2xl border border-edge bg-surface p-4 shadow-[0_1px_0_rgba(17,17,17,0.02)] transition-[background-color,border-color] duration-300 ease-out hover:border-orange-400 hover:bg-orange-400 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)]"
+            class="group relative overflow-hidden rounded-lg border border-edge bg-surface p-4 shadow-[0_1px_0_rgba(17,17,17,0.02)] transition-[background-color,border-color] duration-300 ease-out hover:border-orange-400 hover:bg-orange-400 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)]"
           >
             <div class="pointer-events-none absolute inset-y-0 left-0 w-[58%] bg-[radial-gradient(115%_105%_at_0%_0%,rgba(254,131,72,0.26)_0%,rgba(254,131,72,0.14)_34%,rgba(254,131,72,0.05)_64%,rgba(255,255,255,0)_100%)] transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
             <div class="pointer-events-none absolute inset-y-0 left-0 w-[52%] bg-[linear-gradient(90deg,rgba(254,131,72,0.16)_1px,transparent_1px),linear-gradient(0deg,rgba(254,131,72,0.12)_1px,transparent_1px)] bg-size-[18px_18px] opacity-35 transition-opacity duration-300 ease-out group-hover:opacity-0"></div>
@@ -36,7 +36,7 @@
           </div>
       </section>
 
-      <section id="dashboard" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
+      <section id="dashboard" class="mx-auto mt-12 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
         <div
           class="overflow-hidden bg-transparent"
         >
@@ -100,7 +100,7 @@
         </div>
       </section>
 
-      <section id="governance" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
+      <section id="governance" class="mx-auto mt-12 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
         <div
           class="overflow-hidden bg-transparent"
         >
@@ -154,8 +154,8 @@
         </div>
       </section>
 
-      <section id="download" ref="downloadSectionRef" class="mx-auto mt-6 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
-        <div class="relative overflow-hidden rounded-2xl bg-neutral-900 p-8 text-on-dark dark:bg-zinc-900 max-md:p-5">
+      <section id="download" ref="downloadSectionRef" class="mx-auto mt-12 w-full max-w-360 px-14 max-lg:px-6 max-md:px-5">
+        <div class="relative overflow-hidden rounded-lg bg-neutral-900 p-8 text-on-dark dark:bg-zinc-900 max-md:p-5">
           <div class="download-material pointer-events-none absolute inset-0 z-0"></div>
           <div class="relative z-20 max-w-136 lg:max-w-none lg:pr-88">
             <div

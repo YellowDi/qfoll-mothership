@@ -1,15 +1,22 @@
 <template>
   <section :class="sectionClass">
     <div
-      class="relative overflow-hidden border border-edge bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+      class="relative overflow-hidden bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
       :class="[
-        props.homePreview ? 'rounded-md p-8 max-md:p-5' : 'rounded-2xl px-8 pt-8 pb-0 max-md:px-5 max-md:pt-5 max-md:pb-0',
+        props.homePreview
+          ? 'rounded-md border border-edge p-8 max-md:p-5'
+          : 'border-0 rounded-none',
       ]"
     >
       <YgbRoadMapBg class="pointer-events-none absolute inset-0 opacity-[0.96]" />
       <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,0.08),rgba(246,245,244,0.02)_40%,rgba(246,245,244,0.08)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015)_40%,rgba(255,255,255,0.03)_100%)]"></div>
       <div class="pointer-events-none absolute inset-0 mask-[radial-gradient(88%_80%_at_15%_12%,#000_0%,rgba(0,0,0,0.92)_34%,rgba(0,0,0,0.56)_58%,rgba(0,0,0,0.2)_74%,transparent_92%)] bg-[radial-gradient(112%_92%_at_14%_8%,rgba(246,245,244,0.88)_0%,rgba(246,245,244,0.62)_34%,rgba(246,245,244,0.24)_62%,rgba(246,245,244,0)_90%)] dark:bg-[radial-gradient(112%_92%_at_14%_8%,rgba(18,18,22,0.92)_0%,rgba(18,18,22,0.72)_34%,rgba(18,18,22,0.34)_62%,rgba(18,18,22,0)_90%)]"></div>
+      <div
+        v-if="!props.homePreview"
+        class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-bg to-transparent dark:from-bg"
+      />
 
+      <div :class="contentWrapperClass">
       <div class="relative grid w-full min-w-0 max-w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:items-end">
         <div :class="homePreview ? 'w-full min-w-0 max-w-full' : 'w-full min-w-0 max-w-full lg:self-start'">
           <div
@@ -140,6 +147,7 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
   </section>
 </template>
@@ -167,7 +175,10 @@ const props = defineProps({
 });
 
 const sectionClass = computed(() =>
-  props.homePreview ? "w-full" : "mx-auto w-full max-w-360 px-14 max-lg:px-6 max-md:px-5",
+  props.homePreview ? "w-full" : "w-full",
+);
+const contentWrapperClass = computed(() =>
+  props.homePreview ? "w-full" : "relative mx-auto w-full max-w-360 px-14 pt-8 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-5 max-md:pb-8",
 );
 const heroCardImageSizes = "(max-width: 768px) 88vw, (max-width: 1280px) 52vw, 46vw";
 
