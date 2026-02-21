@@ -31,18 +31,11 @@
     ></video>
     <div
       v-if="resolvedIconClass"
-      class="pointer-events-none absolute inset-0 flex items-center justify-center text-white [text-shadow:0_10px_30px_rgba(0,0,0,0.35)]"
+      class="pointer-events-none absolute inset-0 flex items-center justify-center text-white"
       :style="iconScaleStyle"
       aria-hidden="true"
     >
-      <img
-        v-if="isMarkdownIcon"
-        :src="markdownIconSrc"
-        alt=""
-        class="block w-[clamp(3.4rem,11vw,6.8rem)] h-auto aspect-square"
-        draggable="false"
-      />
-      <i v-else :class="resolvedIconClass" class="text-[clamp(3.4rem,11vw,6.8rem)] leading-none"></i>
+      <i :class="resolvedIconClass" class="text-[clamp(3.4rem,11vw,6.8rem)] leading-none"></i>
     </div>
     <button
       v-if="shouldRenderVideo"
@@ -59,7 +52,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import CoverImage from "./CoverImage.vue";
-import markdownIconSrc from "../assets/icons/ri-markdown-fill.svg";
 
 const AVAILABLE_COVER_ICONS = new Set([
   "ri-android-fill",
@@ -160,7 +152,6 @@ const sanitizeIconClass = (value) => {
   return raw;
 };
 const resolvedIconClass = computed(() => sanitizeIconClass(props.iconClass));
-const isMarkdownIcon = computed(() => resolvedIconClass.value === "ri-markdown-fill");
 const iconScaleStyle = computed(() => {
   const scale = Number.isFinite(props.iconScale) ? Math.max(0.25, props.iconScale) : 1;
   return {
