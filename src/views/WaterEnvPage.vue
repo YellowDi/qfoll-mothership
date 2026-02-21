@@ -14,10 +14,10 @@
         ]"
       >
         <div
-          class="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14"
+          class="grid grid-cols-1 items-center gap-10 md:grid-cols-5 md:gap-14"
         >
           <div
-            class="order-1 min-w-0"
+            class="order-1 min-w-0 md:col-span-2"
             :class="[idx % 2 === 1 ? 'md:order-2' : 'md:order-1']"
           >
             <h2 class="text-[clamp(1.5rem,2.5vw,2.25rem)] font-medium leading-[1.15] tracking-[-0.03em] text-primary">
@@ -28,30 +28,32 @@
             </p>
           </div>
           <div
-            class="order-2 min-w-0"
+            class="order-2 min-w-0 md:col-span-3"
             :class="[idx % 2 === 1 ? 'md:order-1' : 'md:order-2']"
           >
-            <div class="water-env-section-media relative overflow-hidden rounded-md bg-surface">
-              <img
-                v-if="item.image"
-                :src="item.image"
-                :alt="item.title"
-                class="block h-auto w-full object-cover"
-                loading="lazy"
-                :fetchpriority="idx > 0 ? 'low' : undefined"
-              />
-              <div
-                v-if="item.image"
-                class="water-env-img-mask pointer-events-none absolute inset-0 rounded-md"
-                :class="idx % 2 === 1 ? 'water-env-img-mask--left' : 'water-env-img-mask--right'"
-                aria-hidden="true"
-              />
+            <div class="water-env-media-wrapper relative overflow-visible">
+              <div class="water-env-section-media relative overflow-hidden rounded-md bg-surface shadow-[0_8px_40px_-12px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_48px_-12px_rgba(0,0,0,0.4)]">
+                <img
+                  v-if="item.image"
+                  :src="item.image"
+                  :alt="item.title"
+                  class="block h-auto w-full object-cover"
+                  loading="lazy"
+                  :fetchpriority="idx > 0 ? 'low' : undefined"
+                />
               <div
                 v-else
                 class="flex aspect-video items-center justify-center bg-linear-to-br from-sky-100 to-sky-50 dark:from-sky-900/30 dark:to-sky-800/20"
               >
                 <i :class="[item.icon, 'text-6xl text-sky-400/60 dark:text-sky-500/50']"></i>
               </div>
+            </div>
+              <div
+                v-if="item.image"
+                class="water-env-img-mask pointer-events-none absolute inset-y-0 z-10"
+                :class="idx % 2 === 1 ? 'water-env-img-mask--left' : 'water-env-img-mask--right'"
+                aria-hidden="true"
+              />
             </div>
           </div>
         </div>
@@ -71,14 +73,18 @@ import { featureSections } from "../data/waterEnvFeatures";
   content-visibility: auto;
 }
 
-/* ChatGPT Atlas 风格：图片边缘渐变遮罩，融入页面背景 */
-/* 图片在右侧：遮罩右边缘融入页面 */
+/* 图片边缘渐变遮罩，融入页面背景，延伸覆盖阴影 */
+/* 图片在右侧：遮罩右边缘完全融入背景 */
 .water-env-img-mask--right {
-  background: linear-gradient(to left, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 0.6) 15%, transparent 45%);
+  left: 0;
+  right: -72px;
+  background: linear-gradient(to left, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 1) 15%, rgb(var(--color-bg) / 0.95) 22%, rgb(var(--color-bg) / 0.7) 35%, rgb(var(--color-bg) / 0.35) 50%, transparent 75%);
 }
 
-/* 图片在左侧：遮罩左边缘融入页面 */
+/* 图片在左侧：遮罩左边缘完全融入背景 */
 .water-env-img-mask--left {
-  background: linear-gradient(to right, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 0.6) 15%, transparent 45%);
+  left: -72px;
+  right: 0;
+  background: linear-gradient(to right, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 1) 15%, rgb(var(--color-bg) / 0.95) 22%, rgb(var(--color-bg) / 0.7) 35%, rgb(var(--color-bg) / 0.35) 50%, transparent 75%);
 }
 </style>
