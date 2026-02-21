@@ -17,8 +17,10 @@
           class="grid grid-cols-1 items-center gap-10 md:grid-cols-5 md:gap-14"
         >
           <div
-            class="order-1 min-w-0 md:col-span-2"
-            :class="[idx % 2 === 1 ? 'md:order-2' : 'md:order-1']"
+            class="order-1 min-w-0 md:col-span-2 md:pl-10 md:pr-4"
+            :class="[
+              idx % 2 === 1 ? 'md:order-2 md:pl-4 md:pr-10' : 'md:order-1',
+            ]"
           >
             <h2 class="text-[clamp(1.5rem,2.5vw,2.25rem)] font-medium leading-[1.15] tracking-[-0.03em] text-primary">
               {{ item.title }}
@@ -29,7 +31,9 @@
           </div>
           <div
             class="order-2 min-w-0 md:col-span-3"
-            :class="[idx % 2 === 1 ? 'md:order-1' : 'md:order-2']"
+            :class="[
+              idx % 2 === 1 ? 'md:order-1 md:-ml-6' : 'md:order-2 md:-mr-6',
+            ]"
           >
             <div class="water-env-media-wrapper relative overflow-visible">
               <div class="water-env-section-media relative overflow-hidden rounded-md bg-surface shadow-[0_8px_40px_-12px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_48px_-12px_rgba(0,0,0,0.4)]">
