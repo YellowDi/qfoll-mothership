@@ -177,7 +177,7 @@ const isCompanyRoute = (path) =>
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
-const isAutoHideSidebarRoute = (path) => path === "/" || path === "/ygb" || path === "/water-env";
+const isAutoHideSidebarRoute = (path) => path === "/ygb" || path === "/water-env";
 const desktopCollapsed = ref(isAutoHideSidebarRoute(route.path));
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
