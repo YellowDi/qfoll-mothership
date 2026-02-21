@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { projectList } from "../data/projects";
 import HeaderBar from "../components/HeaderBar.vue";
@@ -171,17 +171,11 @@ const isCompanyRoute = (path) =>
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
-const desktopCollapsed = ref(route.path === "/");
+const desktopCollapsed = ref(false);
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
 const mobileNavMediaQuery = "(max-width: 767.98px)";
-const ygbDesktopAutoCollapseQuery = "(min-width: 1024px) and (max-width: 1279.98px)";
-const isYgbLgViewport = ref(false);
-let ygbDesktopAutoCollapseMql = null;
-const isYgbRoute = computed(() => route.path === "/ygb");
-const sidebarCollapsed = computed(
-  () => desktopCollapsed.value || (isYgbRoute.value && isYgbLgViewport.value),
-);
+const sidebarCollapsed = computed(() => desktopCollapsed.value);
 const navLevel = ref(
   route.path.startsWith("/project") || route.path === "/projects"
     ? "projects"
@@ -216,10 +210,6 @@ const sidebarProjectList = computed(() =>
 const toggleNav = () => {
   if (window.matchMedia(mobileNavMediaQuery).matches) {
     mobileNavOpen.value = !mobileNavOpen.value;
-    return;
-  }
-  if (isYgbRoute.value && isYgbLgViewport.value) {
-    desktopCollapsed.value = true;
     return;
   }
   desktopCollapsed.value = !desktopCollapsed.value;
@@ -334,7 +324,6 @@ watch(
   () => route.fullPath,
   () => {
     mobileNavOpen.value = false;
-    desktopCollapsed.value = route.path === "/";
     if (route.path.startsWith("/project") || route.path === "/projects") {
       navLevel.value = "projects";
       return;
@@ -361,29 +350,6 @@ watch(mobileNavOpen, (open) => {
 
 onBeforeUnmount(() => {
   removeMobileScrollGuards();
-  if (!ygbDesktopAutoCollapseMql) return;
-  if (typeof ygbDesktopAutoCollapseMql.removeEventListener === "function") {
-    ygbDesktopAutoCollapseMql.removeEventListener("change", syncYgbDesktopViewport);
-  } else if (typeof ygbDesktopAutoCollapseMql.removeListener === "function") {
-    ygbDesktopAutoCollapseMql.removeListener(syncYgbDesktopViewport);
-  }
-  ygbDesktopAutoCollapseMql = null;
-});
-
-const syncYgbDesktopViewport = () => {
-  isYgbLgViewport.value = Boolean(ygbDesktopAutoCollapseMql?.matches);
-};
-
-onMounted(() => {
-  ygbDesktopAutoCollapseMql = window.matchMedia(ygbDesktopAutoCollapseQuery);
-  syncYgbDesktopViewport();
-  if (typeof ygbDesktopAutoCollapseMql.addEventListener === "function") {
-    ygbDesktopAutoCollapseMql.addEventListener("change", syncYgbDesktopViewport);
-    return;
-  }
-  if (typeof ygbDesktopAutoCollapseMql.addListener === "function") {
-    ygbDesktopAutoCollapseMql.addListener(syncYgbDesktopViewport);
-  }
 });
 
 </script>
