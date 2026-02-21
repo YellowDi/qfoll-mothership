@@ -95,11 +95,11 @@
           <RouterLink class="text-sm btn-text btn-text-primary" to="/news">查看更多</RouterLink>
         </div>
         <div class="mx-auto w-full pt-6">
-          <div class="grid grid-flow-row grid-cols-1 gap-y-6 xl:grid-cols-2 xl:gap-x-10 xl:gap-y-8">
+          <div class="grid grid-flow-row grid-cols-1 gap-y-6 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-6 xl:gap-x-10 xl:gap-y-8">
             <RouterLink
               v-for="item in latestNews"
               :key="`news-${item.id}`"
-              class="group grid grid-cols-[minmax(0,9rem)_1fr] items-center gap-2 xl:grid-cols-[minmax(0,12rem)_1fr] xl:gap-4"
+              class="group grid grid-cols-[minmax(0,9rem)_1fr] items-center gap-2 lg:grid-cols-[minmax(0,12rem)_1fr] lg:gap-4"
               :to="`/news/${item.id}`"
             >
               <div class="overflow-hidden rounded-md">
@@ -110,13 +110,13 @@
                   :video-src="item.coverVideo"
                   :icon-class="item.coverIcon"
                   :enable-video-cover="true"
-                  sizes="(max-width: 1279px) 9rem, 12rem"
+                  sizes="(max-width: 1023px) 9rem, 12rem"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />
               </div>
-              <div class="flex min-h-full max-w-none flex-col justify-center pl-2 pr-6 py-1.5 text-left xl:max-w-[36rem] xl:pl-4 xl:pr-10 xl:py-2">
-                <div class="text-base leading-[1.3] font-medium text-primary xl:text-lg">{{ item.title }}</div>
+              <div class="flex min-h-full max-w-none flex-col justify-center pl-2 pr-6 py-1.5 text-left lg:max-w-[36rem] lg:pl-4 lg:pr-8 lg:py-2 xl:pr-10">
+                <div class="text-base leading-[1.3] font-medium text-primary lg:text-lg">{{ item.title }}</div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
                   <span class="font-medium text-primary">{{ item.category }}</span>
                   <span class="text-secondary">{{ item.publishedAt }}</span>
