@@ -99,7 +99,7 @@
             <RouterLink
               v-for="item in latestNews"
               :key="`news-${item.id}`"
-              class="group grid grid-cols-[minmax(0,6.25rem)_1fr] items-center gap-3 xl:grid-cols-[minmax(0,12rem)_1fr] xl:gap-5"
+              class="group grid grid-cols-[minmax(0,9rem)_1fr] items-center gap-2 xl:grid-cols-[minmax(0,12rem)_1fr] xl:gap-4"
               :to="`/news/${item.id}`"
             >
               <div class="overflow-hidden rounded-md">
@@ -110,13 +110,13 @@
                   :video-src="item.coverVideo"
                   :icon-class="item.coverIcon"
                   :enable-video-cover="true"
-                  sizes="(max-width: 1279px) 6.25rem, 12rem"
+                  sizes="(max-width: 1279px) 9rem, 12rem"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />
               </div>
-              <div class="flex min-h-full max-w-none flex-col justify-center pl-2.5 pr-6 py-1.5 text-left xl:max-w-[36rem] xl:pl-4 xl:pr-10 xl:py-2">
-                <div class="text-lg leading-[1.3] font-medium text-primary xl:text-xl">{{ item.title }}</div>
+              <div class="flex min-h-full max-w-none flex-col justify-center pl-2 pr-6 py-1.5 text-left xl:max-w-[36rem] xl:pl-4 xl:pr-10 xl:py-2">
+                <div class="text-base leading-[1.3] font-medium text-primary xl:text-lg">{{ item.title }}</div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
                   <span class="font-medium text-primary">{{ item.category }}</span>
                   <span class="text-secondary">{{ item.publishedAt }}</span>

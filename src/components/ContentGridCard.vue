@@ -15,8 +15,8 @@
         image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
       />
     </div>
-    <div class="pt-4 text-left">
-      <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ title }}</div>
+    <div class="pt-3 text-left">
+      <div class="text-lg leading-[1.3] font-medium text-primary max-md:text-base">{{ title }}</div>
       <div class="mt-4 flex items-center gap-2 text-sm">
         <span class="font-medium text-primary">{{ primaryMeta }}</span>
         <span class="text-secondary">{{ secondaryMeta }}</span>
