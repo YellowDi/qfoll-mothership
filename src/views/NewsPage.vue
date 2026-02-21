@@ -319,8 +319,6 @@
           :cover-src-set="item.coverSrcSet"
           :cover-video="item.coverVideo"
           :cover-icon="item.coverIcon"
-          :cover-icon-scale="3"
-          cover-media-class="news-cover-media"
           :enable-video-cover="true"
           cover-sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
           :primary-meta="item.category"
@@ -423,27 +421,6 @@ const filteredNews = computed(() => {
   return items;
 });
 </script>
-
-<style scoped>
-/* 📱 手机默认 */
-:deep(.news-cover-media) {
-  --cover-icon-scale: 2.6;
-}
-
-/* 📲 平板 */
-@media (min-width: 768px) {
-  :deep(.news-cover-media) {
-    --cover-icon-scale: 1.3;
-  }
-}
-
-/* 🖥 桌面 */
-@media (min-width: 1280px) {
-  :deep(.news-cover-media) {
-    --cover-icon-scale: 2;
-  }
-}
-</style>
 
 <style scoped>
 .dropdown-fade-enter-active,

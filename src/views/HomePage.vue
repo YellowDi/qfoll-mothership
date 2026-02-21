@@ -29,6 +29,9 @@
                     class="aspect-square w-full rounded-md"
                     :src="item.cover"
                     :src-set="item.coverSrcSet"
+                    :video-src="item.coverVideo"
+                    :icon-class="item.coverIcon"
+                    :enable-video-cover="true"
                     sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
                     :alt="item.title"
                     image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
@@ -57,6 +60,9 @@
                   class="h-full w-full rounded-md"
                   :src="item.cover"
                   :src-set="item.coverSrcSet"
+                  :video-src="item.coverVideo"
+                  :icon-class="item.coverIcon"
+                  :enable-video-cover="true"
                   sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
@@ -85,6 +91,9 @@
                     class="aspect-square w-full rounded-md"
                     :src="item.cover"
                     :src-set="item.coverSrcSet"
+                    :video-src="item.coverVideo"
+                    :icon-class="item.coverIcon"
+                    :enable-video-cover="true"
                     sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
                     :alt="item.title"
                     image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
@@ -126,7 +135,7 @@
               :to="`/news/${item.id}`"
             >
               <div class="overflow-hidden rounded-md">
-                <SquareCoverMedia
+                <CoverImage
                   class="aspect-square w-full rounded-md"
                   :src="item.cover"
                   :src-set="item.coverSrcSet"
@@ -168,7 +177,6 @@
 import AppLayout from "../layouts/AppLayout.vue";
 import AboutSection from "../components/AboutSection.vue";
 import CoverImage from "../components/CoverImage.vue";
-import SquareCoverMedia from "../components/SquareCoverMedia.vue";
 import TagMarqueeSection from "../components/TagMarqueeSection.vue";
 import YgbHeroSection from "../components/YgbHeroSection.vue";
 import { computed } from "vue";

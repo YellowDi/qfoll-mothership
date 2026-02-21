@@ -1,7 +1,7 @@
 <template>
   <RouterLink class="group" :to="to">
     <div class="overflow-hidden rounded-sm">
-      <SquareCoverMedia
+      <CoverImage
         class="aspect-square w-full rounded-sm"
         :class="coverMediaClass"
         :src="cover"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import SquareCoverMedia from "./SquareCoverMedia.vue";
+import CoverImage from "./CoverImage.vue";
 
 defineProps({
   to: {
