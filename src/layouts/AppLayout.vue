@@ -171,7 +171,8 @@ const isCompanyRoute = (path) =>
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
-const desktopCollapsed = ref(false);
+const isAutoHideSidebarRoute = (path) => path === "/" || path === "/ygb";
+const desktopCollapsed = ref(isAutoHideSidebarRoute(route.path));
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
 const mobileNavMediaQuery = "(max-width: 767.98px)";
@@ -324,6 +325,7 @@ watch(
   () => route.fullPath,
   () => {
     mobileNavOpen.value = false;
+    desktopCollapsed.value = isAutoHideSidebarRoute(route.path);
     if (route.path.startsWith("/project") || route.path === "/projects") {
       navLevel.value = "projects";
       return;
