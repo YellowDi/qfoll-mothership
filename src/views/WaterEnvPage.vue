@@ -18,15 +18,15 @@
             :class="[idx % 2 === 1 ? 'lg:order-2' : 'lg:order-1']"
           >
             <div
-              class="water-env-section-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm"
+              class="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1.5 text-sm text-secondary"
             >
               <i :class="[item.icon, 'text-base']"></i>
               {{ item.chip }}
             </div>
-            <h2 class="water-env-section-title mt-5">
+            <h2 class="mt-5 text-[clamp(1.5rem,2.5vw,2.25rem)] font-medium leading-[1.15] tracking-[-0.03em] text-primary">
               {{ item.title }}
             </h2>
-            <p class="water-env-section-desc mt-5">
+            <p class="mt-5 text-[clamp(0.9375rem,1.05vw,1.0625rem)] leading-[1.75] text-secondary">
               {{ item.desc }}
             </p>
           </div>
@@ -95,18 +95,3 @@ const featureSections = [
   },
 ];
 </script>
-
-<style scoped>
-/* ChatGPT Atlas 风格：chip、标题、描述 */
-.water-env-section-chip {
-  @apply border border-edge bg-surface/90 text-secondary;
-}
-
-.water-env-section-title {
-  @apply text-[clamp(1.5rem,2.5vw,2.25rem)] font-medium leading-[1.15] tracking-[-0.03em] text-primary;
-}
-
-.water-env-section-desc {
-  @apply text-[clamp(0.9375rem,1.05vw,1.0625rem)] leading-[1.75] text-secondary;
-}
-</style>
