@@ -10,6 +10,7 @@ const routes = [
   { path: "/news/:id", name: "news-article", component: () => import("../views/NewsArticlePage.vue") },
   { path: "/company", redirect: "/contact" },
   { path: "/ygb", name: "ygb", component: () => import("../views/YgbPage.vue"), meta: { title: "云柜宝" } },
+  { path: "/water-env", name: "water-env", component: () => import("../views/WaterEnvPage.vue"), meta: { title: "水环境智慧监控" } },
   { path: "/cloud-cabinet", redirect: "/ygb" },
   { path: "/contact", name: "contact", component: () => import("../views/ContactPage.vue"), meta: { title: "联系我们" } },
   { path: "/pricing", name: "pricing", component: () => import("../views/PricingPage.vue"), meta: { title: "定价" } },

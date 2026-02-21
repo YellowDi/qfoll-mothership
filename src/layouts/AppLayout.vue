@@ -44,6 +44,12 @@
                   <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/ygb')" aria-hidden="true"></i>
                 </span>
               </RouterLink>
+              <RouterLink to="/water-env" :class="rootLinkClass(route.path === '/water-env')" :aria-current="route.path === '/water-env' ? 'page' : undefined">
+                <span class="flex items-center justify-between">
+                  <span>水环境智慧监控</span>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/water-env')" aria-hidden="true"></i>
+                </span>
+              </RouterLink>
               <button
                 type="button"
                 :class="rootButtonClass(isCompanyRoute(route.path))"
@@ -171,7 +177,7 @@ const isCompanyRoute = (path) =>
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
-const isAutoHideSidebarRoute = (path) => path === "/" || path === "/ygb";
+const isAutoHideSidebarRoute = (path) => path === "/" || path === "/ygb" || path === "/water-env";
 const desktopCollapsed = ref(isAutoHideSidebarRoute(route.path));
 const mobileNavOpen = ref(false);
 const { isDark, toggleTheme } = useTheme();
