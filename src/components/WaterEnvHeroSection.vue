@@ -1,7 +1,7 @@
 <template>
   <section :class="sectionClass">
     <div
-      class="relative overflow-hidden select-none water-env-hero-bg flex min-h-[50vh] flex-col justify-start"
+      class="relative overflow-hidden select-none water-env-hero-bg flex min-h-[50vh] flex-col justify-start contain-[layout_paint]"
       :class="[
         props.homePreview
           ? 'min-h-0 rounded-md border border-edge p-8 max-md:p-5'

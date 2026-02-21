@@ -24,6 +24,12 @@ let docVisible = true;
 let reduceMotion = false;
 let width = 0;
 let height = 0;
+let lastFrameTime = 0;
+let resizeTimeout = null;
+
+const TARGET_FPS = 30;
+const MIN_FRAME_MS = 1000 / TARGET_FPS;
+const getSafeDpr = () => Math.min(devicePixelRatio || 1, 2);
 
 // PS Vita / PSP XMB 波浪 - 高还原度复刻 (ref: fchavonet/creative_coding-xmb_wave_background)
 const vertexSource = `
@@ -99,8 +105,9 @@ const initWebGL = () => {
   width = Math.max(1, rect.width || 1);
   height = Math.max(1, rect.height || 1);
 
-  canvasRef.value.width = Math.round(width * (devicePixelRatio || 1));
-  canvasRef.value.height = Math.round(height * (devicePixelRatio || 1));
+  const dpr = getSafeDpr();
+  canvasRef.value.width = Math.round(width * dpr);
+  canvasRef.value.height = Math.round(height * dpr);
   gl = canvasRef.value.getContext("webgl") || canvasRef.value.getContext("experimental-webgl");
   if (!gl) return;
 
@@ -140,16 +147,23 @@ const setMode = () => {
 
 const render = (timeMs) => {
   if (!gl || !program) return;
-  gl.clear(gl.COLOR_BUFFER_BIT);
-  gl.uniform1f(timeLoc, timeMs * 0.001);
-  gl.uniform2f(resolutionLoc, width, height);
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  const elapsed = timeMs - lastFrameTime;
+  if (elapsed >= MIN_FRAME_MS) {
+    lastFrameTime = timeMs;
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(timeLoc, timeMs * 0.001);
+    gl.uniform2f(resolutionLoc, width, height);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
   rafId = requestAnimationFrame(render);
 };
 
 const updateLoopState = () => {
   if (inViewport && docVisible && !reduceMotion) {
-    if (!rafId) rafId = requestAnimationFrame(render);
+    if (!rafId) {
+      lastFrameTime = 0;
+      rafId = requestAnimationFrame(render);
+    }
   } else {
     if (rafId) {
       cancelAnimationFrame(rafId);
@@ -158,16 +172,21 @@ const updateLoopState = () => {
   }
 };
 
-const resize = () => {
+const doResize = () => {
   if (!canvasRef.value || !gl) return;
   const rect = canvasRef.value.getBoundingClientRect();
   width = rect.width;
   height = rect.height;
   if (!width || !height) return;
-  const dpr = devicePixelRatio || 1;
+  const dpr = getSafeDpr();
   canvasRef.value.width = Math.round(width * dpr);
   canvasRef.value.height = Math.round(height * dpr);
   gl.viewport(0, 0, canvasRef.value.width, canvasRef.value.height);
+};
+
+const resize = () => {
+  if (resizeTimeout) clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(doResize, 120);
 };
 
 onMounted(() => {
@@ -200,6 +219,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (rafId) cancelAnimationFrame(rafId);
+  if (resizeTimeout) clearTimeout(resizeTimeout);
   resizeObserver?.disconnect?.();
   intersectionObserver?.disconnect?.();
   document.removeEventListener("visibilitychange", visibilityHandler);
