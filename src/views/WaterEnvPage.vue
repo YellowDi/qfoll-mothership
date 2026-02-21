@@ -41,7 +41,15 @@
                   v-if="item.image"
                   :src="item.image"
                   :alt="item.title"
-                  class="block h-auto w-full object-cover"
+                  class="block h-auto w-full object-cover dark:hidden"
+                  loading="lazy"
+                  :fetchpriority="idx > 0 ? 'low' : undefined"
+                />
+                <img
+                  v-if="item.imageDark ?? item.image"
+                  :src="item.imageDark ?? item.image"
+                  :alt="item.title"
+                  class="hidden h-auto w-full object-cover dark:block"
                   loading="lazy"
                   :fetchpriority="idx > 0 ? 'low' : undefined"
                 />
