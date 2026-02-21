@@ -7,8 +7,8 @@ startMonth: 4
 company: 湖州恒信通工程管理有限公司
 tag: 企业数字化
 lead: 面向排水管网全生命周期管理的数字化监测与预警系统
-primaryButtonText: 
-primaryButtonUrl: 
+primaryButtonText: 查看详情
+primaryButtonUrl: /water-env
 secondaryButtonText: 
 secondaryButtonUrl: 
 cover: "/covers/hzhst.webp"
