@@ -77,7 +77,7 @@ const contentWrapperClass = computed(() =>
 </script>
 
 <style scoped>
-/* ChatGPT Atlas 风格 mesh gradient，强化 base 底色与渐变层次 */
+/* mesh gradient，强化 base 底色与渐变层次 */
 .water-env-hero-bg {
   background:
     radial-gradient(ellipse 90% 70% at 75% 5%, rgba(129, 140, 248, 0.22) 0%, transparent 55%),
