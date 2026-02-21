@@ -11,13 +11,13 @@
         </div>
         <div class="mx-auto w-full pb-10 pt-6 max-md:pb-8">
           <div class="grid grid-cols-12 gap-6 max-md:gap-4">
-            <div class="col-span-8 self-start max-[1023px]:col-span-12 min-[1024px]:sticky min-[1024px]:top-17">
+            <div class="col-span-12 self-start max-[1279px]:col-span-12 min-[1280px]:col-span-8 min-[1280px]:sticky min-[1280px]:top-17">
               <RouterLink class="cursor-pointer rounded-md" to="/ygb">
                 <YgbHeroSection preview home-preview />
               </RouterLink>
             </div>
 
-            <div class="col-span-4 flex flex-col gap-6 max-[1023px]:col-span-12 max-[1024px]:grid max-[1024px]:grid-cols-3 max-md:hidden">
+            <div class="col-span-12 grid grid-cols-3 gap-6 max-[1279px]:col-span-12 max-[1279px]:grid max-[1279px]:grid-cols-3 min-[1280px]:col-span-4 min-[1280px]:flex min-[1280px]:flex-col max-md:hidden">
               <RouterLink
                 v-for="item in sideProjects"
                 :key="item.id"
@@ -78,38 +78,6 @@
             </RouterLink>
           </div>
 
-          <div v-if="moreProjects.length" class="mt-10 max-md:hidden">
-            <div class="grid grid-cols-3 gap-6">
-              <RouterLink
-                v-for="item in moreProjects"
-                :key="`more-${item.id}`"
-                class="group block"
-                :to="`/project/${item.id}`"
-              >
-                <div class="overflow-hidden rounded-md">
-                  <CoverImage
-                    class="aspect-square w-full rounded-md"
-                    :src="item.cover"
-                    :src-set="item.coverSrcSet"
-                    :video-src="item.coverVideo"
-                    :icon-class="item.coverIcon"
-                    :enable-video-cover="true"
-                    sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw"
-                    :alt="item.title"
-                    image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                  />
-                </div>
-                <div class="pt-3 text-left">
-                  <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
-                  <div class="mt-4 flex items-center gap-2 text-sm">
-                    <span class="font-medium text-primary">{{ item.tag }}</span>
-                    <span class="text-secondary">{{ item.yearLabel || item.year }}</span>
-                  </div>
-                </div>
-              </RouterLink>
-            </div>
-          </div>
-
           <div v-if="hasMoreProjects" class="mt-8 flex justify-center max-md:mt-6">
             <RouterLink
               to="/projects"
@@ -127,11 +95,11 @@
           <RouterLink class="text-sm btn-text btn-text-primary" to="/news">查看更多</RouterLink>
         </div>
         <div class="mx-auto w-full pt-6">
-          <div class="grid grid-flow-row grid-cols-2 gap-x-10 gap-y-8 max-md:grid-cols-1 max-md:gap-x-0 max-md:gap-y-6">
+          <div class="grid grid-flow-row grid-cols-1 gap-y-6 xl:grid-cols-2 xl:gap-x-10 xl:gap-y-8">
             <RouterLink
               v-for="item in latestNews"
               :key="`news-${item.id}`"
-              class="group grid grid-cols-[minmax(0,12rem)_1fr] items-center gap-5 max-lg:grid-cols-[minmax(0,10.25rem)_1fr] max-md:grid-cols-[minmax(0,6.25rem)_1fr] max-md:gap-3"
+              class="group grid grid-cols-[minmax(0,6.25rem)_1fr] items-center gap-3 xl:grid-cols-[minmax(0,12rem)_1fr] xl:gap-5"
               :to="`/news/${item.id}`"
             >
               <div class="overflow-hidden rounded-md">
@@ -142,13 +110,13 @@
                   :video-src="item.coverVideo"
                   :icon-class="item.coverIcon"
                   :enable-video-cover="true"
-                  sizes="(max-width: 768px) 6.25rem, (max-width: 1024px) 10.25rem, 12rem"
+                  sizes="(max-width: 1279px) 6.25rem, 12rem"
                   :alt="item.title"
                   image-class="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 />
               </div>
-              <div class="flex min-h-full max-w-[36rem] flex-col justify-center pl-4 pr-10 py-2 text-left max-lg:max-w-[30rem] max-lg:pl-3 max-lg:pr-8 max-lg:py-1.5 max-md:max-w-none max-md:pl-2.5 max-md:pr-6 max-md:py-1.5">
-                <div class="text-xl leading-[1.3] font-medium text-primary max-md:text-lg">{{ item.title }}</div>
+              <div class="flex min-h-full max-w-none flex-col justify-center pl-2.5 pr-6 py-1.5 text-left xl:max-w-[36rem] xl:pl-4 xl:pr-10 xl:py-2">
+                <div class="text-lg leading-[1.3] font-medium text-primary xl:text-xl">{{ item.title }}</div>
                 <div class="mt-4 flex items-center gap-2 text-sm">
                   <span class="font-medium text-primary">{{ item.category }}</span>
                   <span class="text-secondary">{{ item.publishedAt }}</span>
@@ -156,7 +124,7 @@
               </div>
             </RouterLink>
           </div>
-          <div class="mt-8 flex justify-center max-md:mt-6">
+          <div class="mt-6 flex justify-center xl:mt-8">
             <RouterLink
               to="/news"
               class="btn-neutral btn-neutral-primary"
@@ -209,8 +177,7 @@ const sideProjectIds = computed(() => new Set(sideProjects.value.map((item) => i
 const moreProjectPool = computed(() =>
   sortedProjects.value.filter((item) => item.id !== "ygb" && !sideProjectIds.value.has(item.id)),
 );
-const moreProjects = computed(() => moreProjectPool.value.slice(0, 3));
-const hasMoreProjects = computed(() => moreProjectPool.value.length > 3);
+const hasMoreProjects = computed(() => moreProjectPool.value.length > 0);
 const latestNews = computed(() =>
   [...newsList]
     .sort((a, b) => b.publishedTimestamp - a.publishedTimestamp)
