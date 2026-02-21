@@ -78,7 +78,7 @@
             </RouterLink>
           </div>
 
-          <div v-if="hasMoreProjects" class="mt-8 flex justify-center max-md:mt-6">
+          <div v-if="hasMoreProjects" class="mt-16 flex justify-center max-md:mt-6">
             <RouterLink
               to="/projects"
               class="btn-neutral btn-neutral-primary"
@@ -124,7 +124,7 @@
               </div>
             </RouterLink>
           </div>
-          <div class="mt-6 flex justify-center xl:mt-8">
+          <div class="mt-6 flex justify-center xl:mt-16">
             <RouterLink
               to="/news"
               class="btn-neutral btn-neutral-primary"
