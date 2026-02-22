@@ -26,13 +26,13 @@ infoTags:
 
 当前实现可拆分为五层：
 
-```text
-Markdown 文件
-  -> 内容建模层（frontmatter + 正文）
-  -> 解析渲染层（markdown-it + 自定义规则）
-  -> 结构增强层（表格包裹、代码复制、媒体交互）
-  -> 样式系统层（token、节奏、断点）
-  -> 页面装配层（详情页、列表页、周边模块）
+```mermaid
+flowchart TB
+    A[Markdown 文件] --> B[内容建模层<br/>frontmatter + 正文]
+    B --> C[解析渲染层<br/>markdown-it + 自定义规则]
+    C --> D[结构增强层<br/>表格包裹、代码复制、媒体交互]
+    D --> E[样式系统层<br/>token、节奏、断点]
+    E --> F[页面装配层<br/>详情页、列表页、周边模块]
 ```
 
 这五层形成明确边界：
@@ -51,6 +51,16 @@ Markdown 文件
 
 - frontmatter：`id`、`title`、`publishedAt`、`cover`、`infoTags` 等结构化字段。
 - body：Markdown 正文，承载标题、段落、列表、代码块、表格、引用和自定义块。
+
+```mermaid
+flowchart LR
+    A[Markdown 源文件] --> B[提取 frontmatter]
+    B --> C[解析正文 body]
+    C --> D[统一数据源]
+    D --> E1[文章卡片]
+    D --> E2[详情页标题]
+    D --> E3[相关推荐筛选]
+```
 
 解析流程先提取 frontmatter，再处理正文内容。字段稳定后，文章卡片、发布时间展示、文章详情页标题、相关推荐筛选等都可以共享同一来源，避免「同一信息在多个页面重复维护」。
 
@@ -116,6 +126,13 @@ media 组件是本次升级的重点，它负责把多媒体内容纳入同一�
 - image: https://shared.cdn.queniuqe.com/store_item_assets/steam/apps/1850570/ss_d47bde2e349606b3ef1f641e2d8fb7ccf1adba77.1920x1080.jpg?t=1764081491
   caption: 图片卡片展示统一尺寸与对齐策略。
 :::
+
+```mermaid
+flowchart TB
+    A[1. 语法输入<br/>video / image / caption] --> B[2. 结构生成<br/>卡片结构 + data-carousel-id]
+    B --> C[3. 交互增强<br/>导航、对齐、播放控制]
+    C --> D[4. 视觉策略<br/>全宽 + 版心对齐]
+```
 
 ### 1) 语法输入
 
