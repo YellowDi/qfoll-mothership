@@ -1,9 +1,55 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import mermaid from "mermaid";
+import { useTheme } from "./useTheme";
+
+const MERMAID_FONT =
+  '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", sans-serif';
+
+const MERMAID_THEME_LIGHT = {
+  theme: "base",
+  themeVariables: {
+    darkMode: false,
+    fontFamily: MERMAID_FONT,
+    fontSize: "15px",
+    background: "#fafafa",
+    primaryColor: "#f0f4f8",
+    primaryTextColor: "#1f2937",
+    primaryBorderColor: "#e5e7eb",
+    secondaryColor: "#e8eef4",
+    secondaryTextColor: "#374151",
+    secondaryBorderColor: "#d1d5db",
+    tertiaryColor: "#e2e8f0",
+    tertiaryTextColor: "#4b5563",
+    lineColor: "#9ca3af",
+    textColor: "#1f2937",
+  },
+};
+
+const MERMAID_THEME_DARK = {
+  theme: "base",
+  themeVariables: {
+    darkMode: true,
+    fontFamily: MERMAID_FONT,
+    fontSize: "15px",
+    background: "#1a1a1e",
+    primaryColor: "#2a2a2e",
+    primaryTextColor: "#e5e7eb",
+    primaryBorderColor: "#3f3f46",
+    secondaryColor: "#27272a",
+    secondaryTextColor: "#d4d4d8",
+    secondaryBorderColor: "#52525b",
+    tertiaryColor: "#3f3f46",
+    tertiaryTextColor: "#a1a1aa",
+    lineColor: "#71717a",
+    textColor: "#e5e7eb",
+  },
+};
 
 export const useDetailPageInteractions = ({
   watchSource,
   initInlineVideoPlayers,
 }) => {
+  const { isDark } = useTheme();
   const markdownRef = ref(null);
   const articleContentRef = ref(null);
   const copiedVisible = ref(false);
@@ -399,6 +445,34 @@ export const useDetailPageInteractions = ({
     }, 120);
   };
 
+  const runMermaid = async (forceRerender = false) => {
+    if (!markdownRef.value) return;
+    const containers = markdownRef.value.querySelectorAll(".md-mermaid-block .mermaid");
+    if (!containers.length) return;
+    const dark = isDark.value;
+    try {
+      mermaid.initialize({
+        securityLevel: "loose",
+        ...(dark ? MERMAID_THEME_DARK : MERMAID_THEME_LIGHT),
+      });
+      const toRender = [];
+      containers.forEach((el) => {
+        const src = el.dataset.mermaidSrc;
+        if (!src) return;
+        if (forceRerender || !el.querySelector("svg")) {
+          el.textContent = src;
+          el.removeAttribute("data-processed");
+          toRender.push(el);
+        }
+      });
+      if (toRender.length) {
+        await mermaid.run({ nodes: toRender, suppressErrors: true });
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
   onMounted(() => {
     if (markdownRef.value) {
       markdownRef.value.addEventListener("click", handleMarkdownClick, true);
@@ -406,6 +480,7 @@ export const useDetailPageInteractions = ({
       scheduleEnhanceMarkdownTables();
       scheduleAlign();
       mountInlineVideoPlayers();
+      runMermaid();
       observeLayoutSize();
     }
     window.addEventListener("resize", scheduleAlign);
@@ -420,9 +495,14 @@ export const useDetailPageInteractions = ({
       scheduleEnhanceMarkdownTables();
       scheduleAlign();
       mountInlineVideoPlayers();
+      runMermaid();
       observeLayoutSize();
     }
   );
+
+  watch(isDark, () => {
+    runMermaid(true);
+  });
 
   onUnmounted(() => {
     if (markdownRef.value) {

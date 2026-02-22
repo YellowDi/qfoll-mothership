@@ -71,7 +71,7 @@
     margin-top: 0;
   }
 
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block):not(.md-mermaid-block) {
     width: 100%;
     max-width: none;
     padding-left: clamp(16px, 4vw, 56px);
@@ -92,7 +92,7 @@
     margin: 64px 0 0;
   }
 
-  .markdown-body :where(p, ul, ol, blockquote, .md-code-block, .md-table) + :where(h1, h2, h3, h4, h5, h6) {
+  .markdown-body :where(p, ul, ol, blockquote, .md-code-block, .md-table, .md-mermaid-block) + :where(h1, h2, h3, h4, h5, h6) {
     margin-top: clamp(20px, 2.4vw, 30px);
   }
 
@@ -169,6 +169,33 @@
     border-radius: var(--md-card-radius);
     background: var(--md-card-bg);
     overflow: hidden;
+  }
+
+  .markdown-body .md-mermaid-block {
+    margin: 0 0 var(--md-list-block-gap);
+    padding: 20px;
+    border-radius: var(--md-card-radius);
+    border: 1px solid var(--md-code-border);
+    background: var(--md-card-bg);
+    overflow-x: auto;
+    text-align: center;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+  }
+
+  .markdown-body .md-mermaid-block .mermaid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+  }
+
+  .markdown-body .md-mermaid-block svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .dark .markdown-body .md-mermaid-block {
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
   }
 
   .markdown-body .md-code-toolbar {
@@ -465,7 +492,7 @@
     line-height: 1.62;
   }
 
-  .markdown-body > :is(blockquote, .md-code-block, .md-table) {
+  .markdown-body > :is(blockquote, .md-code-block, .md-table, .md-mermaid-block) {
     margin-top: 24px;
     margin-bottom: 0;
   }
@@ -1086,7 +1113,7 @@
     justify-self: center;
   }
 
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block):not(.md-mermaid-block) {
     grid-column: 1 / -1;
     width: min(100%, 40rem);
     padding-left: 0;
@@ -1094,7 +1121,8 @@
     justify-self: center;
   }
 
-  .markdown-body > .md-code-block:not(.md-media) {
+  .markdown-body > .md-code-block:not(.md-media),
+  .markdown-body > .md-mermaid-block:not(.md-media) {
     grid-column: 1 / -1;
     width: min(100%, 40rem);
     max-width: min(100%, 40rem);
@@ -1133,12 +1161,13 @@
     justify-self: center;
   }
 
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block):not(.md-mermaid-block) {
     width: min(100%, 40rem);
     justify-self: center;
   }
 
-  .markdown-body > .md-code-block:not(.md-media) {
+  .markdown-body > .md-code-block:not(.md-media),
+  .markdown-body > .md-mermaid-block:not(.md-media) {
     --md-code-outer-gap: clamp(16px, 4vw, 24px);
     width: min(40rem, calc(100% - (var(--md-code-outer-gap) * 2)));
     max-width: calc(100% - (var(--md-code-outer-gap) * 2));
@@ -1190,7 +1219,7 @@
 }
 
 @media (max-width: 839px) {
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block):not(.md-mermaid-block) {
     max-width: 100%;
   }
 
@@ -1245,7 +1274,7 @@
 }
 
 @media (min-width: 744px) and (max-width: 839px) {
-  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block) {
+  .markdown-body > :not(.md-media):not(blockquote):not(ul):not(ol):not(.md-table):not(.md-code-block):not(.md-mermaid-block) {
     grid-column: 1 / -1;
     width: min(100%, 40rem);
     max-width: min(100%, 40rem);
@@ -1258,6 +1287,7 @@
   .markdown-body > ul:not(.md-media),
   .markdown-body > ol:not(.md-media),
   .markdown-body > .md-code-block:not(.md-media),
+  .markdown-body > .md-mermaid-block:not(.md-media),
   .markdown-body > .md-table:not(.md-media) {
     grid-column: 1 / -1;
     width: min(100%, 40rem);

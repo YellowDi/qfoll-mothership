@@ -161,6 +161,11 @@ const highlightCode = (code, language, hasExplicitLanguage) => {
 const renderMarkdownCodeBlock = (code, language) => {
   const rawInfo = String(language || "").trim();
   const hasExplicitLanguage = rawInfo.length > 0;
+  const normalizedLang = normalizeCodeLanguage(rawInfo);
+  if (hasExplicitLanguage && normalizedLang === "mermaid") {
+    const trimmed = code.trim();
+    return `<div class="md-mermaid-block"><div class="mermaid" data-mermaid-src="${escapeAttr(trimmed)}">${md.utils.escapeHtml(trimmed)}</div></div>`;
+  }
   const highlighted = highlightCode(code, rawInfo, hasExplicitLanguage);
   const lang = highlighted.language || normalizeCodeLanguage(rawInfo);
   return `<div class="md-code-block" data-code-lang="${escapeAttr(
