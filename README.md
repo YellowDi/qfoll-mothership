@@ -1,80 +1,73 @@
-# 企丰科技官网（qfoll-mothership）
+# 企丰科技官网
 
-企丰科技品牌官网项目，基于 Vue 3 + Vite 构建的单页应用（SPA）。
+基于 Vue 3 + Vite 构建的品牌官网，展示公司信息、客户案例与动态内容。
 
-## 项目目标
+## 功能概览
 
-- 展示公司品牌信息、服务能力与项目案例
-- 提供可维护的内容结构（Markdown + 元数据）
-- 支持快速开发、构建和部署
+- **品牌与业务**：首页、客户案例、产品页
+- **内容中心**：最新动态、文章详情，支持 Mermaid 图表、KaTeX 公式、代码高亮
+- **其它页面**：联系我们、定价、工作机会、设计规范
 
 ## 技术栈
 
-- 框架：Vue 3（Composition API / `<script setup>`）
-- 构建工具：Vite 7
-- 路由：Vue Router 4
-- 样式：Tailwind CSS 4
-- 内容系统：Markdown（`gray-matter` + `markdown-it`）
-- 图标：Remix Icon
 
-## 目录结构
+| 类别  | 技术                                          |
+| --- | ------------------------------------------- |
+| 框架  | Vue 3（Composition API）                      |
+| 构建  | Vite 7                                      |
+| 路由  | Vue Router 4                                |
+| 样式  | Tailwind CSS 4                              |
+| 内容  | Markdown + 自定义 frontmatter                  |
+| 渲染  | markdown-it、Mermaid、highlight.js、KaTeX      |
+| 图片  | vite-imagetools、vite-plugin-image-optimizer |
 
-```text
+
+## 项目结构
+
+```
 src/
-├── components/      # 公共组件（Hero、About、Footer 等）
-├── content/         # Markdown 内容（项目案例）
-│   └── projects/    # 案例内容文件
-├── data/            # 项目元数据与内容解析逻辑
-├── layouts/         # 布局组件（如 AppLayout）
-├── router/          # 路由配置
-├── views/           # 页面视图
-├── main.js          # 应用入口
-└── style.css        # 全局样式
+├── components/     # 公共组件（HeaderBar、CoverImage、ContentListRow 等）
+├── composables/    # 组合式逻辑（主题、详情页交互、语音朗读等）
+├── content/        # Markdown 内容
+│   ├── projects/   # 客户案例
+│   └── news/       # 新闻文章
+├── data/           # 内容解析与元数据（projects.js、news.js、contentParserShared.js）
+├── layouts/        # 布局（AppLayout）
+├── router/         # 路由配置
+├── styles/         # 全局样式与 Markdown 排版
+├── views/          # 页面视图
+├── App.vue
+├── main.js
+└── style.css
 ```
 
 ## 环境要求
 
 - Node.js 18+
-- npm（默认）或 pnpm
+- npm 或 pnpm
 
 ## 快速开始
 
 ```bash
-# 1) 安装依赖
 npm install
-
-# 2) 启动本地开发
 npm run dev
 ```
 
-默认启动后可在终端提示地址访问（通常为 `http://localhost:5173`）。
+开发服务器默认地址：`http://localhost:5173`
 
 ## 常用命令
 
-```bash
-# 本地开发
-npm run dev
 
-# 生产构建
-npm run build
+| 命令                | 说明     |
+| ----------------- | ------ |
+| `npm run dev`     | 本地开发   |
+| `npm run build`   | 生产构建   |
+| `npm run preview` | 预览构建产物 |
 
-# 本地预览构建产物
-npm run preview
-```
 
-## 内容维护说明
+## 构建与部署
 
-项目案例内容位于 `src/content/projects/`，推荐按以下方式维护：
-
-- 每个案例使用单独的 Markdown 文件
-- 在 frontmatter 中维护标题、日期、标签、封面等元数据
-- 正文使用标准 Markdown 编写，组件通过解析逻辑统一渲染
-
-如需新增字段，请同步更新 `src/data/` 中的解析与类型映射逻辑。
-
-## 构建产物
-
-执行 `npm run build` 后，静态产物输出到 `dist/` 目录，可直接用于静态站点部署。
+`npm run build` 后静态产物输出到 `dist/`，可直接部署到任意静态托管服务。
 
 ## 许可证
 
