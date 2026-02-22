@@ -1,74 +1,86 @@
-# 企丰科技官网
+# Qifeng Tech Website
 
-基于 Vue 3 + Vite 构建的品牌官网，展示公司信息、客户案例与动态内容。
+A brand website built with Vue 3 + Vite, showcasing company info, case studies, and news.
 
-## 功能概览
+## Overview
 
-- **品牌与业务**：首页、客户案例、产品页
-- **内容中心**：最新动态、文章详情，支持 Mermaid 图表、KaTeX 公式、代码高亮
-- **其它页面**：联系我们、定价、工作机会、设计规范
+- **Brand & Products**: Home, case studies, product pages (Yun Gui Bao, Water Environment Monitoring)
+- **Content Hub**: News feed, article details, with Mermaid diagrams, KaTeX math, and syntax highlighting
+- **Other Pages**: Contact, pricing, careers, design specs
 
-## 技术栈
+## Tech Stack
 
+| Category | Tech |
+|----------|------|
+| Framework | Vue 3 (Composition API) |
+| Build | Vite 7 |
+| Router | Vue Router 4 |
+| Styling | Tailwind CSS 4 |
+| Content | Markdown + custom frontmatter |
+| Rendering | markdown-it, Mermaid, highlight.js, KaTeX |
+| Images | vite-imagetools, vite-plugin-image-optimizer |
 
-| 类别  | 技术                                          |
-| --- | ------------------------------------------- |
-| 框架  | Vue 3（Composition API）                      |
-| 构建  | Vite 7                                      |
-| 路由  | Vue Router 4                                |
-| 样式  | Tailwind CSS 4                              |
-| 内容  | Markdown + 自定义 frontmatter                  |
-| 渲染  | markdown-it、Mermaid、highlight.js、KaTeX      |
-| 图片  | vite-imagetools、vite-plugin-image-optimizer |
-
-
-## 项目结构
+## Project Structure
 
 ```
 src/
-├── components/     # 公共组件（HeaderBar、CoverImage、ContentListRow 等）
-├── composables/    # 组合式逻辑（主题、详情页交互、语音朗读等）
-├── content/        # Markdown 内容
-│   ├── projects/   # 客户案例
-│   └── news/       # 新闻文章
-├── data/           # 内容解析与元数据（projects.js、news.js、contentParserShared.js）
-├── layouts/        # 布局（AppLayout）
-├── router/         # 路由配置
-├── styles/         # 全局样式与 Markdown 排版
-├── views/          # 页面视图
+├── components/     # Shared components (HeaderBar, CoverImage, ContentListRow, etc.)
+├── composables/    # Composition logic (theme, detail page interactions, speech synthesis, etc.)
+├── content/        # Markdown content
+│   ├── projects/   # Case studies
+│   └── news/       # News articles
+├── data/           # Content parsing and metadata (projects.js, news.js, contentParserShared.js)
+├── layouts/        # Layouts (AppLayout)
+├── router/         # Route config
+├── styles/         # Global styles and Markdown typography
+├── views/          # Page views
 ├── App.vue
 ├── main.js
 └── style.css
 ```
 
-## 环境要求
+## Requirements
 
 - Node.js 18+
-- npm 或 pnpm
+- npm or pnpm
 
-## 快速开始
+## Quick Start
 
 ```bash
 npm install
 npm run dev
 ```
 
-开发服务器默认地址：`http://localhost:5173`
+Dev server: `http://localhost:5173`
 
-## 常用命令
+## Commands
 
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Local development |
+| `npm run build` | Production build |
+| `npm run preview` | Preview build output |
 
-| 命令                | 说明     |
-| ----------------- | ------ |
-| `npm run dev`     | 本地开发   |
-| `npm run build`   | 生产构建   |
-| `npm run preview` | 预览构建产物 |
+## Content
 
+### Case Studies (`src/content/projects/`)
 
-## 构建与部署
+- One Markdown file per case
+- Use frontmatter for title, year, tags, cover image, etc.
+- Body supports Markdown, Mermaid, code blocks, and more
 
-`npm run build` 后静态产物输出到 `dist/`，可直接部署到任意静态托管服务。
+### News Articles (`src/content/news/`)
 
-## 许可证
+- One Markdown file per article
+- Frontmatter: `title`, `publishedAt`, `category`, `lead`, `cover`, `infoTags`, etc.
+- Shares the same Markdown rendering pipeline as case studies
 
-私有项目，未经授权请勿对外分发。
+Update parsing logic in `src/data/` when adding new frontmatter fields.
+
+## Build & Deploy
+
+After `npm run build`, static output goes to `dist/` and can be deployed to any static host.
+
+## License
+
+Private project. Do not distribute without authorization.
