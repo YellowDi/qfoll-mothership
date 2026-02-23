@@ -112,15 +112,18 @@ const ArticleSpeechPlayer = defineAsyncComponent(() =>
 const route = useRoute();
 const article = computed(() => newsArticles[route.params.id] || newsList[0]);
 const relatedArticles = computed(() => {
-  const sameCategory = newsList.filter(
-    (item) => item.id !== article.value.id && item.category === article.value.category
-  );
-  if (sameCategory.length >= 3) return sameCategory.slice(0, 3);
-  const fallback = newsList.filter(
-    (item) =>
-      item.id !== article.value.id &&
-      !sameCategory.some((picked) => picked.id === item.id)
-  );
+  const current = article.value;
+  const excludeCurrent = (list) =>
+    list.filter((item) => item.id !== current.id);
+  const byNewest = (a, b) => (b.publishedTimestamp ?? 0) - (a.publishedTimestamp ?? 0);
+
+  const sameCategory = excludeCurrent(newsList)
+    .filter((item) => item.category === current.category)
+    .sort(byNewest);
+  const fallback = excludeCurrent(newsList)
+    .filter((item) => !sameCategory.some((p) => p.id === item.id))
+    .sort(byNewest);
+
   return [...sameCategory, ...fallback].slice(0, 3);
 });
 const infoTagLinks = computed(() =>

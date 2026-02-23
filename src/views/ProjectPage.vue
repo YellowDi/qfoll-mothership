@@ -105,9 +105,18 @@ const ArticleSpeechPlayer = defineAsyncComponent(() =>
 
 const route = useRoute();
 const project = computed(() => projects[route.params.id] || projects.hzhst);
-const relatedProjects = computed(() =>
-  projectList.filter((item) => item.id !== project.value.id).slice(0, 3)
-);
+const relatedProjects = computed(() => {
+  const current = project.value;
+  const others = projectList.filter((item) => item.id !== current.id);
+  const yearNum = (item) => Number(String(item.year || "0").slice(0, 4)) || 0;
+  const byTagThenYear = [...others].sort((a, b) => {
+    const sameTagA = a.tag && a.tag === current.tag ? 1 : 0;
+    const sameTagB = b.tag && b.tag === current.tag ? 1 : 0;
+    if (sameTagA !== sameTagB) return sameTagB - sameTagA;
+    return yearNum(b) - yearNum(a);
+  });
+  return byTagThenYear.slice(0, 3);
+});
 const infoTagLinks = computed(() =>
   mapInfoTagsToLinks(project.value.infoTags, "/projects")
 );
