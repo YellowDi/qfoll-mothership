@@ -97,7 +97,7 @@ const resetQrTilt = () => {
   transform-style: preserve-3d;
   transition: transform 180ms ease, filter 220ms ease;
   will-change: transform;
-  filter: drop-shadow(0 24px 44px rgb(17 17 17 / 0.2));
+  filter: drop-shadow(0 10px 24px rgb(17 17 17 / 0.2));
 }
 
 .qr-tilt-glare {
