@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">
-      <div class="mx-auto w-full max-w-208">
+      <div ref="titleSectionRef" class="mx-auto w-full max-w-208">
         <div class="mb-8 flex items-center justify-center gap-4 text-sm">
           <time
             class="font-medium text-primary"
@@ -94,7 +94,14 @@
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  watch,
+} from "vue";
 import { useRoute } from "vue-router";
 import AppLayout from "../layouts/AppLayout.vue";
 import DetailMetaCard from "../components/DetailMetaCard.vue";
@@ -103,6 +110,10 @@ import { newsArticles, newsList } from "../data/news";
 import { initInlineVideoPlayers } from "../composables/useInlineVideoPlayers";
 import { useDetailPageInteractions } from "../composables/useDetailPageInteractions";
 import { mapInfoTagsToLinks } from "../composables/useInfoTagLinks";
+import {
+  clearHeaderBarDetailTitle,
+  setHeaderBarDetailTitle,
+} from "../composables/useHeaderBarDetailTitle";
 import "../styles/markdown-media.css";
 
 const ArticleSpeechPlayer = defineAsyncComponent(() =>
@@ -110,6 +121,8 @@ const ArticleSpeechPlayer = defineAsyncComponent(() =>
 );
 
 const route = useRoute();
+const titleSectionRef = ref(null);
+let titleVisibilityObserver = null;
 const article = computed(() => newsArticles[route.params.id] || newsList[0]);
 const relatedArticles = computed(() => {
   const current = article.value;
@@ -145,4 +158,43 @@ const {
 const isExternalLink = (url) => /^https?:\/\//i.test(url || "");
 const linkTarget = (url) => (isExternalLink(url) ? "_blank" : "_self");
 const linkRel = (url) => (isExternalLink(url) ? "noreferrer" : undefined);
+
+const disconnectTitleObserver = () => {
+  if (titleVisibilityObserver) {
+    titleVisibilityObserver.disconnect();
+    titleVisibilityObserver = null;
+  }
+};
+
+const setupTitleObserver = () => {
+  disconnectTitleObserver();
+  const titleSection = titleSectionRef.value;
+  if (!titleSection || !("IntersectionObserver" in window)) return;
+  titleVisibilityObserver = new IntersectionObserver(
+    ([entry]) => {
+      const isVisible = entry?.isIntersecting ?? true;
+      setHeaderBarDetailTitle({
+        title: article.value.title,
+        show: !isVisible,
+      });
+    },
+    { threshold: 0 }
+  );
+  titleVisibilityObserver.observe(titleSection);
+};
+
+watch(
+  () => route.params.id,
+  async () => {
+    setHeaderBarDetailTitle({ title: article.value.title, show: false });
+    await nextTick();
+    setupTitleObserver();
+  },
+  { immediate: true }
+);
+
+onBeforeUnmount(() => {
+  disconnectTitleObserver();
+  clearHeaderBarDetailTitle();
+});
 </script>

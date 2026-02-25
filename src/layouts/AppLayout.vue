@@ -127,7 +127,12 @@
       </div>
     </aside>
 
-    <HeaderBar :on-toggle="toggleNav" :on-toggle-theme="toggleTheme" :is-dark="isDark" />
+    <HeaderBar
+      :on-toggle="toggleNav"
+      :on-toggle-theme="toggleTheme"
+      :is-dark="isDark"
+      :sidebar-collapsed="sidebarCollapsed"
+    />
     <div
       class="fixed left-0 right-0 top-0 bottom-0 z-20 hidden bg-transparent opacity-0 pointer-events-none transition-opacity duration-300 max-md:block max-md:touch-none"
       :class="{ 'opacity-100 pointer-events-auto': mobileNavOpen }"
