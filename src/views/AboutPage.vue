@@ -16,12 +16,12 @@
             我们是企丰科技，专注企业信息化系统开发与技术服务，用创意融合技术，助力商业持续增长。
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-3">
-            <span class="btn-primary btn-md gap-2 px-5 inline-flex items-center cursor-default">
-              联系我们
-              <i class="ri-arrow-right-line text-base" aria-hidden="true"></i>
-            </span>
-            <RouterLink to="/projects" class="btn-secondary btn-md gap-2 px-5">
+            <RouterLink to="/projects" class="btn-primary btn-md gap-2 px-5">
               客户案例
+              <i class="ri-arrow-right-line text-base" aria-hidden="true"></i>
+            </RouterLink>
+            <RouterLink to="/careers" class="btn-secondary btn-md gap-2 px-5">
+              加入我们
             </RouterLink>
           </div>
         </div>
