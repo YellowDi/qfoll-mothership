@@ -10,16 +10,16 @@
           <h1
             class="about-hero-title max-w-[28em] text-[clamp(2rem,calc(2rem+2*((100vw-23.4375rem)/66.5625)),3.75rem)] font-medium leading-[1.2] tracking-[-0.03em] text-primary"
           >
-            以技术驱动，助力企业数字化
+            以技术驱动，<br>助力企业数字化
           </h1>
           <p class="mt-4 text-base leading-[1.72] text-primary/80">
             我们是企丰科技，专注企业信息化系统开发与技术服务，用创意融合技术，助力商业持续增长。
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-3">
-            <a href="#contact" class="btn-primary btn-md gap-2 px-5">
+            <span class="btn-primary btn-md gap-2 px-5 inline-flex items-center cursor-default">
               联系我们
               <i class="ri-arrow-right-line text-base" aria-hidden="true"></i>
-            </a>
+            </span>
             <RouterLink to="/projects" class="btn-secondary btn-md gap-2 px-5">
               客户案例
             </RouterLink>
@@ -140,11 +140,11 @@
             </p>
           </div>
           <div class="about-intro-media order-1 min-w-0 flex-1 md:order-2">
-            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
+            <div class="about-intro-image-wrap group relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage1"
                 alt="企丰科技产品与方案"
-                class="absolute inset-0 h-full w-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 loading="lazy"
                 decoding="async"
               />
@@ -163,11 +163,11 @@
             </p>
           </div>
           <div class="about-intro-media order-1 min-w-0 flex-1 md:order-1">
-            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
+            <div class="about-intro-image-wrap group relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage2"
                 alt="企丰科技项目协作"
-                class="absolute inset-0 h-full w-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 loading="lazy"
                 decoding="async"
               />
@@ -196,11 +196,11 @@
             </div>
           </div>
           <div class="about-intro-media order-1 min-w-0 flex-1 md:order-2">
-            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
+            <div class="about-intro-image-wrap group relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage3"
                 alt="企丰科技自研产品"
-                class="absolute inset-0 h-full w-full object-cover"
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 loading="lazy"
                 decoding="async"
               />
