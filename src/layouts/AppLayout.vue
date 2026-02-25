@@ -173,6 +173,7 @@ const sidebarEl = ref(null);
 const lastTouchY = ref(0);
 let removeTouchGuards = null;
 const isCompanyRoute = (path) =>
+  path === "/about" ||
   path === "/contact" ||
   path === "/pricing" ||
   path === "/careers" ||
@@ -191,6 +192,7 @@ const navLevel = ref(
     : "root"
 );
 const companyMenu = [
+  { path: "/about", label: "关于我们" },
   { path: "/contact", label: "联系我们" },
   { path: "/pricing", label: "定价" },
   { path: "/careers", label: "工作机会" },
@@ -312,7 +314,7 @@ const goProjects = () => {
 const goCompany = () => {
   navLevel.value = "company";
   if (!isCompanyRoute(route.path)) {
-    router.push("/contact");
+    router.push("/about");
   }
 };
 
