@@ -393,7 +393,7 @@ onMounted(() => {
   const navEntry = performance.getEntriesByType?.("navigation")?.[0];
   if (navEntry?.type === "reload" && window.location.hash === "#contact") {
     window.scrollTo(0, 0);
-    history.replaceState(null, "", window.location.pathname + window.location.search);
+    history.replaceState(history.state, "", window.location.pathname + window.location.search);
   }
 
   canAnimateQrCache =

@@ -102,7 +102,7 @@ export const useDetailHeaderBarToc = ({
     const top = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
     window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     if (window.history?.replaceState) {
-      window.history.replaceState(null, "", `#${id}`);
+      window.history.replaceState(window.history.state, "", `#${id}`);
     }
   };
 
