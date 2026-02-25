@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed left-0 top-0 right-0 z-40 bg-bg">
+  <header ref="headerRootRef" class="fixed left-0 top-0 right-0 z-40 bg-bg">
     <div class="relative flex h-14 items-center justify-between px-4 md:px-6">
       <div class="flex items-center gap-3">
         <RouterLink to="/" class="flex items-center gap-2">
@@ -18,8 +18,7 @@
       <Transition name="header-detail-title">
         <div
           v-if="shouldShowDetailTitle"
-          ref="tocRootRef"
-          :class="detailTitleClass"
+          :class="detailTitleDesktopClass"
         >
           <button
             v-if="hasToc"
@@ -45,7 +44,7 @@
           <Transition name="header-detail-toc">
             <div
               v-if="tocOpen && hasToc"
-              class="absolute left-1/2 top-full mt-2 max-h-[58vh] w-[min(38rem,72vw)] -translate-x-1/2 overflow-auto rounded-md bg-surface p-2 shadow-xs max-md:fixed max-md:left-0 max-md:right-0 max-md:top-14 max-md:mt-0 max-md:w-screen max-md:translate-x-0"
+              class="absolute left-1/2 top-full mt-2 max-h-[58vh] w-[min(38rem,72vw)] -translate-x-1/2 overflow-auto rounded-md bg-surface p-2 shadow-xs"
               role="menu"
               aria-label="文章目录"
             >
@@ -83,6 +82,54 @@
         </button>
       </div>
     </div>
+    <Transition name="header-detail-title">
+      <div
+        v-if="shouldShowDetailTitle"
+        class="relative px-3 py-1.5 md:hidden"
+      >
+        <button
+          v-if="hasToc"
+          class="inline-flex w-full items-center justify-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-primary"
+          type="button"
+          aria-haspopup="menu"
+          :aria-expanded="tocOpen ? 'true' : 'false'"
+          @click.stop="toggleHeaderBarToc"
+        >
+          <span class="truncate">{{ detailTitle }}</span>
+          <i
+            class="ri-arrow-down-s-line text-base transition-transform duration-200"
+            :class="{ 'rotate-180': tocOpen }"
+            aria-hidden="true"
+          ></i>
+        </button>
+        <div
+          v-else
+          class="truncate px-2 py-1 text-center text-sm font-medium text-primary"
+        >
+          {{ detailTitle }}
+        </div>
+        <Transition name="header-detail-toc">
+          <div
+            v-if="tocOpen && hasToc"
+            class="absolute left-0 right-0 top-full max-h-[58vh] w-screen overflow-auto border-t border-line bg-surface p-2 shadow-xs"
+            role="menu"
+            aria-label="文章目录"
+          >
+            <button
+              v-for="item in tocItems"
+              :key="item.id"
+              class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors"
+              :class="itemClass(item)"
+              role="menuitem"
+              type="button"
+              @click="navigateHeaderBarToc(item.id)"
+            >
+              {{ item.text }}
+            </button>
+          </div>
+        </Transition>
+      </div>
+    </Transition>
   </header>
 </template>
 
@@ -104,7 +151,7 @@ const {
   activeTocId,
   tocOpen,
 } = useHeaderBarDetailTitle();
-const tocRootRef = ref(null);
+const headerRootRef = ref(null);
 
 const props = defineProps({
   onToggle: {
@@ -125,12 +172,12 @@ const props = defineProps({
   },
 });
 
-const detailTitleClass = computed(() =>
+const detailTitleDesktopClass = computed(() =>
   [
-    "absolute text-sm text-primary transition-[left,opacity,transform] duration-300 ease-out max-md:left-0 max-md:right-0 max-md:flex max-md:justify-center max-md:px-4 max-md:max-w-none max-md:transform-none",
+    "absolute hidden text-sm text-primary transition-[left,opacity,transform] duration-300 ease-out md:flex md:items-center",
     props.sidebarCollapsed
-      ? "left-1/2 md:-translate-x-1/2 md:max-w-[56vw]"
-      : "left-1/2 md:left-[calc(50%+6.25rem)] md:-translate-x-1/2 md:max-w-[56vw]",
+      ? "left-1/2 -translate-x-1/2 max-w-[56vw]"
+      : "left-1/2 md:left-[calc(50%+6.25rem)] -translate-x-1/2 max-w-[56vw]",
   ].join(" ")
 );
 
@@ -149,7 +196,7 @@ const itemClass = (item) => {
 
 const handleDocumentPointerDown = (event) => {
   if (!tocOpen.value) return;
-  const root = tocRootRef.value;
+  const root = headerRootRef.value;
   const target = event.target;
   if (root instanceof HTMLElement && target instanceof Node && !root.contains(target)) {
     closeHeaderBarToc();
