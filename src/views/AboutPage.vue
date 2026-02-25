@@ -55,7 +55,7 @@
           <RouterLink
             v-for="(_, slotIndex) in 4"
             :key="slotIndex"
-            :to="`/project/${coverForSlot(slotIndex, 0).id}`"
+            :to="`/project/${coverSlots[slotIndex].current.id}`"
             class="group block min-w-0"
           >
             <div class="about-card-slot relative min-w-0 overflow-hidden">
@@ -64,49 +64,49 @@
               <div
                 class="about-card-layer absolute inset-0 flex flex-col about-logo-current"
                 :class="{ 'about-logo-slide-out': isFlipped, 'about-logo-reset': isResetting }"
-                :style="slideDelayStyle(slotIndex, false)"
+                :style="slideDelayStyles[slotIndex].current"
                 @transitionend="onSlideTransitionEnd($event, slotIndex)"
               >
                 <div class="about-cover-block relative aspect-square w-full shrink-0 overflow-hidden rounded-sm">
                   <img
                     :key="`${slotIndex}-0-${baseStep}`"
-                    :src="coverForSlot(slotIndex, 0).src"
-                    :srcset="coverForSlot(slotIndex, 0).srcSet"
-                    :alt="coverForSlot(slotIndex, 0).name"
+                    :src="coverSlots[slotIndex].current.src"
+                    :srcset="coverSlots[slotIndex].current.srcSet"
+                    :alt="coverSlots[slotIndex].current.name"
                     class="about-cover-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
                 <div class="about-caption-block shrink-0 pt-3 text-left">
-                  <div class="text-lg leading-[1.3] font-medium text-primary">{{ coverForSlot(slotIndex, 0).name }}</div>
+                  <div class="text-lg leading-[1.3] font-medium text-primary">{{ coverSlots[slotIndex].current.name }}</div>
                   <div class="mt-4 flex items-center gap-2 text-sm">
-                    <span class="font-medium text-primary">{{ coverForSlot(slotIndex, 0).primaryMeta }}</span>
-                    <span class="text-secondary">{{ coverForSlot(slotIndex, 0).secondaryMeta }}</span>
+                    <span class="font-medium text-primary">{{ coverSlots[slotIndex].current.primaryMeta }}</span>
+                    <span class="text-secondary">{{ coverSlots[slotIndex].current.secondaryMeta }}</span>
                   </div>
                 </div>
               </div>
               <div
                 class="about-card-layer absolute inset-0 flex flex-col about-logo-next"
                 :class="{ 'about-logo-slide-in': isFlipped, 'about-logo-reset': isResetting }"
-                :style="slideDelayStyle(slotIndex, true)"
+                :style="slideDelayStyles[slotIndex].next"
               >
                 <div class="about-cover-block relative aspect-square w-full shrink-0 overflow-hidden rounded-sm">
                   <img
                     :key="`${slotIndex}-1-${baseStep}`"
-                    :src="coverForSlot(slotIndex, 1).src"
-                    :srcset="coverForSlot(slotIndex, 1).srcSet"
-                    :alt="coverForSlot(slotIndex, 1).name"
+                    :src="coverSlots[slotIndex].next.src"
+                    :srcset="coverSlots[slotIndex].next.srcSet"
+                    :alt="coverSlots[slotIndex].next.name"
                     class="about-cover-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
                 <div class="about-caption-block shrink-0 pt-3 text-left">
-                  <div class="text-lg leading-[1.3] font-medium text-primary">{{ coverForSlot(slotIndex, 1).name }}</div>
+                  <div class="text-lg leading-[1.3] font-medium text-primary">{{ coverSlots[slotIndex].next.name }}</div>
                   <div class="mt-4 flex items-center gap-2 text-sm">
-                    <span class="font-medium text-primary">{{ coverForSlot(slotIndex, 1).primaryMeta }}</span>
-                    <span class="text-secondary">{{ coverForSlot(slotIndex, 1).secondaryMeta }}</span>
+                    <span class="font-medium text-primary">{{ coverSlots[slotIndex].next.primaryMeta }}</span>
+                    <span class="text-secondary">{{ coverSlots[slotIndex].next.secondaryMeta }}</span>
                   </div>
                 </div>
               </div>
@@ -246,7 +246,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { RouterLink } from "vue-router";
 import AppLayout from "../layouts/AppLayout.vue";
 import RelatedContentSection from "../components/RelatedContentSection.vue";
@@ -271,13 +271,14 @@ const qrCardStyle = ref({
   "--glare-opacity": "0",
 });
 
-const canAnimateQr = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-  !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** 是否允许二维码倾斜动画，在 onMounted 中初始化，避免每次 pointermove 调用 matchMedia */
+let canAnimateQrCache = false;
+let qrRafId = null;
+/** 当前帧内待应用的倾斜样式，供 rAF 回调使用最新值 */
+let pendingQrStyle = null;
 
 const handleQrPointerMove = (event) => {
-  if (!canAnimateQr() || !qrCardRef.value) return;
+  if (!canAnimateQrCache || !qrCardRef.value) return;
   const rect = qrCardRef.value.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
@@ -285,15 +286,28 @@ const handleQrPointerMove = (event) => {
   const py = y / rect.height;
   const rotateX = (0.5 - py) * 16;
   const rotateY = (px - 0.5) * 18;
-  qrCardStyle.value = {
+  pendingQrStyle = {
     transform: `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.045)`,
     "--glare-x": `${(px * 100).toFixed(2)}%`,
     "--glare-y": `${(py * 100).toFixed(2)}%`,
     "--glare-opacity": "0.95",
   };
+  if (qrRafId != null) return;
+  qrRafId = requestAnimationFrame(() => {
+    qrRafId = null;
+    if (pendingQrStyle) {
+      qrCardStyle.value = pendingQrStyle;
+      pendingQrStyle = null;
+    }
+  });
 };
 
 const resetQrTilt = () => {
+  if (qrRafId != null) {
+    cancelAnimationFrame(qrRafId);
+    qrRafId = null;
+  }
+  pendingQrStyle = null;
   qrCardStyle.value = {
     transform: "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)",
     "--glare-x": "50%",
@@ -306,15 +320,10 @@ const baseStep = ref(0);
 const isFlipped = ref(false);
 const isResetting = ref(false);
 let flipTimer = null;
+let mediaQuery = null;
+let mediaChangeHandler = null;
 
 const coverList = projectList.length >= 4 ? projectList : [...projectList, ...projectList, ...projectList].slice(0, Math.max(4, projectList.length));
-
-/** 移动端展示的项目列表，与项目页「更多项目」一致取前 3 项（直接用 projectList 保证有数据） */
-const mobileProjectItems = projectList.slice(0, 3);
-
-const projectItemTo = (item) => `/project/${item.id}`;
-const projectPrimaryMeta = (item) => item.tag || "";
-const projectSecondaryMeta = (item) => item.yearLabel || item.year || "";
 
 function coverForSlot(slotIndex, face) {
   const idx = (baseStep.value + slotIndex + face) % coverList.length;
@@ -329,19 +338,41 @@ function coverForSlot(slotIndex, face) {
   };
 }
 
-function startSlide() {
-  if (isFlipped.value || isResetting.value) return;
-  isFlipped.value = true;
-}
+const coverSlots = computed(() => {
+  return Array.from({ length: 4 }, (_, slotIndex) => ({
+    current: coverForSlot(slotIndex, 0),
+    next: coverForSlot(slotIndex, 1),
+  }));
+});
 
 const SLIDE_DELAY_PER_SLOT = 0.12;
 /** 新图比原图提前开始的时间，使新图更早出现 */
 const SLIDE_NEXT_EARLY = 0.06;
 
-function slideDelayStyle(slotIndex, forNext = false) {
-  if (!isFlipped.value) return { transitionDelay: "0s" };
-  const delay = slotIndex * SLIDE_DELAY_PER_SLOT - (forNext ? SLIDE_NEXT_EARLY : 0);
-  return { transitionDelay: `${Math.max(0, delay)}s` };
+const slideDelayStyles = computed(() => {
+  if (!isFlipped.value) {
+    return Array.from({ length: 4 }, () => ({ current: { transitionDelay: "0s" }, next: { transitionDelay: "0s" } }));
+  }
+  return Array.from({ length: 4 }, (_, slotIndex) => {
+    const delayCurrent = slotIndex * SLIDE_DELAY_PER_SLOT;
+    const delayNext = slotIndex * SLIDE_DELAY_PER_SLOT - SLIDE_NEXT_EARLY;
+    return {
+      current: { transitionDelay: `${Math.max(0, delayCurrent)}s` },
+      next: { transitionDelay: `${Math.max(0, delayNext)}s` },
+    };
+  });
+});
+
+/** 移动端展示的项目列表，与项目页「更多项目」一致取前 3 项（直接用 projectList 保证有数据） */
+const mobileProjectItems = computed(() => projectList.slice(0, 3));
+
+const projectItemTo = (item) => `/project/${item.id}`;
+const projectPrimaryMeta = (item) => item.tag || "";
+const projectSecondaryMeta = (item) => item.yearLabel || item.year || "";
+
+function startSlide() {
+  if (isFlipped.value || isResetting.value) return;
+  isFlipped.value = true;
 }
 
 function onSlideTransitionEnd(e, slotIndex) {
@@ -358,10 +389,15 @@ function onSlideTransitionEnd(e, slotIndex) {
 }
 
 onMounted(() => {
-  const media = window.matchMedia("(min-width: 768px)");
+  canAnimateQrCache =
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  mediaQuery = window.matchMedia("(min-width: 768px)");
   const startTimer = () => {
     if (flipTimer) return;
-    if (media.matches) flipTimer = setInterval(startSlide, 3500);
+    if (mediaQuery.matches) flipTimer = setInterval(startSlide, 3500);
   };
   const stopTimer = () => {
     if (flipTimer) {
@@ -369,12 +405,18 @@ onMounted(() => {
       flipTimer = null;
     }
   };
-  media.addEventListener("change", (e) => (e.matches ? startTimer() : stopTimer()));
+  mediaChangeHandler = (e) => (e.matches ? startTimer() : stopTimer());
+  mediaQuery.addEventListener("change", mediaChangeHandler);
   startTimer();
 });
 
 onUnmounted(() => {
   if (flipTimer) clearInterval(flipTimer);
+  if (mediaQuery && mediaChangeHandler) {
+    mediaQuery.removeEventListener("change", mediaChangeHandler);
+    mediaQuery = null;
+    mediaChangeHandler = null;
+  }
 });
 </script>
 
