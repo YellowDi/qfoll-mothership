@@ -16,10 +16,10 @@
             我们是企丰科技，专注企业信息化系统开发与技术服务，用创意融合技术，助力商业持续增长。
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-3">
-            <RouterLink to="/contact" class="btn-primary btn-md gap-2 px-5">
+            <a href="#contact" class="btn-primary btn-md gap-2 px-5">
               联系我们
               <i class="ri-arrow-right-line text-base" aria-hidden="true"></i>
-            </RouterLink>
+            </a>
             <RouterLink to="/projects" class="btn-secondary btn-md gap-2 px-5">
               客户案例
             </RouterLink>
@@ -130,16 +130,16 @@
     <!-- 关于企丰科技：桌面端使用较窄内容宽度（参考页非全宽），图片竖向长方形，参考「使用 AI 为员工赋能」 -->
     <section class="about-intro mx-auto w-full max-w-[72rem] px-14 max-lg:px-6" aria-labelledby="about-intro-heading">
 
-      <!-- Block 1: 左文右图 -->
+      <!-- Block 1: 左文右图（移动端图在上） -->
       <div class="about-intro-block pt-10 md:pt-20">
         <div class="about-intro-inner flex flex-col gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
-          <div class="about-intro-copy order-1 min-w-0 md:max-w-[28rem] md:shrink-0">
+          <div class="about-intro-copy order-2 min-w-0 md:order-1 md:max-w-[28rem] md:shrink-0">
             <h3 class="about-intro-h3 mb-6 text-2xl font-medium tracking-[-0.02em] text-primary md:text-3xl">以技术驱动为核心</h3>
             <p class="text-base leading-[1.8] text-primary md:text-lg">
               企丰科技专注企业信息化系统开发与技术服务，深耕软件研发多年，服务多家企业与品牌，涵盖企业级后台、数据平台、智能硬件与物联网、以及面向 C 端的应用与小程序。我们相信，好的数字化项目不只是上线那一刻的完成，而是在多年之后依然稳定运行，能够随着业务发展不断扩展与优化。
             </p>
           </div>
-          <div class="about-intro-media order-2 min-w-0 flex-1">
+          <div class="about-intro-media order-1 min-w-0 flex-1 md:order-2">
             <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage1"
@@ -153,16 +153,16 @@
         </div>
       </div>
 
-      <!-- Block 2: 左图右文 -->
+      <!-- Block 2: 左图右文（移动端图在上） -->
       <div class="about-intro-block pt-10 md:pt-20">
         <div class="about-intro-inner flex flex-col gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
-          <div class="about-intro-copy order-1 min-w-0 md:order-2 md:max-w-[28rem] md:shrink-0">
+          <div class="about-intro-copy order-2 min-w-0 md:order-2 md:max-w-[28rem] md:shrink-0">
             <h3 class="about-intro-h3 mb-6 text-2xl font-medium tracking-[-0.02em] text-primary md:text-3xl">理解问题，对齐目标</h3>
             <p class="text-base leading-[1.8] text-primary md:text-lg">
               在每一个项目开始之前，我们都会花时间理解问题本身。需求阶段由产品、设计、研发、测试与项目管理共同参与，对齐目标、边界与优先级。我们强调结构清晰、逻辑明确，进入迭代后关注可验证的结果与质量标准。我们交付的不只是代码，而是一套真正能够运转的系统、一份稳定可靠的技术支持。
             </p>
           </div>
-          <div class="about-intro-media order-2 min-w-0 flex-1 md:order-1">
+          <div class="about-intro-media order-1 min-w-0 flex-1 md:order-1">
             <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage2"
@@ -176,10 +176,10 @@
         </div>
       </div>
 
-      <!-- Block 3: 左文右图 -->
+      <!-- Block 3: 左文右图（移动端图在上） -->
       <div class="about-intro-block pb-4 pt-10 md:pt-20">
         <div class="about-intro-inner flex flex-col gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
-          <div class="about-intro-copy order-1 min-w-0 md:max-w-[28rem] md:shrink-0">
+          <div class="about-intro-copy order-2 min-w-0 md:order-1 md:max-w-[28rem] md:shrink-0">
             <h3 class="about-intro-h3 mb-6 text-2xl font-medium tracking-[-0.02em] text-primary md:text-3xl">长期可用，持续演进</h3>
             <p class="text-base leading-[1.8] text-primary md:text-lg">
               无论是云柜宝、水环境智慧监控等自研产品，还是为客户定制的信息化系统，我们始终坚持以长期可用性为前提，用工程能力与产品思维助力企业数字化落地。
@@ -195,7 +195,7 @@
               </RouterLink>
             </div>
           </div>
-          <div class="about-intro-media order-2 min-w-0 flex-1">
+          <div class="about-intro-media order-1 min-w-0 flex-1 md:order-2">
             <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage3"
@@ -210,16 +210,36 @@
       </div>
     </section>
 
-    <!-- 底部 CTA -->
-    <section class="mx-auto w-full max-w-360 px-14 pb-24 pt-6 max-md:pb-16 max-md:pt-4 max-lg:px-6">
-      <div class="mx-auto max-w-[40rem] text-center">
-        <p class="text-base leading-[1.72] text-primary/80">
-          如需项目合作、产品方案或技术支持，欢迎
-          <RouterLink to="/contact" class="font-medium text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">
-            联系我们
-          </RouterLink>
-          。
-        </p>
+    <!-- 底部 CTA：全宽灰色容器，整合联系页内容 -->
+    <section id="contact" class="w-full max-w-360 mx-auto py-10">
+      <div class="mx-auto w-full px-16 max-xl:px-6 max-md:px-5">
+        <div class="bg-black/4.5 px-3 py-6 md:py-24 rounded-md dark:bg-white/6">
+          <div class="mx-auto flex w-full max-w-[40rem] flex-col gap-8">
+            <h2 class="text-2xl md:text-4xl font-medium tracking-[-0.02em] text-primary text-center">联系我们</h2>
+
+            <article class="font-sans text-base leading-relaxed text-primary overflow-x-clip">
+              <div class="markdown-body detail-markdown-body contact-markdown flex flex-col gap-6">
+                <p>
+                  扫码添加企业微信，可快速发起项目咨询并获取合作支持。无论你是希望咨询项目合作、了解产品方案，还是希望讨论长期技术支持，我们都欢迎你随时联系我们。我们重视每一次沟通，会尽快响应并给出明确反馈。若你已有明确需求，也可以直接留言项目背景、目标与时间计划，便于我们更高效地对接。
+                </p>
+                <div
+                  ref="qrCardRef"
+                  class="qr-tilt-card mx-auto w-full max-w-72"
+                  :style="qrCardStyle"
+                  @pointermove="handleQrPointerMove"
+                  @pointerleave="resetQrTilt"
+                >
+                  <img
+                    :src="wecomQrCode"
+                    alt="企业微信二维码"
+                    class="block h-auto w-full rounded-xl border border-edge bg-white p-3"
+                  />
+                  <span class="qr-tilt-glare" aria-hidden="true"></span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
   </AppLayout>
@@ -239,7 +259,48 @@ import introImage1 from "../assets/about-02.webp";
 import introImage2 from "../assets/about-03.webp";
 import introImage3 from "../assets/about-04.webp";
 
+import wecomQrCode from "../assets/wecom-qrcode.webp";
+
 import { projectList } from "../data/projects";
+
+const qrCardRef = ref(null);
+const qrCardStyle = ref({
+  transform: "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)",
+  "--glare-x": "50%",
+  "--glare-y": "50%",
+  "--glare-opacity": "0",
+});
+
+const canAnimateQr = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+  !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const handleQrPointerMove = (event) => {
+  if (!canAnimateQr() || !qrCardRef.value) return;
+  const rect = qrCardRef.value.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const px = x / rect.width;
+  const py = y / rect.height;
+  const rotateX = (0.5 - py) * 16;
+  const rotateY = (px - 0.5) * 18;
+  qrCardStyle.value = {
+    transform: `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.045)`,
+    "--glare-x": `${(px * 100).toFixed(2)}%`,
+    "--glare-y": `${(py * 100).toFixed(2)}%`,
+    "--glare-opacity": "0.95",
+  };
+};
+
+const resetQrTilt = () => {
+  qrCardStyle.value = {
+    transform: "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)",
+    "--glare-x": "50%",
+    "--glare-y": "50%",
+    "--glare-opacity": "0",
+  };
+};
 
 const baseStep = ref(0);
 const isFlipped = ref(false);
@@ -400,6 +461,45 @@ onUnmounted(() => {
   .about-logo-current,
   .about-logo-next {
     transition: none;
+  }
+}
+
+/* 底部 CTA 内联系内容：二维码倾斜卡片 */
+.qr-tilt-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 180ms ease, filter 220ms ease;
+  will-change: transform;
+  filter: drop-shadow(0 10px 24px rgb(17 17 17 / 0.2));
+}
+
+.qr-tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 0.8rem;
+  background: radial-gradient(
+    170px circle at var(--glare-x) var(--glare-y),
+    rgb(255 255 255 / calc(0.45 * var(--glare-opacity))),
+    rgb(255 255 255 / calc(0.12 * var(--glare-opacity))) 38%,
+    transparent 72%
+  );
+  transition: opacity 180ms ease;
+}
+
+.contact-markdown {
+  overflow: visible;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .qr-tilt-card {
+    transform: none !important;
+    transition: none;
+    filter: none;
+  }
+
+  .qr-tilt-glare {
+    display: none;
   }
 }
 </style>

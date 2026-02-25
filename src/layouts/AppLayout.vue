@@ -174,7 +174,6 @@ const lastTouchY = ref(0);
 let removeTouchGuards = null;
 const isCompanyRoute = (path) =>
   path === "/about" ||
-  path === "/contact" ||
   path === "/pricing" ||
   path === "/careers" ||
   path === "/design-spec";
@@ -193,7 +192,6 @@ const navLevel = ref(
 );
 const companyMenu = [
   { path: "/about", label: "关于我们" },
-  { path: "/contact", label: "联系我们" },
   { path: "/pricing", label: "定价" },
   { path: "/careers", label: "工作机会" },
   { path: "/design-spec", label: "设计规范" },

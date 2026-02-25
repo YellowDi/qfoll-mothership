@@ -13,7 +13,7 @@ const routes = [
   { path: "/water-env", name: "water-env", component: () => import("../views/WaterEnvPage.vue"), meta: { title: "水环境智慧监控" } },
   { path: "/cloud-cabinet", redirect: "/ygb" },
   { path: "/about", name: "about", component: () => import("../views/AboutPage.vue"), meta: { title: "关于我们" } },
-  { path: "/contact", name: "contact", component: () => import("../views/ContactPage.vue"), meta: { title: "联系我们" } },
+  { path: "/contact", redirect: "/about#contact" },
   { path: "/pricing", name: "pricing", component: () => import("../views/PricingPage.vue"), meta: { title: "定价" } },
   { path: "/careers", name: "careers", component: () => import("../views/CareersPage.vue"), meta: { title: "工作机会" } },
   { path: "/design-spec", name: "design-spec", component: () => import("../views/DesignSpecPage.vue"), meta: { title: "设计规范" } },
@@ -24,7 +24,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() {
+  scrollBehavior(to, _from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    if (to.hash) return { el: to.hash, behavior: "smooth" };
     return { top: 0 };
   },
 });

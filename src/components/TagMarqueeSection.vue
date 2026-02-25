@@ -73,7 +73,7 @@
               </p>
 
               <RouterLink
-                to="/contact"
+                to="/about#contact"
                 class="pointer-events-auto mt-8 btn-primary btn-md gap-2 px-5 max-md:mt-6"
               >
                 联系我们
