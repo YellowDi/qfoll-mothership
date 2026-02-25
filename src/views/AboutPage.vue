@@ -389,6 +389,13 @@ function onSlideTransitionEnd(e, slotIndex) {
 }
 
 onMounted(() => {
+  // 刷新时若 URL 带 #contact，回到顶部并去掉 hash，避免重复滚到 CTA
+  const navEntry = performance.getEntriesByType?.("navigation")?.[0];
+  if (navEntry?.type === "reload" && window.location.hash === "#contact") {
+    window.scrollTo(0, 0);
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
   canAnimateQrCache =
     typeof window !== "undefined" &&
     window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
