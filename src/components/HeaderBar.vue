@@ -1,5 +1,5 @@
 <template>
-  <header ref="headerRootRef" class="fixed left-0 top-0 right-0 z-40 bg-bg">
+  <header ref="headerRootRef" class="fixed left-0 top-0 right-0 z-40 bg-white dark:bg-zinc-900">
     <div class="relative flex h-14 items-center justify-between px-4 md:px-6">
       <div class="flex items-center gap-3">
         <RouterLink to="/" class="flex items-center gap-2">
@@ -44,14 +44,14 @@
           <Transition name="header-detail-toc">
             <div
               v-if="tocOpen && hasToc"
-              class="absolute left-1/2 top-full mt-2 max-h-[58vh] w-[min(38rem,72vw)] -translate-x-1/2 overflow-auto rounded-md bg-surface p-2 shadow-xs"
+              class="absolute left-1/2 top-full mt-2 max-h-[58vh] w-[min(38rem,72vw)] -translate-x-1/2 overflow-auto rounded-md bg-white p-2 shadow-xs dark:border-white/12 dark:bg-zinc-900"
               role="menu"
               aria-label="文章目录"
             >
               <button
                 v-for="item in tocItems"
                 :key="item.id"
-                class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm transition-colors"
+                class="flex w-full items-center rounded-md px-3 py-2 text-left text-sm"
                 :class="itemClass(item)"
                 role="menuitem"
                 type="button"
@@ -111,7 +111,7 @@
         <Transition name="header-detail-toc">
           <div
             v-if="tocOpen && hasToc"
-            class="absolute left-0 right-0 top-full max-h-[58vh] w-screen overflow-auto border-t border-line bg-surface p-2 shadow-xs"
+            class="absolute left-0 right-0 top-full max-h-[58vh] w-screen overflow-auto border-b border-black/8 bg-white p-2 shadow-xs dark:border-white/12 dark:bg-zinc-900"
             role="menu"
             aria-label="文章目录"
           >
