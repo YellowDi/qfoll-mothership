@@ -73,10 +73,10 @@
               </p>
 
               <RouterLink
-                to="/about#contact"
+                to="/about"
                 class="pointer-events-auto mt-8 btn-primary btn-md gap-2 px-5 max-md:mt-6"
               >
-                联系我们
+                了解更多
                 <i class="ri-arrow-right-line text-base"></i>
               </RouterLink>
             </div>
