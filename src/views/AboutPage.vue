@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <!-- Hero: 左文字右图片、左右底部对齐 -->
-    <section class="about-hero mx-auto w-full max-w-360 px-14 pt-24 pb-16 max-lg:px-6">
+    <section class="about-hero mx-auto w-full max-w-360 px-14 pt-24 pb-16 max-md:pt-20 max-md:pb-10 max-lg:px-6">
       <div class="about-hero-grid flex w-full flex-col gap-10 md:flex-row md:items-end md:gap-8 lg:gap-12 xl:gap-x-16">
         <div class="about-hero-copy order-1 flex min-w-0 flex-col md:flex-1 md:justify-end xl:pb-0">
           <div class="mb-5 text-sm">
@@ -26,8 +26,8 @@
           </div>
         </div>
         <div class="about-hero-media order-2 flex justify-center md:flex-1 md:min-w-0 xl:shrink-0 xl:min-w-[560px] xl:max-w-[min(58%,864px)] xl:flex-[1.15]">
-          <!-- 移动端图在文下；768px–1279px 左右 50-50；≥1280px 大图 1:1 -->
-          <div class="about-hero-image-wrap relative w-full overflow-hidden rounded-2xl bg-[rgb(var(--color-line)/0.08)] max-md:aspect-4/3 md:aspect-square">
+          <!-- 移动端图在文下；与桌面端一致保持 1:1 宽高比 -->
+          <div class="about-hero-image-wrap relative w-full overflow-hidden rounded-2xl bg-[rgb(var(--color-line)/0.08)] aspect-square">
             <img
               :src="heroImage"
               :srcset="heroImageSrcSet"
@@ -43,7 +43,7 @@
     </section>
 
     <!-- 项目封面：桌面端轮播动画，移动端与项目页「更多项目」完全一致（无切换无动画） -->
-    <section class="about-logos w-full max-md:mt-10">
+    <section class="about-logos w-full max-md:mt-6">
       <!-- 桌面端：轮播，与 hero 同宽 -->
       <div class="max-md:hidden mx-auto w-full max-w-360 px-14 py-14 max-lg:px-6">
         <div class="mb-8 text-center">
@@ -115,7 +115,7 @@
         </div>
       </div>
       <!-- 移动端：与项目页「更多项目」完全一致，无切换无动画 -->
-      <div class="md:hidden w-full">
+      <div class="md:hidden w-full -mt-4">
         <RelatedContentSection
           title="信任我们的企业与伙伴"
           view-all-to="/projects"
@@ -131,7 +131,7 @@
     <section class="about-intro mx-auto w-full max-w-[72rem] px-14 max-lg:px-6" aria-labelledby="about-intro-heading">
 
       <!-- Block 1: 左文右图 -->
-      <div class="about-intro-block pt-16 md:pt-20">
+      <div class="about-intro-block pt-10 md:pt-20">
         <div class="about-intro-inner flex flex-col gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
           <div class="about-intro-copy order-1 min-w-0 md:max-w-[28rem] md:shrink-0">
             <h3 class="about-intro-h3 mb-6 text-2xl font-medium tracking-[-0.02em] text-primary md:text-3xl">以技术驱动为核心</h3>
@@ -140,7 +140,7 @@
             </p>
           </div>
           <div class="about-intro-media order-2 min-w-0 flex-1">
-            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-2xl bg-[rgb(var(--color-line)/0.06)]">
+            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage1"
                 alt="企丰科技产品与方案"
@@ -154,7 +154,7 @@
       </div>
 
       <!-- Block 2: 左图右文 -->
-      <div class="about-intro-block pt-16 md:pt-20">
+      <div class="about-intro-block pt-10 md:pt-20">
         <div class="about-intro-inner flex flex-col gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
           <div class="about-intro-copy order-1 min-w-0 md:order-2 md:max-w-[28rem] md:shrink-0">
             <h3 class="about-intro-h3 mb-6 text-2xl font-medium tracking-[-0.02em] text-primary md:text-3xl">理解问题，对齐目标</h3>
@@ -163,7 +163,7 @@
             </p>
           </div>
           <div class="about-intro-media order-2 min-w-0 flex-1 md:order-1">
-            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-2xl bg-[rgb(var(--color-line)/0.06)]">
+            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage2"
                 alt="企丰科技项目协作"
@@ -177,7 +177,7 @@
       </div>
 
       <!-- Block 3: 左文右图 -->
-      <div class="about-intro-block pb-4 pt-16 md:pt-20">
+      <div class="about-intro-block pb-4 pt-10 md:pt-20">
         <div class="about-intro-inner flex flex-col gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
           <div class="about-intro-copy order-1 min-w-0 md:max-w-[28rem] md:shrink-0">
             <h3 class="about-intro-h3 mb-6 text-2xl font-medium tracking-[-0.02em] text-primary md:text-3xl">长期可用，持续演进</h3>
@@ -196,7 +196,7 @@
             </div>
           </div>
           <div class="about-intro-media order-2 min-w-0 flex-1">
-            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-2xl bg-[rgb(var(--color-line)/0.06)]">
+            <div class="about-intro-image-wrap relative w-full overflow-hidden rounded-lg bg-[rgb(var(--color-line)/0.06)]">
               <img
                 :src="introImage3"
                 alt="企丰科技自研产品"
@@ -211,7 +211,7 @@
     </section>
 
     <!-- 底部 CTA -->
-    <section class="mx-auto w-full max-w-360 px-14 pb-24 pt-6 max-lg:px-6">
+    <section class="mx-auto w-full max-w-360 px-14 pb-24 pt-6 max-md:pb-16 max-md:pt-4 max-lg:px-6">
       <div class="mx-auto max-w-[40rem] text-center">
         <p class="text-base leading-[1.72] text-primary/80">
           如需项目合作、产品方案或技术支持，欢迎
@@ -232,12 +232,12 @@ import AppLayout from "../layouts/AppLayout.vue";
 import RelatedContentSection from "../components/RelatedContentSection.vue";
 import "../styles/markdown-media.css";
 
-import heroImage from "../assets/ygb-assets/hero-01.webp";
-import heroImageSrcSet from "../assets/ygb-assets/hero-01.webp?w=480;640;800;960;1200&format=webp&as=srcset";
+import heroImage from "../assets/about-01.webp";
+import heroImageSrcSet from "../assets/about-01.webp?w=480;640;800;960;1200&format=webp&as=srcset";
 
-import introImage1 from "../assets/ygb-assets/dashboard.webp";
-import introImage2 from "../assets/water-images/screen-01.webp";
-import introImage3 from "../assets/ygb-assets/app-01-d.webp";
+import introImage1 from "../assets/about-02.webp";
+import introImage2 from "../assets/about-03.webp";
+import introImage3 from "../assets/about-04.webp";
 
 import { projectList } from "../data/projects";
 
@@ -353,15 +353,9 @@ onUnmounted(() => {
   }
 }
 
-/* 关于企丰科技：参考 OpenAI 使用 AI 为员工赋能 样式 */
+/* 关于企丰科技：竖图宽高比与桌面端一致，移动端也保持 3:4 */
 .about-intro-image-wrap {
-  aspect-ratio: 4 / 3;
-}
-
-@media (min-width: 768px) {
-  .about-intro-image-wrap {
-    aspect-ratio: 3 / 4;
-  }
+  aspect-ratio: 3 / 4;
 }
 
 .about-intro-h3 {
