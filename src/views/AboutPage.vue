@@ -42,77 +42,88 @@
       </div>
     </section>
 
-    <!-- 项目封面轮播：一行 4 个，宽度与 hero 一致，向上滑动淡入淡出切换 -->
-    <section class="about-logos mx-auto w-full max-w-360 px-14 py-14 max-lg:px-6">
-      <div class="mb-8 text-center">
-        <h2 class="text-lg font-medium tracking-[-0.02em] text-primary md:text-3xl">
-          信任我们的企业与伙伴
-        </h2>
+    <!-- 项目封面：桌面端轮播动画，移动端与项目页「更多项目」完全一致（无切换无动画） -->
+    <section class="about-logos w-full max-md:mt-10">
+      <!-- 桌面端：轮播，与 hero 同宽 -->
+      <div class="max-md:hidden mx-auto w-full max-w-360 px-14 py-14 max-lg:px-6">
+        <div class="mb-8 text-center">
+          <h2 class="text-lg font-medium tracking-[-0.02em] text-primary md:text-3xl">
+            信任我们的企业与伙伴
+          </h2>
+        </div>
+        <div class="about-covers-grid grid grid-cols-4 gap-6 max-lg:grid-cols-2 min-w-0">
+          <RouterLink
+            v-for="(_, slotIndex) in 4"
+            :key="slotIndex"
+            :to="`/project/${coverForSlot(slotIndex, 0).id}`"
+            class="group block min-w-0"
+          >
+            <div class="about-card-slot relative min-w-0 overflow-hidden">
+              <div class="aspect-square w-full invisible" aria-hidden="true"></div>
+              <div class="h-[5.5rem] invisible" aria-hidden="true"></div>
+              <div
+                class="about-card-layer absolute inset-0 flex flex-col about-logo-current"
+                :class="{ 'about-logo-slide-out': isFlipped, 'about-logo-reset': isResetting }"
+                :style="slideDelayStyle(slotIndex, false)"
+                @transitionend="onSlideTransitionEnd($event, slotIndex)"
+              >
+                <div class="about-cover-block relative aspect-square w-full shrink-0 overflow-hidden rounded-sm">
+                  <img
+                    :key="`${slotIndex}-0-${baseStep}`"
+                    :src="coverForSlot(slotIndex, 0).src"
+                    :srcset="coverForSlot(slotIndex, 0).srcSet"
+                    :alt="coverForSlot(slotIndex, 0).name"
+                    class="about-cover-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="about-caption-block shrink-0 pt-3 text-left">
+                  <div class="text-lg leading-[1.3] font-medium text-primary">{{ coverForSlot(slotIndex, 0).name }}</div>
+                  <div class="mt-4 flex items-center gap-2 text-sm">
+                    <span class="font-medium text-primary">{{ coverForSlot(slotIndex, 0).primaryMeta }}</span>
+                    <span class="text-secondary">{{ coverForSlot(slotIndex, 0).secondaryMeta }}</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="about-card-layer absolute inset-0 flex flex-col about-logo-next"
+                :class="{ 'about-logo-slide-in': isFlipped, 'about-logo-reset': isResetting }"
+                :style="slideDelayStyle(slotIndex, true)"
+              >
+                <div class="about-cover-block relative aspect-square w-full shrink-0 overflow-hidden rounded-sm">
+                  <img
+                    :key="`${slotIndex}-1-${baseStep}`"
+                    :src="coverForSlot(slotIndex, 1).src"
+                    :srcset="coverForSlot(slotIndex, 1).srcSet"
+                    :alt="coverForSlot(slotIndex, 1).name"
+                    class="about-cover-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="about-caption-block shrink-0 pt-3 text-left">
+                  <div class="text-lg leading-[1.3] font-medium text-primary">{{ coverForSlot(slotIndex, 1).name }}</div>
+                  <div class="mt-4 flex items-center gap-2 text-sm">
+                    <span class="font-medium text-primary">{{ coverForSlot(slotIndex, 1).primaryMeta }}</span>
+                    <span class="text-secondary">{{ coverForSlot(slotIndex, 1).secondaryMeta }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </RouterLink>
+        </div>
       </div>
-      <div class="about-covers-grid grid grid-cols-4 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
-        <RouterLink
-          v-for="(_, slotIndex) in 4"
-          :key="slotIndex"
-          :to="`/project/${coverForSlot(slotIndex, 0).id}`"
-          class="group block"
-        >
-          <!-- 整卡高度由占位撑开：方形封面 + 标题区 -->
-          <div class="about-card-slot relative overflow-hidden">
-            <div class="aspect-square w-full invisible" aria-hidden="true"></div>
-            <div class="h-[5.5rem] invisible" aria-hidden="true"></div>
-            <!-- 当前卡：封面+标题一体向上移出并淡出 -->
-            <div
-              class="about-card-layer absolute inset-0 flex flex-col about-logo-current"
-              :class="{ 'about-logo-slide-out': isFlipped, 'about-logo-reset': isResetting }"
-              :style="slideDelayStyle(slotIndex, false)"
-              @transitionend="onSlideTransitionEnd($event, slotIndex)"
-            >
-              <div class="about-cover-block relative aspect-square w-full shrink-0 overflow-hidden rounded-sm">
-                <img
-                  :key="`${slotIndex}-0-${baseStep}`"
-                  :src="coverForSlot(slotIndex, 0).src"
-                  :srcset="coverForSlot(slotIndex, 0).srcSet"
-                  :alt="coverForSlot(slotIndex, 0).name"
-                  class="about-cover-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div class="about-caption-block shrink-0 pt-3 text-left">
-                <div class="text-lg leading-[1.3] font-medium text-primary max-md:text-base">{{ coverForSlot(slotIndex, 0).name }}</div>
-                <div class="mt-4 flex items-center gap-2 text-sm">
-                  <span class="font-medium text-primary">{{ coverForSlot(slotIndex, 0).primaryMeta }}</span>
-                  <span class="text-secondary">{{ coverForSlot(slotIndex, 0).secondaryMeta }}</span>
-                </div>
-              </div>
-            </div>
-            <!-- 下一卡：封面+标题一体自下而上划入并淡入 -->
-            <div
-              class="about-card-layer absolute inset-0 flex flex-col about-logo-next"
-              :class="{ 'about-logo-slide-in': isFlipped, 'about-logo-reset': isResetting }"
-              :style="slideDelayStyle(slotIndex, true)"
-            >
-              <div class="about-cover-block relative aspect-square w-full shrink-0 overflow-hidden rounded-sm">
-                <img
-                  :key="`${slotIndex}-1-${baseStep}`"
-                  :src="coverForSlot(slotIndex, 1).src"
-                  :srcset="coverForSlot(slotIndex, 1).srcSet"
-                  :alt="coverForSlot(slotIndex, 1).name"
-                  class="about-cover-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div class="about-caption-block shrink-0 pt-3 text-left">
-                <div class="text-lg leading-[1.3] font-medium text-primary max-md:text-base">{{ coverForSlot(slotIndex, 1).name }}</div>
-                <div class="mt-4 flex items-center gap-2 text-sm">
-                  <span class="font-medium text-primary">{{ coverForSlot(slotIndex, 1).primaryMeta }}</span>
-                  <span class="text-secondary">{{ coverForSlot(slotIndex, 1).secondaryMeta }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </RouterLink>
+      <!-- 移动端：与项目页「更多项目」完全一致，无切换无动画 -->
+      <div class="md:hidden w-full">
+        <RelatedContentSection
+          title="信任我们的企业与伙伴"
+          view-all-to="/projects"
+          :items="mobileProjectItems"
+          :item-to="projectItemTo"
+          :primary-meta="projectPrimaryMeta"
+          :secondary-meta="projectSecondaryMeta"
+        />
       </div>
     </section>
 
@@ -218,6 +229,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { RouterLink } from "vue-router";
 import AppLayout from "../layouts/AppLayout.vue";
+import RelatedContentSection from "../components/RelatedContentSection.vue";
 import "../styles/markdown-media.css";
 
 import heroImage from "../assets/ygb-assets/hero-01.webp";
@@ -235,6 +247,13 @@ const isResetting = ref(false);
 let flipTimer = null;
 
 const coverList = projectList.length >= 4 ? projectList : [...projectList, ...projectList, ...projectList].slice(0, Math.max(4, projectList.length));
+
+/** 移动端展示的项目列表，与项目页「更多项目」一致取前 3 项（直接用 projectList 保证有数据） */
+const mobileProjectItems = projectList.slice(0, 3);
+
+const projectItemTo = (item) => `/project/${item.id}`;
+const projectPrimaryMeta = (item) => item.tag || "";
+const projectSecondaryMeta = (item) => item.yearLabel || item.year || "";
 
 function coverForSlot(slotIndex, face) {
   const idx = (baseStep.value + slotIndex + face) % coverList.length;
@@ -278,7 +297,19 @@ function onSlideTransitionEnd(e, slotIndex) {
 }
 
 onMounted(() => {
-  flipTimer = setInterval(startSlide, 3500);
+  const media = window.matchMedia("(min-width: 768px)");
+  const startTimer = () => {
+    if (flipTimer) return;
+    if (media.matches) flipTimer = setInterval(startSlide, 3500);
+  };
+  const stopTimer = () => {
+    if (flipTimer) {
+      clearInterval(flipTimer);
+      flipTimer = null;
+    }
+  };
+  media.addEventListener("change", (e) => (e.matches ? startTimer() : stopTimer()));
+  startTimer();
 });
 
 onUnmounted(() => {
