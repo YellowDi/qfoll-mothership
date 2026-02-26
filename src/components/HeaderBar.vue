@@ -1,5 +1,5 @@
 <template>
-  <header ref="headerRootRef" class="fixed left-0 top-0 right-0 z-40 bg-white dark:bg-zinc-900">
+  <header ref="headerRootRef" class="fixed left-0 top-0 right-0 z-40 bg-bg">
     <div class="relative flex h-14 items-center justify-between px-4 md:px-6">
       <div class="flex items-center gap-3">
         <RouterLink to="/" class="flex items-center gap-2">
@@ -111,7 +111,7 @@
         <Transition name="header-detail-toc">
           <div
             v-if="tocOpen && hasToc"
-            class="absolute left-0 right-0 top-full max-h-[58vh] w-screen overflow-auto border-b border-black/8 bg-white p-2 shadow-xs dark:border-white/12 dark:bg-zinc-900"
+            class="absolute left-0 right-0 top-full max-h-[58vh] w-screen overflow-auto border-b border-black/8 bg-bg p-2 shadow-xs dark:border-white/12"
             role="menu"
             aria-label="文章目录"
           >
