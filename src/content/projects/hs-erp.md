@@ -10,6 +10,7 @@ primaryButtonText:
 primaryButtonUrl: 
 secondaryButtonText: 
 secondaryButtonUrl: 
+cover: "/covers/hs-erp.webp"
 infoTags:
   - 2023
   - 企业数字化
