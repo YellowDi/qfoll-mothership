@@ -133,7 +133,7 @@
   }
 
   .btn-text-primary {
-    @apply text-primary hover:text-primary dark:text-primary dark:hover:text-primary;
+    @apply text-primary transition-opacity hover:opacity-60 dark:text-primary;
   }
 
   .btn-chip {
