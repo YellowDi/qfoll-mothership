@@ -199,7 +199,7 @@ const companyMenu = [
   { path: "/about", label: "关于我们" },
   { path: "/pricing", label: "定价" },
   { path: "/careers", label: "工作机会" },
-  { path: "/design-spec", label: "设计规范" },
+  // { path: "/design-spec", label: "设计规范" }, // 暂时隐藏
 ];
 const toYearValue = (item) => {
   const year = Number.parseInt(String(item?.year ?? ""), 10);
