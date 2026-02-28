@@ -14,6 +14,13 @@
         >
           浙ICP备2022008031号-1
         </a>
+        <span class="mx-2 text-secondary max-lg:hidden">·</span>
+        <RouterLink
+          to="/changelog"
+          class="pointer-events-auto block text-secondary transition-colors hover:text-primary max-lg:mt-1 lg:inline"
+        >
+          v{{ version }}
+        </RouterLink>
       </div>
       <button
         type="button"
@@ -28,7 +35,11 @@
 </template>
 
 <script setup>
+import { RouterLink } from "vue-router";
+import pkg from "../../package.json";
+
 const currentYear = new Date().getFullYear();
+const version = pkg.version;
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });

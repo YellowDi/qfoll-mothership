@@ -1,0 +1,2416 @@
+{
+  "entries": [
+    {
+      "date": "2026-02-28",
+      "commits": [
+        {
+          "hash": "845bda7",
+          "date": "2026-02-28",
+          "subject": "style(YgbHeroSection.vue): update paragraph class to prevent text wrapping for improved readability",
+          "message": "update paragraph class to prevent text wrapping for improved readability",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "YgbHeroSection.vue",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "ffaa45b",
+          "date": "2026-02-28",
+          "subject": "chore(package.json, pnpm-lock.yaml, .gitignore, README.md): migrate project to pnpm, update dependencies, and adjust installation instructions",
+          "message": "migrate project to pnpm, update dependencies, and adjust installation instructions",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "package.json, pnpm-lock.yaml, .gitignore, README.md",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "3dc5b55",
+          "date": "2026-02-28",
+          "subject": "style(remixicon-used.css, ArticleSpeechPlayer.vue): add new icon style for file copy and adjust layout properties for improved alignment",
+          "message": "add new icon style for file copy and adjust layout properties for improved alignment",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "remixicon-used.css, ArticleSpeechPlayer.vue",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "aa0f3a5",
+          "date": "2026-02-28",
+          "subject": "style(contentParserShared, markdown-media.css, remixicon-used.css): enhance code block presentation with new metadata and icon styles for improved user experience",
+          "message": "enhance code block presentation with new metadata and icon styles for improved user experience",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "contentParserShared, markdown-media.css, remixicon-used.css",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-27",
+      "commits": [
+        {
+          "hash": "2ad7f40",
+          "date": "2026-02-27",
+          "subject": "fix(index.html): update favicon links to use absolute paths for improved resource loading",
+          "message": "update favicon links to use absolute paths for improved resource loading",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "index.html",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "5aa4c6a",
+          "date": "2026-02-27",
+          "subject": "chore(.gitignore, DetailMetaCard.vue): update .gitignore to include local scripts and modify background color class for DetailMetaCard for improved visual consistency",
+          "message": "update .gitignore to include local scripts and modify background color class for DetailMetaCard for improved visual consistency",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": ".gitignore, DetailMetaCard.vue",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-26",
+      "commits": [
+        {
+          "hash": "8acf0f5",
+          "date": "2026-02-26",
+          "subject": "style(HeaderBar): change header background color class for improved visual consistency",
+          "message": "change header background color class for improved visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HeaderBar",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "f8624ec",
+          "date": "2026-02-26",
+          "subject": "feat(index.html): add meta tags for SEO and social media sharing to enhance visibility and engagement",
+          "message": "add meta tags for SEO and social media sharing to enhance visibility and engagement",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "index.html",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "a057816",
+          "date": "2026-02-26",
+          "subject": "chore(AppLayout): temporarily hide design specification menu item for future updates",
+          "message": "temporarily hide design specification menu item for future updates",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "AppLayout",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "301dfef",
+          "date": "2026-02-26",
+          "subject": "feat(HS-ERP): add cover image to project documentation for enhanced visual presentation",
+          "message": "add cover image to project documentation for enhanced visual presentation",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "HS-ERP",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "6068e9a",
+          "date": "2026-02-26",
+          "subject": "refactor(HS-ERP, HS-GPS, Huasen Regulatory Platform, HZHST): streamline content structure and enhance media presentation across project documentation for improved clarity and user engagement",
+          "message": "streamline content structure and enhance media presentation across project documentation for improved clarity and user engagement",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "HS-ERP, HS-GPS, Huasen Regulatory Platform, HZHST",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "662951e",
+          "date": "2026-02-26",
+          "subject": "style(Button): update button text styling to improve hover effects and transition behavior",
+          "message": "update button text styling to improve hover effects and transition behavior",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "Button",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-25",
+      "commits": [
+        {
+          "hash": "3381822",
+          "date": "2026-02-25",
+          "subject": "style(HeaderBar): update background colors and class bindings for improved visual consistency in light and dark modes",
+          "message": "update background colors and class bindings for improved visual consistency in light and dark modes",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HeaderBar",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "6f6f672",
+          "date": "2026-02-25",
+          "subject": "fix(HeaderBar): update history state handling in TOC navigation and AboutPage to maintain state consistency during scroll actions",
+          "message": "update history state handling in TOC navigation and AboutPage to maintain state consistency during scroll actions",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "HeaderBar",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "e7a8c84",
+          "date": "2026-02-25",
+          "subject": "feat(HeaderBar): enhance mobile header with detail title toggle and improved TOC navigation; refactor class bindings for better responsiveness",
+          "message": "enhance mobile header with detail title toggle and improved TOC navigation; refactor class bindings for better responsiveness",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "HeaderBar",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "1ae8477",
+          "date": "2026-02-25",
+          "subject": "feat(HeaderBar): implement table of contents functionality with toggle and navigation; refactor detail title handling in NewsArticlePage and ProjectPage for improved user experience",
+          "message": "implement table of contents functionality with toggle and navigation; refactor detail title handling in NewsArticlePage and ProjectPage for improved user experience",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "HeaderBar",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "1959174",
+          "date": "2026-02-25",
+          "subject": "feat(HeaderBar): add detail title transition and integrate sidebar collapsed state; enhance NewsArticlePage and ProjectPage with title visibility observer for improved UX",
+          "message": "add detail title transition and integrate sidebar collapsed state; enhance NewsArticlePage and ProjectPage with title visibility observer for improved UX",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "HeaderBar",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "e5f8eae",
+          "date": "2026-02-25",
+          "subject": "chore: update version to 1.0 in package.json and package-lock.json; modify AboutPage.vue to enhance button layout and navigation links",
+          "message": "update version to 1.0 in package.json and package-lock.json; modify AboutPage.vue to enhance button layout and navigation links",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "84439ab",
+          "date": "2026-02-25",
+          "subject": "style(AboutPage): refine text layout and enhance image transitions for improved visual appeal",
+          "message": "refine text layout and enhance image transitions for improved visual appeal",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "AboutPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "76a510a",
+          "date": "2026-02-25",
+          "subject": "fix(AboutPage): handle page reloads with #contact hash to scroll to top and remove hash for better user experience",
+          "message": "handle page reloads with #contact hash to scroll to top and remove hash for better user experience",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "AboutPage",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "c5c0911",
+          "date": "2026-02-25",
+          "subject": "refactor(TagMarqueeSection): update link text and routing for improved clarity and user engagement",
+          "message": "update link text and routing for improved clarity and user engagement",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "TagMarqueeSection",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "c06666e",
+          "date": "2026-02-25",
+          "subject": "refactor(AboutPage): update project cover handling to use computed properties for improved readability and maintainability",
+          "message": "update project cover handling to use computed properties for improved readability and maintainability",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "AboutPage",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "7d5a886",
+          "date": "2026-02-25",
+          "subject": "refactor(Routing): remove ContactPage and update routing to redirect to the contact section on the About page, enhancing navigation and user experience",
+          "message": "remove ContactPage and update routing to redirect to the contact section on the About page, enhancing navigation and user experience",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "Routing",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "8ba2274",
+          "date": "2026-02-25",
+          "subject": "style(AboutPage): update layout and spacing for improved mobile responsiveness and visual consistency",
+          "message": "update layout and spacing for improved mobile responsiveness and visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "AboutPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "4a2a723",
+          "date": "2026-02-25",
+          "subject": "refactor(AboutPage): restructure project cover carousel for improved responsiveness and visual consistency across devices",
+          "message": "restructure project cover carousel for improved responsiveness and visual consistency across devices",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "AboutPage",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "4ea62ef",
+          "date": "2026-02-25",
+          "subject": "refactor(Routing): update company route redirection to point to the about page and enhance sidebar menu with new about section",
+          "message": "update company route redirection to point to the about page and enhance sidebar menu with new about section",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "Routing",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-24",
+      "commits": [
+        {
+          "hash": "6f4f96b",
+          "date": "2026-02-24",
+          "subject": "style(ContactPage): adjust drop-shadow filter for improved visual clarity",
+          "message": "adjust drop-shadow filter for improved visual clarity",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "ContactPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-23",
+      "commits": [
+        {
+          "hash": "d7551d7",
+          "date": "2026-02-23",
+          "subject": "feat(Assets): update multiple cover images and enhance project documentation for Mingde Academy with new media integration",
+          "message": "update multiple cover images and enhance project documentation for Mingde Academy with new media integration",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "Assets",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-22",
+      "commits": [
+        {
+          "hash": "ab77680",
+          "date": "2026-02-22",
+          "subject": "feat(MarkdownEnhancements): integrate mermaid diagrams for improved visualization of markdown structure and parsing flow",
+          "message": "integrate mermaid diagrams for improved visualization of markdown structure and parsing flow",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "MarkdownEnhancements",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "ed9bf9b",
+          "date": "2026-02-22",
+          "subject": "chore(README): translate and enhance project documentation for clarity, including updates to features, tech stack, and commands",
+          "message": "translate and enhance project documentation for clarity, including updates to features, tech stack, and commands",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "README",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "8d820f9",
+          "date": "2026-02-22",
+          "subject": "refactor(README): update project overview, structure, and commands for clarity and improved organization",
+          "message": "update project overview, structure, and commands for clarity and improved organization",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "README",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "060fc61",
+          "date": "2026-02-22",
+          "subject": "delete(dark-mode-image-switching): remove dark mode image switching article to streamline content",
+          "message": "delete(dark-mode-image-switching): remove dark mode image switching article to streamline content",
+          "author": "Rolly",
+          "type": "other",
+          "scope": "dark-mode-image-switching",
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "4f369c0",
+          "date": "2026-02-22",
+          "subject": "feat(MermaidIntegration): add mermaid support for diagram rendering in markdown, including light and dark themes, and update styles for improved layout",
+          "message": "add mermaid support for diagram rendering in markdown, including light and dark themes, and update styles for improved layout",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "MermaidIntegration",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "a307758",
+          "date": "2026-02-22",
+          "subject": "feat(hzhst): add primary button text and URL for enhanced user navigation",
+          "message": "add primary button text and URL for enhanced user navigation",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "hzhst",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "d05b6e6",
+          "date": "2026-02-22",
+          "subject": "style(AboutSection): rename and enhance fade effect styles for improved visual consistency",
+          "message": "rename and enhance fade effect styles for improved visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "AboutSection",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "6dc45c4",
+          "date": "2026-02-22",
+          "subject": "fix(AppLayout): remove redundant route from sidebar auto-hide logic for cleaner code",
+          "message": "remove redundant route from sidebar auto-hide logic for cleaner code",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "AppLayout",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "811104e",
+          "date": "2026-02-22",
+          "subject": "style(HomePage): enhance grid and text styles for improved responsiveness and visual consistency",
+          "message": "enhance grid and text styles for improved responsiveness and visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HomePage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "67359d0",
+          "date": "2026-02-22",
+          "subject": "style(HomePage, ContentGridCard): adjust grid and text styles for improved responsiveness and visual consistency",
+          "message": "adjust grid and text styles for improved responsiveness and visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HomePage, ContentGridCard",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "559c183",
+          "date": "2026-02-22",
+          "subject": "style(CoverImage): refine play button styling and add responsive scaling for improved visual consistency",
+          "message": "refine play button styling and add responsive scaling for improved visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "CoverImage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "2b18e59",
+          "date": "2026-02-22",
+          "subject": "style(CoverImage, PricingPage): update icon transition effects and adjust text formatting for improved visual consistency",
+          "message": "update icon transition effects and adjust text formatting for improved visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "CoverImage, PricingPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "a893a56",
+          "date": "2026-02-22",
+          "subject": "feat(WaterEnvHeroSection): enhance layout with KPI cards and update grid classes for improved responsiveness",
+          "message": "enhance layout with KPI cards and update grid classes for improved responsiveness",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "WaterEnvHeroSection",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "7b5a9ad",
+          "date": "2026-02-22",
+          "subject": "feat(waterEnvFeatures, WaterEnvPage): add dark mode images and update image rendering for improved visual experience",
+          "message": "add dark mode images and update image rendering for improved visual experience",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "waterEnvFeatures, WaterEnvPage",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "6fdb244",
+          "date": "2026-02-22",
+          "subject": "style(WaterEnvPage): adjust grid layout and spacing for improved responsiveness and visual consistency",
+          "message": "adjust grid layout and spacing for improved responsiveness and visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "WaterEnvPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "5bf1c6e",
+          "date": "2026-02-22",
+          "subject": "style(WaterEnvPage): refine grid layout and update image styles for enhanced visual appeal and responsiveness",
+          "message": "refine grid layout and update image styles for enhanced visual appeal and responsiveness",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "WaterEnvPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "22bdb11",
+          "date": "2026-02-22",
+          "subject": "style(WaterEnvPage): enhance grid layout and update image mask styles for improved visual integration and responsiveness",
+          "message": "enhance grid layout and update image mask styles for improved visual integration and responsiveness",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "WaterEnvPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "664aaf8",
+          "date": "2026-02-22",
+          "subject": "style(WaterEnvHeroSection, waterEnvFeatures, WaterEnvPage): update text content, enhance styling, and improve layout for better user experience",
+          "message": "update text content, enhance styling, and improve layout for better user experience",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "WaterEnvHeroSection, waterEnvFeatures, WaterEnvPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "c0a6fda",
+          "date": "2026-02-22",
+          "subject": "refactor(WaterEnvPage, WaterSurfaceBg): optimize rendering performance and update layout styles for better responsiveness",
+          "message": "optimize rendering performance and update layout styles for better responsiveness",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "WaterEnvPage, WaterSurfaceBg",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "c8cfdb2",
+          "date": "2026-02-22",
+          "subject": "style(WaterEnvPage): update styling for section chips, titles, and descriptions to enhance visual consistency",
+          "message": "update styling for section chips, titles, and descriptions to enhance visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "WaterEnvPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "1b07ad6",
+          "date": "2026-02-22",
+          "subject": "feat(router): add new route for water environment monitoring page and update sidebar navigation",
+          "message": "add new route for water environment monitoring page and update sidebar navigation",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "router",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "5f13df1",
+          "date": "2026-02-22",
+          "subject": "style(HomePage): adjust padding and font sizes for improved readability and aesthetics",
+          "message": "adjust padding and font sizes for improved readability and aesthetics",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HomePage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-21",
+      "commits": [
+        {
+          "hash": "4b00034",
+          "date": "2026-02-21",
+          "subject": "style(HomePage): increase margin for project and news links to enhance layout spacing",
+          "message": "increase margin for project and news links to enhance layout spacing",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HomePage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "f42983f",
+          "date": "2026-02-21",
+          "subject": "style(YgbHeroSection, YgbPage): adjust layout and styling for improved responsiveness and visual consistency",
+          "message": "adjust layout and styling for improved responsiveness and visual consistency",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "YgbHeroSection, YgbPage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "8397d3f",
+          "date": "2026-02-21",
+          "subject": "style(HomePage): update responsive layout and refine grid structure for better display",
+          "message": "update responsive layout and refine grid structure for better display",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "HomePage",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "cf32187",
+          "date": "2026-02-21",
+          "subject": "refactor(AppLayout): enhance sidebar collapse behavior based on route path",
+          "message": "enhance sidebar collapse behavior based on route path",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "AppLayout",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "a965706",
+          "date": "2026-02-21",
+          "subject": "refactor(AppLayout): simplify sidebar collapse logic and remove unused viewport handling",
+          "message": "simplify sidebar collapse logic and remove unused viewport handling",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "AppLayout",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "c5d1ff6",
+          "date": "2026-02-21",
+          "subject": "feat(related-content): add video cover support and icon customization for related content items",
+          "message": "add video cover support and icon customization for related content items",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "related-content",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "0c87df7",
+          "date": "2026-02-21",
+          "subject": "feat(cover-media): replace SquareCoverMedia with CoverImage and add video support across components",
+          "message": "replace SquareCoverMedia with CoverImage and add video support across components",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "cover-media",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "cf860a1",
+          "date": "2026-02-21",
+          "subject": "refactor(icons): remove markdown icon and update related styles in SquareCoverMedia",
+          "message": "remove markdown icon and update related styles in SquareCoverMedia",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "icons",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "17d6e00",
+          "date": "2026-02-21",
+          "subject": "refactor(tailwind): replace legacy utilities with recommended v4 equivalents",
+          "message": "replace legacy utilities with recommended v4 equivalents",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "tailwind",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "6b3edc6",
+          "date": "2026-02-21",
+          "subject": "style(home-page): align layout breakpoints with hero section",
+          "message": "align layout breakpoints with hero section",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "home-page",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "84d7590",
+          "date": "2026-02-21",
+          "subject": "style(ygb-hero-section): refine responsive breakpoints",
+          "message": "refine responsive breakpoints",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "ygb-hero-section",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "cccb712",
+          "date": "2026-02-21",
+          "subject": "feat(news): add video cover support for news pages",
+          "message": "add video cover support for news pages",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "news",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-20",
+      "commits": [
+        {
+          "hash": "d634208",
+          "date": "2026-02-20",
+          "subject": "Merge branch 'codex/stage-0-baseline'",
+          "message": "Merge branch 'codex/stage-0-baseline'",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "3d56897",
+          "date": "2026-02-20",
+          "subject": "Adjust Ygb download carousel stage to avoid top clipping",
+          "message": "Adjust Ygb download carousel stage to avoid top clipping",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "7eff440",
+          "date": "2026-02-20",
+          "subject": "Adjust homepage cases tablet breakpoint to include iPad Pro",
+          "message": "Adjust homepage cases tablet breakpoint to include iPad Pro",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "f6458db",
+          "date": "2026-02-20",
+          "subject": "chore(font): remove unused MiSans assets and cleanup references",
+          "message": "remove unused MiSans assets and cleanup references",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "font",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "3375e63",
+          "date": "2026-02-20",
+          "subject": "refactor(font): unify global font stack across platforms",
+          "message": "unify global font stack across platforms",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": "font",
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-19",
+      "commits": [
+        {
+          "hash": "eb5b898",
+          "date": "2026-02-19",
+          "subject": "Adjust YGB breakpoints and auto-hide sidebar on lg",
+          "message": "Adjust YGB breakpoints and auto-hide sidebar on lg",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "18efca8",
+          "date": "2026-02-19",
+          "subject": "content(news): update article cover and body; sync company page content width",
+          "message": "content(news): update article cover and body; sync company page content width",
+          "author": "Rolly",
+          "type": "other",
+          "scope": "news",
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "6296a11",
+          "date": "2026-02-19",
+          "subject": "fix(article): align action bar width with markdown body",
+          "message": "align action bar width with markdown body",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "article",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "475ee4f",
+          "date": "2026-02-19",
+          "subject": "style(markdown): unify top spacing and remove bottom margins",
+          "message": "unify top spacing and remove bottom margins",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "e44e94c",
+          "date": "2026-02-19",
+          "subject": "content(markdown): expand article details and refine heading rhythm spacing",
+          "message": "content(markdown): expand article details and refine heading rhythm spacing",
+          "author": "Rolly",
+          "type": "other",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "d9f71f9",
+          "date": "2026-02-19",
+          "subject": "content(news): publish markdown-to-html technical article update",
+          "message": "content(news): publish markdown-to-html technical article update",
+          "author": "Rolly",
+          "type": "other",
+          "scope": "news",
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "16121d1",
+          "date": "2026-02-19",
+          "subject": "fix(markdown): align iPad mini/air layout with desktop markdown rhythm",
+          "message": "align iPad mini/air layout with desktop markdown rhythm",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "d63eacf",
+          "date": "2026-02-19",
+          "subject": "style(markdown): tune table header corners and subtle hover state",
+          "message": "tune table header corners and subtle hover state",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "692a2b9",
+          "date": "2026-02-19",
+          "subject": "style(markdown): refine table card tone and divider contrast",
+          "message": "refine table card tone and divider contrast",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "f4e1599",
+          "date": "2026-02-19",
+          "subject": "feat(markdown): isolate table/code block layout and add md-table styling",
+          "message": "isolate table/code block layout and add md-table styling",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "46411a3",
+          "date": "2026-02-19",
+          "subject": "feat(markdown): add highlighted code blocks with copy toolbar",
+          "message": "add highlighted code blocks with copy toolbar",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "markdown",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "b02f021",
+          "date": "2026-02-19",
+          "subject": "tune: adjust media peek and left-align wrapped captions",
+          "message": "tune: adjust media peek and left-align wrapped captions",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "1c15db7",
+          "date": "2026-02-19",
+          "subject": "tune: increase markdown media side preview peek",
+          "message": "tune: increase markdown media side preview peek",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "4bc124b",
+          "date": "2026-02-19",
+          "subject": "fix: make markdown media width respond to sidebar layout changes",
+          "message": "make markdown media width respond to sidebar layout changes",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "34a7e0d",
+          "date": "2026-02-19",
+          "subject": "refine markdown list and blockquote layout across breakpoints",
+          "message": "refine markdown list and blockquote layout across breakpoints",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "908ceba",
+          "date": "2026-02-19",
+          "subject": "fix: prevent Windows layout shift from scrollbar toggling",
+          "message": "prevent Windows layout shift from scrollbar toggling",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "0516049",
+          "date": "2026-02-19",
+          "subject": "style: unify heading descriptions to text-primary",
+          "message": "unify heading descriptions to text-primary",
+          "author": "Rolly",
+          "type": "style",
+          "scope": null,
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "a76ef7f",
+          "date": "2026-02-19",
+          "subject": "restore text-secondary token while keeping shared color derivation",
+          "message": "restore text-secondary token while keeping shared color derivation",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "2a2525f",
+          "date": "2026-02-19",
+          "subject": "separate border and divider colors with edge token",
+          "message": "separate border and divider colors with edge token",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "5da4430",
+          "date": "2026-02-19",
+          "subject": "refactor theme tokens and unify primary button text",
+          "message": "refactor theme tokens and unify primary button text",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "7acaa30",
+          "date": "2026-02-19",
+          "subject": "fix tablet filter/sort popover anchor direction and breakpoints",
+          "message": "fix tablet filter/sort popover anchor direction and breakpoints",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "7db310f",
+          "date": "2026-02-19",
+          "subject": "style: align footer tablet behavior with mobile",
+          "message": "align footer tablet behavior with mobile",
+          "author": "Rolly",
+          "type": "style",
+          "scope": null,
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "2d0152e",
+          "date": "2026-02-19",
+          "subject": "fix: align tablet sidebar toggle media query with tailwind breakpoint",
+          "message": "align tablet sidebar toggle media query with tailwind breakpoint",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "1e367c4",
+          "date": "2026-02-19",
+          "subject": "a11y: improve navigation semantics and home heading structure",
+          "message": "a11y: improve navigation semantics and home heading structure",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "fd7639a",
+          "date": "2026-02-19",
+          "subject": "perf: lazy-load MiSans and remove unused font/dependency assets",
+          "message": "perf: lazy-load MiSans and remove unused font/dependency assets",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "15bf9a1",
+          "date": "2026-02-19",
+          "subject": "refactor: extract shared list/detail logic and content parsing",
+          "message": "extract shared list/detail logic and content parsing",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "43e3e2c",
+          "date": "2026-02-19",
+          "subject": "fix: stabilize iOS video fullscreen exit layout",
+          "message": "stabilize iOS video fullscreen exit layout",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "5bcf481",
+          "date": "2026-02-19",
+          "subject": "chore: update ygb tag copy",
+          "message": "update ygb tag copy",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "3bdd217",
+          "date": "2026-02-19",
+          "subject": "fix: improve dark-mode readability for white CTA buttons",
+          "message": "improve dark-mode readability for white CTA buttons",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "4987c01",
+          "date": "2026-02-19",
+          "subject": "feat(video-player): make playback speed a submenu with back action",
+          "message": "make playback speed a submenu with back action",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "video-player",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "d00b1e8",
+          "date": "2026-02-19",
+          "subject": "refactor: unify button styles with semantic utility classes",
+          "message": "unify button styles with semantic utility classes",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "e5c125d",
+          "date": "2026-02-19",
+          "subject": "refactor: unify global text color tokens and semantic classes",
+          "message": "unify global text color tokens and semantic classes",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "7dab8eb",
+          "date": "2026-02-19",
+          "subject": "feat(theme): prioritize system color scheme over manual selection",
+          "message": "prioritize system color scheme over manual selection",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "theme",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "10fea63",
+          "date": "2026-02-19",
+          "subject": "perf: lazy-load speech player and improve paragraph pauses",
+          "message": "perf: lazy-load speech player and improve paragraph pauses",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-18",
+      "commits": [
+        {
+          "hash": "a3d1ae2",
+          "date": "2026-02-18",
+          "subject": "feat: add article speech player and align company markdown styles",
+          "message": "add article speech player and align company markdown styles",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "639abcf",
+          "date": "2026-02-18",
+          "subject": "feat(typography): apply platform-specific font stacks",
+          "message": "apply platform-specific font stacks",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "typography",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "3156576",
+          "date": "2026-02-18",
+          "subject": "chore(ygb): update mini-program hint copy",
+          "message": "update mini-program hint copy",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "ygb",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "52abd72",
+          "date": "2026-02-18",
+          "subject": "fix(ygb): restore top-aligned download meta on desktop",
+          "message": "restore top-aligned download meta on desktop",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "ygb",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "476ac95",
+          "date": "2026-02-18",
+          "subject": "fix(ygb): align download meta with CTA on tablet breakpoints",
+          "message": "align download meta with CTA on tablet breakpoints",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "ygb",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "28c0de0",
+          "date": "2026-02-18",
+          "subject": "Raise minimum typography to 0.875rem across the site",
+          "message": "Raise minimum typography to 0.875rem across the site",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "d12d307",
+          "date": "2026-02-18",
+          "subject": "Prune MiSans bundle to regular medium semibold",
+          "message": "Prune MiSans bundle to regular medium semibold",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "2ee73aa",
+          "date": "2026-02-18",
+          "subject": "Localize MiSans with bundled subset fonts",
+          "message": "Localize MiSans with bundled subset fonts",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "920e28e",
+          "date": "2026-02-18",
+          "subject": "style: update global sans fallback order with MiSans priority",
+          "message": "update global sans fallback order with MiSans priority",
+          "author": "Rolly",
+          "type": "style",
+          "scope": null,
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "bffed44",
+          "date": "2026-02-18",
+          "subject": "style: lower Segoe UI priority in global sans font fallback",
+          "message": "lower Segoe UI priority in global sans font fallback",
+          "author": "Rolly",
+          "type": "style",
+          "scope": null,
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "6e002db",
+          "date": "2026-02-18",
+          "subject": "feat: optimize homepage hero images with responsive srcset",
+          "message": "optimize homepage hero images with responsive srcset",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "9e01f70",
+          "date": "2026-02-18",
+          "subject": "feat: optimize project and news covers with responsive srcset loading",
+          "message": "optimize project and news covers with responsive srcset loading",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "5b34586",
+          "date": "2026-02-18",
+          "subject": "fix: keep detail info tag links within their own content channel",
+          "message": "keep detail info tag links within their own content channel",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "fb53b94",
+          "date": "2026-02-18",
+          "subject": "Optimize above-the-fold CSS delivery and split markdown media styles",
+          "message": "Optimize above-the-fold CSS delivery and split markdown media styles",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "fcfbd1f",
+          "date": "2026-02-18",
+          "subject": "Revert \"refactor: move shared list page styles into global stylesheet\"",
+          "message": "Revert \"refactor: move shared list page styles into global stylesheet\"",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "9509fb0",
+          "date": "2026-02-18",
+          "subject": "Revert \"refactor: centralize shared list panel styles\"",
+          "message": "Revert \"refactor: centralize shared list panel styles\"",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "c13dfbb",
+          "date": "2026-02-18",
+          "subject": "refactor: centralize shared list panel styles",
+          "message": "centralize shared list panel styles",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "971479d",
+          "date": "2026-02-18",
+          "subject": "refactor: move shared list page styles into global stylesheet",
+          "message": "move shared list page styles into global stylesheet",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "0814ef8",
+          "date": "2026-02-18",
+          "subject": "refactor: componentize shared project/news page sections",
+          "message": "componentize shared project/news page sections",
+          "author": "Rolly",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "3bf738f",
+          "date": "2026-02-18",
+          "subject": "style: lighten cover skeleton placeholder colors",
+          "message": "lighten cover skeleton placeholder colors",
+          "author": "Rolly",
+          "type": "style",
+          "scope": null,
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "a91faf1",
+          "date": "2026-02-18",
+          "subject": "feat: add skeleton loading transition for cover images",
+          "message": "add skeleton loading transition for cover images",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "d150c4b",
+          "date": "2026-02-18",
+          "subject": "fix: ensure year appears before category in detail info tags",
+          "message": "ensure year appears before category in detail info tags",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "57ddfcc",
+          "date": "2026-02-18",
+          "subject": "fix: adapt project/news filter and sort panels for dark mode",
+          "message": "adapt project/news filter and sort panels for dark mode",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "9363925",
+          "date": "2026-02-18",
+          "subject": "fix: stabilize panel placement and category nav fade behavior",
+          "message": "stabilize panel placement and category nav fade behavior",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "6ae7ccc",
+          "date": "2026-02-18",
+          "subject": "fix: stabilize filter/sort panel viewport positioning",
+          "message": "stabilize filter/sort panel viewport positioning",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "7603b33",
+          "date": "2026-02-18",
+          "subject": "feat: refine info card layout and normalize news date formats",
+          "message": "refine info card layout and normalize news date formats",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "8b2216b",
+          "date": "2026-02-18",
+          "subject": "fix: swap news article meta order and styling",
+          "message": "swap news article meta order and styling",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "04c0690",
+          "date": "2026-02-18",
+          "subject": "fix: adjust news nav active state and list-page routing",
+          "message": "adjust news nav active state and list-page routing",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "32723b7",
+          "date": "2026-02-18",
+          "subject": "feat: add more news posts and refine news article recommendations",
+          "message": "add more news posts and refine news article recommendations",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "663d7fc",
+          "date": "2026-02-18",
+          "subject": "feat: adjust homepage case-study tablet layout to three columns",
+          "message": "adjust homepage case-study tablet layout to three columns",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "c0132bd",
+          "date": "2026-02-18",
+          "subject": "feat: add news section with list/detail pages and homepage module",
+          "message": "add news section with list/detail pages and homepage module",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "commits": [
+        {
+          "hash": "723940c",
+          "date": "2026-02-17",
+          "subject": "chore(footer): link icp record to miit filing site",
+          "message": "link icp record to miit filing site",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "footer",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "4152489",
+          "date": "2026-02-17",
+          "subject": "feat: add 404 page and improve footer mobile layout",
+          "message": "add 404 page and improve footer mobile layout",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "4bbaac2",
+          "date": "2026-02-17",
+          "subject": "feat(ygb): update hero actions and mobile download button copy",
+          "message": "update hero actions and mobile download button copy",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "ygb",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "3857d5a",
+          "date": "2026-02-17",
+          "subject": "feat(project): add ygb detail primary button link to ygb page",
+          "message": "add ygb detail primary button link to ygb page",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "project",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "319ad76",
+          "date": "2026-02-17",
+          "subject": "fix(home): prevent horizontal overflow on full-bleed sections",
+          "message": "prevent horizontal overflow on full-bleed sections",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "home",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "9910186",
+          "date": "2026-02-17",
+          "subject": "chore(footer): update company legal name and icp number",
+          "message": "update company legal name and icp number",
+          "author": "Rolly",
+          "type": "chore",
+          "scope": "footer",
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "97f2179",
+          "date": "2026-02-17",
+          "subject": "docs: improve README content and usage guide",
+          "message": "improve README content and usage guide",
+          "author": "Rolly",
+          "type": "docs",
+          "scope": null,
+          "typeInfo": {
+            "label": "文档",
+            "icon": "ri-file-text-line",
+            "color": "orange"
+          }
+        },
+        {
+          "hash": "986cd40",
+          "date": "2026-02-17",
+          "subject": "perf(ygb-hero): pause stacked card autoplay when offscreen",
+          "message": "perf(ygb-hero): pause stacked card autoplay when offscreen",
+          "author": "Rolly",
+          "type": "other",
+          "scope": "ygb-hero",
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "e75422d",
+          "date": "2026-02-17",
+          "subject": "style(ygb): soften feature divider lines in light mode",
+          "message": "soften feature divider lines in light mode",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "ygb",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        },
+        {
+          "hash": "cc038b2",
+          "date": "2026-02-17",
+          "subject": "fix(ui): disable text selection on top hero cards",
+          "message": "disable text selection on top hero cards",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "ui",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "adeb6ad",
+          "date": "2026-02-17",
+          "subject": "feat(ui): add global footer and unify neutral pill button style",
+          "message": "add global footer and unify neutral pill button style",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "ui",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "87f482b",
+          "date": "2026-02-17",
+          "subject": "feat(router): append brand suffix to non-home page titles",
+          "message": "append brand suffix to non-home page titles",
+          "author": "Asuka Langley",
+          "type": "feat",
+          "scope": "router",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "cc91514",
+          "date": "2026-02-17",
+          "subject": "fix(carousel): default media initial slide to first item",
+          "message": "default media initial slide to first item",
+          "author": "Asuka Langley",
+          "type": "fix",
+          "scope": "carousel",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "3759fa0",
+          "date": "2026-02-17",
+          "subject": "chore: update qfshop media caption and assets",
+          "message": "update qfshop media caption and assets",
+          "author": "Asuka Langley",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "dc57dae",
+          "date": "2026-02-17",
+          "subject": "chore: rename bluetonemusic media files and update hs-erp captions",
+          "message": "rename bluetonemusic media files and update hs-erp captions",
+          "author": "Asuka Langley",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "c0abbb4",
+          "date": "2026-02-17",
+          "subject": "chore: reorder ygb media assets and refresh captions",
+          "message": "reorder ygb media assets and refresh captions",
+          "author": "Asuka Langley",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "ab6ac1d",
+          "date": "2026-02-17",
+          "subject": "feat: unify media behavior across pages and fix project image mappings",
+          "message": "unify media behavior across pages and fix project image mappings",
+          "author": "Asuka Langley",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "d65aeba",
+          "date": "2026-02-17",
+          "subject": "feat: enhance qr card 3d hover and fix shadow clipping",
+          "message": "enhance qr card 3d hover and fix shadow clipping",
+          "author": "Asuka Langley",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "commits": [
+        {
+          "hash": "50ebd95",
+          "date": "2026-02-16",
+          "subject": "feat: add hover nudge animation to sidebar back arrow",
+          "message": "add hover nudge animation to sidebar back arrow",
+          "author": "Asuka Langley",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "be6f8f1",
+          "date": "2026-02-16",
+          "subject": "fix: prevent ygb hero title wrapping on wide screens",
+          "message": "prevent ygb hero title wrapping on wide screens",
+          "author": "Asuka Langley",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "384c6cd",
+          "date": "2026-02-16",
+          "subject": "build: add image optimization plugins for vite",
+          "message": "build: add image optimization plugins for vite",
+          "author": "Asuka Langley",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "b9b65b6",
+          "date": "2026-02-16",
+          "subject": "chore: commit remaining local changes",
+          "message": "commit remaining local changes",
+          "author": "Asuka Langley",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "112cea3",
+          "date": "2026-02-16",
+          "subject": "docs: add MiSans usage guidelines to design spec",
+          "message": "add MiSans usage guidelines to design spec",
+          "author": "Asuka Langley",
+          "type": "docs",
+          "scope": null,
+          "typeInfo": {
+            "label": "文档",
+            "icon": "ri-file-text-line",
+            "color": "orange"
+          }
+        },
+        {
+          "hash": "53e77e4",
+          "date": "2026-02-16",
+          "subject": "fix: restore design spec carousel image asset binding",
+          "message": "restore design spec carousel image asset binding",
+          "author": "Asuka Langley",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "841e952",
+          "date": "2026-02-16",
+          "subject": "refactor: optimize static asset placement for vite",
+          "message": "optimize static asset placement for vite",
+          "author": "Asuka Langley",
+          "type": "refactor",
+          "scope": null,
+          "typeInfo": {
+            "label": "重构",
+            "icon": "ri-refresh-line",
+            "color": "blue"
+          }
+        },
+        {
+          "hash": "c19029c",
+          "date": "2026-02-16",
+          "subject": "feat: adjust project tags and case page presentation",
+          "message": "adjust project tags and case page presentation",
+          "author": "Asuka Langley",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "ace3453",
+          "date": "2026-02-16",
+          "subject": "fix: polish iOS sidebar overlay and blur behavior",
+          "message": "polish iOS sidebar overlay and blur behavior",
+          "author": "Asuka Langley",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "554f612",
+          "date": "2026-02-16",
+          "subject": "fix: stabilize iOS mobile sidebar scroll behavior",
+          "message": "stabilize iOS mobile sidebar scroll behavior",
+          "author": "Asuka Langley",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "6a04083",
+          "date": "2026-02-16",
+          "subject": "fix: refine mobile sidebar behavior and interactions",
+          "message": "refine mobile sidebar behavior and interactions",
+          "author": "Asuka Langley",
+          "type": "fix",
+          "scope": null,
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        },
+        {
+          "hash": "52b0d92",
+          "date": "2026-02-16",
+          "subject": "content: refresh project profiles and player center icon",
+          "message": "content: refresh project profiles and player center icon",
+          "author": "Asuka Langley",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "800ef8d",
+          "date": "2026-02-16",
+          "subject": "chore: stop tracking vscode workspace recommendations",
+          "message": "stop tracking vscode workspace recommendations",
+          "author": "Asuka Langley",
+          "type": "chore",
+          "scope": null,
+          "typeInfo": {
+            "label": "维护",
+            "icon": "ri-tools-line",
+            "color": "secondary"
+          }
+        },
+        {
+          "hash": "3c99bfe",
+          "date": "2026-02-16",
+          "subject": "feat: make ygb card fully clickable and set per-page titles",
+          "message": "make ygb card fully clickable and set per-page titles",
+          "author": "Asuka Langley",
+          "type": "feat",
+          "scope": null,
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-02-15",
+      "commits": [
+        {
+          "hash": "7cd029b",
+          "date": "2026-02-15",
+          "subject": "Initial commit",
+          "message": "Initial commit",
+          "author": "Asuka Langley",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        }
+      ]
+    }
+  ],
+  "types": {
+    "feat": {
+      "label": "新增",
+      "icon": "ri-rocket-line",
+      "color": "brand"
+    },
+    "fix": {
+      "label": "修复",
+      "icon": "ri-bug-line",
+      "color": "green"
+    },
+    "chore": {
+      "label": "维护",
+      "icon": "ri-tools-line",
+      "color": "secondary"
+    },
+    "style": {
+      "label": "样式",
+      "icon": "ri-palette-line",
+      "color": "purple"
+    },
+    "refactor": {
+      "label": "重构",
+      "icon": "ri-refresh-line",
+      "color": "blue"
+    },
+    "docs": {
+      "label": "文档",
+      "icon": "ri-file-text-line",
+      "color": "orange"
+    }
+  }
+}

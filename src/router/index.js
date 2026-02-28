@@ -17,6 +17,7 @@ const routes = [
   { path: "/pricing", name: "pricing", component: () => import("../views/PricingPage.vue"), meta: { title: "定价" } },
   { path: "/careers", name: "careers", component: () => import("../views/CareersPage.vue"), meta: { title: "工作机会" } },
   { path: "/design-spec", name: "design-spec", component: () => import("../views/DesignSpecPage.vue"), meta: { title: "设计规范" } },
+  { path: "/changelog", name: "changelog", component: () => import("../views/ChangelogPage.vue"), meta: { title: "更新日志" } },
   { path: "/resources", redirect: "/design-spec" },
   { path: "/:pathMatch(.*)*", name: "not-found", component: () => import("../views/NotFoundPage.vue"), meta: { title: "页面不存在" } },
 ];
