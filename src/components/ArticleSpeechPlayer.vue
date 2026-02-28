@@ -212,8 +212,6 @@ onUnmounted(() => {
   background: rgb(var(--color-ink) / 0.08);
   color: rgb(var(--color-ink) / 1);
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   font-size: 18px;
   position: relative;
   transition: background-color 0.2s ease, color 0.2s ease;

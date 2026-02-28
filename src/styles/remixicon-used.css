@@ -33,6 +33,7 @@
 .ri-download-2-line:before { content: "\ec54"; }
 .ri-drop-line:before { content: "\ec6a"; }
 .ri-equalizer-2-line:before { content: "\f404"; }
+.ri-file-copy-line:before { content: "\ecd5"; }
 .ri-fullscreen-exit-line:before { content: "\ed9a"; }
 .ri-fullscreen-line:before { content: "\ed9c"; }
 .ri-grid-fill:before { content: "\edde"; }
