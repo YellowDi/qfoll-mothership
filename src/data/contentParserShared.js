@@ -170,9 +170,9 @@ const renderMarkdownCodeBlock = (code, language) => {
   const lang = highlighted.language || normalizeCodeLanguage(rawInfo);
   return `<div class="md-code-block" data-code-lang="${escapeAttr(
     lang
-  )}"><div class="md-code-toolbar"><span class="md-code-lang">${escapeAttr(
+  )}"><div class="md-code-toolbar"><span class="md-code-meta"><span class="md-code-icon" aria-hidden="true"><i class="ri-code-s-slash-line"></i></span><span class="md-code-lang">${escapeAttr(
     lang
-  )}</span><button class="md-code-copy" type="button" aria-label="复制代码"><i class="ri-file-copy-line" aria-hidden="true"></i><span class="md-code-copy-text">复制</span></button></div><pre class="md-code-pre"><code class="language-${escapeAttr(
+  )}</span></span><button class="md-code-copy" type="button" aria-label="复制代码"><i class="ri-file-copy-line" aria-hidden="true"></i><span class="md-code-copy-text">复制</span></button></div><pre class="md-code-pre"><code class="language-${escapeAttr(
     lang
   )} hljs">${highlighted.html}</code></pre></div>`;
 };

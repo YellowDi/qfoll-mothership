@@ -209,10 +209,32 @@
     line-height: 1;
   }
 
+  .markdown-body .md-code-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .markdown-body .md-code-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+  }
+
+  .markdown-body .md-code-icon > i {
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
   .markdown-body .md-code-lang {
+    display: inline-flex;
+    align-items: center;
     text-transform: lowercase;
     letter-spacing: 0.01em;
     font-weight: 450;
+    line-height: 1;
   }
 
   .markdown-body .md-code-copy {
@@ -228,6 +250,13 @@
     padding: 4px 2px;
     cursor: pointer;
     transition: color 0.2s ease;
+  }
+
+  .markdown-body .md-code-copy > i,
+  .markdown-body .md-code-copy-text {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
   }
 
   .markdown-body .md-code-copy:hover {

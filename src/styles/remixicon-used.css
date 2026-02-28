@@ -29,7 +29,9 @@
 .ri-arrow-up-s-line:before { content: "\ea78"; }
 .ri-check-line:before { content: "\eb7b"; }
 .ri-close-line:before { content: "\eb99"; }
+.ri-code-s-slash-line:before { content: "\ebad"; }
 .ri-download-2-line:before { content: "\ec54"; }
+.ri-drop-line:before { content: "\ec6a"; }
 .ri-equalizer-2-line:before { content: "\f404"; }
 .ri-fullscreen-exit-line:before { content: "\ed9a"; }
 .ri-fullscreen-line:before { content: "\ed9c"; }
