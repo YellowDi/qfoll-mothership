@@ -42,13 +42,13 @@ src/
 ## Requirements
 
 - Node.js 18+
-- npm or pnpm
+- pnpm
 
 ## Quick Start
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Dev server: `http://localhost:5173`
@@ -57,9 +57,9 @@ Dev server: `http://localhost:5173`
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Local development |
-| `npm run build` | Production build |
-| `npm run preview` | Preview build output |
+| `pnpm dev` | Local development |
+| `pnpm build` | Production build |
+| `pnpm preview` | Preview build output |
 
 ## Content
 
@@ -79,7 +79,7 @@ Update parsing logic in `src/data/` when adding new frontmatter fields.
 
 ## Build & Deploy
 
-After `npm run build`, static output goes to `dist/` and can be deployed to any static host.
+After `pnpm build`, static output goes to `dist/` and can be deployed to any static host.
 
 ## License
 
