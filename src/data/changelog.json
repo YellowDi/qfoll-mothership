@@ -4,6 +4,20 @@
       "date": "2026-02-28",
       "commits": [
         {
+          "hash": "fd96958",
+          "date": "2026-02-28",
+          "subject": "feat(changelog-page): add changelog page",
+          "message": "add changelog page",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "changelog-page",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
           "hash": "845bda7",
           "date": "2026-02-28",
           "subject": "style(YgbHeroSection.vue): update paragraph class to prevent text wrapping for improved readability",
