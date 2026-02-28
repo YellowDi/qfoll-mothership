@@ -31,7 +31,7 @@
           <h1 class="mt-1 whitespace-nowrap text-[clamp(2rem,3.4vw,3.6rem)] leading-[1.08] tracking-[-0.03em] font-medium text-primary">
             智能集卡物流平台
           </h1>
-          <p class="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary">
+          <p class="mt-3 whitespace-nowrap text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary">
             让运输管理更简单、更高效
           </p>
           <div class="relative mt-1 flex w-full min-w-0 max-w-full flex-nowrap items-center gap-2 whitespace-nowrap text-[clamp(1.15rem,1.9vw,1.8rem)] leading-tight font-medium text-primary max-md:text-[clamp(1rem,4.4vw,1.18rem)]">
