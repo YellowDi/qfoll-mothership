@@ -74,6 +74,16 @@
                   <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/news')" aria-hidden="true"></i>
                 </span>
               </button>
+              <RouterLink
+                to="/showcase"
+                :class="rootLinkClass(route.path === '/showcase' || route.path.startsWith('/showcase/'))"
+                :aria-current="route.path === '/showcase' || route.path.startsWith('/showcase/') ? 'page' : undefined"
+              >
+                <span class="flex items-center justify-between">
+                  <span>Showcase</span>
+                  <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/showcase' || route.path.startsWith('/showcase/'))" aria-hidden="true"></i>
+                </span>
+              </RouterLink>
             </nav>
           </div>
           <div

@@ -36,6 +36,8 @@
 .ri-file-copy-line:before { content: "\ecd5"; }
 .ri-fullscreen-exit-line:before { content: "\ed9a"; }
 .ri-fullscreen-line:before { content: "\ed9c"; }
+.ri-github-fill:before { content: "\edca"; }
+.ri-github-line:before { content: "\edcb"; }
 .ri-grid-fill:before { content: "\edde"; }
 .ri-layout-left-2-line:before { content: "\ee92"; }
 .ri-list-check-2:before { content: "\eeb9"; }

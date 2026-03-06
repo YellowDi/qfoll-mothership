@@ -1,6 +1,25 @@
 {
   "entries": [
     {
+      "date": "2026-03-07",
+      "commits": [
+        {
+          "hash": "47b1cca",
+          "date": "2026-03-07",
+          "subject": "fix(spa-fallback): prevent refresh 404 on history routes",
+          "message": "prevent refresh 404 on history routes",
+          "author": "Rolly",
+          "type": "fix",
+          "scope": "spa-fallback",
+          "typeInfo": {
+            "label": "修复",
+            "icon": "ri-bug-line",
+            "color": "green"
+          }
+        }
+      ]
+    },
+    {
       "date": "2026-03-02",
       "commits": [
         {

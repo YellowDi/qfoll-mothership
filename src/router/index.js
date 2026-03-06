@@ -1,11 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { projects } from "../data/projects";
 import { newsArticles } from "../data/news";
+import { showcaseById } from "../data/showcase";
 
 const routes = [
   { path: "/", name: "home", component: () => import("../views/HomePage.vue"), meta: { title: "企丰科技" } },
   { path: "/projects", name: "projects", component: () => import("../views/ProjectsPage.vue"), meta: { title: "客户案例" } },
   { path: "/project/:id", name: "project", component: () => import("../views/ProjectPage.vue") },
+  { path: "/showcase", name: "showcase", component: () => import("../views/ShowcasePage.vue"), meta: { title: "Showcase" } },
+  { path: "/showcase/:id", name: "showcase-detail", component: () => import("../views/ShowcaseDetailPage.vue") },
   { path: "/news", name: "news", component: () => import("../views/NewsPage.vue"), meta: { title: "最新动态" } },
   { path: "/news/:id", name: "news-article", component: () => import("../views/NewsArticlePage.vue") },
   { path: "/company", redirect: "/about" },
@@ -53,6 +56,13 @@ router.afterEach((to) => {
     const articleId = String(to.params.id || "");
     const articleTitle = newsArticles[articleId]?.title;
     document.title = withBrandSuffix(articleTitle || "最新动态");
+    return;
+  }
+
+  if (to.name === "showcase-detail") {
+    const demoId = String(to.params.id || "");
+    const demoTitle = showcaseById[demoId]?.title;
+    document.title = withBrandSuffix(demoTitle || "Showcase");
     return;
   }
 
