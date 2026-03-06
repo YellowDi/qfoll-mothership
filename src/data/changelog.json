@@ -1,6 +1,25 @@
 {
   "entries": [
     {
+      "date": "2026-03-02",
+      "commits": [
+        {
+          "hash": "38b8c61",
+          "date": "2026-03-02",
+          "subject": "style(articles): normalize quotation marks in selected articles",
+          "message": "normalize quotation marks in selected articles",
+          "author": "Rolly",
+          "type": "style",
+          "scope": "articles",
+          "typeInfo": {
+            "label": "样式",
+            "icon": "ri-palette-line",
+            "color": "purple"
+          }
+        }
+      ]
+    },
+    {
       "date": "2026-03-01",
       "commits": [
         {
