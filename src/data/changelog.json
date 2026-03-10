@@ -1,6 +1,39 @@
 {
   "entries": [
     {
+      "date": "2026-03-10",
+      "commits": [
+        {
+          "hash": "4b833c2",
+          "date": "2026-03-10",
+          "subject": "feat(showcase): add BuildGuard Admin to showcase list",
+          "message": "add BuildGuard Admin to showcase list",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "showcase",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "0264061",
+          "date": "2026-03-10",
+          "subject": "feat(header-bar): implement secret entry feature to navigate to internal page",
+          "message": "implement secret entry feature to navigate to internal page",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "header-bar",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        }
+      ]
+    },
+    {
       "date": "2026-03-07",
       "commits": [
         {
