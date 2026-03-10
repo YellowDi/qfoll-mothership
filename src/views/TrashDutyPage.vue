@@ -15,7 +15,7 @@
               轮值开始：{{ formatDisplayDate(roster.rotationStartDate) }}
             </span>
             <span class="rounded-full bg-black/5 px-4 py-2 dark:bg-white/8">
-              {{ roster.includeWeekends ? "按自然日轮值" : "仅工作日轮值" }}
+              默认工作日轮值，兼容调休与假期
             </span>
             <span class="rounded-full bg-black/5 px-4 py-2 dark:bg-white/8">
               当前成员 {{ roster.members.length }} 人
@@ -46,7 +46,7 @@
       <section class="overflow-hidden rounded-md border border-black/8 bg-surface dark:border-white/10">
         <div class="border-b border-black/8 px-6 py-5 dark:border-white/10">
           <h2 class="text-xl font-medium text-primary">未来 14 天排班</h2>
-          <p class="mt-1 text-sm text-secondary">仅显示今天起未来两周，按顺序自动轮转，特殊日期优先使用手动覆盖。</p>
+          <p class="mt-1 text-sm text-secondary">仅显示今天起未来两周，年度日历优先决定是否排班，特殊日期可手动覆盖负责人。</p>
         </div>
         <div class="overflow-x-auto">
           <table class="min-w-full border-separate border-spacing-0">
@@ -127,29 +127,66 @@ function isWeekend(date) {
 }
 
 const rotationStart = startOfDay(parseDate(roster.rotationStartDate));
+const calendarByYear = roster.calendarByYear || {};
+
+function getCalendarForYear(date) {
+  return calendarByYear[String(date.getFullYear())] || null;
+}
+
+function isListedDate(dateList, date) {
+  return Array.isArray(dateList) && dateList.includes(formatDateKey(date));
+}
+
+function getDutyDayStatus(date) {
+  const calendar = getCalendarForYear(date);
+
+  if (calendar && isListedDate(calendar.offDays, date)) {
+    return "holiday";
+  }
+
+  if (calendar && isListedDate(calendar.workdays, date)) {
+    return "makeup-workday";
+  }
+
+  return isWeekend(date) ? "weekend" : "workday";
+}
+
+function isDutyDay(date) {
+  const status = getDutyDayStatus(date);
+  return status === "workday" || status === "makeup-workday";
+}
+
+function getRowNote(source, status) {
+  if (source === "override") return "手动调整";
+  if (status === "makeup-workday") return "调休上班";
+  if (status === "holiday") return "假期休息";
+  if (status === "weekend") return "周末休息";
+  return "常规轮值";
+}
 
 function getDutyAssignee(date) {
   const normalizedDate = startOfDay(date);
-  const override = roster.overrides[formatDateKey(normalizedDate)];
-  if (override) {
-    return { assignee: override, source: "override" };
-  }
-
-  if (!roster.includeWeekends && isWeekend(normalizedDate)) {
-    return { assignee: "", source: "skipped" };
+  const dayStatus = getDutyDayStatus(normalizedDate);
+  if (!isDutyDay(normalizedDate)) {
+    return { assignee: "", source: "skipped", dayStatus };
   }
 
   let workingDays = 0;
   const cursor = new Date(rotationStart);
   while (cursor < normalizedDate) {
-    if (roster.includeWeekends || !isWeekend(cursor)) {
+    if (isDutyDay(cursor)) {
       workingDays += 1;
     }
     cursor.setDate(cursor.getDate() + 1);
   }
 
+  const override = roster.overrides[formatDateKey(normalizedDate)];
+  if (override) {
+    return { assignee: override, source: "override", dayStatus };
+  }
+
   const index = workingDays % roster.members.length;
-  return { assignee: roster.members[index], source: "rotation" };
+  return { assignee: roster.members[index], source: "rotation", dayStatus };
 }
 
 function buildUpcomingRows() {
@@ -165,12 +202,7 @@ function buildUpcomingRows() {
       assignee: duty.assignee,
       isSkipped: duty.source === "skipped",
       isToday: formatDateKey(date) === formatDateKey(today),
-      note:
-        duty.source === "override"
-          ? "手动调整"
-          : duty.source === "skipped"
-          ? "周末跳过"
-          : "常规轮值",
+      note: getRowNote(duty.source, duty.dayStatus),
     });
   }
   return rows;
