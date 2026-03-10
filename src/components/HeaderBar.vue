@@ -4,7 +4,12 @@
       <div class="flex items-center gap-3">
         <RouterLink to="/" class="flex items-center gap-2">
           <img :src="logoImage" alt="企丰科技" class="h-8 w-8 rounded-sm object-cover" />
-          <div class="text-sm font-medium">企丰科技</div>
+          <div
+            class="select-none text-sm font-medium"
+            @click.prevent="handleSecretEntry"
+          >
+            企丰科技
+          </div>
         </RouterLink>
         <button
           class="hidden md:inline-flex btn-icon btn-icon-md btn-icon-muted"
@@ -134,7 +139,7 @@
 </template>
 
 <script setup>
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import logoImage from "../assets/logo.webp";
 import {
@@ -151,7 +156,10 @@ const {
   activeTocId,
   tocOpen,
 } = useHeaderBarDetailTitle();
+const router = useRouter();
 const headerRootRef = ref(null);
+const secretTapCount = ref(0);
+let secretTapTimer = null;
 
 const props = defineProps({
   onToggle: {
@@ -182,6 +190,32 @@ const detailTitleDesktopClass = computed(() =>
 );
 
 const hasToc = computed(() => tocItems.value.length > 0);
+
+const resetSecretTap = () => {
+  secretTapCount.value = 0;
+  if (secretTapTimer) {
+    window.clearTimeout(secretTapTimer);
+    secretTapTimer = null;
+  }
+};
+
+const handleSecretEntry = () => {
+  secretTapCount.value += 1;
+
+  if (secretTapTimer) {
+    window.clearTimeout(secretTapTimer);
+  }
+
+  if (secretTapCount.value >= 3) {
+    resetSecretTap();
+    router.push("/internal/trash-duty-9f3k");
+    return;
+  }
+
+  secretTapTimer = window.setTimeout(() => {
+    resetSecretTap();
+  }, 900);
+};
 
 const itemClass = (item) => {
   const active = item.id === activeTocId.value;
@@ -219,6 +253,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  resetSecretTap();
   document.removeEventListener("pointerdown", handleDocumentPointerDown);
   document.removeEventListener("keydown", handleDocumentKeydown);
 });

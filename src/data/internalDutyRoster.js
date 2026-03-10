@@ -1,0 +1,25 @@
+export const dutyRosterConfig = {
+  pageTitle: "值日表",
+  subtitle: "公司内部使用",
+  routeHint: "此页面未加入站点导航，仅通过链接访问。",
+  includeWeekends: false,
+  rotationStartDate: "2026-03-09",
+  members: [
+    "孙想艺",
+    "吴晓敏",
+    "张启恒",
+    "黄迪",
+    "李哲岭",
+    "蔡亦文",
+    "尤佳晨",
+    "邵静旭",
+    "梁何羽戈",
+    "杨明琪",
+  ],
+  overrides: {},
+  notes: [
+    "名单会先随机排序一次，再按工作日顺序每天一人轮值，全部排完一遍后才进入下一轮。",
+    "如遇请假或节假日，可直接在 overrides 中指定日期负责人。",
+    "需要更换名单时，编辑此文件即可。",
+  ],
+};

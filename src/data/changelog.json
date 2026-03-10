@@ -4,6 +4,20 @@
       "date": "2026-03-07",
       "commits": [
         {
+          "hash": "a3dff92",
+          "date": "2026-03-07",
+          "subject": "feat(showcase): add showcase page and detail view, update routing and layout",
+          "message": "add showcase page and detail view, update routing and layout",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "showcase",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
           "hash": "47b1cca",
           "date": "2026-03-07",
           "subject": "fix(spa-fallback): prevent refresh 404 on history routes",
