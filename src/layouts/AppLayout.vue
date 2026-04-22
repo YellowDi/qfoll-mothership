@@ -44,7 +44,12 @@
                   <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/ygb')" aria-hidden="true"></i>
                 </span>
               </RouterLink>
-              <RouterLink to="/water-env" :class="rootLinkClass(route.path === '/water-env')" :aria-current="route.path === '/water-env' ? 'page' : undefined">
+              <RouterLink
+                v-if="showWaterEnvNav"
+                to="/water-env"
+                :class="rootLinkClass(route.path === '/water-env')"
+                :aria-current="route.path === '/water-env' ? 'page' : undefined"
+              >
                 <span class="flex items-center justify-between">
                   <span>水环境智慧监控</span>
                   <i class="ri-arrow-right-line text-sm" :class="arrowClass(route.path === '/water-env')" aria-hidden="true"></i>
@@ -75,6 +80,7 @@
                 </span>
               </button>
               <RouterLink
+                v-if="showShowcaseNav"
                 to="/showcase"
                 :class="rootLinkClass(route.path === '/showcase' || route.path.startsWith('/showcase/'))"
                 :aria-current="route.path === '/showcase' || route.path.startsWith('/showcase/') ? 'page' : undefined"
@@ -186,6 +192,8 @@ const route = useRoute();
 const router = useRouter();
 const sidebarEl = ref(null);
 const lastTouchY = ref(0);
+const showWaterEnvNav = false;
+const showShowcaseNav = false;
 let removeTouchGuards = null;
 const isCompanyRoute = (path) =>
   path === "/about" ||

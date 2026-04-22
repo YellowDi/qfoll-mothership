@@ -1,10 +1,10 @@
 ---
 id: hzhst
-title: 恒信通水环境智慧监控
-sidebarTitle: 恒信通
+title: 恒仕通水环境智慧监控
+sidebarTitle: 恒仕通
 year: 2025
 startMonth: 4
-company: 湖州恒信通工程管理有限公司
+company: 湖州恒仕通工程管理有限公司
 tag: 企业数字化
 lead: 面向排水管网全生命周期管理的数字化监测与预警系统
 primaryButtonText: 查看详情

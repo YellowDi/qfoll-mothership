@@ -4,6 +4,34 @@
       "date": "2026-03-10",
       "commits": [
         {
+          "hash": "4dc5683",
+          "date": "2026-03-10",
+          "subject": "feat(duty-roster): enhance duty roster functionality and update UI",
+          "message": "enhance duty roster functionality and update UI",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "duty-roster",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
+          "hash": "d3f0487",
+          "date": "2026-03-10",
+          "subject": "feat(changelog): update changelog with new entries for BuildGuard Admin and secret entry feature",
+          "message": "update changelog with new entries for BuildGuard Admin and secret entry feature",
+          "author": "Rolly",
+          "type": "feat",
+          "scope": "changelog",
+          "typeInfo": {
+            "label": "新增",
+            "icon": "ri-rocket-line",
+            "color": "brand"
+          }
+        },
+        {
           "hash": "4b833c2",
           "date": "2026-03-10",
           "subject": "feat(showcase): add BuildGuard Admin to showcase list",
