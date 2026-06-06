@@ -7,11 +7,9 @@ export const dutyRosterConfig = {
   rotationStartDate: "2026-03-09",
   members: [
     "孙想艺",
-    "吴晓敏",
     "张启恒",
     "黄迪",
     "李哲岭",
-    "蔡亦文",
     "尤佳晨",
     "邵静旭",
     "梁何羽戈",

@@ -1,6 +1,25 @@
 {
   "entries": [
     {
+      "date": "2026-04-22",
+      "commits": [
+        {
+          "hash": "b1806ab",
+          "date": "2026-04-22",
+          "subject": "Hide water env and showcase nav links",
+          "message": "Hide water env and showcase nav links",
+          "author": "Rolly",
+          "type": "other",
+          "scope": null,
+          "typeInfo": {
+            "label": "其他",
+            "icon": "ri-commit-line",
+            "color": "secondary"
+          }
+        }
+      ]
+    },
+    {
       "date": "2026-03-10",
       "commits": [
         {
