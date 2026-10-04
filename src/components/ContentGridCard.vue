@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖内容卡片 Props 与 vue-router 链接能力
+ * [OUTPUT]: 对外提供网格内容卡片
+ * [POS]: 项目、Showcase 等列表页面的可复用展示单元
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <RouterLink class="group" :to="to">
     <div class="overflow-hidden rounded-sm">

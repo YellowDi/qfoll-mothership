@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖详情元数据、标签链接和可选 HTML 信息面板
+ * [OUTPUT]: 对外提供详情页元信息卡片
+ * [POS]: 项目与新闻详情页的侧栏元数据展示组件
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <div class="news-meta-section w-full max-w-360 self-stretch mx-auto py-10">
     <div class="mx-auto w-full px-16 max-xl:px-6 max-md:px-5">

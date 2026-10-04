@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 vue-router 链接能力
+ * [OUTPUT]: 对外提供 404 页面组件
+ * [POS]: 未匹配路由的兜底页面
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <section class="mx-auto flex min-h-[calc(100dvh-11rem)] w-full max-w-360 flex-col px-14 pt-24 pb-20 max-lg:px-6 max-md:min-h-[calc(100dvh-9.5rem)] max-md:px-5">

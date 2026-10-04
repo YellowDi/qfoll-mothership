@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 vue-router 与站点导航约定
+ * [OUTPUT]: 对外提供站点页脚导航和回到顶部行为
+ * [POS]: 应用外壳的底部公共区域
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <footer class="w-full bg-bg/92 backdrop-blur-md">
     <div

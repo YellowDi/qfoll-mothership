@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 Markdown 设计规范内容、Mermaid、媒体交互和目录逻辑
+ * [OUTPUT]: 对外提供设计规范页面组件
+ * [POS]: 内部设计文档页面，集中验证 Markdown 媒体增强能力
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">

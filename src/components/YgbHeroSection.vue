@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖云柜宝内容、路由链接、定时器和响应式媒体状态
+ * [OUTPUT]: 对外提供云柜宝 Hero 轮播区块
+ * [POS]: 云柜宝页面及首页预览的核心产品展示组件
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <section :class="sectionClass">
     <div

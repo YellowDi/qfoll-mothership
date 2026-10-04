@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 Markdown 内容解析与公共布局
+ * [OUTPUT]: 对外提供招聘页面组件
+ * [POS]: 公司信息子路由中的静态内容页面
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <section class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">

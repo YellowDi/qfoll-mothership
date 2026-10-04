@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 Showcase 数据、筛选状态与公共内容组件
+ * [OUTPUT]: 对外提供 Showcase 列表页面组件
+ * [POS]: Showcase 内容域的列表入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="showcase-page">

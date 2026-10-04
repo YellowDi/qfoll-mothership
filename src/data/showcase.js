@@ -1,4 +1,10 @@
 /**
+ * [INPUT]: 依赖 Showcase 项目、展示媒体与使用场景静态配置
+ * [OUTPUT]: 对外提供 Showcase 列表、详情索引和使用场景数据
+ * [POS]: Showcase 内容域的数据入口，被 Showcase 列表与详情页面消费
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+/**
  * Showcase 演示项目数据
  * - 每个 demo 部署在 Vercel，访问按钮跳转到 demoUrl
  * - 临时使用项目内图片作为封面（public/project-images），后续可替换为专用图与真实 demoUrl

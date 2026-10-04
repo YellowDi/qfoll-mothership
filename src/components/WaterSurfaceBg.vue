@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 WebGL、Canvas 生命周期和主题状态
+ * [OUTPUT]: 对外提供水面 WebGL 背景
+ * [POS]: 水环境产品页面的沉浸式背景渲染器
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <canvas ref="canvasRef" class="block h-full w-full" aria-hidden="true"></canvas>
 </template>

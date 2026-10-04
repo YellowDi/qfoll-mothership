@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖主题 composable、关于页展示数据与浏览器尺寸事件
+ * [OUTPUT]: 对外提供关于页面的特性展示区块
+ * [POS]: 首页与关于页共享的品牌内容组件
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <section
     ref="sectionRef"

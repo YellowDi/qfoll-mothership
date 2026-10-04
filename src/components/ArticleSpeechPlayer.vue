@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖语音合成 composable、文章容器引用和播放器状态
+ * [OUTPUT]: 对外提供文章朗读控制器
+ * [POS]: 新闻详情页的无障碍辅助交互组件
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <div class="article-speech-panel">
     <button

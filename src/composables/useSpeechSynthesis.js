@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖浏览器 SpeechSynthesis API 和 Vue 响应式 API
+ * [OUTPUT]: 对外提供文章朗读、暂停、停止和进度状态
+ * [POS]: 文章朗读组件的浏览器能力适配层
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { onMounted, onUnmounted, ref } from "vue";
 
 const RATE_OPTIONS = [0.5, 1, 1.5, 2];

@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖新闻 Markdown 内容和封面资源索引
+ * [OUTPUT]: 对外提供新闻文章索引与派生列表数据
+ * [POS]: 新闻内容域的单一数据入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { parseMarkdownModule } from "./contentParserShared";
 import { resolveCoverVideoAsset } from "./coverAssets";
 

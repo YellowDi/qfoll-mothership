@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 Canvas、设备像素比、媒体查询和动画循环
+ * [OUTPUT]: 对外提供云柜宝路线图背景渲染器
+ * [POS]: 云柜宝页面的复杂 Canvas 装饰层，独立于业务内容渲染
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <canvas ref="canvasRef" class="block h-full w-full"></canvas>
 </template>

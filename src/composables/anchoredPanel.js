@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖浏览器窗口和元素布局信息
+ * [OUTPUT]: 对外提供锚定面板的尺寸与位置计算工具
+ * [POS]: 详情和筛选面板布局的底层测量工具
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 const DEFAULT_GAP = 10;
 const DEFAULT_MARGIN = 12;
 

@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 Vue 响应式引用
+ * [OUTPUT]: 对外提供顶栏详情标题的共享读写状态
+ * [POS]: HeaderBar 与详情页之间的轻量状态桥接
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { readonly, ref } from "vue";
 
 const detailTitle = ref("");

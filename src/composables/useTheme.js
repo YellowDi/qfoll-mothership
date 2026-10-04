@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 document 根节点、localStorage 与媒体查询
+ * [OUTPUT]: 对外提供主题初始化、读取和切换能力
+ * [POS]: 全局主题状态边界，被应用外壳和视觉组件共享
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { computed, ref } from "vue";
 
 const userStorageKey = "qf-theme-user";

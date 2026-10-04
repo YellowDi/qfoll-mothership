@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖远端节假日数据和本地日历输出路径
+ * [OUTPUT]: 对外提供值日日期生成脚本
+ * [POS]: 构建前的数据生成工具，不参与浏览器运行时
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import fs from "node:fs/promises";
 import path from "node:path";
 

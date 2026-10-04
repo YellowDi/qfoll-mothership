@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖相关内容数组与 vue-router 链接能力
+ * [OUTPUT]: 对外提供相关内容区块
+ * [POS]: 详情页底部的跨内容导航组件
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <div class="w-full max-w-360 self-stretch mx-auto mt-10 overflow-x-hidden max-md:max-w-none max-md:w-screen max-md:ml-[calc(50%-50vw)] max-md:mr-[calc(50%-50vw)]">
     <div class="mx-auto flex w-full items-center justify-between px-16 max-xl:px-6 max-md:px-5">

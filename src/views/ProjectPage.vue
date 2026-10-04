@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖项目数据、Markdown 内容、详情交互与 vue-router
+ * [OUTPUT]: 对外提供项目详情页面组件
+ * [POS]: 项目内容域的详情渲染入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">

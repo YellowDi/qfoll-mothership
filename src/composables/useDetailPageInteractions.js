@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖详情 Markdown DOM、媒体增强器、目录和浏览器事件
+ * [OUTPUT]: 对外提供复制、表格、媒体、对齐和目录等详情交互初始化与清理
+ * [POS]: 所有富文本详情页共享的复杂交互编排层
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import mermaid from "mermaid";
 import { useTheme } from "./useTheme";

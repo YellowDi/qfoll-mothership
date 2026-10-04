@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖生成的 changelog 数据
+ * [OUTPUT]: 对外提供更新日志页面组件
+ * [POS]: 项目工程信息页面，展示版本变更记录
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <section class="changelog-page mx-auto w-full max-w-360 px-14 pt-24 pb-24 max-lg:px-6">

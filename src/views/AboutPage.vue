@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖关于页内容、主题、公共组件、Markdown 媒体和 vue-router
+ * [OUTPUT]: 对外提供关于我们页面组件
+ * [POS]: 公司信息子路由的主页面
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <!-- Hero: 左文字右图片、左右底部对齐 -->

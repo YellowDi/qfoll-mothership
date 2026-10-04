@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 DOM 标题、滚动事件、路由 hash 和详情标题状态
+ * [OUTPUT]: 对外提供详情页目录和标题栏联动能力
+ * [POS]: 详情页导航层的滚动观察逻辑
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { nextTick, onBeforeUnmount, watch } from "vue";
 import {
   clearHeaderBarDetailTitle,

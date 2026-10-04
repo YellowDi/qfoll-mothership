@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖值日表数据与日历数据
+ * [OUTPUT]: 对外提供内部值日表页面组件
+ * [POS]: 内部工具路由的独立数据展示页面
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <section class="mx-auto flex w-full max-w-360 flex-col gap-10 px-14 pt-24 pb-20 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-12">

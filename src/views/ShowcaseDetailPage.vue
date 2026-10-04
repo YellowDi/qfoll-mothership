@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 Showcase 数据、Markdown 内容、详情交互与 vue-router
+ * [OUTPUT]: 对外提供 Showcase 详情页面组件
+ * [POS]: Showcase 内容域的详情渲染入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div v-if="demo">

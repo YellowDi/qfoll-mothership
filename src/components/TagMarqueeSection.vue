@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖主题状态、响应式媒体查询和品牌标签数据
+ * [OUTPUT]: 对外提供标签滚动展示区块
+ * [POS]: 首页品牌动效区域，封装滚动性能和暗色背景策略
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <section
     ref="sectionRef"

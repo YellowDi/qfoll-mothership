@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 markdown-it、highlight.js 与 Mermaid 解析能力
+ * [OUTPUT]: 对外提供 Markdown 解析和内容增强工具
+ * [POS]: 项目、新闻和设计规范页面共享的内容转换边界
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
 import { resolveCoverAsset } from "./coverAssets";

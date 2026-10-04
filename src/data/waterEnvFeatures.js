@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖水环境产品特性静态配置
+ * [OUTPUT]: 对外提供水环境产品特性数据
+ * [POS]: 水环境页面的数据源，与 Hero 和详情展示组件解耦
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import screen01 from "../assets/water-images/screen-01.webp";
 import screen01Dark from "../assets/water-images/screen-01-dark.webp";
 import screen02 from "../assets/water-images/screen-02.webp";

@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖静态媒体资源路径约定
+ * [OUTPUT]: 对外提供内容封面与媒体资源映射
+ * [POS]: 内容数据与 public/src assets 之间的资源适配层
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 const coverImages = import.meta.glob("../assets/covers/*.webp", {
   eager: true,
   import: "default",

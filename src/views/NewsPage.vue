@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖新闻数据、筛选排序 composable、公共列表组件与 vue-router
+ * [OUTPUT]: 对外提供新闻列表页面组件
+ * [POS]: 新闻内容域的列表入口，负责筛选、排序和分页式交互
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">

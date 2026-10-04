@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖水环境 Hero、WebGL 背景和产品特性数据
+ * [OUTPUT]: 对外提供水环境产品页面组件
+ * [POS]: 产品展示域的水环境详情页面
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="w-full bg-bg pt-14 pb-16">

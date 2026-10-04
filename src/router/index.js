@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 vue-router 与项目、新闻、Showcase 数据索引
+ * [OUTPUT]: 对外提供路由实例及页面标题、滚动策略
+ * [POS]: 应用导航边界，连接 URL、页面组件和内容数据
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { createRouter, createWebHistory } from "vue-router";
 import { projects } from "../data/projects";
 import { newsArticles } from "../data/news";

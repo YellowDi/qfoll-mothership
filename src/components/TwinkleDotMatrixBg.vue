@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 Canvas、指针事件、媒体查询和主题相关颜色
+ * [OUTPUT]: 对外提供闪烁点阵 Canvas 背景
+ * [POS]: 首页及品牌区域的装饰性动画背景
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <canvas ref="canvasRef" class="twinkle-grid" aria-hidden="true"></canvas>
 </template>

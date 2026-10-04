@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖首页数据、公共内容组件与 vue-router
+ * [OUTPUT]: 对外提供首页页面组件
+ * [POS]: 根路由页面，编排产品、案例、新闻和品牌展示模块
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="w-full px-14 pt-14 pb-20 max-lg:px-6 max-md:px-5 max-md:pt-14 max-md:pb-12">

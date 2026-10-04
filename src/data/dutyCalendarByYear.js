@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖生成脚本产出的年度日历数据
+ * [OUTPUT]: 对外提供按年份组织的值日日期数据
+ * [POS]: 内部工具页面的数据源
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 export const dutyCalendarByYear = {
   "2026": {
     source: "ChinaCalendar + internal review",

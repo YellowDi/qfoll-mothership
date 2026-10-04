@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 vue 响应式 API、路由查询参数和列表布局 DOM
+ * [OUTPUT]: 对外提供列表筛选、排序、响应式面板和查询同步状态
+ * [POS]: 项目与新闻列表页共享的交互逻辑层
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, unref, watch } from "vue";
 
 export const useFilterSortListPage = ({

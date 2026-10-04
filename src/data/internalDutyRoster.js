@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖内部值日人员静态配置
+ * [OUTPUT]: 对外提供值日人员数据
+ * [POS]: 内部值日表的数据源，不承担渲染和排序职责
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { dutyCalendarByYear } from "./dutyCalendarByYear";
 
 export const dutyRosterConfig = {

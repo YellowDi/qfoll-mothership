@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖 vue-router、导航组件、项目数据与主题 composable
+ * [OUTPUT]: 对外提供带侧栏、顶栏和页脚的站点布局
+ * [POS]: 所有业务页面共享的应用外壳，集中处理导航层级、响应式侧栏和主题入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <div
     :class="[

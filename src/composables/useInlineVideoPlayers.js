@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖 DOM 视频节点、全屏 API、滚动状态和浏览器事件
+ * [OUTPUT]: 对外提供 Markdown 内联视频初始化、控制和清理能力
+ * [POS]: 详情内容交互层的媒体控制核心
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 const VIEWPORT_THRESHOLDS = [0, 0.15, 0.35, 0.55, 0.75, 1];
 const TRACK_THRESHOLDS = [0, 0.2, 0.4, 0.6, 0.8, 1];
 const MIN_VIEWPORT_RATIO = 0.35;

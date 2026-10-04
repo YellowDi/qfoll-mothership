@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 /**
+ * [INPUT]: 依赖 Git 提交历史和 changelog 输出约定
+ * [OUTPUT]: 对外提供更新日志生成脚本
+ * [POS]: 构建前的版本信息生成工具
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+/**
  * Generate changelog.json from git commits.
  * Parses conventional commit format (feat:, fix:, chore:, style:, refactor:, docs:).
  * Run before build: pnpm run generate:changelog

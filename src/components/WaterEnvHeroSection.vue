@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖水环境产品数据与 vue-router 链接能力
+ * [OUTPUT]: 对外提供水环境产品 Hero 区块
+ * [POS]: 水环境页面及首页预览的产品展示组件
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <section :class="sectionClass">
     <div

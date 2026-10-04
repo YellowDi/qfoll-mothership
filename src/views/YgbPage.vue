@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖云柜宝 Hero、路线图背景、产品资源和公共布局
+ * [OUTPUT]: 对外提供云柜宝产品页面组件
+ * [POS]: 产品展示域的云柜宝详情页面
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="w-full bg-bg pt-14 pb-16">

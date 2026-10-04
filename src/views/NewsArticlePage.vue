@@ -1,3 +1,9 @@
+<!--
+ * [INPUT]: 依赖新闻内容、Markdown 解析、详情交互 composables 与 vue-router
+ * [OUTPUT]: 对外提供新闻详情页面组件
+ * [POS]: 新闻内容域的详情渲染入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ -->
 <template>
   <AppLayout>
     <div class="mx-auto w-full max-w-360 px-14 pt-24 pb-10 max-lg:px-6 max-md:px-5 max-md:pt-20 max-md:pb-8">
