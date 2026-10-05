@@ -10,14 +10,6 @@ import "./ReactWaterEnvPage.css";
 
 type FeatureSection = (typeof featureSections)[number];
 
-type Kpi = readonly [icon: string, label: string, value: string, color: string];
-
-const kpis: Kpi[] = [
-  ["ri-map-pin-fill", "监测站点", "128+", "text-sky-400"],
-  ["ri-time-line", "预警响应", "< 5min", "text-cyan-400"],
-  ["ri-shield-check-fill", "运维保障", "7×24h", "text-indigo-400"],
-];
-
 export function ReactWaterEnvPage() {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -48,7 +40,7 @@ export function ReactWaterEnvPage() {
 
   return (
     <div className="w-full pb-20">
-      <section ref={heroRef} className="react-water-hero relative flex min-h-[clamp(36rem,76vh,48rem)] items-center overflow-hidden py-12 md:py-20">
+      <section ref={heroRef} className="react-water-hero relative flex min-h-[clamp(36rem,76vh,48rem)] flex-col items-center overflow-hidden py-12 md:py-20">
         <video
           ref={videoRef}
           className="react-water-hero-video"
@@ -83,20 +75,12 @@ export function ReactWaterEnvPage() {
             查看监测总览
             <i className="ri-arrow-down-line text-base" aria-hidden="true" />
           </a>
-          <div className="react-water-hero-kpis mx-auto mt-14 grid max-w-220 grid-cols-3 gap-2 text-left md:gap-4">
-            {kpis.map(([icon, label, value, color]) => (
-              <article key={label} className="rounded-2xl border border-white/60 bg-white/70 p-3 shadow-lg dark:border-white/15 dark:bg-black/15 md:p-5">
-                <i className={`${icon} ${color} text-2xl`} aria-hidden="true" />
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-[.12em] text-secondary">{label}</p>
-                <p className={`mt-1 text-lg font-bold tracking-tight ${color}`}>{value}</p>
-              </article>
-            ))}
-          </div>
         </div>
+        <FeatureSection item={featureSections[0]} index={0} />
       </section>
 
-      {(featureSections as FeatureSection[]).map((item, index) => (
-        <FeatureSection key={item.id} item={item} index={index} />
+      {(featureSections as FeatureSection[]).slice(1).map((item, index) => (
+        <FeatureSection key={item.id} item={item} index={index + 1} />
       ))}
     </div>
   );
@@ -107,19 +91,40 @@ function FeatureSection({ item, index }: { item: FeatureSection; index: number }
   return (
     <section
       id={item.id}
-      className={`water-feature-section mx-auto grid w-full max-w-360 grid-cols-1 items-center px-6 md:px-14 ${isLead ? "water-feature-section--lead mt-20 gap-10 md:grid-cols-[minmax(15rem,.7fr)_minmax(0,1.3fr)] md:gap-16 lg:mt-28" : `mt-20 gap-10 md:grid-cols-5 md:gap-14 lg:mt-28`}`}
+      className={`water-feature-section mx-auto w-full max-w-360 px-6 md:px-14 ${isLead ? "water-feature-section--lead mt-20 lg:mt-28" : `mt-20 grid grid-cols-1 items-center gap-10 md:grid-cols-5 md:gap-14 lg:mt-28`}`}
     >
-      <div className={`water-feature-copy min-w-0 ${isLead ? "md:col-span-1" : `md:col-span-2 md:px-8 ${index % 2 ? "md:order-2" : ""}`}`}>
-        <span className="inline-flex rounded-full border border-edge bg-surface/75 px-3 py-1 text-sm text-secondary">{item.chip}</span>
-        <h2 className="mt-4 text-[clamp(1.75rem,3vw,3rem)] font-medium leading-[1.08] tracking-[-0.04em]">{item.title}</h2>
-        <p className="mt-5 text-[clamp(.9375rem,1.05vw,1.0625rem)] leading-[1.75] text-secondary">{item.desc}</p>
-      </div>
-      <div className={`water-feature-media min-w-0 ${isLead ? "md:col-span-1" : `md:col-span-3 ${index % 2 ? "md:order-1" : ""}`}`}>
-        <div className="overflow-hidden rounded-md bg-surface shadow-[0_8px_40px_-12px_rgba(0,0,0,.15)] dark:shadow-[0_12px_48px_-12px_rgba(0,0,0,.4)]">
-          <img src={item.image} alt={item.title} className="block h-auto w-full object-cover dark:hidden" loading={index ? "lazy" : "eager"} />
-          <img src={item.imageDark || item.image} alt={item.title} className="hidden h-auto w-full object-cover dark:block" loading="lazy" />
-        </div>
-      </div>
+      {isLead ? (
+        <>
+          <FeatureMedia item={item} index={index} />
+          <FeatureCopy item={item} />
+        </>
+      ) : (
+        <>
+          <FeatureCopy item={item} alternate={index % 2 === 1} />
+          <FeatureMedia item={item} index={index} alternate={index % 2 === 1} />
+        </>
+      )}
     </section>
+  );
+}
+
+function FeatureCopy({ item, alternate = false }: { item: FeatureSection; alternate?: boolean }) {
+  return (
+    <div className={`water-feature-copy min-w-0 md:col-span-2 md:px-8 ${alternate ? "md:order-2" : ""}`}>
+      <span className="inline-flex rounded-full border border-edge bg-surface/75 px-3 py-1 text-sm text-secondary">{item.chip}</span>
+      <h2 className="mt-4 text-[clamp(1.75rem,3vw,3rem)] font-medium leading-[1.08] tracking-[-0.04em]">{item.title}</h2>
+      <p className="mt-5 text-[clamp(.9375rem,1.05vw,1.0625rem)] leading-[1.75] text-secondary">{item.desc}</p>
+    </div>
+  );
+}
+
+function FeatureMedia({ item, index, alternate = false }: { item: FeatureSection; index: number; alternate?: boolean }) {
+  return (
+    <div className={`water-feature-media min-w-0 ${index === 0 ? "" : `md:col-span-3 ${alternate ? "md:order-1" : ""}`}`}>
+      <div className="overflow-hidden rounded-md bg-surface shadow-[0_8px_40px_-12px_rgba(0,0,0,.15)] dark:shadow-[0_12px_48px_-12px_rgba(0,0,0,.4)]">
+        <img src={item.image} alt={item.title} className="block h-auto w-full object-cover dark:hidden" loading={index ? "lazy" : "eager"} />
+        <img src={item.imageDark || item.image} alt={item.title} className="hidden h-auto w-full object-cover dark:block" loading="lazy" />
+      </div>
+    </div>
   );
 }

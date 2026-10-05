@@ -23,10 +23,18 @@
   content: "";
   position: absolute;
   z-index: 1;
-  inset: auto 0 0;
-  height: clamp(8rem, 32%, 16rem);
+  inset: 0;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgb(var(--color-bg) / 0), rgb(var(--color-bg) / .56) 55%, rgb(var(--color-bg)));
+  /* 渐变中点对齐首张地图的中段，地图下半段与说明文字回到页面底色 */
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--color-bg) / 0) 0%,
+    rgb(var(--color-bg) / 0) 58%,
+    rgb(var(--color-bg) / .18) 64%,
+    rgb(var(--color-bg) / .78) 73%,
+    rgb(var(--color-bg)) 80%,
+    rgb(var(--color-bg)) 100%
+  );
 }
 
 .react-water-hero-content {
@@ -37,17 +45,28 @@
   text-wrap: balance;
 }
 
-.react-water-hero-kpis {
-  position: relative;
-  z-index: 2;
-}
-
 .water-feature-section {
   scroll-margin-top: 2rem;
 }
 
+.react-water-hero > .water-feature-section {
+  position: relative;
+  z-index: 2;
+}
+
+.water-feature-section--lead {
+  text-align: center;
+}
+
+.water-feature-section--lead .water-feature-copy {
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
 .water-feature-section--lead .water-feature-media {
   width: 100%;
+  max-width: 80rem;
+  margin: 3rem auto 0;
 }
 
 .water-feature-section--lead .water-feature-media > div {
