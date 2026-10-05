@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖本目录全部模块：iso/palette/layout/ground/city/terminal/ship/cranes/traffic/sea/sky
- * [OUTPUT]: 对外提供 PortScene：画布生命周期、静态烘焙 (动态占用扫描)、精灵图集、船体分段精灵、分层逐帧绘制、主题/暂停/倍速、镜头设定与覆盖镜头飞行 (快照交叉淡化)、帧订阅与事件总线 (gate/arrive)
+ * [OUTPUT]: 对外提供 PortScene：画布生命周期、静态烘焙 (动态占用扫描)、精灵图集、船体分段精灵、分层逐帧绘制、主题/暂停/倍速、镜头设定与覆盖镜头飞行 (快照交叉淡化)、帧订阅与事件总线 (gate/arrive)、画质档位 (飞行临时降档 + 帧耗时自动降档)
  * [POS]: visuals/ygbPort 的总装与渲染调度；所有绘制顺序约定集中于此，模块之间不互相调用绘制
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -18,6 +18,14 @@ import { FUNNEL_TOP, Sky } from "./sky";
 
 const APRON_Y = 246;
 const ATLAS = 2048, GUTTER = 2;
+/*
+ * 画质档位：静止时保持设备像素比 (上限 2) 的完整清晰度。
+ * 镜头飞行途中画面本就在被缩放，临时用 1.5 渲染、到站恢复；
+ * 静止时若连续约 2 秒平均帧耗时超过 20ms (低于 50fps)，本次会话降到 1.5。
+ */
+const FULL_DPR = 2, LOW_DPR = 1.5, SLOW_FRAME_MS = 20, PROBE_FRAMES = 120, SETTLE_FRAMES = 45;
+/* 飞行降档要额外重建一次，只在大舞台 (约 250 万物理像素以上) 才划算；手机小舞台上反而多一次主线程阻塞 */
+const FLIGHT_LOW_MIN_PIXELS = 2.5e6;
 const CELL = 16;
 
 /*
@@ -35,6 +43,8 @@ export class PortScene {
     this.iso = new Iso();
     this.ground = document.createElement("canvas");
     this.lightmap = document.createElement("canvas");
+    this.dprCap = FULL_DPR;
+    this.flightLow = false;
     this.paused = false;
     this.speed = 1;
     this.frame = 0;
@@ -92,8 +102,10 @@ export class PortScene {
     if (!w || !h) return;
     this.w = w;
     this.h = h;
-    this.dpr = Math.min(devicePixelRatio || 1, 2);
-    for (const cv of [this.canvas, this.ground, this.lightmap]) {
+    this.dpr = Math.min(devicePixelRatio || 1, FULL_DPR, this.dprCap, this.flightLow ? LOW_DPR : FULL_DPR);
+    this.probe = [];
+    this.settle = SETTLE_FRAMES;
+    for (const cv of [this.canvas, this.ground]) {
       cv.width = Math.round(this.w * this.dpr);
       cv.height = Math.round(this.h * this.dpr);
     }
@@ -122,6 +134,8 @@ export class PortScene {
       vis.push({ o, b });
     }
     vis.sort((p, q) => p.o.depth - q.o.depth);
+    /* 光照图按需分配：白天只在重建时充当阴影草稿层，用完即释放；夜间逐帧叠加，常驻 */
+    this.sizeCanvas(this.lightmap, true);
     if (!dark) {
       /* 所有阴影先锐利地画进同一层，再整体模糊一次合成；避免逐物件 blur 带来的上百次滤镜开销 */
       const l = this.lightmap.getContext("2d");
@@ -134,6 +148,7 @@ export class PortScene {
       g.filter = `blur(${1.8 * iso.s * this.dpr}px)`;
       g.drawImage(this.lightmap, 0, 0);
       g.restore();
+      this.sizeCanvas(this.lightmap, false);
     } else {
       /* 夜间光照图：灯池叠加在地面与物件之上 (lighter)，集装箱与立面也会被照亮 */
       const l = this.lightmap.getContext("2d");
@@ -431,6 +446,21 @@ export class PortScene {
     const tx = this.w / 2 - V.px * V.s - (this.w / 2 - R.px * R.s) * k, ty = this.h / 2 - V.py * V.s - (this.h / 2 - R.py * R.s) * k;
     return `translate(${tx}px, ${ty}px) scale(${k})`;
   }
+  /* 画布显存：full 为真时按舞台像素分配，否则缩到 1×1 释放后备存储 */
+  sizeCanvas(cv, full) {
+    const w = full ? Math.round(this.w * this.dpr) : 1, h = full ? Math.round(this.h * this.dpr) : 1;
+    if (cv.width !== w || cv.height !== h) {
+      cv.width = w;
+      cv.height = h;
+    }
+  }
+  /* 过渡快照只在飞行两端存在；淡出结束后释放，下次飞行由 snapshot 重新分配 */
+  releaseGhost(delay) {
+    clearTimeout(this.ghostTimer);
+    this.ghostTimer = setTimeout(() => {
+      if (this.ghost && !this.flight && this.ghost.style.opacity === "0") this.sizeCanvas(this.ghost, false);
+    }, delay);
+  }
   ghostCanvas() {
     if (!this.ghost) {
       const g = document.createElement("canvas");
@@ -447,6 +477,8 @@ export class PortScene {
       g.width = this.canvas.width;
       g.height = this.canvas.height;
     }
+    g.style.width = `${this.w}px`;
+    g.style.height = `${this.h}px`;
     const x = g.getContext("2d");
     x.clearRect(0, 0, g.width, g.height);
     x.drawImage(this.canvas, 0, 0);
@@ -478,10 +510,16 @@ export class PortScene {
     };
     /* 当前像素已覆盖整条路径则不重建；否则快照保持画面，在覆盖镜头 (或目标) 上重建 */
     let R = held, ghost = null;
+    /* 复用现有像素时也降到飞行档：镜头不变只降分辨率，运动中看不出差别，整段飞行都省合成开销 */
+    if (reuse && !this.flightLow && this.canFlyLow()) {
+      this.flightLow = true;
+      this.resize();
+    }
     if (!reuse) {
       ghost = this.snapshot(this.mapping(held, A));
       this.camera = C === B ? camera : this.camOf(C);
       this.canvas.style.transform = "";
+      this.flightLow = this.canFlyLow();
       this.resize();
       R = C === B ? B : C;
     }
@@ -499,8 +537,10 @@ export class PortScene {
       if (p < 1) { this.flight = requestAnimationFrame(step); return; }
       this.flight = 0;
       this.flightState = null;
-      /* 到站：主画布不在目标镜头时，快照当前放大画面，重建清晰帧后淡出快照 */
-      if (R !== B) {
+      const lowered = this.flightLow;
+      this.flightLow = false;
+      /* 到站：主画布不在目标镜头或仍是飞行低档时，快照当前画面，按完整画质重建后淡出快照 */
+      if (R !== B || lowered) {
         const g = this.snapshot(cv.style.transform);
         this.camera = camera;
         cv.style.transform = "";
@@ -508,11 +548,15 @@ export class PortScene {
         requestAnimationFrame(() => {
           g.style.transition = "opacity .32s ease";
           g.style.opacity = "0";
+          this.releaseGhost(420);
         });
       } else {
         this.camera = camera;
         cv.style.transform = "";
-        if (ghost) ghost.style.opacity = "0";
+        if (ghost) {
+          ghost.style.opacity = "0";
+          this.releaseGhost(0);
+        }
       }
     };
     this.flight = requestAnimationFrame(step);
@@ -522,10 +566,12 @@ export class PortScene {
     this.flight = 0;
     this.flightState = null;
     if (keepPixels) return;
+    this.flightLow = false;
     this.canvas.style.transform = "";
     if (this.ghost) {
       this.ghost.style.transition = "none";
       this.ghost.style.opacity = "0";
+      this.releaseGhost(0);
     }
   }
   /* 事件订阅：type = gate | arrive */
@@ -541,6 +587,32 @@ export class PortScene {
     fn(this);
     return () => this.listeners.delete(fn);
   }
+  /* 自动降档：只统计静止画面 (非飞行、重建后稳定) 的帧间隔；单帧尖峰按 50ms 截断，避免一次 GC 误判 */
+  watchFrame(ms) {
+    if (this.flight || this.flightLow || this.dprCap <= LOW_DPR || (devicePixelRatio || 1) <= LOW_DPR) return;
+    if (this.settle > 0) { this.settle--; return; }
+    this.probe.push(Math.min(ms, 50));
+    if (this.probe.length < PROBE_FRAMES) return;
+    const avg = this.probe.reduce((a, b) => a + b, 0) / this.probe.length;
+    this.probe = [];
+    if (avg <= SLOW_FRAME_MS) return;
+    this.dprCap = LOW_DPR;
+    const g = this.snapshot("");
+    this.resize();
+    requestAnimationFrame(() => {
+      g.style.transition = "opacity .5s ease";
+      g.style.opacity = "0";
+      this.releaseGhost(600);
+    });
+  }
+  canFlyLow() {
+    const dpr = Math.min(devicePixelRatio || 1, this.dprCap);
+    return dpr > LOW_DPR && this.w * this.h * dpr * dpr >= FLIGHT_LOW_MIN_PIXELS;
+  }
+  /* 调试：当前渲染像素比与降档状态 */
+  get quality() {
+    return { dpr: this.dpr, cap: this.dprCap, flightLow: this.flightLow, adaptive: this.dprCap < FULL_DPR };
+  }
   clock() {
     cancelAnimationFrame(this.frame);
     this.frame = 0;
@@ -553,6 +625,7 @@ export class PortScene {
         const n = Math.ceil(this.speed);
         for (let k = 0; k < n; k++) this.step(dt / n);
       }
+      if (this.last) this.watchFrame(now - this.last);
       this.last = now;
       this.draw();
       if (this.listeners) for (const fn of this.listeners) fn(this);
@@ -562,6 +635,7 @@ export class PortScene {
   }
   dispose() {
     this.cancelFlight();
+    clearTimeout(this.ghostTimer);
     this.ghost?.remove();
     this.listeners?.clear();
     this.handlers?.clear();

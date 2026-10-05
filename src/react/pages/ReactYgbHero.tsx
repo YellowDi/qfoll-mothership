@@ -1,11 +1,12 @@
 /**
- * [INPUT]: 依赖原云柜宝 Hero 资源、默认共享路线图或注入背景与 React 生命周期
+ * [INPUT]: 依赖原云柜宝 Hero 资源、默认共享港区背景或注入背景、hooks/useTypedPain 打字机文案与 React 生命周期
  * [OUTPUT]: 对外提供 ReactYgbHero，供专题页和首页预览共用
- * [POS]: 原 YgbHeroSection 的 React 适配，背景插槽供独立原型复用原文字和叠卡
+ * [POS]: 原 YgbHeroSection 的 React 适配；当前用于首页云柜宝预览与调试页，/ygb 专题已由 ygbStory 封面取代
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ReactYgbPortBackground } from "./ReactYgbPortBackground";
+import { useTypedPain } from "../hooks/useTypedPain";
 import "./ReactYgbHero.css";
 import hero01Image from "../../assets/ygb-assets/hero-01.webp";
 import hero02Image from "../../assets/ygb-assets/hero-02.webp";
@@ -32,27 +33,6 @@ const heroCards = [
   },
 ];
 
-
-const painTags = ["效率低下", "路线混乱", "信息滞后", "推进缓慢", "对接低效", "延误频繁"];
-function useTypedPain() {
-  const [pain, setPain] = useState(painTags[0]);
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let index = 0, chars = painTags[0].length, deleting = true, timer = 0;
-    const tick = () => {
-      const current = painTags[index];
-      if (!deleting) {
-        if (chars < current.length) { chars += 1; setPain(current.slice(0, chars)); timer = window.setTimeout(tick, 95); return; }
-        deleting = true; timer = window.setTimeout(tick, 1100); return;
-      }
-      if (chars > 0) { chars -= 1; setPain(current.slice(0, chars)); timer = window.setTimeout(tick, 58); return; }
-      deleting = false; index = (index + 1) % painTags.length; timer = window.setTimeout(tick, 180);
-    };
-    timer = window.setTimeout(tick, 1100);
-    return () => window.clearTimeout(timer);
-  }, []);
-  return pain;
-}
 
 const HERO_AUTO_PLAY_INTERVAL_MS = 4200;
 const HERO_AUTO_PLAY_START_DELAY_MS = 360;

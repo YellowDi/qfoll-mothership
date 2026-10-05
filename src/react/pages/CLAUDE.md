@@ -15,11 +15,10 @@ ReactShowcasePage.tsx: Showcase 自动横向轮播页面，暂停逻辑只由卡
 ReactShowcasePage.module.css: Showcase 轮播轨道和卡片的局部动画样式。
 ReactDetailPage.tsx: 项目与新闻详情共用的标题、正文、元信息和相关推荐页面。
 ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和相关演示页面。
-ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载展台。
-ReactYgbPage.css: 云柜宝下载展台的网格、渐变和暗色材质背景，与 Vue 原版 download-material 同源。
-ReactYgbHero.tsx: 云柜宝专题与首页预览共用的 Hero、打字机文案和原版叠卡；背景插槽支持原型复用，默认共享港口背景。
+ReactYgbPage.tsx: 云柜宝产品专题，只挂载 ygbStory (封面 + 六章)；整页一个港区世界，原 #dashboard/#governance/#download 锚点由 ygbStory 提供。
+ReactYgbHero.tsx: 首页云柜宝预览与调试页使用的 Hero 和原版叠卡；/ygb 专题已由 ygbStory 封面取代，打字机文案来自 hooks/useTypedPain。
 ReactYgbPortBackground.tsx: 云柜宝港区背景的 React 适配器，只负责挂载 visuals/ygbPort 并同步主题与暂停，绘制逻辑与原型调试页同源。
-ygbStory/: 云柜宝六章杂志式介绍 (实色面板 + 港区镜头飞行 + 集卡实时配图)，当前由原型页挂载验收，见 ygbStory/CLAUDE.md。
+ygbStory/: 云柜宝六章杂志式介绍 (实色面板 + 港区镜头飞行 + 集卡实时配图)，由 ReactYgbPage 正式挂载，原型页同步用于调试，见 ygbStory/CLAUDE.md。
 ReactYgbHero.css: 云柜宝 Hero 叠卡的精确位移、透明度和高度过渡，集中处理减少动画偏好。
 ReactYgbRoadMapBg.tsx: Canvas 路线网络、地块、水系与运输节点装饰层。
 ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。

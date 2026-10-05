@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React Router、共享导航元数据、主题上下文、触摸保护、顶栏和页脚组件
  * [OUTPUT]: 对外提供 React 迁移层应用布局
- * [POS]: React 应用的公共外壳，承接侧栏、移动端遮罩和主内容，页面副作用由常驻 RouteEffects 承担
+ * [POS]: React 应用的公共外壳，承接侧栏、移动端遮罩和主内容，页面副作用由常驻 RouteEffects 承担；横向裁切用 overflow-x-clip，保证页面内 sticky 以 window 为滚动容器
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState } from "react";
@@ -49,7 +49,7 @@ export function ReactAppLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-bg text-primary transition-colors duration-300 motion-reduce:transition-none max-md:overflow-x-hidden">
+    <div className="min-h-screen bg-bg text-primary transition-colors duration-300 motion-reduce:transition-none max-md:overflow-x-clip">
       <aside
         ref={sidebarRef}
         aria-label="站点导航"
@@ -157,7 +157,7 @@ export function ReactAppLayout() {
         aria-hidden="true"
       />
       <main
-        className={`relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300 motion-reduce:transition-none ${desktopCollapsed ? "md:ml-0" : "md:ml-50"} ${location.pathname === "/" ? "overflow-visible" : "overflow-x-hidden"}`}
+        className={`relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300 motion-reduce:transition-none ${desktopCollapsed ? "md:ml-0" : "md:ml-50"} ${location.pathname === "/" ? "overflow-visible" : "overflow-x-clip"}`}
       >
         <div className={`flex min-h-screen flex-col items-center transition-transform duration-300 motion-reduce:transition-none max-md:items-start ${mobileNavOpen ? "max-md:translate-x-[334px] max-md:pointer-events-none max-md:pb-[env(safe-area-inset-bottom)] max-md:blur-[3px]" : ""}`}>
           <Outlet />

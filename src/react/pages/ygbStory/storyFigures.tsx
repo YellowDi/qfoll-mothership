@@ -1,10 +1,10 @@
 /**
  * [INPUT]: 依赖 visuals/ygbPort 的 mountTracker/mountDispatch/mountJourney/mountFleet/mountUplink 与 FLEET_STATES，云柜宝司机端截图
- * [OUTPUT]: 对外提供 TrackerFigure/DispatchFigure/JourneyFigure/FleetFigure/UplinkFigure 五个实时配图与 PhoneShowcase 手机展台
+ * [OUTPUT]: 对外提供 TrackerFigure/DispatchFigure/JourneyFigure/FleetFigure/UplinkFigure 五个实时配图 (仅当前章、非滚动中逐帧刷新)、noteScroll 滚动静默信号与 PhoneShowcase 手机展台
  * [POS]: react/pages/ygbStory 的配图层；状态全部来自同一港区世界里的社会集卡，组件只负责排版呈现
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { FLEET_STATES, mountDispatch, mountFleet, mountJourney, mountTracker, mountUplink, type mountYgbPort } from "../../../visuals/ygbPort";
 import app01 from "../../../assets/ygb-assets/app-01-m.webp";
 import app02 from "../../../assets/ygb-assets/app-02-m.webp";
@@ -16,24 +16,57 @@ export type PortScene = ReturnType<typeof mountYgbPort>["scene"];
 type Mount<T> = (scene: PortScene, onState: (state: T) => void) => () => void;
 type CanvasMount<T> = (canvas: HTMLCanvasElement, scene: PortScene, onState: (state: T) => void) => () => void;
 
-/* 订阅一个配图状态源；场景就绪后挂载，卸载时清理 */
-function useFigure<T>(scene: PortScene | null, mount: Mount<T>) {
+/*
+ * 配图门控：只有当前章的配图跟随场景逐帧刷新 (绘制地图、推送 React 状态)；
+ * 隐藏章节的帧订阅暂停，但 gate/arrive 等事件照常接收，日志与运单状态不断档。
+ * 实现上给状态源一个"门控场景"：继承原场景的一切，只替换 subscribe。
+ */
+/*
+ * 滚动静默：手指滚动期间配图暂停刷新 (地图重绘与 DOM 更新都会在 iOS 上与滚动错帧)，
+ * 停止约 160ms 后自动恢复；事件仍照常接收，日志不断档。由 YgbStory 的滚动监听调用。
+ */
+let quietUntil = 0;
+export const noteScroll = () => { quietUntil = performance.now() + 160; };
+const scrolling = () => performance.now() < quietUntil;
+
+function useGatedScene(scene: PortScene | null, active: boolean) {
+  const activeRef = useRef(active);
+  const subs = useRef(new Set<(s: PortScene) => void>());
+  activeRef.current = active;
+  const gated = useMemo(() => {
+    if (!scene) return null;
+    const g = Object.create(scene) as PortScene;
+    g.subscribe = (fn: (s: PortScene) => void) => {
+      subs.current.add(fn);
+      const off = scene.subscribe((sc: PortScene) => { if (activeRef.current && !scrolling()) fn(sc); });
+      return () => { subs.current.delete(fn); off(); };
+    };
+    return g;
+  }, [scene]);
+  /* 激活时立即补画一帧：暂停或减少动态时也不会停在旧画面 */
+  useEffect(() => { if (active && scene) for (const fn of subs.current) fn(scene); }, [active, scene]);
+  return gated;
+}
+function useFigure<T>(scene: PortScene | null, active: boolean, mount: Mount<T>) {
+  const gated = useGatedScene(scene, active);
   const [state, setState] = useState<T | null>(null);
-  useEffect(() => (scene ? mount(scene, setState) : undefined), [scene, mount]);
+  useEffect(() => (gated ? mount(gated, setState) : undefined), [gated, mount]);
   return state;
 }
-function useCanvasFigure<T>(scene: PortScene | null, mount: CanvasMount<T>) {
+function useCanvasFigure<T>(scene: PortScene | null, active: boolean, mount: CanvasMount<T>) {
+  const gated = useGatedScene(scene, active);
   const ref = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<T | null>(null);
-  useEffect(() => (scene && ref.current ? mount(ref.current, scene, setState) : undefined), [scene, mount]);
+  useEffect(() => (gated && ref.current ? mount(ref.current, gated, setState) : undefined), [gated, mount]);
   return [ref, state] as const;
 }
+type FigureProps = { scene: PortScene | null; active: boolean };
 const cssVar = (name: string, value: string) => ({ [name]: value }) as CSSProperties;
 
 /* ═══ 01 在途追踪 ═══ */
 interface TrackInfo { zone: string; speed: number; heading: string; status: string; time: string; dest: string | null; remain: string | null; events: { time: string; text: string }[] }
-export function TrackerFigure({ scene }: { scene: PortScene | null }) {
-  const [ref, info] = useCanvasFigure<TrackInfo>(scene, mountTracker);
+export function TrackerFigure({ scene, active }: FigureProps) {
+  const [ref, info] = useCanvasFigure<TrackInfo>(scene, active, mountTracker);
   const cell = (k: string, v?: string | null) => <div><span className="ys-k">{k}</span><b className="ys-v">{v ?? "—"}</b></div>;
   return <div className="ys-frame ys-trk">
     <div className="ys-trk-bar"><span>运单 <b className="ys-mono">YS3280 4238 0235</b>{info?.dest && <em> → {info.dest}</em>}</span><span className="ys-chip" data-on={info?.status === "行驶中"}>{info?.status ?? "定位中"}{info && ` · ${info.time}`}</span></div>
@@ -46,8 +79,8 @@ export function TrackerFigure({ scene }: { scene: PortScene | null }) {
 
 /* ═══ 02 智能派单 ═══ */
 interface DispatchInfo { no: string; box: string; origin: string; dest: string; phase: string; eta: number; candidates: { plate: string; status: string; km: string; score: number; chosen: boolean }[] }
-export function DispatchFigure({ scene }: { scene: PortScene | null }) {
-  const [ref, info] = useCanvasFigure<DispatchInfo>(scene, mountDispatch);
+export function DispatchFigure({ scene, active }: FigureProps) {
+  const [ref, info] = useCanvasFigure<DispatchInfo>(scene, active, mountDispatch);
   const assigned = info?.phase === "已派单";
   return <div className="ys-frame"><canvas ref={ref} className="ys-map" aria-hidden="true" />
     {info && <div className="ys-card ys-order">
@@ -57,7 +90,7 @@ export function DispatchFigure({ scene }: { scene: PortScene | null }) {
     </div>}
     {info && <div className="ys-card ys-cands">{info.candidates.map((c) => <div key={c.plate} className="ys-cand" data-chosen={c.chosen} data-dim={assigned && !c.chosen}>
       <b className="ys-mono">{c.plate}</b><span className="ys-k" style={{ marginTop: 0 }}>{c.status}</span><span className="ys-mono">{c.km} km</span>
-      <div className="ys-score"><i style={{ width: `${c.score}%` }} /></div><span className="ys-cand-tag">{c.chosen ? "派单" : c.score ? `${c.score}` : ""}</span>
+      <div className="ys-score"><i style={cssVar("--k", String(c.score / 100))} /></div><span className="ys-cand-tag">{c.chosen ? "派单" : c.score ? `${c.score}` : ""}</span>
     </div>)}</div>}
   </div>;
 }
@@ -73,15 +106,15 @@ function Spark({ values }: { values: number[] }) {
     <polyline points={pts.join(" ")} fill="none" stroke="#f97316" strokeWidth="1.4" vectorEffect="non-scaling-stroke" />
   </svg>;
 }
-export function JourneyFigure({ scene }: { scene: PortScene | null }) {
-  const info = useFigure<JourneyInfo>(scene, mountJourney);
+export function JourneyFigure({ scene, active }: FigureProps) {
+  const info = useFigure<JourneyInfo>(scene, active, mountJourney);
   if (!info) return <div className="ys-frame" />;
   const pct = (info.progress / 4) * 100;
   return <div className="ys-frame ys-jny">
     <div className="ys-jny-top"><span>运单 <b className="ys-mono">{info.no}</b> · <span className="ys-mono">{info.plate}</span></span><span className="ys-chip" data-on={info.moving}>{info.moving ? `行驶中 · ${info.speed} km/h` : `停车 · ${info.zone}`}</span></div>
-    <div className="ys-track"><div className="ys-track-fill" style={{ width: `${pct}%` }} />
+    <div className="ys-track"><div className="ys-track-fill" style={cssVar("--k", String(pct / 100))} />
       {info.nodes.map((n, i) => <span key={n.label} className="ys-node" style={{ left: `${i * 25}%` }} data-done={n.done || i <= info.stage} data-next={i === info.stage + 1} />)}
-      <span className="ys-truck" style={{ left: `${pct}%` }}>{info.plate}</span>
+      <div className="ys-truck-rail" style={cssVar("--k", String(pct / 100))}><span className="ys-truck">{info.plate}</span></div>
     </div>
     <div className="ys-nodes">{info.nodes.map((n) => <div key={n.label}><b>{n.label}</b><span>{n.place}</span><time data-eta={!n.time && !!n.eta}>{n.time ?? (n.eta ? `预计 ${n.eta}` : "—")}</time></div>)}</div>
     <div className="ys-jny-mid">
@@ -99,8 +132,8 @@ export function JourneyFigure({ scene }: { scene: PortScene | null }) {
 /* ═══ 04 车队看板 ═══ */
 const FLEET_COLORS: Record<string, string> = { 重车在途: "#f97316", 空车在途: "#3b82f6", 排队进港: "#eab308", 港区作业: "#0ea5e9", 月台装卸: "#a855f7", 路口等待: "#94a3b8", 停车场待命: "#22c55e" };
 interface FleetInfo { total: number; busy: number; rate: number; counts: Record<string, number>; rows: { id: number; plate: string; state: string; zone: string; speed: number; box: string }[] }
-export function FleetFigure({ scene }: { scene: PortScene | null }) {
-  const info = useFigure<FleetInfo>(scene, mountFleet);
+export function FleetFigure({ scene, active }: FigureProps) {
+  const info = useFigure<FleetInfo>(scene, active, mountFleet);
   if (!info) return <div className="ys-frame" />;
   return <div className="ys-frame ys-fleet">
     <div className="ys-kpis"><div><b>{info.total}</b><span>在线集卡</span></div><div><b>{info.busy}</b><span>运行中</span></div><div><b>{info.rate}%</b><span>运力利用率</span></div></div>
@@ -115,8 +148,8 @@ export function FleetFigure({ scene }: { scene: PortScene | null }) {
 /* ═══ 05 监管上报 ═══ */
 const KIND_COLORS: Record<string, string> = { 运单: "#3b82f6", 轨迹: "#8b5cf6", 进出港: "#f97316", 结算: "#16a34a" };
 interface UplinkInfo { total: number; latency: string; packets: { id: number; kind: string; p: number }[]; rows: { id: number; time: string; kind: string; ref: string; detail: string; sig: string; ok: boolean }[] }
-export function UplinkFigure({ scene }: { scene: PortScene | null }) {
-  const info = useFigure<UplinkInfo>(scene, mountUplink);
+export function UplinkFigure({ scene, active }: FigureProps) {
+  const info = useFigure<UplinkInfo>(scene, active, mountUplink);
   if (!info) return <div className="ys-frame" />;
   return <div className="ys-frame ys-up">
     <div className="ys-link">
@@ -151,7 +184,6 @@ export function PhoneShowcase({ active }: { active: boolean }) {
   const next = SCREENS[(on + 1) % SCREENS.length];
   return <div className="ys-frame ys-show" onMouseEnter={() => setHold(true)} onMouseLeave={() => setHold(false)}>
     <div className="ys-show-list">
-      <div className="ys-show-kicker"><b>{String(SCREENS.length).padStart(2, "0")}</b><span>司机端核心界面</span></div>
       <div className="ys-show-items">{SCREENS.map((s, i) => <button key={s.title} type="button" className="ys-show-item" data-on={i === on} onClick={() => setOn(i)} style={cssVar("--dur", `${SHOW_MS}ms`)}>
         <i>{String(i + 1).padStart(2, "0")}</i><b>{s.title}</b><span>{s.desc}</span><span className="ys-show-prog"><i /></span>
       </button>)}</div>

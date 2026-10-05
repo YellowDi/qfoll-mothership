@@ -19,3 +19,4 @@ ygb-hero-react.html - 当前正式 React 云柜宝 Hero 的独立展示入口，
 法则: 极简·稳定·导航·版本精确
 
 迁移基线: React + TypeScript 迁移只改变运行时框架，优先保持路由、视觉、内容和交互行为一致；不得将视觉改版与框架迁移绑定。React 已成为默认运行时与 dist 产物，Vue 仅通过 --mode vue 保留兼容构建。
+已确认的例外: 云柜宝专题 /ygb 的 React 版按产品决定改版为港区杂志式介绍 (src/react/pages/ygbStory)，Vue 兼容版保持原样。
