@@ -49,11 +49,11 @@ export function ReactAppLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-bg text-primary transition-colors duration-300 max-md:overflow-x-hidden">
+    <div className="min-h-screen bg-bg text-primary transition-colors duration-300 motion-reduce:transition-none max-md:overflow-x-hidden">
       <aside
         ref={sidebarRef}
         aria-label="站点导航"
-        className={`fixed bottom-0 left-0 top-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out max-md:w-[334px] max-md:max-w-[90vw] max-md:pb-[env(safe-area-inset-bottom)] ${
+        className={`fixed bottom-0 left-0 top-0 z-30 w-50 overflow-y-auto overflow-x-hidden overscroll-y-contain bg-bg transition-transform duration-300 ease-out motion-reduce:transition-none max-md:w-[334px] max-md:max-w-[90vw] max-md:pb-[env(safe-area-inset-bottom)] ${
           mobileNavOpen ? "max-md:translate-x-0" : "max-md:-translate-x-full"
         } ${desktopCollapsed ? "md:-translate-x-[110%]" : "md:translate-x-0"}`}
       >
@@ -152,14 +152,14 @@ export function ReactAppLayout() {
       />
       <div
         ref={overlayRef}
-        className={`fixed inset-0 z-20 hidden bg-transparent opacity-0 transition-opacity max-md:block max-md:touch-none ${mobileNavOpen ? "pointer-events-auto opacity-100" : "pointer-events-none"}`}
+        className={`fixed inset-0 z-20 hidden bg-transparent opacity-0 transition-opacity motion-reduce:transition-none max-md:block max-md:touch-none ${mobileNavOpen ? "pointer-events-auto opacity-100" : "pointer-events-none"}`}
         onClick={() => setMobileNavOpen(false)}
         aria-hidden="true"
       />
       <main
-        className={`relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300 ${desktopCollapsed ? "md:ml-0" : "md:ml-50"} ${location.pathname === "/" ? "overflow-visible" : "overflow-x-hidden"}`}
+        className={`relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300 motion-reduce:transition-none ${desktopCollapsed ? "md:ml-0" : "md:ml-50"} ${location.pathname === "/" ? "overflow-visible" : "overflow-x-hidden"}`}
       >
-        <div className={`flex min-h-screen flex-col items-center transition-transform duration-300 max-md:items-start ${mobileNavOpen ? "max-md:translate-x-[334px] max-md:pointer-events-none max-md:pb-[env(safe-area-inset-bottom)] max-md:blur-[3px]" : ""}`}>
+        <div className={`flex min-h-screen flex-col items-center transition-transform duration-300 motion-reduce:transition-none max-md:items-start ${mobileNavOpen ? "max-md:translate-x-[334px] max-md:pointer-events-none max-md:pb-[env(safe-area-inset-bottom)] max-md:blur-[3px]" : ""}`}>
           <Outlet />
           <ReactSiteFooter />
         </div>

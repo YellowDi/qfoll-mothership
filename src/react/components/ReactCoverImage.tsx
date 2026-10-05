@@ -56,12 +56,12 @@ export function ReactCoverImage({
 
 function CoverImageLayer({ source, srcSet, sizes, alt, loaded, errored, onLoad, onError, className }: { source: string; srcSet?: string; sizes?: string; alt: string; loaded: boolean; errored: boolean; onLoad: () => void; onError: () => void; className: string }) {
   if (!source) return null;
-  return <><div className={`absolute inset-0 animate-pulse bg-zinc-100/75 dark:bg-zinc-700/40 ${loaded || errored ? "hidden" : ""}`} aria-hidden="true" /><img src={source} srcSet={srcSet || undefined} sizes={sizes || undefined} alt={alt} loading="lazy" decoding="async" onLoad={onLoad} onError={onError} className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${loaded && !errored ? "opacity-100" : "opacity-0"} ${className}`} /> </>;
+  return <><div className={`absolute inset-0 animate-pulse motion-reduce:animate-none bg-zinc-100/75 dark:bg-zinc-700/40 ${loaded || errored ? "hidden" : ""}`} aria-hidden="true" /><img src={source} srcSet={srcSet || undefined} sizes={sizes || undefined} alt={alt} loading="lazy" decoding="async" onLoad={onLoad} onError={onError} className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 motion-reduce:transition-none ${loaded && !errored ? "opacity-100" : "opacity-0"} ${className}`} /> </>;
 }
 
 function CoverVideoLayer({ enabled, videoRef, source, poster, ready, onReady }: { enabled: boolean; videoRef: React.RefObject<HTMLVideoElement | null>; source: string; poster: string; ready: boolean; onReady: () => void }) {
   if (!enabled) return null;
-  return <video ref={videoRef} src={source} poster={poster || undefined} className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${ready ? "opacity-100" : "opacity-0"}`} muted loop playsInline preload="metadata" aria-hidden="true" onLoadedMetadata={onReady} />;
+  return <video ref={videoRef} src={source} poster={poster || undefined} className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 motion-reduce:transition-none ${ready ? "opacity-100" : "opacity-0"}`} muted loop playsInline preload="metadata" aria-hidden="true" onLoadedMetadata={onReady} />;
 }
 
 function CoverIconLayer({ className, scale }: { className: string; scale: number }) {

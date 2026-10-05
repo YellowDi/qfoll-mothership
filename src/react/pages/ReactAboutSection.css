@@ -46,14 +46,22 @@
   object-fit: cover;
   transform: translateY(var(--icon-y)) rotate(var(--icon-rotate)) scale(var(--icon-scale));
   transform-origin: center;
-  transition: transform 180ms ease-out, box-shadow 180ms ease-out, z-index 180ms ease-out;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow: 0 7px 16px rgba(17, 24, 39, 0.24);
 }
 
-.react-inline-icon:hover {
-  --icon-scale: 1.2;
-  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.3);
-  z-index: 5;
+@media (hover: hover) and (pointer: fine) {
+  .react-inline-icon:hover {
+    --icon-scale: 1.2;
+    box-shadow: 0 10px 22px rgba(17, 24, 39, 0.3);
+    z-index: 5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .react-inline-icon {
+    transition: none;
+  }
 }
 
 .react-inline-icon--qf {

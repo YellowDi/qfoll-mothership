@@ -65,9 +65,10 @@ export function AboutProjectsCarousel() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     let timer: number | null = null;
     const start = () => {
-      if (timer !== null || !mediaQuery.matches) return;
+      if (timer !== null || !mediaQuery.matches || reducedMotionQuery.matches) return;
       timer = window.setInterval(() => {
         if (flippedRef.current || resettingRef.current) return;
         flippedRef.current = true;
@@ -79,16 +80,20 @@ export function AboutProjectsCarousel() {
       timer = null;
     };
     const onMediaChange = (event: MediaQueryListEvent) => (event.matches ? start() : stop());
+    const onReducedMotionChange = (event: MediaQueryListEvent) => (event.matches ? stop() : start());
     mediaQuery.addEventListener("change", onMediaChange);
+    reducedMotionQuery.addEventListener("change", onReducedMotionChange);
     start();
     return () => {
       stop();
       mediaQuery.removeEventListener("change", onMediaChange);
+      reducedMotionQuery.removeEventListener("change", onReducedMotionChange);
     };
   }, []);
 
   const onTransitionEnd = (event: TransitionEvent<HTMLDivElement>, slotIndex: number) => {
-    if (!isFlipped || slotIndex !== 3 || !["transform", "opacity"].includes(event.propertyName)) return;
+    // 一个 cover 同时结束 transform 与 opacity；只允许第一个事件推进窗口，避免一次切换跳过多张。
+    if (!isFlipped || slotIndex !== 3 || resettingRef.current || !["transform", "opacity"].includes(event.propertyName)) return;
     resettingRef.current = true;
     flippedRef.current = false;
     setIsResetting(true);

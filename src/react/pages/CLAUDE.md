@@ -18,6 +18,7 @@ ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和�
 ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载展台。
 ReactYgbPage.css: 云柜宝下载展台的网格、渐变和暗色材质背景，与 Vue 原版 download-material 同源。
 ReactYgbHero.tsx: 云柜宝专题与首页预览共用的 Hero、打字机文案和原版叠卡轮播。
+ReactYgbHero.css: 云柜宝 Hero 叠卡的精确位移、透明度和高度过渡，集中处理减少动画偏好。
 ReactYgbRoadMapBg.tsx: Canvas 路线网络、地块、水系与运输节点装饰层。
 ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
 ReactWaterEnvPage.css: 水环境 Hero 的渐变基底与明暗主题色彩。
