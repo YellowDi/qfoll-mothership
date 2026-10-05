@@ -1,10 +1,17 @@
 /**
  * [INPUT]: 依赖 ReactWaterEnvPage 的水面 Hero 容器
- * [OUTPUT]: 对外提供水环境 Hero 的浅色与深色基底
- * [POS]: 水环境产品页的页面局部样式
+ * [OUTPUT]: 对外提供水环境 Hero 的浅色与深色渐变基底，以及两层缓慢漂移的光晕
+ * [POS]: 水环境产品页的页面局部样式；点阵涟漪 (ReactDotRippleBg) 的底色全由这里承担
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
+
+/* ------------------------------------------------------------------
+ * 分层：Hero 自身画静态渐变底；::before / ::after 是两团超大光晕，
+ * 用 transform 缓慢漂移 (走合成器，不触发重绘)。isolation 让 z-index:-1
+ * 的光晕落在 Hero 背景之上、正文与涟漪画布之下。
+ * ------------------------------------------------------------------ */
 .react-water-hero {
+  isolation: isolate;
   background:
     radial-gradient(ellipse 90% 70% at 75% 5%, rgba(129, 140, 248, .25), transparent 55%),
     radial-gradient(ellipse 70% 90% at 15% 25%, rgba(59, 130, 246, .2), transparent 55%),
@@ -18,4 +25,35 @@
     radial-gradient(ellipse 70% 90% at 15% 25%, rgba(59, 130, 246, .22), transparent 55%),
     radial-gradient(ellipse 80% 50% at 88% 55%, rgba(34, 211, 238, .16), transparent 50%),
     #0f2847;
+}
+
+.react-water-hero::before,
+.react-water-hero::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.react-water-hero::before {
+  background: radial-gradient(ellipse 45% 55% at 30% 40%, rgba(99, 102, 241, .32), transparent 70%);
+  animation: react-water-drift-a 32s ease-in-out infinite alternate;
+}
+
+.react-water-hero::after {
+  background: radial-gradient(ellipse 40% 50% at 72% 60%, rgba(34, 211, 238, .26), transparent 70%);
+  animation: react-water-drift-b 40s ease-in-out infinite alternate;
+}
+
+.dark .react-water-hero::before { background: radial-gradient(ellipse 45% 55% at 30% 40%, rgba(129, 140, 248, .3), transparent 70%); }
+.dark .react-water-hero::after { background: radial-gradient(ellipse 40% 50% at 72% 60%, rgba(34, 211, 238, .2), transparent 70%); }
+
+@keyframes react-water-drift-a { to { transform: translate3d(14%, 8%, 0) scale(1.12); } }
+@keyframes react-water-drift-b { to { transform: translate3d(-12%, -9%, 0) scale(1.08); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .react-water-hero::before,
+  .react-water-hero::after { animation: none; }
 }

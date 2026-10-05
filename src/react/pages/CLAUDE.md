@@ -21,9 +21,9 @@ ReactYgbPortBackground.tsx: 云柜宝港区背景的 React 适配器，只负责
 ygbStory/: 云柜宝六章杂志式介绍 (实色面板 + 港区镜头飞行 + 集卡实时配图)，由 ReactYgbPage 正式挂载，原型页同步用于调试，见 ygbStory/CLAUDE.md。
 ReactYgbHero.css: 云柜宝 Hero 叠卡的精确位移、透明度和高度过渡，集中处理减少动画偏好。
 ReactYgbRoadMapBg.tsx: Canvas 路线网络、地块、水系与运输节点装饰层。
-ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
-ReactWaterEnvPage.css: 水环境 Hero 的渐变基底与明暗主题色彩。
-ReactWaterSurfaceBg.tsx: Canvas 水面波纹与主题光晕装饰层。
+ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图；Hero 内以 data-dot-avoid 标记文案，交 useTextExclusions 采集后传给涟漪背景避让。
+ReactWaterEnvPage.css: 水环境 Hero 的渐变基底、两层缓慢漂移的光晕与明暗主题色彩，是点阵涟漪的唯一底色来源。
+ReactDotRippleBg.tsx: 水环境 Hero 的点阵涟漪适配器，只负责挂载 visuals/dotRipple 并同步字符颜色 (深色白、浅色深靛) 与文字避让区域。
 ReactHomePage.tsx: 首页品牌、案例、新闻和能力标签墙编排。
 ReactHomePage.css: 首页品牌光栅和能力标签横向动画样式。
 ReactAboutSection.tsx: 首页与关于页共享的品牌首屏、内联图标和特性列表。

@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 WebGL 与原水环境正弦波着色器、主题和可见性状态
  * [OUTPUT]: 对外提供 mountWaterSurface，挂载原水面渲染并返回清理函数
- * [POS]: 水环境的框架无关背景引擎，Vue 与 React 共用同一 shader 和参数
+ * [POS]: 水环境的框架无关背景引擎，现仅 Vue 兼容版 (WaterSurfaceBg.vue) 使用；React 版已改用 visuals/dotRipple
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 export function mountWaterSurface(canvas, getIsDark) {

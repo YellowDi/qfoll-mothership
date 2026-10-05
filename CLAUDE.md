@@ -14,6 +14,7 @@ tsconfig.json - React 迁移层 TypeScript 编译约束
 tailwind.config.js - 设计令牌和 Tailwind 扩展
 index.html - 应用挂载文档壳
 ygb-hero-prototype.html - 港区引擎 (src/visuals/ygbPort，正式 Hero 同源) 调试台，复用原 React Hero 文案与叠卡，提供仅看背景/暂停/倍速；不接入正式路由
+water-prototype.html - 水环境点阵涟漪 (src/visuals/dotRipple) 调试台，滑杆由 PARAM_SPEC 生成，可切换本地视频底 (public/water-env/hero-bg.mp4，参考素材版权属第三方，未入库，缺失时自动退回渐变底) 或 Hero 渐变底；不接入正式路由
 ygb-hero-react.html - 当前正式 React 云柜宝 Hero 的独立展示入口，复用默认港口背景与叠卡，可导出资源内嵌静态 HTML；独立于港区调试台
 </config>
 法则: 极简·稳定·导航·版本精确
