@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React DOM、React 根组件和全局视觉样式
- * [OUTPUT]: 对外启动 React 迁移预览应用
- * [POS]: React 阶段入口，与现有 Vue main.js 并行，直到页面迁移完成
+ * [OUTPUT]: 对外启动 React 应用
+ * [POS]: React 默认运行时入口，Vue main.js 仅在兼容构建模式中使用
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { StrictMode } from "react";

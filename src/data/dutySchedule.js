@@ -4,6 +4,12 @@
  * [POS]: Vue/React 内部工具页的共享计算边界，节假日先于调休与轮值覆盖
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
+const displayDateFormatter = new Intl.DateTimeFormat("zh-CN", {
+  month: "long",
+  day: "numeric",
+  weekday: "long",
+});
+
 export function createDutySchedule(roster, referenceDate = new Date()) {
 const weekdayLabels = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 const today = startOfDay(referenceDate);
@@ -28,11 +34,7 @@ function formatDateKey(date) {
 
 function formatDisplayDate(dateLike) {
   const date = typeof dateLike === "string" ? parseDate(dateLike) : dateLike;
-  return new Intl.DateTimeFormat("zh-CN", {
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-  }).format(date);
+  return displayDateFormatter.format(date);
 }
 
 function isWeekend(date) {

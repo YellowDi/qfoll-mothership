@@ -16,4 +16,4 @@ index.html - 应用挂载文档壳
 </config>
 法则: 极简·稳定·导航·版本精确
 
-迁移基线: React + TypeScript 迁移只改变运行时框架，优先保持路由、视觉、内容和交互行为一致；不得将视觉改版与框架迁移绑定。阶段 1 通过 vite --mode react 构建 dist-react，Vue 默认构建继续输出 dist。
+迁移基线: React + TypeScript 迁移只改变运行时框架，优先保持路由、视觉、内容和交互行为一致；不得将视觉改版与框架迁移绑定。React 已成为默认运行时与 dist 产物，Vue 仅通过 --mode vue 保留兼容构建。

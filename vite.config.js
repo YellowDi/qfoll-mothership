@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 Vite、Vue/React 插件与现有图片处理、产物分析插件
- * [OUTPUT]: 对外提供默认 Vue 模式和隔离的 React 迁移模式构建配置
+ * [OUTPUT]: 对外提供默认 React 模式和显式 Vue 兼容模式的构建配置
  * [POS]: 构建工具链入口，共享资源处理，按模式选择单一框架及产物目录
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -13,6 +13,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
+  const useLegacyVue = mode === "vue";
   const reactEntryPlugin = {
     name: "react-migration-entry",
     transformIndexHtml: {
@@ -23,7 +24,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      ...(mode === "react" ? [react(), reactEntryPlugin] : [vue()]),
+      ...(useLegacyVue ? [vue()] : [react(), reactEntryPlugin]),
       imagetools({
         removeMetadata: true,
       }),

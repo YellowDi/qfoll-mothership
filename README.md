@@ -1,6 +1,6 @@
 # Qifeng Tech Website
 
-A brand website built with Vue 3 + Vite, showcasing company info, case studies, and news.
+A brand website built with React + TypeScript + Vite, showcasing company info, case studies, and news.
 
 ## Overview
 
@@ -12,9 +12,9 @@ A brand website built with Vue 3 + Vite, showcasing company info, case studies, 
 
 | Category | Tech |
 |----------|------|
-| Framework | Vue 3 (Composition API) |
+| Framework | React 19 + TypeScript |
 | Build | Vite 7 |
-| Router | Vue Router 4 |
+| Router | React Router 7 |
 | Styling | Tailwind CSS 4 |
 | Content | Markdown + custom frontmatter |
 | Rendering | markdown-it, Mermaid, highlight.js, KaTeX |
@@ -30,12 +30,13 @@ src/
 │   ├── projects/   # Case studies
 │   └── news/       # News articles
 ├── data/           # Content parsing and metadata (projects.js, news.js, contentParserShared.js)
-├── layouts/        # Layouts (AppLayout)
-├── router/         # Route config
+├── layouts/        # Legacy Vue layout and shared shell references
+├── react/          # React + TypeScript application
+├── router/         # Legacy Vue route config
 ├── styles/         # Global styles and Markdown typography
-├── views/          # Page views
-├── App.vue
-├── main.js
+├── views/          # Legacy Vue page views
+├── App.vue         # Legacy Vue root
+├── main.js         # Legacy Vue entry (explicit vue mode)
 └── style.css
 ```
 
@@ -60,6 +61,10 @@ Dev server: `http://localhost:5173`
 | `pnpm dev` | Local development |
 | `pnpm build` | Production build |
 | `pnpm preview` | Preview build output |
+| `pnpm dev:vue` | Run the legacy Vue compatibility mode |
+| `pnpm build:vue` | Build the legacy Vue compatibility output |
+| `pnpm dev:react` | Run the React migration mode explicitly |
+| `pnpm build:react` | Build the React migration output to `dist-react/` |
 
 ## Content
 
