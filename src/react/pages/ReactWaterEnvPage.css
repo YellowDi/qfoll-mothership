@@ -1,59 +1,61 @@
 /**
- * [INPUT]: 依赖 ReactWaterEnvPage 的水面 Hero 容器
- * [OUTPUT]: 对外提供水环境 Hero 的浅色与深色渐变基底，以及两层缓慢漂移的光晕
- * [POS]: 水环境产品页的页面局部样式；点阵涟漪 (ReactDotRippleBg) 的底色全由这里承担
+ * [INPUT]: 依赖 ReactWaterEnvPage 的视频 Hero、功能媒体与全局 --color-bg 页面背景令牌
+ * [OUTPUT]: 对外提供舒展的视口高度、清晰视频背景、Codex 式居中首屏和大幅地图介绍区
+ * [POS]: 水环境产品页的局部样式，视频、正文与媒体区按页面流顺序衔接
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-
-/* ------------------------------------------------------------------
- * 分层：Hero 自身画静态渐变底；::before / ::after 是两团超大光晕，
- * 用 transform 缓慢漂移 (走合成器，不触发重绘)。isolation 让 z-index:-1
- * 的光晕落在 Hero 背景之上、正文与涟漪画布之下。
- * ------------------------------------------------------------------ */
 .react-water-hero {
   isolation: isolate;
-  background:
-    radial-gradient(ellipse 90% 70% at 75% 5%, rgba(129, 140, 248, .25), transparent 55%),
-    radial-gradient(ellipse 70% 90% at 15% 25%, rgba(59, 130, 246, .2), transparent 55%),
-    radial-gradient(ellipse 80% 50% at 88% 55%, rgba(34, 211, 238, .15), transparent 50%),
-    #d4ebf7;
+  background: rgb(var(--color-bg));
 }
 
-.dark .react-water-hero {
-  background:
-    radial-gradient(ellipse 90% 70% at 75% 5%, rgba(129, 140, 248, .28), transparent 55%),
-    radial-gradient(ellipse 70% 90% at 15% 25%, rgba(59, 130, 246, .22), transparent 55%),
-    radial-gradient(ellipse 80% 50% at 88% 55%, rgba(34, 211, 238, .16), transparent 50%),
-    #0f2847;
+.react-water-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
 }
 
-.react-water-hero::before,
+/* ---- 视频保持原始清晰度：不添加全屏模糊或颜色遮罩 ---- */
 .react-water-hero::after {
   content: "";
   position: absolute;
-  inset: -25%;
-  z-index: -1;
+  z-index: 1;
+  inset: auto 0 0;
+  height: clamp(8rem, 32%, 16rem);
   pointer-events: none;
-  will-change: transform;
+  background: linear-gradient(to bottom, rgb(var(--color-bg) / 0), rgb(var(--color-bg) / .56) 55%, rgb(var(--color-bg)));
 }
 
-.react-water-hero::before {
-  background: radial-gradient(ellipse 45% 55% at 30% 40%, rgba(99, 102, 241, .32), transparent 70%);
-  animation: react-water-drift-a 32s ease-in-out infinite alternate;
+.react-water-hero-content {
+  text-align: center;
 }
 
-.react-water-hero::after {
-  background: radial-gradient(ellipse 40% 50% at 72% 60%, rgba(34, 211, 238, .26), transparent 70%);
-  animation: react-water-drift-b 40s ease-in-out infinite alternate;
+.react-water-hero-title {
+  text-wrap: balance;
 }
 
-.dark .react-water-hero::before { background: radial-gradient(ellipse 45% 55% at 30% 40%, rgba(129, 140, 248, .3), transparent 70%); }
-.dark .react-water-hero::after { background: radial-gradient(ellipse 40% 50% at 72% 60%, rgba(34, 211, 238, .2), transparent 70%); }
+.react-water-hero-kpis {
+  position: relative;
+  z-index: 2;
+}
 
-@keyframes react-water-drift-a { to { transform: translate3d(14%, 8%, 0) scale(1.12); } }
-@keyframes react-water-drift-b { to { transform: translate3d(-12%, -9%, 0) scale(1.08); } }
+.water-feature-section {
+  scroll-margin-top: 2rem;
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .react-water-hero::before,
-  .react-water-hero::after { animation: none; }
+.water-feature-section--lead .water-feature-media {
+  width: 100%;
+}
+
+.water-feature-section--lead .water-feature-media > div {
+  border: 1px solid rgb(var(--color-ink) / .08);
+  box-shadow: 0 18px 60px -24px rgb(17 17 17 / .22);
+}
+
+.dark .water-feature-section--lead .water-feature-media > div {
+  border-color: rgb(255 255 255 / .12);
+  box-shadow: 0 24px 70px -24px rgb(0 0 0 / .55);
 }

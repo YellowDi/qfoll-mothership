@@ -4,8 +4,3 @@ name = "qfoll-mothership"
 
 [setup]
 script = ""
-
-[[actions]]
-name = "运行"
-icon = "run"
-command = "pnpm run dev"

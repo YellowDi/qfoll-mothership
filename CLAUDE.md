@@ -4,7 +4,7 @@ Vite + React 19 + TypeScript + React Router + Vue 3 兼容入口 + Tailwind CSS 
 <directory>
 src/ - 浏览器应用源码 (10个关键模块: components、views、composables、data、react、visuals、layouts、router、styles、content)
 scripts/ - 构建前数据生成与 SPA 部署后处理 (3个脚本)
-public/ - 不经源码导入的静态资源 (项目图片、站点图标与 manifest)
+public/ - 不经源码导入的静态资源 (项目图片、站点图标、manifest 与 water-env Hero 视频和首帧封面)
 </directory>
 <config>
 package.json - 依赖、构建、预览和数据生成命令
