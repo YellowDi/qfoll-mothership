@@ -16,7 +16,7 @@ YgbPage.vue: 云柜宝产品详情和路线图。
 WaterEnvPage.vue: 水环境产品详情和 WebGL 背景。
 DesignSpecPage.vue: 设计规范 Markdown、Mermaid 和媒体交互。
 ChangelogPage.vue: Git 生成的更新日志展示。
-TrashDutyPage.vue: 内部值日表工具页面。
+TrashDutyPage.vue: 内部值日表工具页面，消费 data/dutySchedule 的共享排班计算。
 NotFoundPage.vue: 未匹配路由兜底页面。
 
 法则: 页面只编排数据与组件；共享行为下沉到 components 或 composables；每个路由必须在 router 中有唯一映射。

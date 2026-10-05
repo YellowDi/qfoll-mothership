@@ -43,6 +43,7 @@ export function useReactDetailPageInteractions({ markdownRef, contentKey }: Opti
     };
     root.addEventListener("click", onClick);
     const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video[data-autoplay], .md-media video"));
+    videos.forEach((video) => { const source = video.dataset.src; if (source && !video.src) video.src = source; });
     const observer = "IntersectionObserver" in window ? new IntersectionObserver((entries) => entries.forEach((entry) => { const video = entry.target as HTMLVideoElement; if (entry.isIntersecting) void video.play().catch(() => undefined); else video.pause(); }), { threshold: 0.25 }) : null;
     videos.forEach((video) => observer?.observe(video));
     return () => { root.removeEventListener("click", onClick); observer?.disconnect(); };

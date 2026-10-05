@@ -17,6 +17,11 @@ ReactDetailPage.tsx: 项目与新闻详情共用的标题、正文、元信息�
 ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和相关演示页面。
 ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载轮播。
 ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
+ReactHomePage.tsx: 首页品牌、案例、新闻和能力标签墙编排。
+ReactHomePage.css: 首页品牌光栅和能力标签横向动画样式。
+ReactDesignSpecPage.tsx: 设计规范图文、媒体轮播和内联视频页面。
+ReactDesignSpecPage.css: 设计规范宽媒体与响应式比例样式。
+ReactTrashDutyPage.tsx: 内部值日表摘要、排班表和维护说明。
 
 法则: 页面只编排稳定内容与数据，不复制布局外壳；复杂交互页面继续按独立页面边界迁移。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md

@@ -6,6 +6,7 @@ contentParserShared.js: Markdown、代码高亮、Mermaid 和媒体增强的共�
 coverAssets.js: 内容标识到封面与媒体资源的映射。
 dutyCalendarByYear.js: 按年份组织的值日日期生成结果。
 internalDutyRoster.js: 内部值日人员配置。
+dutySchedule.js: Vue/React 共用的值日计算模型，处理工作日、节假日、调休和覆盖。
 news.js: 新闻 Markdown、元数据和列表索引。
 projects.js: 项目 Markdown、元数据和列表索引。
 showcase.js: Showcase 项目和使用场景数据。
