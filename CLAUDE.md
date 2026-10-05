@@ -13,6 +13,7 @@ postcss.config.js - Tailwind/PostCSS 处理配置
 tsconfig.json - React 迁移层 TypeScript 编译约束
 tailwind.config.js - 设计令牌和 Tailwind 扩展
 index.html - 应用挂载文档壳
+ygb-hero-prototype.html - 云柜宝 React 视觉升级的独立港口交互原型，不接入正式路由
 </config>
 法则: 极简·稳定·导航·版本精确
 
