@@ -1,10 +1,11 @@
 /**
- * [INPUT]: 依赖品牌标签、关于页跳转和原版标签墙轨道配置
+ * [INPUT]: 依赖品牌标签、关于页跳转、主题上下文和原版标签墙轨道配置
  * [OUTPUT]: 对外提供 ReactTagMarqueeSection，呈现标签舞台和品牌收束文案
  * [POS]: React 首页底部品牌展示区域，与 Vue TagMarqueeSection 保持相同的舞台密度
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Link } from "react-router-dom";
+import { useTheme } from "../providers/ThemeProvider";
 import "./ReactTagMarqueeSection.css";
 
 const baseWords = [
@@ -52,10 +53,12 @@ const stripes = stripeConfigs.map((stripe, stripeIndex) => {
 });
 
 export function ReactTagMarqueeSection() {
+  const { isDark } = useTheme();
+
   return (
     <section className="tilt-wall-section relative -mx-14 mt-14 w-auto overflow-hidden max-lg:-mx-6 max-md:-mx-5 max-md:mt-10">
       <div className="relative w-full pb-16 max-md:pb-11">
-        <div className="tilt-wall">
+        <div className={`tilt-wall${isDark ? " tilt-wall--dark" : ""}`}>
           <div className="tilt-wall__scene" aria-hidden="true">
             <div className="tilt-wall__text-layer">
               {stripes.map((stripe) => (
