@@ -36,6 +36,11 @@ function yearsFor(items: ListItem[]) {
 }
 function yearValue(item: ListItem) { const value = Number.parseInt(String(item.year ?? ""), 10); return Number.isFinite(value) ? value : -Infinity; }
 function monthValue(item: ListItem) { const value = Number.parseInt(String(item.startMonth ?? ""), 10); return Number.isFinite(value) ? value : 0; }
+function includesAny(value: string, candidates: Set<string>) {
+  if (!candidates.size) return true;
+  for (const candidate of candidates) if (value.includes(candidate)) return true;
+  return false;
+}
 
 export function ReactProjectsPage() {
   return <ReactListPage kind="projects" title="客户案例" items={projects} />;
@@ -62,12 +67,15 @@ function ReactListPage({ kind, title, items }: { kind: ListKind; title: string; 
   const years = useMemo(() => yearsFor(items), [items]);
   const filterTabs = ["全部", ...tags];
   const hasFilters = selectedTags.length > 0 || selectedYears.length > 0;
+  const selectedTagSet = useMemo(() => new Set(selectedTags), [selectedTags]);
+  const selectedYearSet = useMemo(() => new Set(selectedYears), [selectedYears]);
   const filterText = hasFilters ? [...selectedTags, ...selectedYears.map((year) => `${year}年`)].slice(0, 2).join(" · ") + ([...selectedTags, ...selectedYears].length > 2 ? ` +${[...selectedTags, ...selectedYears].length - 2}` : "") : "筛选";
 
   useEffect(() => {
-    setActiveFilter(searchParams.get("filter") || "全部");
-    setSelectedTags(readList(searchParams.get("tags")));
-    setSelectedYears(readList(searchParams.get("years")));
+    const params = new URLSearchParams(queryKey);
+    setActiveFilter(params.get("filter") || "全部");
+    setSelectedTags(readList(params.get("tags")));
+    setSelectedYears(readList(params.get("years")));
   }, [queryKey]);
   useEffect(() => {
     const close = (event: PointerEvent) => {
@@ -79,10 +87,12 @@ function ReactListPage({ kind, title, items }: { kind: ListKind; title: string; 
     return () => { document.removeEventListener("pointerdown", close); document.removeEventListener("keydown", escape); };
   }, []);
   useEffect(() => {
-    const update = () => { const node = categoryRef.current; if (!node) return; const max = node.scrollWidth - node.clientWidth; setCategoryFade({ left: node.scrollLeft > 1, right: node.scrollLeft < max - 1 }); };
-    update(); window.addEventListener("resize", update); categoryRef.current?.addEventListener("scroll", update, { passive: true });
-    return () => { window.removeEventListener("resize", update); categoryRef.current?.removeEventListener("scroll", update); };
-  }, [tags.length]);
+    const node = categoryRef.current;
+    if (!node) return;
+    const update = () => { const max = node.scrollWidth - node.clientWidth; setCategoryFade({ left: node.scrollLeft > 1, right: node.scrollLeft < max - 1 }); };
+    update(); window.addEventListener("resize", update); node.addEventListener("scroll", update, { passive: true });
+    return () => { window.removeEventListener("resize", update); node.removeEventListener("scroll", update); };
+  }, [kind, tags]);
 
   const replaceQuery = (next: { filter?: string; tags?: string[]; years?: string[] }) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -97,14 +107,14 @@ function ReactListPage({ kind, title, items }: { kind: ListKind; title: string; 
   const visibleItems = useMemo(() => {
     const filtered = items.filter((item) => {
       const value = kind === "projects" ? item.tag || "" : item.category || "";
-      return (activeFilter === "全部" || value.includes(activeFilter)) && (!selectedTags.length || selectedTags.some((tag) => value.includes(tag))) && (!selectedYears.length || selectedYears.includes(String(item.year)));
+      return (activeFilter === "全部" || value.includes(activeFilter)) && includesAny(value, selectedTagSet) && (!selectedYearSet.size || selectedYearSet.has(String(item.year)));
     });
     return filtered.sort((a, b) => {
       if (kind === "news") { const delta = (a.publishedTimestamp || -Infinity) - (b.publishedTimestamp || -Infinity); return sortMode === "最早" ? delta || String(a.title).localeCompare(String(b.title), "zh-Hans-CN") : -delta || String(a.title).localeCompare(String(b.title), "zh-Hans-CN"); }
       const delta = (yearValue(a) - yearValue(b)) || (monthValue(a) - monthValue(b));
       return (sortMode === "最早" ? delta : -delta) || String(a.title).localeCompare(String(b.title), "zh-Hans-CN");
     });
-  }, [activeFilter, items, kind, selectedTags, selectedYears, sortMode]);
+  }, [activeFilter, items, kind, selectedTagSet, selectedYearSet, sortMode]);
 
   return <section className="mx-auto w-full max-w-360 px-6 pb-20 pt-24 md:px-14">
     <div className="mb-6 flex items-center justify-between"><h1 className="text-4xl font-medium tracking-tight">{title}</h1></div>
@@ -122,9 +132,9 @@ function ReactListPage({ kind, title, items }: { kind: ListKind; title: string; 
 }
 
 function FilterPanel({ tags, years, selectedTags, selectedYears, onTag, onYear, hasFilters, onClear }: { tags: string[]; years: number[]; selectedTags: string[]; selectedYears: string[]; onTag: (event: ChangeEvent<HTMLInputElement>) => void; onYear: (event: ChangeEvent<HTMLInputElement>) => void; hasFilters: boolean; onClear: () => void }) {
-  return <div className="absolute right-0 z-30 mt-3 w-90 max-w-[calc(100vw-2rem)] rounded-md border border-edge bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm dark:border-white/10 dark:bg-zinc-900" role="dialog" aria-label="筛选选项"><div className="grid grid-cols-2 gap-6 max-md:grid-cols-1"><CheckGroup title="主题" options={tags} selected={selectedTags} onChange={onTag} /><CheckGroup title="年份" options={years.map(String)} selected={selectedYears} onChange={onYear} suffix=" 年" /></div><div className="mt-5 flex justify-end"><button type="button" className="text-[15px] font-medium text-primary" onClick={onClear}>{hasFilters ? "清除筛选" : "取消"}</button></div></div>;
+  return <dialog open className="absolute right-0 z-30 mt-3 w-90 max-w-[calc(100vw-2rem)] rounded-md border border-edge bg-zinc-100 px-6 py-5 text-[15px] text-primary shadow-sm dark:border-white/10 dark:bg-zinc-900" aria-label="筛选选项"><div className="grid grid-cols-2 gap-6 max-md:grid-cols-1"><CheckGroup title="主题" options={tags} selected={selectedTags} onChange={onTag} /><CheckGroup title="年份" options={years.map(String)} selected={selectedYears} onChange={onYear} suffix=" 年" /></div><div className="mt-5 flex justify-end"><button type="button" className="text-[15px] font-medium text-primary" onClick={onClear}>{hasFilters ? "清除筛选" : "取消"}</button></div></dialog>;
 }
-function CheckGroup({ title, options, selected, onChange, suffix = "" }: { title: string; options: string[]; selected: string[]; onChange: (event: ChangeEvent<HTMLInputElement>) => void; suffix?: string }) { return <div><div className="mb-3 text-sm text-secondary">{title}</div><div className="max-h-55 space-y-2 overflow-auto pr-2">{options.map((option) => <label key={option} className="flex items-center gap-3 text-[15px]"><input type="checkbox" className="h-4 w-4 rounded border-edge bg-transparent text-primary" value={option} checked={selected.includes(option)} onChange={onChange} /><span>{option}{suffix}</span></label>)}</div></div>; }
+function CheckGroup({ title, options, selected, onChange, suffix = "" }: { title: string; options: string[]; selected: string[]; onChange: (event: ChangeEvent<HTMLInputElement>) => void; suffix?: string }) { const selectedSet = new Set(selected); return <div><div className="mb-3 text-sm text-secondary">{title}</div><div className="max-h-55 space-y-2 overflow-auto pr-2">{options.map((option) => <label key={option} className="flex items-center gap-3 text-[15px]"><input type="checkbox" className="h-4 w-4 rounded border-edge bg-transparent text-primary" value={option} checked={selectedSet.has(option)} onChange={onChange} /><span>{option}{suffix}</span></label>)}</div></div>; }
 function SortOption({ label, checked, onClick }: { label: string; checked: boolean; onClick: () => void }) { return <button type="button" className="flex w-full items-center gap-3 py-1.5" role="menuitemradio" aria-checked={checked} onClick={onClick}><span className="flex h-4 w-4 items-center justify-center rounded-full border border-edge"><span className={checked ? "h-2.5 w-2.5 rounded-full bg-ink" : ""} /></span>{label}</button>; }
 function GridCard({ item, kind }: { item: ListItem; kind: ListKind }) { const primary = kind === "projects" ? item.tag : item.category; const secondary = kind === "projects" ? item.yearLabel || item.year : item.publishedAt; return <Link to={`/${kind === "projects" ? "project" : "news"}/${item.id}`} className="group"><div className="overflow-hidden rounded-sm"><img src={item.cover} srcSet={item.coverSrcSet || undefined} alt={item.title || "内容"} className="aspect-square w-full rounded-sm object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" loading="lazy" decoding="async" /></div><div className="pt-3 text-left"><div className="text-lg font-medium leading-[1.3] text-primary max-md:text-base">{item.title}</div><div className="mt-4 flex items-center gap-2 text-sm"><span className="font-medium text-primary">{primary}</span><span className="text-secondary">{secondary}</span></div></div></Link>; }
 function ListRow({ item, kind }: { item: ListItem; kind: ListKind }) { const primary = kind === "projects" ? item.tag || "客户案例" : item.category || "最新动态"; const secondary = kind === "projects" ? item.yearLabel || item.year : item.publishedAt; return <Link to={`/${kind === "projects" ? "project" : "news"}/${item.id}`} className="group grid grid-cols-12 gap-6 border-b border-line py-7 transition-colors hover:border-primary/55 hover:text-primary"><div className="col-span-12 text-sm text-secondary md:col-span-3"><div className="text-[15px] font-medium text-primary">{primary}</div><div className="mt-2 text-sm text-secondary">{secondary}</div></div><div className="col-span-12 md:col-span-9"><div className="text-[17px] font-medium text-primary">{item.title}</div><div className="mt-2 text-sm text-secondary">{item.lead}</div></div></Link>; }
