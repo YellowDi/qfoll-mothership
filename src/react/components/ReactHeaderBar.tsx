@@ -68,7 +68,7 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
         id={mobile ? "header-toc-mobile" : "header-toc-desktop"}
         className={`${styles.toc} ${detail.open && hasToc ? styles.visible : ""} ${mobile
           ? "absolute left-0 right-0 top-full max-h-[58vh] w-screen overflow-auto border-b border-black/8 bg-bg p-2 shadow-xs dark:border-white/12"
-          : "absolute left-1/2 top-full mt-2 max-h-[58vh] w-[min(38rem,72vw)] -translate-x-1/2 overflow-auto rounded-md bg-white p-2 shadow-xs dark:bg-zinc-900"}`}
+          : "absolute left-1/2 top-full mt-2 max-h-[58vh] w-[30rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-auto rounded-md bg-white p-2 shadow-xs dark:bg-zinc-900"}`}
         role="menu"
         aria-label="文章目录"
         aria-hidden={!detail.open || !hasToc}

@@ -21,6 +21,9 @@
   /* Tailwind 的 -translate-x-1/2 与过渡用 translate 属性同源，显式合并两轴避免标题偏右。 */
   .title { translate: -50% -4px; }
   .title.visible { translate: -50% 0; }
+  /* 目录也以标题中心为锚点，避免被自身的纵向过渡覆盖横向定位。 */
+  .toc { translate: -50% -8px; }
+  .toc.visible { translate: -50% 0; }
 }
 .toc {
   translate: 0 -8px;
