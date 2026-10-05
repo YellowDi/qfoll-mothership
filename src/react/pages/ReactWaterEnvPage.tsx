@@ -1,16 +1,17 @@
 /**
- * [INPUT]: 依赖水环境特性数据、明暗主题图片、页面背景令牌与 public/water-env 的视频和首帧封面，依赖 ReactDotRippleBg 点阵涟漪与 useTextExclusions 避让采集
- * [OUTPUT]: 对外提供 ReactWaterEnvPage，展示居中视频 Hero (叠加鼠标点阵涟漪)、地图总览和水环境运维能力
- * [POS]: 产品专题路由 /water-env 的 React 页面边界，负责 Hero 可见性播放与内容区衔接
+ * [INPUT]: 依赖 data/waterEnvFeatures 的 waterEnvStory 叙事数据，依赖 public/water-env 的视频和首帧封面，依赖 ReactDotRippleBg 点阵涟漪与 useTextExclusions 避让采集
+ * [OUTPUT]: 对外提供 ReactWaterEnvPage：居中视频 Hero (叠加鼠标点阵涟漪 + 首张大幅地图) → 地图总览 → 闭环四步 → 核心能力切换展台 → 八模块 → 收束标语
+ * [POS]: 产品专题路由 /water-env 的 React 页面边界，负责 Hero 可见性播放与内容区编排；文案全部来自 waterEnvStory，页面不持有内容
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { useEffect, useRef } from "react";
-import { featureSections } from "../../data/waterEnvFeatures";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { waterEnvStory } from "../../data/waterEnvFeatures";
 import { useTextExclusions } from "../hooks/useTextExclusions";
 import { ReactDotRippleBg } from "./ReactDotRippleBg";
 import "./ReactWaterEnvPage.css";
 
-type FeatureSection = (typeof featureSections)[number];
+const { overview, loop, showcase, modules, closing } = waterEnvStory;
+type Screen = { image: string; imageDark?: string };
 
 export function ReactWaterEnvPage() {
   const heroRef = useRef<HTMLElement>(null);
@@ -42,7 +43,7 @@ export function ReactWaterEnvPage() {
   }, []);
 
   return (
-    <div className="w-full pb-20">
+    <div className="water-page w-full">
       <section ref={heroRef} className="react-water-hero relative flex min-h-[clamp(36rem,76vh,48rem)] flex-col items-center overflow-hidden py-12 md:py-20">
         <video
           ref={videoRef}
@@ -76,61 +77,165 @@ export function ReactWaterEnvPage() {
           <p data-dot-avoid className="mx-auto mt-4 max-w-160 text-sm leading-relaxed text-secondary md:text-base">
             以统一的数据体系连接分散的监测节点，让排水管网从「看不见」走向「可感知、可分析、可预警」。
           </p>
-          <a href="#monitoring" data-dot-avoid className="btn-primary btn-md mt-7 inline-flex items-center gap-2 px-5">
-            查看监测总览
-            <i className="ri-arrow-down-line text-base" aria-hidden="true" />
-          </a>
         </div>
-        <FeatureSection item={featureSections[0]} index={0} />
+        {/* 首张地图是 Hero 的收尾：页面背景渐变在它中段收束，整块标记为涟漪禁区 */}
+        <figure id={overview.id} data-dot-block className="water-lead relative z-2 mx-auto mt-20 w-full max-w-360 px-6 md:px-14 lg:mt-28">
+          <Shot screen={overview} alt="水环境监控平台站点地图" eager className="water-lead-frame" />
+        </figure>
+        <Overview />
       </section>
 
-      {(featureSections as FeatureSection[]).slice(1).map((item, index) => (
-        <FeatureSection key={item.id} item={item} index={index + 1} />
-      ))}
+      <Loop />
+      <Showcase />
+      <Modules />
+      <Closing />
     </div>
   );
 }
 
-function FeatureSection({ item, index }: { item: FeatureSection; index: number }) {
-  const isLead = index === 0;
+/* ==================== 章节骨架：编号眉题 + 标题，五个章节共用 ==================== */
+function SectionHead({ index, eyebrow, title, desc, center = false }: { index: string; eyebrow: string; title: ReactNode; desc?: string; center?: boolean }) {
   return (
-    <section
-      id={item.id}
-      data-dot-block={isLead ? "" : undefined}
-      className={`water-feature-section mx-auto w-full max-w-360 px-6 md:px-14 ${isLead ? "water-feature-section--lead mt-20 lg:mt-28" : `mt-20 grid grid-cols-1 items-center gap-10 md:grid-cols-5 md:gap-14 lg:mt-28`}`}
-    >
-      {isLead ? (
-        <>
-          <FeatureMedia item={item} index={index} />
-          <FeatureCopy item={item} />
-        </>
-      ) : (
-        <>
-          <FeatureCopy item={item} alternate={index % 2 === 1} />
-          <FeatureMedia item={item} index={index} alternate={index % 2 === 1} />
-        </>
-      )}
+    <header className={center ? "mx-auto max-w-200 text-center" : "max-w-200"}>
+      <p className="water-eyebrow"><span className="text-sky-500">{index}</span> / {eyebrow}</p>
+      <h2 className="mt-5 text-[clamp(2rem,3.6vw,3.5rem)] font-medium leading-[1.06] tracking-[-0.045em] text-balance">{title}</h2>
+      {desc && <p className={`mt-5 max-w-160 text-[clamp(.9375rem,1.1vw,1.0625rem)] leading-[1.75] text-secondary ${center ? "mx-auto" : ""}`}>{desc}</p>}
+    </header>
+  );
+}
+
+function Shot({ screen, alt, eager = false, className = "" }: { screen: Screen; alt: string; eager?: boolean; className?: string }) {
+  return (
+    <div className={`water-shot ${className}`}>
+      <img src={screen.image} alt={alt} className="block h-full w-full object-cover dark:hidden" loading={eager ? "eager" : "lazy"} />
+      <img src={screen.imageDark || screen.image} alt={alt} className="hidden h-full w-full object-cover dark:block" loading="lazy" />
+    </div>
+  );
+}
+
+/* ---- 01 地图总览：标题与说明左右分栏，事实清单用细线分隔 ---- */
+function Overview() {
+  return (
+    <div className="water-container relative z-2 mt-16 grid gap-10 md:mt-24 md:grid-cols-12 md:gap-14">
+      <div className="md:col-span-5">
+        <SectionHead index="01" eyebrow={overview.eyebrow} title={<>{overview.title[0]}<br />{overview.title[1]}</>} />
+      </div>
+      <div className="md:col-span-6 md:col-start-7 md:pt-11">
+        <p className="text-[clamp(.9375rem,1.1vw,1.0625rem)] leading-[1.75] text-secondary">{overview.desc}</p>
+        <dl className="mt-8">
+          {overview.facts.map(([term, detail]) => (
+            <div key={term} className="flex items-baseline justify-between gap-6 border-t border-edge py-4 text-sm last:border-b">
+              <dt className="shrink-0 font-medium">{term}</dt>
+              <dd className="text-right text-secondary">{detail}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  );
+}
+
+/* ---- 02 工作方式：四步沿一条横线推进，线上圆点标记节点 ---- */
+function Loop() {
+  return (
+    <section id={loop.id} className="water-container water-section water-section--after-lead">
+      <SectionHead index="02" eyebrow={loop.eyebrow} title={loop.title} desc={loop.desc} />
+      <ol className="water-loop mt-14 grid gap-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-0">
+        {loop.steps.map(([name, text], index) => (
+          <li key={name} className="water-loop-step relative lg:pr-10">
+            <span className="water-loop-dot" aria-hidden="true" />
+            <p className="mt-7 font-mono text-xs tracking-[.08em] text-secondary">STEP {String(index + 1).padStart(2, "0")}</p>
+            <h3 className="mt-2 text-2xl font-medium tracking-[-0.03em]">{name}</h3>
+            <p className="mt-3 max-w-64 text-sm leading-[1.7] text-secondary">{text}</p>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }
 
-function FeatureCopy({ item, alternate = false }: { item: FeatureSection; alternate?: boolean }) {
+/* ---- 03 核心能力：左侧能力列表切换，右侧截图原位交叉淡入 ---- */
+function Showcase() {
+  const [active, setActive] = useState(0);
   return (
-    <div className={`water-feature-copy min-w-0 md:col-span-2 md:px-8 ${alternate ? "md:order-2" : ""}`}>
-      <span className="inline-flex rounded-full border border-edge bg-surface/75 px-3 py-1 text-sm text-secondary">{item.chip}</span>
-      <h2 className="mt-4 text-[clamp(1.75rem,3vw,3rem)] font-medium leading-[1.08] tracking-[-0.04em]">{item.title}</h2>
-      <p className="mt-5 text-[clamp(.9375rem,1.05vw,1.0625rem)] leading-[1.75] text-secondary">{item.desc}</p>
-    </div>
+    <section id={showcase.id} className="water-container water-section">
+      <SectionHead index="03" eyebrow={showcase.eyebrow} title={showcase.title} />
+      <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-12 lg:gap-14">
+        <div role="tablist" aria-label={showcase.eyebrow} className="flex flex-col lg:col-span-4">
+          {showcase.items.map((item, index) => {
+            const selected = index === active;
+            return (
+              <button
+                key={item.id}
+                id={`water-tab-${item.id}`}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                aria-controls={`water-panel-${item.id}`}
+                onClick={() => setActive(index)}
+                className="water-tab group border-t border-edge py-5 text-left last:border-b"
+              >
+                <span className="flex items-center justify-between gap-4">
+                  <span className={`text-lg font-medium tracking-[-0.02em] transition-colors ${selected ? "text-primary" : "text-secondary group-hover:text-primary"}`}>{item.label}</span>
+                  <span className={`font-mono text-xs transition-colors ${selected ? "text-sky-500" : "text-secondary"}`}>{String(index + 1).padStart(2, "0")}</span>
+                </span>
+                <span className="water-tab-body" data-open={selected}>
+                  <span className="block overflow-hidden">
+                    <span className="block pt-3 text-sm leading-[1.75] text-secondary">{item.desc}</span>
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="relative lg:col-span-8">
+          {showcase.items.map((item, index) => (
+            <div
+              key={item.id}
+              id={`water-panel-${item.id}`}
+              role="tabpanel"
+              aria-labelledby={`water-tab-${item.id}`}
+              aria-hidden={index !== active}
+              className={`water-panel ${index === active ? "is-active" : ""}`}
+            >
+              <Shot screen={item} alt={item.label} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-function FeatureMedia({ item, index, alternate = false }: { item: FeatureSection; index: number; alternate?: boolean }) {
+/* ---- 04 平台模块：发丝线网格，一格一个模块 ---- */
+function Modules() {
   return (
-    <div className={`water-feature-media min-w-0 ${index === 0 ? "" : `md:col-span-3 ${alternate ? "md:order-1" : ""}`}`}>
-      <div className="overflow-hidden rounded-md bg-surface shadow-[0_8px_40px_-12px_rgba(0,0,0,.15)] dark:shadow-[0_12px_48px_-12px_rgba(0,0,0,.4)]">
-        <img src={item.image} alt={item.title} className="block h-auto w-full object-cover dark:hidden" loading={index ? "lazy" : "eager"} />
-        <img src={item.imageDark || item.image} alt={item.title} className="hidden h-auto w-full object-cover dark:block" loading="lazy" />
-      </div>
-    </div>
+    <section id={modules.id} className="water-container water-section">
+      <SectionHead index="04" eyebrow={modules.eyebrow} title={modules.title} />
+      <ul className="water-modules mt-12 grid grid-cols-2 lg:mt-16 lg:grid-cols-4">
+        {modules.items.map(([name, text], index) => (
+          <li key={name} className="flex min-h-40 flex-col justify-between gap-6 p-5 md:min-h-48 md:p-7">
+            <span className="font-mono text-xs text-secondary">{String(index + 1).padStart(2, "0")}</span>
+            <span>
+              <span className="block text-lg font-medium tracking-[-0.02em]">{name}</span>
+              <span className="mt-1.5 block text-sm leading-[1.6] text-secondary">{text}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/* ---- 收束：回到 Hero 的承诺，只留一句话 ---- */
+function Closing() {
+  return (
+    <section className="water-container water-section pb-24 text-center md:pb-36">
+      <h2 className="mx-auto max-w-240 text-[clamp(2.25rem,5vw,4.5rem)] font-medium leading-[1.04] tracking-[-0.05em] text-balance">
+        {closing.title[0]}
+        <br />
+        <span className="text-sky-500">{closing.title[1]}</span>
+      </h2>
+    </section>
   );
 }

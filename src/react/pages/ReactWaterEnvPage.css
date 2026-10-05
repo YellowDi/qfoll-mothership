@@ -1,9 +1,11 @@
 /**
- * [INPUT]: 依赖 ReactWaterEnvPage 的视频 Hero、功能媒体与全局 --color-bg 页面背景令牌
- * [OUTPUT]: 对外提供舒展的视口高度、清晰视频背景、Codex 式居中首屏和大幅地图介绍区
- * [POS]: 水环境产品页的局部样式，视频、正文与媒体区按页面流顺序衔接
+ * [INPUT]: 依赖 ReactWaterEnvPage 的视频 Hero 与五个内容章节，依赖全局 --color-bg / --color-ink / --color-edge 令牌
+ * [OUTPUT]: 对外提供 Hero 满幅视频与收束渐变、首张大幅地图框，以及 water-* 章节样式 (容器节奏、眉题、闭环横线、能力展台交叉淡入、模块发丝网格)
+ * [POS]: 水环境产品页的局部样式；Hero 层叠 (视频 → 涟漪 → 渐变 → 正文) 独立于下方章节，章节只靠页面底色与发丝线组织，不用卡片阴影堆层次
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
+
+/* ==================== Hero：保持原设计 ==================== */
 .react-water-hero {
   isolation: isolate;
   background: rgb(var(--color-bg));
@@ -25,14 +27,14 @@
   z-index: 1;
   inset: 0;
   pointer-events: none;
-  /* 渐变中点对齐首张地图的中段，地图下半段与说明文字回到页面底色 */
+  /* 渐变中点对齐首张地图的中段，地图下半段与总览章节回到页面底色 */
   background: linear-gradient(
     to bottom,
     rgb(var(--color-bg) / 0) 0%,
-    rgb(var(--color-bg) / 0) 58%,
-    rgb(var(--color-bg) / .18) 64%,
-    rgb(var(--color-bg) / .78) 73%,
-    rgb(var(--color-bg)) 80%,
+    rgb(var(--color-bg) / 0) 52%,
+    rgb(var(--color-bg) / .18) 58%,
+    rgb(var(--color-bg) / .78) 66%,
+    rgb(var(--color-bg)) 72%,
     rgb(var(--color-bg)) 100%
   );
 }
@@ -45,36 +47,139 @@
   text-wrap: balance;
 }
 
-.water-feature-section {
+/* ==================== 截图框：明暗主题共用一层细边 ==================== */
+.water-shot {
+  aspect-ratio: 1440 / 1024;
+  overflow: hidden;
+  border: 1px solid rgb(var(--color-ink) / .08);
+  border-radius: 8px;
+  background: rgb(var(--color-surface));
+  box-shadow: 0 18px 50px -28px rgb(17 17 17 / .2);
+}
+
+.dark .water-shot {
+  border-color: rgb(255 255 255 / .1);
+  box-shadow: 0 24px 60px -28px rgb(0 0 0 / .6);
+}
+
+.water-lead {
   scroll-margin-top: 2rem;
 }
 
-.react-water-hero > .water-feature-section {
-  position: relative;
-  z-index: 2;
-}
-
-.water-feature-section--lead {
-  text-align: center;
-}
-
-.water-feature-section--lead .water-feature-copy {
-  max-width: 52rem;
-  margin-inline: auto;
-}
-
-.water-feature-section--lead .water-feature-media {
-  width: 100%;
+.water-lead-frame {
   max-width: 80rem;
-  margin: 3rem auto 0;
-}
-
-.water-feature-section--lead .water-feature-media > div {
-  border: 1px solid rgb(var(--color-ink) / .08);
+  margin-inline: auto;
   box-shadow: 0 18px 60px -24px rgb(17 17 17 / .22);
 }
 
-.dark .water-feature-section--lead .water-feature-media > div {
-  border-color: rgb(255 255 255 / .12);
-  box-shadow: 0 24px 70px -24px rgb(0 0 0 / .55);
+/* ==================== 章节节奏 ==================== */
+.water-container {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .water-container {
+    padding-inline: 3.5rem;
+  }
+}
+
+.water-section {
+  margin-top: clamp(6rem, 12vw, 11rem);
+  scroll-margin-top: 2rem;
+}
+
+/* 01 总览已经紧接在 Hero 地图之后，02 只保留一段明确的呼吸距离 */
+.water-section--after-lead {
+  margin-top: clamp(3.5rem, 6vw, 6rem);
+}
+
+.water-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .75rem;
+  letter-spacing: .08em;
+  color: rgb(var(--color-text-secondary) / var(--color-text-secondary-opacity));
+}
+
+/* ==================== 02 闭环：一条横线贯穿四步 ==================== */
+.water-loop-step {
+  border-top: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
+}
+
+.water-loop-dot {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgb(var(--color-bg));
+  border: 1.5px solid rgb(14 165 233);
+}
+
+/* 最后一步实心：闭环在此完成 */
+.water-loop-step:last-child .water-loop-dot {
+  background: rgb(14 165 233);
+}
+
+/* ==================== 03 能力展台 ==================== */
+.water-tab {
+  cursor: pointer;
+}
+
+.water-tab:focus-visible {
+  outline: 2px solid rgb(14 165 233);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* 说明文字用 grid 行高 0fr → 1fr 展开，高度无需测量 */
+.water-tab-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .35s cubic-bezier(.2, .7, .2, 1);
+}
+
+.water-tab-body[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+/* 截图原位叠放，第一张撑开高度，其余绝对定位交叉淡入 */
+.water-panel {
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+
+.water-panel:not(:first-child) {
+  position: absolute;
+  inset: 0;
+}
+
+.water-panel.is-active {
+  opacity: 1;
+}
+
+/* ==================== 04 模块：发丝线网格 ==================== */
+.water-modules {
+  border-top: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
+  border-left: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
+}
+
+.water-modules > li {
+  border-right: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
+  border-bottom: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
+  transition: background-color .2s ease;
+}
+
+.water-modules > li:hover {
+  background: rgb(var(--color-ink) / .025);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-tab-body,
+  .water-panel {
+    transition: none;
+  }
 }
