@@ -13,6 +13,8 @@ AboutPage.module.css: 关于页交互样式契约，保留二维码卡片的倾�
 ReactListPage.tsx: 项目与新闻列表共用的筛选、排序、网格/列表和查询参数同步模板。
 ReactShowcasePage.tsx: Showcase 自动横向轮播页面，暂停逻辑只由卡片悬停和键盘聚焦触发。
 ReactShowcasePage.module.css: Showcase 轮播轨道和卡片的局部动画样式。
+ReactDetailPage.tsx: 项目与新闻详情共用的标题、正文、元信息和相关推荐页面。
+ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和相关演示页面。
 
 法则: 页面只编排稳定内容与数据，不复制布局外壳；复杂交互页面继续按独立页面边界迁移。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
