@@ -11,6 +11,7 @@ import { ReactAppLayout } from "./layouts/ReactAppLayout";
 import { ReactRoutePlaceholder } from "./components/ReactRoutePlaceholder";
 import { CareersPage, PricingPage } from "./pages/ReactArticlePage";
 import { ReactChangelogPage } from "./pages/ReactChangelogPage";
+import { AboutPage } from "./pages/AboutPage";
 
 function AppFrame() {
   const { pathname, search, hash } = useLocation();
@@ -25,6 +26,7 @@ export function AppRoutes() {
           const element = path === "/pricing" ? <PricingPage />
             : path === "/careers" ? <CareersPage />
               : path === "/changelog" ? <ReactChangelogPage />
+                : path === "/about" ? <AboutPage />
                 : <ReactRoutePlaceholder title={title} />;
           return <Route key={path} path={path} element={element} />;
         })}
