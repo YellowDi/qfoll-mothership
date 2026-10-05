@@ -1,11 +1,13 @@
 /**
- * [INPUT]: 依赖水环境特性数据、明暗主题图片、页面背景令牌与 public/water-env 的视频和首帧封面
- * [OUTPUT]: 对外提供 ReactWaterEnvPage，展示居中视频 Hero、地图总览和水环境运维能力
+ * [INPUT]: 依赖水环境特性数据、明暗主题图片、页面背景令牌与 public/water-env 的视频和首帧封面，依赖 ReactDotRippleBg 点阵涟漪与 useTextExclusions 避让采集
+ * [OUTPUT]: 对外提供 ReactWaterEnvPage，展示居中视频 Hero (叠加鼠标点阵涟漪)、地图总览和水环境运维能力
  * [POS]: 产品专题路由 /water-env 的 React 页面边界，负责 Hero 可见性播放与内容区衔接
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef } from "react";
 import { featureSections } from "../../data/waterEnvFeatures";
+import { useTextExclusions } from "../hooks/useTextExclusions";
+import { ReactDotRippleBg } from "./ReactDotRippleBg";
 import "./ReactWaterEnvPage.css";
 
 type FeatureSection = (typeof featureSections)[number];
@@ -13,6 +15,7 @@ type FeatureSection = (typeof featureSections)[number];
 export function ReactWaterEnvPage() {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const excludeRects = useTextExclusions(heroRef);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -55,23 +58,25 @@ export function ReactWaterEnvPage() {
           aria-hidden="true"
           tabIndex={-1}
         />
+        {/* 涟漪层只覆盖 Hero 首屏 (与 section 的 min-h 同值)，夹在视频与正文之间；底部页面背景渐变 (::after, z-1) 会自然把它盖掉 */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(36rem,76vh,48rem)]" aria-hidden="true"><ReactDotRippleBg excludeRects={excludeRects} /></div>
         <div className="react-water-hero-content relative z-10 mx-auto w-full max-w-240 px-6">
-          <div className="react-water-hero-kicker inline-flex items-center gap-2 rounded-full border border-zinc-300/50 bg-white/60 px-3 py-1 text-sm text-secondary dark:border-white/20 dark:bg-white/10 dark:text-on-dark">
+          <div data-dot-avoid className="react-water-hero-kicker inline-flex items-center gap-2 rounded-full border border-zinc-300/50 bg-white/60 px-3 py-1 text-sm text-secondary dark:border-white/20 dark:bg-white/10 dark:text-on-dark">
             <i className="ri-drop-line text-sky-500" aria-hidden="true" />
             统一数据平台 · 动态预警 · 污染源追溯
           </div>
-          <h1 className="react-water-hero-title mt-7 text-[clamp(3rem,7vw,6.5rem)] font-medium leading-[.98] tracking-[-0.06em]">
+          <h1 data-dot-avoid className="react-water-hero-title mt-7 text-[clamp(3rem,7vw,6.5rem)] font-medium leading-[.98] tracking-[-0.06em]">
             <span className="text-sky-500">水环境</span>
             <br />
             智慧监控平台
           </h1>
-          <p className="mx-auto mt-6 max-w-180 text-[clamp(1.15rem,2vw,1.8rem)] font-medium leading-tight">
+          <p data-dot-avoid className="mx-auto mt-6 max-w-180 text-[clamp(1.15rem,2vw,1.8rem)] font-medium leading-tight">
             面向排水管网全生命周期管理的数字化监测与预警
           </p>
-          <p className="mx-auto mt-4 max-w-160 text-sm leading-relaxed text-secondary md:text-base">
+          <p data-dot-avoid className="mx-auto mt-4 max-w-160 text-sm leading-relaxed text-secondary md:text-base">
             以统一的数据体系连接分散的监测节点，让排水管网从「看不见」走向「可感知、可分析、可预警」。
           </p>
-          <a href="#monitoring" className="btn-primary btn-md mt-7 inline-flex items-center gap-2 px-5">
+          <a href="#monitoring" data-dot-avoid className="btn-primary btn-md mt-7 inline-flex items-center gap-2 px-5">
             查看监测总览
             <i className="ri-arrow-down-line text-base" aria-hidden="true" />
           </a>
@@ -91,6 +96,7 @@ function FeatureSection({ item, index }: { item: FeatureSection; index: number }
   return (
     <section
       id={item.id}
+      data-dot-block={isLead ? "" : undefined}
       className={`water-feature-section mx-auto w-full max-w-360 px-6 md:px-14 ${isLead ? "water-feature-section--lead mt-20 lg:mt-28" : `mt-20 grid grid-cols-1 items-center gap-10 md:grid-cols-5 md:gap-14 lg:mt-28`}`}
     >
       {isLead ? (

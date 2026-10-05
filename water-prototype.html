@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-[INPUT]: 依赖 src/visuals/dotRipple 的 mountDotRipple 引擎与 PARAM_SPEC 参数元数据，可选依赖本地 public/water-env/hero-bg.mp4 作视频底 (参考素材版权属第三方，未入库；缺失时只剩渐变底)
+[INPUT]: 依赖 src/visuals/dotRipple 的 mountDotRipple 引擎与 PARAM_SPEC 参数元数据，依赖 public/water-env/hero-bg.mp4 作视频底 (素材取自第三方参考页，上线前须确认授权)
 [OUTPUT]: 提供 ASCII 点阵涟漪调试台：全屏字符场、参数滑杆 (由 PARAM_SPEC 生成)、昼夜/视频底/暂停切换 (字符颜色 ink 由本页按底色决定)、帧率读数、参数 JSON 复制
 [POS]: 根目录的独立调试台，只验收涟漪效果本身；不接入正式路由，也不依赖站点样式，满意后再由 React 适配器接入 /water-env
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
@@ -12,7 +12,7 @@
 <title>水环境 · 点阵涟漪调试台</title>
 <style>
 html,body{margin:0;height:100%;overflow:hidden;font:12px/1.4 system-ui,-apple-system,'PingFang SC',sans-serif}
-/* 无视频时的底色取自正式 Hero (ReactWaterEnvPage.css) 的渐变；视频底为本地参考素材 (public/water-env/hero-bg.mp4，未入库) */
+/* 无视频时的底色取自正式 Hero (ReactWaterEnvPage.css) 的渐变；视频底为参考素材 (public/water-env/hero-bg.mp4) */
 body{background:radial-gradient(ellipse 90% 70% at 75% 5%,rgba(129,140,248,.28),transparent 55%),radial-gradient(ellipse 70% 90% at 15% 25%,rgba(59,130,246,.22),transparent 55%),radial-gradient(ellipse 80% 50% at 88% 55%,rgba(34,211,238,.16),transparent 50%),#0f2847}
 body.light{background:radial-gradient(ellipse 90% 70% at 75% 5%,rgba(129,140,248,.25),transparent 55%),radial-gradient(ellipse 70% 90% at 15% 25%,rgba(59,130,246,.2),transparent 55%),radial-gradient(ellipse 80% 50% at 88% 55%,rgba(34,211,238,.15),transparent 50%),#d4ebf7}
 #bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover}
