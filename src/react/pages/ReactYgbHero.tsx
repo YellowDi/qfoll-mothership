@@ -5,7 +5,7 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ReactYgbRoadMapBg } from "./ReactYgbRoadMapBg";
+import { ReactYgbPortBackground } from "./ReactYgbPortBackground";
 import "./ReactYgbHero.css";
 import hero01Image from "../../assets/ygb-assets/hero-01.webp";
 import hero02Image from "../../assets/ygb-assets/hero-02.webp";
@@ -142,7 +142,7 @@ export function ReactYgbHero({ homePreview = false, background }: { homePreview?
   const { stackRef, active, select, shift, setHovered } = useHeroCarousel(homePreview);
   return <section className="w-full">
     <div className={`relative overflow-hidden bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] ${homePreview ? "rounded-md border border-edge p-8 max-md:p-5" : "border-0 rounded-none"}`}>
-      <div className="pointer-events-none absolute inset-0 opacity-[0.96]">{background ?? <ReactYgbRoadMapBg />}</div>
+      <div className="pointer-events-none absolute inset-0 opacity-[0.96]">{background ?? <ReactYgbPortBackground />}</div>
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,0.08),rgba(246,245,244,0.02)_40%,rgba(246,245,244,0.08)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015)_40%,rgba(255,255,255,0.03)_100%)]" />
       <div className="pointer-events-none absolute inset-0 mask-[radial-gradient(88%_80%_at_15%_12%,#000_0%,rgba(0,0,0,0.92)_34%,rgba(0,0,0,0.56)_58%,rgba(0,0,0,0.2)_74%,transparent_92%)] bg-[radial-gradient(112%_92%_at_14%_8%,rgba(246,245,244,0.88)_0%,rgba(246,245,244,0.62)_34%,rgba(246,245,244,0.24)_62%,rgba(246,245,244,0)_90%)] dark:bg-[radial-gradient(112%_92%_at_14%_8%,rgba(18,18,22,0.92)_0%,rgba(18,18,22,0.72)_34%,rgba(18,18,22,0.34)_62%,rgba(18,18,22,0)_90%)]" />
       {!homePreview && <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-bg to-transparent dark:from-bg" />}
