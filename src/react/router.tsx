@@ -9,6 +9,8 @@ import { staticPages } from "./navigation";
 import { DetailHeaderProvider } from "./providers/DetailHeaderProvider";
 import { ReactAppLayout } from "./layouts/ReactAppLayout";
 import { ReactRoutePlaceholder } from "./components/ReactRoutePlaceholder";
+import { CareersPage, PricingPage } from "./pages/ReactArticlePage";
+import { ReactChangelogPage } from "./pages/ReactChangelogPage";
 
 function AppFrame() {
   const { pathname, search, hash } = useLocation();
@@ -19,9 +21,13 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppFrame />}>
-        {staticPages.map(({ path, title }) => (
-          <Route key={path} path={path} element={<ReactRoutePlaceholder title={title} />} />
-        ))}
+        {staticPages.map(({ path, title }) => {
+          const element = path === "/pricing" ? <PricingPage />
+            : path === "/careers" ? <CareersPage />
+              : path === "/changelog" ? <ReactChangelogPage />
+                : <ReactRoutePlaceholder title={title} />;
+          return <Route key={path} path={path} element={element} />;
+        })}
       <Route path="/project/:id" element={<ReactRoutePlaceholder title="客户案例详情" detail />} />
       <Route path="/showcase/:id" element={<ReactRoutePlaceholder title="Showcase 详情" detail />} />
       <Route path="/news/:id" element={<ReactRoutePlaceholder title="新闻详情" detail />} />
