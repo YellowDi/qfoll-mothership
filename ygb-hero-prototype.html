@@ -1,198 +1,315 @@
 <!doctype html>
 <!--
-[INPUT]: 依赖浏览器 Canvas 2D、CSS 与可见性/减弱动态偏好，不依赖正式应用运行时
-[OUTPUT]: 提供云柜宝 Hero 的独立视觉原型、港口场景、车辆演示与能力叠卡
-[POS]: 根目录的设计试验入口；仅为 React 后续改版验证方向，不改变 Vue 或共享地图
+[INPUT]: 依赖 React 原 Hero/主题/样式、Canvas 2D 和浏览器可见性/减弱动态偏好
+[OUTPUT]: 提供全幅港口背景试验：日照投影、街道路灯、港口泛光灯、车灯与水面反光
+[POS]: 根目录的 React 背景原型；通过背景插槽复用原文案/截图/叠卡，不改变正式页面或 Vue
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#f3f5f6" />
-<title>云柜宝 · 运力之境 / Hero 概念原型</title>
+<title>云柜宝 · 港口背景预览</title>
 <style>
-:root{color-scheme:light;--bg:#f3f5f6;--ink:#172a35;--muted:#657580;--accent:#f26932;--panel:rgba(255,255,255,.91);--line:rgba(52,80,95,.12);--ease:cubic-bezier(.23,1,.32,1);--shadow:0 30px 70px -26px rgba(25,53,65,.28),0 3px 12px rgba(25,53,65,.06)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:5px}a{color:inherit;text-decoration:none}button{color:inherit}button:disabled{cursor:default}.shell{min-height:100svh;overflow:hidden;position:relative;isolation:isolate}nav{height:88px;max-width:1440px;padding:0 64px;margin:auto;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:5}.brand{display:flex;gap:12px;align-items:center;font-size:20px;font-weight:750;letter-spacing:-.6px}.brand svg{width:34px;height:34px}.brand small{border-left:1px solid var(--line);padding-left:16px;margin-left:10px;letter-spacing:1.2px;color:var(--muted);font-size:10px;font-weight:550}.navlinks{display:flex;align-items:center;gap:32px;font-size:13px;color:var(--muted)}.navlinks span:first-child{color:var(--ink)}.navlinks .prototype{font-size:11px;border:1px solid var(--line);padding:8px 12px;border-radius:6px;letter-spacing:.6px}
-.hero{max-width:1440px;min-height:820px;height:calc(100svh - 88px);max-height:1040px;margin:auto;position:relative}.map-world{position:absolute;inset:0;width:100%;height:100%;z-index:-2}.veil{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,var(--bg) 0%,transparent 42%,transparent 84%,var(--bg) 100%)}.copy{position:relative;width:55%;padding:66px 0 0 64px;z-index:2}.eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);letter-spacing:2px}.eyebrow:before{content:"";height:5px;width:5px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 5px rgba(242,105,50,.09)}h1{font-size:clamp(40px,4.1vw,62px);line-height:1.2;font-weight:650;letter-spacing:-2px;margin:24px 0 20px}h1 em{font-style:normal;color:var(--accent)}.intro{font-size:15px;color:var(--muted);line-height:1.9;max-width:370px;margin:0}.actions{display:flex;align-items:center;gap:22px;margin-top:30px}.primary{display:inline-flex;align-items:center;gap:26px;background:var(--ink);color:var(--bg);padding:15px 21px;border-radius:9px;font-size:13px;font-weight:600;box-shadow:0 4px 12px #172a3510;transition:transform .2s var(--ease),background .2s var(--ease);border:0}.primary svg{width:16px}.secondary{background:transparent;border:0;font-size:12px;display:flex;align-items:center;gap:7px;color:var(--muted)}.secondary svg{width:17px}.stage-status{display:flex;gap:8px;align-items:center;margin-top:25px;font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:.5px;color:var(--muted)}.live{width:5px;height:5px;border-radius:50%;background:#259b83;box-shadow:0 0 0 3px #259b8312}
-.showcase{position:absolute;right:64px;top:85px;width:418px;height:495px;z-index:3}.stack{height:405px;position:relative;perspective:1400px}.feature{position:absolute;inset:0 0 auto;height:348px;border:1px solid rgba(255,255,255,.85);border-radius:16px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow);transform-origin:50% 15%;transition:transform .65s var(--ease),opacity .45s var(--ease);will-change:transform;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.feature[data-slot="0"]{transform:translate3d(0,44px,0) scale(1);z-index:3;opacity:1}.feature[data-slot="1"]{transform:translate3d(0,19px,-45px) scale(.94);z-index:2;opacity:.86;pointer-events:none}.feature[data-slot="2"]{transform:translate3d(0,-6px,-85px) scale(.88);z-index:1;opacity:.62;pointer-events:none}.feature-top{height:53px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--panel)}.feature-title{font-size:13px;font-weight:650;display:flex;align-items:center;gap:8px}.feature-title svg{width:17px;height:17px;color:var(--accent)}.badge{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:6px}.card-scene{position:relative;height:197px;background:linear-gradient(135deg,#eef4f5,#e3edf0);overflow:hidden}.map-card{position:absolute;width:100%;height:100%}.map-chip{position:absolute;top:13px;left:16px;background:rgba(255,255,255,.92);border:1px solid #ffffffb3;border-radius:6px;padding:8px 10px;box-shadow:0 3px 12px #18374d0c;font-size:10px;color:#446371;display:flex;align-items:center;gap:6px}.map-chip .live{width:4px;height:4px}.vehicle-chip{position:absolute;right:16px;bottom:13px;padding:10px 12px;border-radius:7px;background:#172a35e8;color:#eef4f5;box-shadow:0 4px 16px #172a351a;font-size:10px;display:flex;gap:16px;align-items:center}.vehicle-chip strong{display:block;font:12px ui-monospace,SFMono-Regular,monospace;margin-top:5px}.vehicle-chip span{color:#a0b5c0;font-size:9px}.signal{display:flex;gap:2px;align-items:end;height:16px}.signal i{width:3px;background:#71d5bd;height:6px}.signal i:nth-child(2){height:10px}.signal i:nth-child(3){height:14px}.feature-bottom{height:97px;padding:18px 20px;background:var(--panel);display:flex;align-items:start;justify-content:space-between}.feature-bottom h2{font-size:17px;font-weight:650;letter-spacing:-.3px;margin:0 0 6px}.feature-bottom p{font-size:10px;color:var(--muted);margin:0}.metric{text-align:right;font:24px ui-monospace,SFMono-Regular,monospace;letter-spacing:-1px;color:var(--accent)}.metric small{font-family:inherit;font-size:11px;letter-spacing:0;margin-left:3px}.metric span{display:block;font:9px sans-serif;color:var(--muted);letter-spacing:0;margin-top:5px}.card-controls{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 0}.tabs{display:flex;gap:17px}.tab{background:none;border:0;padding:10px 0;font-size:11px;color:var(--muted);position:relative}.tab[aria-selected="true"]{color:var(--ink);font-weight:600}.tab:after{position:absolute;content:"";height:2px;left:0;right:0;bottom:3px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease)}.tab[aria-selected="true"]:after{transform:scaleX(1)}.step{display:flex;align-items:center;gap:13px;font:10px ui-monospace,SFMono-Regular,monospace;color:var(--muted)}.next{height:30px;width:30px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;transition:transform .2s var(--ease)}.next svg{width:14px}
-.scene-label{position:absolute;bottom:95px;left:64px;display:flex;gap:16px;align-items:center}.scene-label .cross{width:28px;height:28px;position:relative;opacity:.6}.cross:before,.cross:after{content:"";background:var(--muted);position:absolute}.cross:before{width:1px;height:18px;top:5px;left:14px}.cross:after{height:1px;width:18px;left:5px;top:14px}.scene-label strong{font-size:12px;font-weight:550;letter-spacing:.5px}.scene-label p{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:1px;color:var(--muted);margin:6px 0 0}.scene-tools{position:absolute;right:64px;bottom:89px;display:flex;gap:6px;padding:5px;border:1px solid var(--line);border-radius:11px;background:var(--panel);backdrop-filter:blur(12px)}.tool{width:36px;height:34px;border:0;border-radius:6px;display:grid;place-items:center;background:transparent;color:var(--muted);transition:background .2s var(--ease),color .2s var(--ease)}.tool[aria-pressed="true"]{background:var(--ink);color:var(--bg)}.tool svg{width:16px;height:16px}.footer-line{position:absolute;bottom:24px;left:64px;right:64px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:10px;border-top:1px solid var(--line);padding-top:18px}.footer-line span:last-child{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:1px}.feedback{min-height:18px;font-size:10px;color:var(--muted);margin:14px 0 0}.night{color-scheme:dark;--bg:#0c1a24;--ink:#e6eef2;--muted:#8ca5b6;--panel:rgba(21,39,51,.95);--line:rgba(172,199,215,.15);--shadow:0 30px 65px -22px #0009,0 0 0 1px #a8d4ec12}.night .feature{border-color:#9dc6da29}.night .card-scene{background:linear-gradient(135deg,#182f3a,#112833)}.night .map-chip{background:#163443ec;border-color:#b0d0dd21;color:#c5dde5}.night .vehicle-chip{background:#061723ec}.night .feature-top,.night .feature-bottom{background:var(--panel)}
-@media(hover:hover) and (pointer:fine){.primary:hover{transform:translateY(-2px);background:var(--accent)}.next:hover{transform:translateX(2px)}.tool:hover{background:var(--line);color:var(--ink)}}
-@media(min-width:1450px){.hero{border-radius:20px}.copy{padding-top:90px}.showcase{top:110px}.scene-label{bottom:115px}.scene-tools{bottom:109px}}
-@media(max-width:1000px){nav{padding:0 32px}.hero{min-height:820px}.copy{padding-left:32px;width:53%;padding-top:65px}h1{font-size:42px}.intro{font-size:13px;max-width:310px}.showcase{right:32px;width:360px;top:90px}.scene-label{left:32px}.scene-tools{right:32px}.footer-line{left:32px;right:32px}.brand small{display:none}.navlinks{gap:20px}}
-@media(max-width:760px){nav{height:72px;padding:0 24px}.brand{font-size:18px}.brand svg{width:29px}.navlinks>span:not(.prototype){display:none}.navlinks .prototype{font-size:9px;padding:6px 9px}.hero{height:auto;min-height:1030px}.copy{width:100%;padding:36px 24px 0}h1{font-size:44px;letter-spacing:-1.8px;line-height:1.23;margin:20px 0 15px}.intro{font-size:13px;max-width:330px}.eyebrow{font-size:10px}.actions{margin-top:23px}.primary{padding:13px 18px}.stage-status{margin-top:20px}.showcase{top:480px;right:24px;left:24px;width:auto;max-width:420px;margin:auto;height:430px}.feature{height:328px}.card-scene{height:177px}.stack{height:385px}.scene-label{left:24px;bottom:90px}.scene-label strong{font-size:10px}.scene-label p{font-size:8px}.scene-label .cross{display:none}.scene-tools{right:24px;bottom:80px}.footer-line{left:24px;right:24px;bottom:24px;font-size:9px}.footer-line span:last-child{letter-spacing:0;font-size:8px}.veil{background:linear-gradient(180deg,var(--bg) 0%,transparent 38%,var(--bg) 87%)}.feedback{margin-top:9px}}
-@media(prefers-reduced-motion:reduce){.feature{transition:opacity .12s linear}.tab:after,.primary,.next,.tool{transition:none}.feature{will-change:auto}}
-@media(prefers-reduced-transparency:reduce){.feature,.scene-tools{backdrop-filter:none;background:var(--bg)}}
+.preview-canvas{display:block;width:100%;height:100%}
+.preview-tools{display:flex;align-items:center;flex-wrap:wrap;gap:12px;max-width:1440px;margin:auto;padding:22px 56px;color:rgb(var(--color-text-secondary)/var(--color-text-secondary-opacity));font-size:12px}
+.preview-tools button{cursor:pointer;white-space:nowrap;font:inherit;border:1px solid rgb(var(--color-edge)/var(--color-edge-opacity));background:rgb(var(--color-surface));padding:8px 14px;border-radius:999px;color:rgb(var(--color-text-primary))}
+.preview-tools button[aria-pressed="true"]{background:rgb(var(--color-ink));color:rgb(var(--color-bg))}
+.preview-tools button:focus-visible{outline:2px solid #fb923c;outline-offset:3px}
+.preview-tools button:disabled{opacity:.45;cursor:default}
+/* 原 Hero 的文案保护仍在，但把底色降到半透明，保留港区日照和夜景的空间层次。 */
+#hero-preview > section > div.relative.overflow-hidden{background-color:rgb(var(--color-bg)/.82)!important}
+.dark #hero-preview > section > div.relative.overflow-hidden{background-color:rgb(var(--color-bg)/.76)!important}
+.background-only #hero-preview > section > div > div:last-child{visibility:hidden}
+.background-only #hero-preview > section > div > div.pointer-events-none:not(:first-child){display:none}
+@media(max-width:760px){.preview-tools{padding:18px 20px;gap:8px}.preview-tools>span{width:100%}}
 </style>
 </head>
 <body>
-<div class="shell">
-<nav aria-label="原型导航">
-<div class="brand"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#f26932"/><path d="m10 13 8-4 8 4v10l-8 4-8-4V13Z" stroke="white" stroke-width="1.7" stroke-linejoin="round"/><path d="m10 13 8 4 8-4M18 17v10M14 11l8 4" stroke="white" stroke-width="1.7"/></svg>云柜宝 <small>CONNECTED LOGISTICS</small></div>
-<div class="navlinks"><span>数字化运输</span><span>全程协同</span><span class="prototype">HERO CONCEPT · 01</span></div>
-</nav>
-<main class="hero">
-<canvas class="map-world" id="world" aria-label="港口数字孪生地图：道路、集装箱、仓库与行驶车辆"></canvas><div class="veil"></div>
-<section class="copy" aria-labelledby="hero-title">
-<div class="eyebrow">看见运输的每一个环节</div>
-<h1 id="hero-title">让每一程运输，<br>都在<em>掌握之中。</em></h1>
-<p class="intro">从港口到目的地，连接车辆、货物与团队。<br>云柜宝，让复杂的集装箱运输清晰有序。</p>
-<div class="actions"><button class="primary" id="explore">探索全程追踪 <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="secondary" id="overview"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor"/><path d="m8 6 6 4-6 4V6Z" fill="currentColor"/></svg>俯瞰运输网络</button></div>
-<div class="stage-status"><span class="live"></span><span id="simulation-status">运输场景演示 · 路线持续更新</span></div><p class="feedback" aria-live="polite" id="feedback"></p>
-</section>
-<section class="showcase" aria-label="云柜宝能力演示">
-<div class="stack">
-<article class="feature" data-card="0" data-slot="0" role="tabpanel" id="panel-0" aria-labelledby="tab-0">
-<div class="feature-top"><div class="feature-title"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.3"/><circle cx="10" cy="10" r="2" fill="currentColor"/><path d="M10 1v3m0 12v3M1 10h3m12 0h3" stroke="currentColor" stroke-width="1.3"/></svg>全程追踪</div><div class="badge"><span class="live"></span>LIVE LOCATION</div></div>
-<div class="card-scene"><canvas class="map-card" data-map="0" aria-label="车辆追踪的港区地图"></canvas><div class="map-chip"><span class="live"></span>北仑港 → 宁波物流中心</div><div class="vehicle-chip"><div><span>集卡 · 浙 B 6X28</span><strong><b id="speed">42</b> km/h</strong></div><div class="signal" aria-label="定位信号良好"><i></i><i></i><i></i></div></div></div>
-<div class="feature-bottom"><div><h2>车辆动态，一目了然</h2><p>实时位置 · 行驶轨迹 · 到达预估</p></div><div class="metric">12<small>min</small><span>预计到达下一站</span></div></div>
-</article>
-<article class="feature" data-card="1" data-slot="1" role="tabpanel" id="panel-1" aria-labelledby="tab-1" inert>
-<div class="feature-top"><div class="feature-title"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="3" width="6" height="5" rx="1" stroke="currentColor"/><rect x="12" y="12" width="6" height="5" rx="1" stroke="currentColor"/><path d="M8 5h6a2 2 0 0 1 2 2v2m-4 6H6a2 2 0 0 1-2-2v-2" stroke="currentColor" stroke-width="1.3"/></svg>智能调度</div><div class="badge">FLEET CONNECTED</div></div>
-<div class="card-scene"><canvas class="map-card" data-map="1" aria-label="多车协同的调度地图"></canvas><div class="map-chip"><span class="live"></span>港区运力 · 协同调度中</div><div class="vehicle-chip"><div><span>当前作业</span><strong>提箱 → 入仓</strong></div><div class="signal"><i></i><i></i><i></i></div></div></div>
-<div class="feature-bottom"><div><h2>人、车、货，高效协同</h2><p>任务分配 · 运力匹配 · 状态同步</p></div><div class="metric">08<small>辆</small><span>演示场景在途运力</span></div></div>
-</article>
-<article class="feature" data-card="2" data-slot="2" role="tabpanel" id="panel-2" aria-labelledby="tab-2" inert>
-<div class="feature-top"><div class="feature-title"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m10 2 7 3v5c0 4-7 8-7 8s-7-4-7-8V5l7-3Z" stroke="currentColor" stroke-width="1.3"/><path d="m6 10 3 3 5-6" stroke="currentColor" stroke-width="1.3"/></svg>安全守护</div><div class="badge">GEOFENCE ACTIVE</div></div>
-<div class="card-scene"><canvas class="map-card" data-map="2" aria-label="电子围栏的安全地图"></canvas><div class="map-chip"><span class="live"></span>港区电子围栏 · 运行正常</div><div class="vehicle-chip"><div><span>运输状态</span><strong>按规划路线行驶</strong></div><div class="signal"><i></i><i></i><i></i></div></div></div>
-<div class="feature-bottom"><div><h2>全程可见，安心可控</h2><p>电子围栏 · 异常预警 · 运输记录</p></div><div class="metric">24<small>h</small><span>运输全程守护</span></div></div>
-</article>
-</div>
-<div class="card-controls"><div class="tabs" role="tablist" aria-label="演示能力"><button class="tab" role="tab" id="tab-0" aria-selected="true" aria-controls="panel-0" data-select="0">全程追踪</button><button class="tab" role="tab" id="tab-1" aria-selected="false" aria-controls="panel-1" tabindex="-1" data-select="1">智能调度</button><button class="tab" role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" tabindex="-1" data-select="2">安全守护</button></div><div class="step"><span id="counter">01 / 03</span><button class="next" id="next" aria-label="下一个能力"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></button></div></div>
-</section>
-<div class="scene-label"><div class="cross" aria-hidden="true"></div><div><strong id="view-label">港口 · 连接运输的起点</strong><p>DIGITAL TWIN / NINGBO PORT</p></div></div>
-<div class="scene-tools" role="group" aria-label="场景控制"><button class="tool" id="day" aria-label="日间材质" aria-pressed="true"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.2"/><path d="M10 1v2m0 14v2M1 10h2m14 0h2M3.6 3.6 5 5m10 10 1.4 1.4M3.6 16.4 5 15M15 5l1.4-1.4" stroke="currentColor" stroke-width="1.2"/></svg></button><button class="tool" id="night" aria-label="夜间材质" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M17 12.2A7.4 7.4 0 0 1 7.8 3 7.4 7.4 0 1 0 17 12.2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button class="tool" id="pause" aria-label="暂停场景动画" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 5v10M13 5v10" stroke="currentColor" stroke-width="2"/></svg></button></div>
-<div class="footer-line"><span>云柜宝 · 集装箱运输数字化平台</span><span>概念原型 / 全部运输数据为演示</span></div>
-</main>
-</div>
-<script>
-/* --- 场景模型：静态材质缓存与动态车辆分离，卡片复用同一港区 --- */
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const motion=matchMedia('(prefers-reduced-motion: reduce)');
-let dark=false, paused=false, active=0, elapsed=0, previous=0, frame=0, fullView=false;
+<div id="preview-root"></div>
+<script type="module">
+import {createElement as h,useEffect,useRef,useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {ReactYgbHero} from '/src/react/pages/ReactYgbHero.tsx';
+import {ThemeProvider,useTheme} from '/src/react/providers/ThemeProvider.tsx';
+import logo from '/src/assets/logo.webp';
+import '/src/style.css';
+import '/src/styles/remixicon-used.css';
+import '/src/react/motion.css';
+
+/* --- 材质：受同一光源约束；日间暖阳、冷色环境光，夜间保留材质而非纯黑 --- */
 const palettes={
- day:{land:'#dce5e6',edge:'#b7cbd0',side:'#a5bdc4',water:'#c2dce2',waterLine:'#d8ebee',road:'#8198a1',roadEdge:'#a9bec3',mark:'#d5e1e4',roof:'#f2f5f2',wall:'#c6d4d8',shade:'#a5bdc5',glass:'#6698ac',trees:'#769e91',orange:'#ed8955',cyan:'#62abb9',white:'#e6edef',truck:'#eb713b',cab:'#f4f5ec'},
- night:{land:'#1b3541',edge:'#274a58',side:'#152c37',water:'#112d3b',waterLine:'#214655',road:'#294651',roadEdge:'#3e5b65',mark:'#527582',roof:'#3d5a68',wall:'#263f4d',shade:'#192f3d',glass:'#79bccb',trees:'#325c54',orange:'#bc7551',cyan:'#397c91',white:'#6f949e',truck:'#f9844b',cab:'#bad3d5'}
+ day:{land:'#cfd9d8',water:'#759da9',waterDeep:'#517e91',road:'#71878b',curb:'#abbcbf',mark:'#e0e5dd',roof:'#eef0e6',wall:'#c4d3d1',shade:'#92abb3',glass:'#769cac',tree:'#699789',orange:'#d98e5b',cyan:'#74a7af',white:'#dce5db',truck:'#e87f46',cab:'#f0eee1',metal:'#768f99'},
+ night:{land:'#233339',water:'#102831',waterDeep:'#0c1d27',road:'#304048',curb:'#3e545c',mark:'#6c7f85',roof:'#4c5d62',wall:'#334b54',shade:'#243741',glass:'#b0baa0',tree:'#3e6659',orange:'#965e3e',cyan:'#3e717f',white:'#81958f',truck:'#c97e4b',cab:'#a7b8b3',metal:'#587880'}
 };
 const routes=[
- [[-430,-250],[260,-250],[260,50],[-430,50]],
- [[-100,-250],[470,-250],[470,190],[-100,190]],
- [[-430,50],[260,50],[260,190],[-430,190]]
+ [[-650,-470],[450,-470],[450,180],[-650,180]],
+ [[-210,-910],[670,-910],[670,-30],[-210,-30]],
+ [[-870,-250],[230,-250],[230,180],[-870,180]],
+ [[-1090,-910],[-430,-910],[-430,-30],[-1090,-30]]
 ];
-function roundedRoute(points,r=37){
- const samples=[];const add=(x,y)=>samples.push({x,y});
+function roundedRoute(points,r=31){
+ const samples=[];
  for(let i=0;i<points.length;i++){
-  const prev=points[(i+points.length-1)%points.length],p=points[i],next=points[(i+1)%points.length];
-  const a=Math.hypot(prev[0]-p[0],prev[1]-p[1]),b=Math.hypot(next[0]-p[0],next[1]-p[1]);
-  const inP=[p[0]+(prev[0]-p[0])*r/a,p[1]+(prev[1]-p[1])*r/a];
-  const outP=[p[0]+(next[0]-p[0])*r/b,p[1]+(next[1]-p[1])*r/b];
-  for(let j=0;j<=12;j++){const t=j/12,u=1-t;add(u*u*inP[0]+2*u*t*p[0]+t*t*outP[0],u*u*inP[1]+2*u*t*p[1]+t*t*outP[1]);}
+  const previous=points[(i+points.length-1)%points.length],p=points[i],next=points[(i+1)%points.length];
+  const a=Math.hypot(previous[0]-p[0],previous[1]-p[1]),b=Math.hypot(next[0]-p[0],next[1]-p[1]);
+  const entry=[p[0]+(previous[0]-p[0])*r/a,p[1]+(previous[1]-p[1])*r/a],exit=[p[0]+(next[0]-p[0])*r/b,p[1]+(next[1]-p[1])*r/b];
+  for(let j=0;j<=16;j++){const t=j/16,u=1-t;samples.push({x:u*u*entry[0]+2*u*t*p[0]+t*t*exit[0],y:u*u*entry[1]+2*u*t*p[1]+t*t*exit[1]});}
  }
- let length=0;for(let i=0;i<samples.length;i++){samples[i].d=length;const next=samples[(i+1)%samples.length];length+=Math.hypot(next.x-samples[i].x,next.y-samples[i].y);}
+ let length=0;for(let i=0;i<samples.length;i++){samples[i].distance=length;const n=samples[(i+1)%samples.length];length+=Math.hypot(n.x-samples[i].x,n.y-samples[i].y);}
  return{samples,length};
 }
-const paths=routes.map(p=>roundedRoute(p));
-function position(route,distance){const d=((distance%route.length)+route.length)%route.length,s=route.samples;let i=0;while(i<s.length-1&&s[i+1].d<d)i++;const a=s[i],b=s[(i+1)%s.length],len=Math.hypot(b.x-a.x,b.y-a.y),t=(d-a.d)/len;return{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,angle:Math.atan2(b.y-a.y,b.x-a.x)};}
-const fleet=Array.from({length:8},(_,i)=>({route:i%3,offset:i*227,speed:18+(i%3)*4,color:i%3}));
-const buildings=[];
-/* 仓库、集装箱与机械只构建一次，世界坐标保持所有画布的一致性。 */
-function building(x,y,w,d,h,type=0){buildings.push({x,y,w,d,h,type});}
-building(-400,-420,224,116,40,0);building(-110,-420,150,116,37,0);
-building(114,-420,95,107,60,1);building(251,-414,82,99,85,1);building(361,-403,55,88,53,1);
-building(-387,-189,101,138,32,0);building(-244,-176,97,123,30,0);building(54,-187,153,132,44,0);
-for(let row=0;row<4;row++)for(let col=0;col<5;col++){const x=-378+col*112,y=86+row*19;building(x,y,88,15,11+(col+row)%3*10,2+(col+row)%3);}
-for(let row=0;row<3;row++)for(let col=0;col<3;col++)building(310+col*48,-158+row*38,36,26,15,2+(row+col)%3);
-const trees=[[-510,-340],[-510,-270],[-506,-150],[-508,-68],[-493,2],[-46,-327],[-32,-152],[-30,-105],[-14,-58],[422,-350],[418,-291],[198,-27],[147,-30],[96,-30]];
-class PortScene{
- constructor(canvas,mode){this.canvas=canvas;this.ctx=canvas.getContext('2d');this.mode=mode;this.cache=document.createElement('canvas');this.staticCtx=this.cache.getContext('2d');this.resize();}
- resize(){const rect=this.canvas.getBoundingClientRect();this.w=rect.width;this.h=rect.height;this.dpr=Math.min(devicePixelRatio||1,2);this.canvas.width=Math.round(this.w*this.dpr);this.canvas.height=Math.round(this.h*this.dpr);this.cache.width=this.canvas.width;this.cache.height=this.canvas.height;this.configure();this.renderStatic();}
- configure(){if(this.mode<0){const mobile=this.w<760;this.scale=mobile?.65:Math.min(this.w/1320,.99);this.cx=this.w*(mobile?.52:.52);this.cy=this.h*(mobile?.445:.7);if(fullView){this.scale*=.92;this.cy+=16;}}else{this.scale=this.w/780;this.cx=this.w*.49;this.cy=this.h*.57;}}
- p(x,y,z=0){return{x:this.cx+(x-y)*.74*this.scale,y:this.cy+(x+y)*.365*this.scale-z*this.scale};}
- polygon(ctx,points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>{const q=this.p(...p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7*this.scale;ctx.stroke();}}
- line(ctx,points,color,width=1,dash=[]){ctx.beginPath();points.forEach((p,i)=>{const q=this.p(...p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});ctx.strokeStyle=color;ctx.lineWidth=width*this.scale;ctx.lineCap='round';ctx.lineJoin='round';ctx.setLineDash(dash.map(v=>v*this.scale));ctx.stroke();ctx.setLineDash([]);}
- box(ctx,x,y,w,d,h,top,left,right,z=0){this.polygon(ctx,[[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+h],[x,y+d,z+h]],left);this.polygon(ctx,[[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+h],[x+w,y,z+h]],right);this.polygon(ctx,[[x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]],top);}
- road(ctx,x,y,w,d){const c=this.c;this.polygon(ctx,[[x-3,y-3],[x+w+3,y-3],[x+w+3,y+d+3],[x-3,y+d+3]],c.roadEdge);this.polygon(ctx,[[x,y],[x+w,y],[x+w,y+d],[x,y+d]],c.road);if(w>d)this.line(ctx,[[x,y+d/2,1],[x+w,y+d/2,1]],c.mark,.8,[8,10]);else this.line(ctx,[[x+w/2,y,1],[x+w/2,y+d,1]],c.mark,.8,[8,10]);}
- drawBuilding(ctx,b){const c=this.c,{x,y,w,d,h,type}=b;this.polygon(ctx,[[x+8,y+7],[x+w+20,y+7],[x+w+20,y+d+18],[x+8,y+d+18]],dark?'#0718223d':'#5378841b');
-  let top=c.roof,left=c.wall,right=c.shade;if(type>=2){top=[c.orange,c.cyan,c.white][type-2];left=this.shade(top,.83);right=this.shade(top,.66);}
-  this.box(ctx,x,y,w,d,h,top,left,right);
-  if(type===0){for(let a=16;a<w;a+=24)this.line(ctx,[[x+a,y+3,h+.2],[x+a,y+d-3,h+.2]],dark?'#9dbecc28':'#a4bac34d',1);this.box(ctx,x+w*.28,y+d*.28,w*.44,13,2,c.glass,c.wall,c.shade,h);for(let a=12;a<w-6;a+=26)this.polygon(ctx,[[x+a,y+d+.1,3],[x+a+13,y+d+.1,3],[x+a+13,y+d+.1,17],[x+a,y+d+.1,17]],c.glass);}
-  else if(type===1){for(let z=9;z<h-6;z+=10){this.line(ctx,[[x+5,y+d+.1,z],[x+w-5,y+d+.1,z]],c.glass,2);this.line(ctx,[[x+w+.1,y+5,z],[x+w+.1,y+d-5,z]],c.glass,2);}this.box(ctx,x+12,y+10,Math.max(12,w-30),Math.max(12,d-28),5,c.wall,c.shade,c.shade,h);}
-  else{for(let a=5;a<w-2;a+=6)this.line(ctx,[[x+a,y+d+.2,1],[x+a,y+d+.2,h-1]],dark?'#ffffff12':'#fff4',.65);this.line(ctx,[[x+2,y+2,h+.1],[x+w-2,y+2,h+.1]],dark?'#ffffff26':'#fff8',.7);}
- }
- shade(hex,f){const n=parseInt(hex.slice(1),16);return`rgb(${Math.round((n>>16)*f)},${Math.round((n>>8&255)*f)},${Math.round((n&255)*f)})`;}
- crane(ctx,x,y){const c=this.c,metal=dark?'#5f91a3':'#718f9c',lit=dark?'#f8a468':'#ed9a66';
-  for(const a of [0,52]){this.box(ctx,x+a,y,6,9,82,metal,metal,c.shade);this.box(ctx,x+a-7,y-2,20,14,5,c.wall,c.shade,c.shade);}
-  this.box(ctx,x-3,y-4,65,10,8,lit,this.shade(lit,.85),this.shade(lit,.7),82);
-  this.line(ctx,[[x+30,y,90],[x+30,y+103,90]],metal,5);this.line(ctx,[[x+30,y,120],[x+30,y+103,90],[x+30,y,87]],metal,1.8);
-  this.line(ctx,[[x+30,y,120],[x+30,y-24,92]],metal,1.8);this.line(ctx,[[x+30,y+85,90],[x+30,y+85,30]],c.shade,1.1);
-  this.box(ctx,x+20,y+80,20,10,3,lit,metal,metal,27);
- }
- renderStatic(){this.c=palettes[dark?'night':'day'];const c=this.c,ctx=this.staticCtx;ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,this.w,this.h);
-  const q=this.p(0,210),g=ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,this.w*.8);g.addColorStop(0,dark?'#38708718':'#86b9c821');g.addColorStop(1,'#86b9c800');ctx.fillStyle=g;ctx.fillRect(0,0,this.w,this.h);
-  this.polygon(ctx,[[-800,160],[800,160],[800,720],[-800,720]],c.water);
-  for(let y=270;y<700;y+=27)for(let x=-750;x<780;x+=99)this.line(ctx,[[x,y],[x+37,y]],c.waterLine,.8);
-  this.polygon(ctx,[[-566,-452],[571,-452],[597,247],[-544,271]],dark?'#020d164f':'#6c94a42c');
-  this.box(ctx,-550,-455,1120,699,14,c.land,c.edge,c.side,-14);
-  this.box(ctx,370,244,178,167,14,c.land,c.edge,c.side,-14);
-  this.polygon(ctx,[[-538,-443],[558,-443],[558,233],[-538,233]],c.land,dark?'#789daa22':'#ffffff80');
-  for(let x=-520;x<550;x+=28)this.line(ctx,[[x,-435],[x,231]],dark?'#96c6d204':'#fff2',.5);
-  for(let y=-435;y<230;y+=28)this.line(ctx,[[-530,y],[555,y]],dark?'#96c6d204':'#fff2',.5);
-  for(const y of [-250,50,190])this.road(ctx,-480,y-17,999,34);
-  for(const x of [-430,-100,260,470])this.road(ctx,x-17,-280,34,489);
-  for(const y of [-250,50,190])for(const x of [-430,-100,260,470])this.polygon(ctx,[[x-17,y-17],[x+17,y-17],[x+17,y+17],[x-17,y+17]],c.road);
-  this.road(ctx,453,208,34,175);
-  // 码头边缘的安全标识与轨道，让港区有明确的空间尺度。
-  this.line(ctx,[[-530,228],[550,228]],c.edge,2);this.line(ctx,[[-520,217],[350,217]],c.orange,1.3);
-  for(let x=-510;x<540;x+=25)this.polygon(ctx,[[x,232],[x+10,232],[x+15,239],[x+5,239]],c.orange);
-  for(const b of [...buildings].sort((a,b)=>(a.x+a.y)-(b.x+b.y)))this.drawBuilding(ctx,b);
-  for(const [x,y] of trees){this.box(ctx,x,y,3,3,13,c.trees,c.shade,c.shade);this.box(ctx,x-7,y-7,16,16,13,c.trees,this.shade(c.trees,.9),this.shade(c.trees,.78),10);}
-  this.crane(ctx,374,269);this.crane(ctx,487,309);
-  // 静泊货船与箱体，保持在码头外侧而非悬浮的装饰图形。
-  this.polygon(ctx,[[319,480],[487,480],[526,462],[527,442],[496,424],[320,424],[297,452]],dark?'#071721':'#375c70');
-  this.polygon(ctx,[[319,466],[491,466],[514,450],[492,434],[319,434],[308,452]],dark?'#476371':'#829fa9');
-  for(let x=325;x<466;x+=32)this.box(ctx,x,441,27,19,13,c.orange,this.shade(c.orange,.8),this.shade(c.orange,.7));
-  this.box(ctx,472,438,22,27,21,c.roof,c.wall,c.shade);this.box(ctx,478,443,11,13,8,c.glass,c.wall,c.shade,21);
-  if(dark){for(const y of [-250,50,190])for(let x=-430;x<490;x+=117){const p=this.p(x,y,3);const l=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,14*this.scale);l.addColorStop(0,'#9adbe54d');l.addColorStop(1,'#9adbe500');ctx.fillStyle=l;ctx.fillRect(p.x-14*this.scale,p.y-14*this.scale,28*this.scale,28*this.scale);}}
- }
- truck(ctx,truck,t){const p=position(paths[truck.route],truck.offset+t*truck.speed);const a=p.angle,cos=Math.cos(a),sin=Math.sin(a);const local=(x,y,z=0)=>[p.x+x*cos-y*sin,p.y+x*sin+y*cos,z];
-  const poly=(coords,fill)=>this.polygon(ctx,coords.map(v=>local(...v)),fill);
-  const box=(x,y,w,d,h,top,side,end,z=0)=>{poly([[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+h],[x,y+d,z+h]],side);poly([[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+h],[x+w,y,z+h]],end);poly([[x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]],top);};
-  poly([[-18,-7],[17,-7],[21,8],[-15,8]],dark?'#030b1455':'#35505b2a');
-  box(-16,-5,28,10,2,'#345463','#24404c','#24404c',2);
-  for(const x of [-13,-6,11])for(const y of [-5.8,4.5])box(x,y,3.4,1.5,4,'#3e535d','#263d49','#172a36');
-  const color=[this.c.truck,this.c.cyan,this.c.white][truck.color];box(-16,-5,22,10,10,color,this.shade(color,.8),this.shade(color,.68),5);
-  for(let x=-13;x<5;x+=3)this.line(ctx,[local(x,5.1,6),local(x,5.1,14)],dark?'#ffffff22':'#ffffff50',.45);
-  box(7,-5,9,10,8,this.c.cab,this.shade(this.c.cab,.85),this.shade(this.c.cab,.76),4);
-  poly([[12,-4,12.1],[15,-4,12.1],[15,4,12.1],[12,4,12.1]],this.c.glass);
-  poly([[16.1,-4,9],[16.1,4,9],[16.1,4,11],[16.1,-4,11]],this.c.glass);
-  for(const y of [-3.4,2.4])box(16,y,1,1.5,1.2,dark?'#ffe4a8':'#fff7de','#fff3bb','#fff3bb',5);
-  if(dark){poly([[17,-4,1],[47,-12,1],[47,12,1],[17,4,1]],'#ffeebc0b');}
- }
- draw(t){const ctx=this.ctx;ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,this.w,this.h);ctx.drawImage(this.cache,0,0,this.w,this.h);const mode=this.mode<0?active:this.mode;
-  const path=paths[mode];const pathPoints=path.samples.map(p=>[p.x,p.y,1.1]);pathPoints.push(pathPoints[0]);
-  this.line(ctx,pathPoints,dark?'#f68c5530':'#ee85482a',9);this.line(ctx,pathPoints,mode===2?(dark?'#6cd6c8':'#3d9f9b'):(dark?'#ffad74':'#e98954'),2.4);
-  // 路径光流的位移与运输方向一致；避免无意义的随机闪烁。
-  const flow=position(path,t*32),fp=this.p(flow.x,flow.y,2);ctx.fillStyle=dark?'#ffe4bd':'#fff6e6';ctx.beginPath();ctx.arc(fp.x,fp.y,2.4*this.scale,0,Math.PI*2);ctx.fill();
-  if(mode===2){this.polygon(ctx,[[-465,-286],[504,-286],[504,220],[-465,220]],dark?'#50c3a810':'#459f9210');this.line(ctx,[[-465,-286,1],[504,-286,1],[504,220,1],[-465,220,1],[-465,-286,1]],dark?'#66cbb778':'#549c9278',1,[5,7]);}
-  const ordered=fleet.map(f=>({f,p:position(paths[f.route],f.offset+t*f.speed)})).sort((a,b)=>(a.p.x+a.p.y)-(b.p.x+b.p.y));for(const {f} of ordered)this.truck(ctx,f,t);
-  for(const [x,y] of [[-100,-250],[260,190]]){const p=this.p(x,y,2);const phase=(t*.4+(x===260?.5:0))%1;ctx.strokeStyle=dark?`rgba(251,167,104,${.45*(1-phase)})`:`rgba(223,128,77,${.4*(1-phase)})`;ctx.lineWidth=.9*this.scale;ctx.beginPath();ctx.ellipse(p.x,p.y,(6+phase*14)*this.scale,(3+phase*7)*this.scale,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle=this.c.truck;ctx.beginPath();ctx.arc(p.x,p.y,2.4*this.scale,0,Math.PI*2);ctx.fill();}
- }
+const paths=routes.map(points=>roundedRoute(points));
+function position(route,distance){
+ const d=((distance%route.length)+route.length)%route.length,s=route.samples;let i=0;
+ while(i<s.length-1&&s[i+1].distance<d)i++;
+ const a=s[i],b=s[(i+1)%s.length],t=(d-a.distance)/Math.hypot(b.x-a.x,b.y-a.y);
+ return{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,angle:Math.atan2(b.y-a.y,b.x-a.x)};
 }
-const scenes=[new PortScene($('#world'),-1),...$$('.map-card').map((c,i)=>new PortScene(c,i))];
-function paint(){for(const s of scenes){if(s.mode<0||s.mode===active)s.draw(elapsed);}}
-function rebuild(){for(const s of scenes){s.configure();s.renderStatic();s.draw(elapsed);}}
-/* --- 动画时钟：暂停、后台和减弱动态均不积累时间，恢复时车辆不跳跃 --- */
-function tick(now){frame=0;if(previous)elapsed+=Math.min((now-previous)/1000,.05);previous=now;paint();if(!paused&&!motion.matches&&!document.hidden)frame=requestAnimationFrame(tick);}
-function syncClock(){if(frame)cancelAnimationFrame(frame);frame=0;previous=0;paint();if(!paused&&!motion.matches&&!document.hidden)frame=requestAnimationFrame(tick);const frozen=paused||motion.matches;$('#simulation-status').textContent=frozen?'运输场景演示 · 静态预览':'运输场景演示 · 路线持续更新';$('#pause').setAttribute('aria-pressed',String(frozen));$('#pause').setAttribute('aria-label',frozen?'继续场景动画':'暂停场景动画');$('#pause').innerHTML=frozen?'<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 5 8 5-8 5V5Z" stroke="currentColor" stroke-width="1.5"/></svg>':'<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 5v10M13 5v10" stroke="currentColor" stroke-width="2"/></svg>';$('#pause').disabled=motion.matches;}
-function select(index,focus=false){active=(index+3)%3;$$('.feature').forEach((el,i)=>{el.dataset.slot=(i-active+3)%3;el.inert=i!==active;el.setAttribute('aria-hidden',String(i!==active));});$$('.tab').forEach((el,i)=>{el.setAttribute('aria-selected',String(i===active));el.tabIndex=i===active?0:-1;});$('#counter').textContent=`0${active+1} / 03`;$('#view-label').textContent=['港口 · 连接运输的起点','协同 · 让运力有序流动','守护 · 每一程安心可控'][active];for(const s of scenes)if(s.mode===active)s.draw(elapsed);paint();if(focus)$(`#tab-${active}`).focus();}
-$$('.tab').forEach((el,i)=>{el.addEventListener('click',()=>select(i));el.addEventListener('keydown',e=>{let target;if(e.key==='ArrowRight')target=active+1;if(e.key==='ArrowLeft')target=active-1;if(e.key==='Home')target=0;if(e.key==='End')target=2;if(target!==undefined){e.preventDefault();select(target,true);}});});
-$('#next').addEventListener('click',()=>select(active+1));
-$('#explore').addEventListener('click',()=>{select(0);$('#feedback').textContent='车辆沿规划路线行驶，点击右侧能力切换场景。';if(innerWidth<761)$('#panel-0').scrollIntoView({behavior:motion.matches?'instant':'smooth',block:'center'});});
-$('#overview').addEventListener('click',()=>{fullView=!fullView;rebuild();$('#overview').lastChild.textContent=fullView?'返回港区视角':'俯瞰运输网络';$('#feedback').textContent=fullView?'已展开港区全景。':'已返回默认视角。';});
-function theme(value){dark=value;document.body.classList.toggle('night',dark);$('#day').setAttribute('aria-pressed',String(!dark));$('#night').setAttribute('aria-pressed',String(dark));document.querySelector('meta[name="theme-color"]').content=dark?'#0c1a24':'#f3f5f6';rebuild();}
-$('#day').addEventListener('click',()=>theme(false));$('#night').addEventListener('click',()=>theme(true));$('#pause').addEventListener('click',()=>{paused=!paused;syncClock();});
-motion.addEventListener('change',syncClock);document.addEventListener('visibilitychange',syncClock);
-let resizeFrame=0;const observer=new ResizeObserver(()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{scenes.forEach(s=>s.resize());paint();});});scenes.forEach(s=>observer.observe(s.canvas));select(0);syncClock();
+const fleet=Array.from({length:18},(_,i)=>({route:i%4,offset:i*193+80,speed:22+i%4*3,color:i%3}));
+const buildings=[],trees=[],lamps=[];
+const streetsX=Array.from({length:17},(_,i)=>-1970+i*220);
+const streetsY=Array.from({length:16},(_,i)=>-3120+i*220);
+function building(x,y,w,d,height,type=0){buildings.push({x,y,w,d,height,type});}
+/* 主街区靠岸为箱堆、远岸为仓库；背景城市延伸到镜头外，避免孤立的菱形地块。 */
+for(let ix=0;ix<streetsX.length-1;ix++)for(let iy=0;iy<streetsY.length-1;iy++){
+ const x=streetsX[ix]+35,y=streetsY[iy]+35,seed=(ix*7+iy*11)%9;
+ if(y>10){for(let row=0;row<4;row++)for(let col=0;col<2;col++)building(x+col*77,y+row*24,66,18,14+(col+row+ix)%3*12,2+(ix+row)%3);}
+ else if(seed<5){building(x,y,150,142,31+seed*6,0);}
+ else{building(x,y,68,65,48+seed*6,1);building(x+91,y+11,60,90,38+seed*4,1);if(seed%2===0)building(x+12,y+92,66,61,41,1);}
+ trees.push([x-10,y+160],[x+170,y+28]);
+}
+for(const y of streetsY)for(let x=-1910;x<1610;x+=110)lamps.push({x,y:y-23,height:30,kind:'street',direction:1});
+for(const x of streetsX)for(let y=-3000;y<150;y+=110)lamps.push({x:x+23,y,height:30,kind:'street',direction:2});
+for(let x=-1840;x<1600;x+=220)lamps.push({x,y:247,height:74,kind:'port',direction:0});
+const cranes=Array.from({length:11},(_,i)=>({x:-1640+i*290,y:291}));
+const ships=[{x:-845,y:464},{x:205,y:466},{x:1060,y:464}];
+const mix=(a,b,t)=>{const aa=parseInt(a.slice(1),16),bb=parseInt(b.slice(1),16);return`rgb(${[16,8,0].map(s=>Math.round(((aa>>s)&255)*(1-t)+((bb>>s)&255)*t)).join(',')})`;};
+const tone=(hex,f)=>{const n=parseInt(hex.slice(1),16);return`rgb(${[16,8,0].map(s=>Math.min(255,Math.round((n>>s&255)*f))).join(',')})`;};
+
+/* --- 渲染边界：地面/光照、立体物件、车辆分层；静态对象缓存为局部精灵 --- */
+class PortScene{
+ constructor(canvas,dark){
+  this.canvas=canvas;this.ctx=canvas.getContext('2d');this.dark=dark;this.time=0;this.frame=0;this.last=0;this.visible=true;this.paused=false;
+  this.ground=document.createElement('canvas');this.motion=matchMedia('(prefers-reduced-motion: reduce)');
+  this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(canvas);
+  this.intersection=new IntersectionObserver(([entry])=>{this.visible=entry.isIntersecting;this.clock();});this.intersection.observe(canvas);
+  this.onVisibility=()=>this.clock();this.onMotion=()=>this.clock();
+  document.addEventListener('visibilitychange',this.onVisibility);this.motion.addEventListener('change',this.onMotion);
+  this.resize();this.clock();
+ }
+ resize(){
+  const rect=this.canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
+  this.w=rect.width;this.h=rect.height;this.dpr=Math.min(devicePixelRatio||1,2);
+  for(const canvas of [this.canvas,this.ground]){canvas.width=Math.round(this.w*this.dpr);canvas.height=Math.round(this.h*this.dpr);}
+  // 正交镜头固定；自适应画幅但不随车辆或鼠标摇晃。
+  this.scale=Math.max(.64,Math.min(1.28,this.w/1250));this.cx=this.w*.55;this.cy=this.h*.44;
+  this.rebuild();
+ }
+ p(x,y,z=0){return{x:this.cx+(x-y)*.74*this.scale,y:this.cy+(x+y)*.365*this.scale-z*this.scale};}
+ shape(ctx,points){ctx.beginPath();points.forEach((p,i)=>{const q=this.p(...p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});ctx.closePath();}
+ polygon(ctx,points,fill){this.shape(ctx,points);ctx.fillStyle=fill;ctx.fill();}
+ line(ctx,points,color,width=1,dash=[]){ctx.beginPath();points.forEach((p,i)=>{const q=this.p(...p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});ctx.strokeStyle=color;ctx.lineWidth=width*this.scale;ctx.lineCap='round';ctx.lineJoin='round';ctx.setLineDash(dash.map(d=>d*this.scale));ctx.stroke();ctx.setLineDash([]);}
+ box(ctx,x,y,w,d,height,top,left,right,z=0){
+  this.polygon(ctx,[[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+height],[x,y+d,z+height]],left);
+  this.polygon(ctx,[[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+height],[x+w,y,z+height]],right);
+  const corners=[[x,y,z+height],[x+w,y,z+height],[x+w,y+d,z+height],[x,y+d,z+height]];
+  this.polygon(ctx,corners,top);
+  this.line(ctx,[corners[3],corners[0],corners[1]],this.dark?'#b2d1d71a':'#ffffff88',.5);
+ }
+ ellipse(ctx,x,y,rx,ry,color){const p=this.p(x,y);ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(p.x,p.y,rx*this.scale,ry*this.scale,0,0,Math.PI*2);ctx.fill();}
+ radial(ctx,x,y,r,color,alpha=.24,ratio=.5,z=0){
+  const p=this.p(x,y,z);ctx.save();ctx.translate(p.x,p.y);ctx.scale(1,ratio);
+  const g=ctx.createRadialGradient(0,0,0,0,0,r*this.scale);g.addColorStop(0,`${color}${Math.round(alpha*255).toString(16).padStart(2,'0')}`);g.addColorStop(.36,`${color}${Math.round(alpha*92).toString(16).padStart(2,'0')}`);g.addColorStop(1,`${color}00`);
+  ctx.fillStyle=g;ctx.fillRect(-r*this.scale,-r*this.scale,r*this.scale*2,r*this.scale*2);ctx.restore();
+ }
+ shadow(ctx,b){
+  const {x,y,w,d,height}=b;if(this.dark)return;
+  // 光从画面左上方入射，高物件产生更长的软影，近地面保留接触阴影。
+  const dx=height*.63,dy=height*.42;
+  ctx.save();ctx.filter=`blur(${1.8*this.scale}px)`;
+  this.polygon(ctx,[[x,y+d],[x+w,y+d],[x+w,y],[x+w+dx,y+dy],[x+w+dx,y+d+dy],[x+dx,y+d+dy]],'#3959673b');ctx.restore();
+  this.polygon(ctx,[[x+2,y+2],[x+w+3,y+2],[x+w+3,y+d+4],[x+2,y+d+4]],this.dark?'#050e154d':'#3f5c5930');
+ }
+ road(ctx,x,y,w,d){const c=this.c;
+  this.polygon(ctx,[[x-3,y-3],[x+w+3,y-3],[x+w+3,y+d+3],[x-3,y+d+3]],c.curb);
+  this.polygon(ctx,[[x,y],[x+w,y],[x+w,y+d],[x,y+d]],c.road);
+  if(w>d)this.line(ctx,[[x,y+d/2,.2],[x+w,y+d/2,.2]],c.mark,.65,[7,12]);
+  else this.line(ctx,[[x+w/2,y,.2],[x+w/2,y+d,.2]],c.mark,.65,[7,12]);
+ }
+ drawBuilding(ctx,b){
+  const {x,y,w,d,height,type}=b,c=this.c;
+  let top=c.roof,left=c.wall,right=c.shade;
+  if(type>=2){top=[c.orange,c.cyan,c.white][type-2];left=tone(top,.83);right=tone(top,.67);}
+  this.box(ctx,x,y,w,d,height,top,left,right);
+  if(type===0){
+   for(let a=14;a<w;a+=20)this.line(ctx,[[x+a,y+3,height+.1],[x+a,y+d-3,height+.1]],this.dark?'#c2dade10':'#8faaa642',.7);
+   for(let a=16;a<w-10;a+=30){this.box(ctx,x+a,y+40,17,26,1.5,c.glass,c.wall,c.shade,height);this.polygon(ctx,[[x+a,y+d+.1,2],[x+a+17,y+d+.1,2],[x+a+17,y+d+.1,19],[x+a,y+d+.1,19]],this.dark?'#182a31':c.glass);}
+   this.box(ctx,x+12,y+12,24,15,4,c.wall,c.shade,c.shade,height);
+   if(this.dark)for(let a=14;a<w-10;a+=32)this.line(ctx,[[x+a,y+d+.3,24],[x+a+12,y+d+.3,24]],'#f6dda680',1.7);
+  }else if(type===1){
+   for(let z=9;z<height-6;z+=11)for(let a=7;a<w-5;a+=10){
+    const lit=this.dark&&((Math.floor(a)+z+Math.floor(x))%7<4);
+    this.polygon(ctx,[[x+a,y+d+.1,z],[x+a+5,y+d+.1,z],[x+a+5,y+d+.1,z+4],[x+a,y+d+.1,z+4]],lit?'#d8c190':this.dark?'#203842':c.glass);
+   }
+   for(let z=9;z<height-6;z+=11)this.line(ctx,[[x+w+.1,y+5,z],[x+w+.1,y+d-5,z]],this.dark?'#e1d4b16e':c.glass,1.7);
+   this.box(ctx,x+10,y+12,w-20,d-28,5,c.wall,c.shade,c.shade,height);
+  }else{
+   for(let a=5;a<w-2;a+=5)this.line(ctx,[[x+a,y+d+.2,1],[x+a,y+d+.2,height-1]],this.dark?'#ffffff15':'#ffffff55',.55);
+   for(let a=5;a<w-2;a+=5)this.line(ctx,[[x+a,y+1,height+.1],[x+a,y+d-1,height+.1]],this.dark?'#ffffff08':'#ffffff22',.35);
+  }
+ }
+ crane(ctx,{x,y}){
+  const c=this.c,metal=c.metal,beam=this.dark?'#946b4b':'#d79b6f';
+  for(const offset of [0,56]){
+   this.box(ctx,x+offset-6,y-2,17,19,5,c.wall,c.shade,c.shade);
+   this.box(ctx,x+offset,y,5,14,89,metal,tone(metal,.8),tone(metal,.68));
+   this.line(ctx,[[x+offset,y,5],[x+offset,y+15,81]],metal,1);
+  }
+  this.box(ctx,x-3,y-3,67,16,8,beam,tone(beam,.86),tone(beam,.66),89);
+  this.line(ctx,[[x+28,y,97],[x+28,y+129,97]],metal,5);
+  this.line(ctx,[[x+28,y,131],[x+28,y+127,97],[x+28,y,91],[x+28,y-31,97],[x+28,y,131]],metal,1.6);
+  this.line(ctx,[[x+28,y+105,97],[x+28,y+105,27]],this.dark?'#658794':'#556f7a',.75);
+  this.box(ctx,x+16,y+98,24,13,3,beam,metal,metal,25);
+  this.box(ctx,x+18,y+14,23,20,11,c.roof,c.wall,c.shade,80);
+  if(this.dark){for(const offset of [0,56])this.lightHead(ctx,x+offset,y+8,97,'#ffe0ac',1.7);this.lightHead(ctx,x+28,y,132,'#fa8a69',1);}
+ }
+ tree(ctx,[x,y]){const c=this.c;this.box(ctx,x,y,2,2,11,c.tree,c.shade,c.shade);for(const [dx,dy,z,r] of [[0,0,15,7],[-4,3,14,5],[4,2,17,5]]){const p=this.p(x+dx,y+dy,z);const g=ctx.createRadialGradient(p.x-r*this.scale*.3,p.y-r*this.scale*.5,0,p.x,p.y,r*this.scale);g.addColorStop(0,this.dark?'#527969':'#85b29a');g.addColorStop(1,c.tree);ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r*this.scale,0,Math.PI*2);ctx.fill();}}
+ lightHead(ctx,x,y,z,color,size=1.1){const p=this.p(x,y,z);this.radial(ctx,x,y,12,color,.19,1,z);ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,size*this.scale,0,Math.PI*2);ctx.fill();}
+ lamp(ctx,lamp){
+  const {x,y,height,kind,direction}=lamp,c=this.c;
+  this.ellipse(ctx,x,y,3,1.8,this.dark?'#0e1f2880':'#6a7a6d35');
+  this.line(ctx,[[x,y,0],[x,y,height]],this.dark?'#88a1a2':'#7b9193',kind==='port'?1.8:1.2);
+  if(kind==='street'){
+   const dx=direction===1?0:-13,dy=direction===1?13:0;
+   this.line(ctx,[[x,y,height],[x+dx,y+dy,height+1]],c.metal,1.2);
+   this.box(ctx,x+dx-2,y+dy-3,4,6,1.2,this.dark?'#d9c9a6':'#c5d0c9',c.metal,c.metal,height);
+   if(this.dark)this.lightHead(ctx,x+dx,y+dy,height,'#ffdea4',1);
+  }else{
+   this.line(ctx,[[x-12,y,height],[x+12,y,height]],c.metal,2);
+   for(const offset of [-10,0,10]){this.box(ctx,x+offset-2,y-2,4,5,3,c.roof,c.metal,c.shade,height);if(this.dark)this.lightHead(ctx,x+offset,y,height,'#fff1d0',1.4);}
+  }
+ }
+ ship(ctx,{x,y}){const c=this.c;
+  this.polygon(ctx,[[x-20,y+24],[x+250,y+24],[x+279,y],[x+250,y-24],[x-18,y-24],[x-32,y]],this.dark?'#09171b':'#345461');
+  this.polygon(ctx,[[x-10,y+19],[x+243,y+19],[x+267,y],[x+242,y-19],[x-10,y-19],[x-24,y]],this.dark?'#485a58':'#9dafaa');
+  for(let col=0;col<6;col++)for(let row=0;row<2;row++)this.box(ctx,x+col*34,y-16+row*18,29,15,19+(col%3)*5,c.orange,tone(c.orange,.83),tone(c.orange,.65));
+  this.box(ctx,x+216,y-15,29,29,28,c.roof,c.wall,c.shade);this.box(ctx,x+222,y-9,16,17,11,c.glass,c.wall,c.shade,28);
+  if(this.dark){this.lightHead(ctx,x+270,y,6,'#d5e6c0',1.2);this.lightHead(ctx,x+220,y-12,40,'#ffdea4',1.4);}
+ }
+ rebuild(){
+  if(!this.w)return;this.c=palettes[this.dark?'night':'day'];const c=this.c,ctx=this.ground.getContext('2d');ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,this.w,this.h);
+  // 全画幅先铺地面和海面，画面边界不会露出空白或独立底座。
+  const land=ctx.createLinearGradient(0,0,this.w,this.h);land.addColorStop(0,this.dark?'#1c2b31':'#e1e5da');land.addColorStop(1,c.land);ctx.fillStyle=land;ctx.fillRect(0,0,this.w,this.h);
+  const sea=ctx.createLinearGradient(0,0,this.w,this.h);sea.addColorStop(0,c.water);sea.addColorStop(1,c.waterDeep);this.polygon(ctx,[[-7000,322],[7000,322],[7000,8000],[-7000,8000]],sea);
+  this.box(ctx,-7000,290,14000,33,11,c.land,c.curb,c.shade,-11);
+  for(const y of streetsY)this.road(ctx,-2400,y-18,4700,36);
+  for(const x of streetsX)this.road(ctx,x-18,-3350,36,3560);
+  for(const y of streetsY)for(const x of streetsX)this.polygon(ctx,[[x-18,y-18],[x+18,y-18],[x+18,y+18],[x-18,y+18]],c.road);
+  this.road(ctx,-2400,246,4700,29);
+  for(let x=-2300;x<2100;x+=24)this.polygon(ctx,[[x,312],[x+11,312],[x+15,319],[x+4,319]],c.orange);
+  for(let x=-2300;x<2100;x+=85){this.box(ctx,x,320,6,7,4,c.metal,c.shade,c.shade);this.line(ctx,[[x,299],[x+29,299]],this.dark?'#77897c':'#efe5b7',.7);}
+  for(let y=356;y<1900;y+=24)for(let x=-2100;x<1900;x+=86)this.line(ctx,[[x,y],[x+21+(x%11),y]],this.dark?'#68858b11':'#d8ecdf24',.65);
+  // 太阳投影先于建筑绘制；灯池也在地面层，避免穿透屋顶。
+  this.visibleBuildings=buildings.filter(b=>this.isVisible(b.x+b.w/2,b.y+b.d/2,b.height,210));
+  for(const b of this.visibleBuildings)this.shadow(ctx,b);
+  this.visibleLamps=lamps.filter(l=>this.isVisible(l.x,l.y,l.height,100));
+  if(this.dark){
+   ctx.save();ctx.globalCompositeOperation='screen';
+   for(const l of this.visibleLamps){
+    const port=l.kind==='port';this.radial(ctx,l.x+(port?0:l.direction===2?-10:0),l.y+(port?-30:l.direction===1?10:0),port?99:38,port?'#fff0cf':'#ffd292',port?.32:.44,.5);
+   }
+   for(const b of this.visibleBuildings)if(b.type===0)for(let x=b.x+24;x<b.x+b.w-10;x+=44)this.radial(ctx,x,b.y+b.d+8,22,'#ffde9a',.12,.5);
+   ctx.restore();
+  }
+  this.objects=[...this.visibleBuildings.map(b=>({depth:b.x+b.y+(b.w+b.d)/2,x:b.x,y:b.y,kind:'building',value:b})),...trees.filter(([x,y])=>this.isVisible(x,y,20,20)).map(v=>({depth:v[0]+v[1],x:v[0],y:v[1],kind:'tree',value:v})),...this.visibleLamps.map(v=>({depth:v.x+v.y,x:v.x,y:v.y,kind:'lamp',value:v})),...cranes.filter(v=>this.isVisible(v.x,v.y,132,130)).map(v=>({depth:v.x+v.y+48,x:v.x,y:v.y,kind:'crane',value:v})),...ships.filter(v=>this.isVisible(v.x,v.y,42,280)).map(v=>({depth:v.x+v.y+120,x:v.x,y:v.y,kind:'ship',value:v}))];
+  this.sprites=this.objects.map(object=>this.sprite(object));this.draw();
+ }
+ isVisible(x,y,z=0,margin=80){const p=this.p(x,y,z);return p.x>-margin&&p.x<this.w+margin&&p.y>-margin&&p.y<this.h+margin;}
+ sprite(object){
+  // 精灵围住物件投影，画布只存局部像素；车辆与静态物件按深度交织，保持遮挡。
+  const margin=object.kind==='building'?240:object.kind==='ship'?340:170;
+  const p=this.p(object.x,object.y);const left=Math.floor(p.x-margin*this.scale),top=Math.floor(p.y-margin*this.scale);
+  const sprite=document.createElement('canvas');sprite.width=Math.ceil(margin*this.scale*2*this.dpr);sprite.height=sprite.width;
+  const ctx=sprite.getContext('2d');ctx.setTransform(this.dpr,0,0,this.dpr,-left*this.dpr,-top*this.dpr);
+  if(object.kind==='building')this.drawBuilding(ctx,object.value);else if(object.kind==='tree')this.tree(ctx,object.value);else if(object.kind==='lamp')this.lamp(ctx,object.value);else if(object.kind==='crane')this.crane(ctx,object.value);else this.ship(ctx,object.value);
+  return{canvas:sprite,left,top,size:sprite.width/this.dpr,depth:object.depth};
+ }
+ truck(ctx,truck){
+  const p=position(paths[truck.route],truck.offset+this.time*truck.speed),cos=Math.cos(p.angle),sin=Math.sin(p.angle);
+  const local=(x,y,z=0)=>[p.x+x*cos-y*sin,p.y+x*sin+y*cos,z];const poly=(points,fill)=>this.polygon(ctx,points.map(point=>local(...point)),fill);
+  const box=(x,y,w,d,height,top,side,end,z=0)=>{poly([[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+height],[x,y+d,z+height]],side);poly([[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+height],[x+w,y,z+height]],end);poly([[x,y,z+height],[x+w,y,z+height],[x+w,y+d,z+height],[x,y+d,z+height]],top);};
+  poly([[-18,-6],[18,-6],[22,9],[-15,9]],this.dark?'#04111985':'#2d484943');
+  if(this.dark){
+   ctx.save();ctx.globalCompositeOperation='screen';
+   for(const y of [-3.3,3.3]){const start=this.p(...local(17,y,1)),end=this.p(...local(60,y*3,1)),g=ctx.createLinearGradient(start.x,start.y,end.x,end.y);g.addColorStop(0,'#fff1c26a');g.addColorStop(.4,'#fff1c222');g.addColorStop(1,'#fff1c200');poly([[17,y-1,1],[63,y-11,1],[68,y+11,1],[17,y+1,1]],g);}
+   ctx.restore();
+  }
+  box(-17,-5,31,10,2,'#3e555d','#263d46','#172b35',2);
+  for(const x of [-14,-7,12])for(const y of [-6,4.5])box(x,y,3,1.5,4,'#364650','#1a2b34','#122430');
+  const color=[this.c.truck,this.c.cyan,this.c.white][truck.color];box(-17,-5,23,10,10,color,tone(color,.82),tone(color,.66),5);
+  for(let x=-14;x<5;x+=3)this.line(ctx,[local(x,5.1,6),local(x,5.1,14)],this.dark?'#ffffff25':'#ffffff60',.5);
+  box(7,-5,10,10,8,this.c.cab,tone(this.c.cab,.85),tone(this.c.cab,.72),4);
+  poly([[12,-4,12.1],[16,-4,12.1],[16,4,12.1],[12,4,12.1]],this.c.glass);
+  poly([[17.1,-4,9],[17.1,4,9],[17.1,4,11],[17.1,-4,11]],this.c.glass);
+  for(const y of [-3.4,2.4]){box(17,y,1,1.2,1,this.dark?'#ffe9b0':'#f5f4e6','#eee7b9','#eee7b9',5);if(this.dark){const point=local(17,y,5);this.lightHead(ctx,...point,'#ffe9ba',.7);}}
+  for(const y of [-3.5,3.5]){const q=this.p(...local(-17,y,5));ctx.fillStyle=this.dark?'#f27550':'#b94f35';ctx.fillRect(q.x-.7*this.scale,q.y-.5*this.scale,1.4*this.scale,this.scale);}
+ }
+ waterReflections(ctx){
+  if(!this.dark)return;ctx.save();ctx.globalCompositeOperation='screen';
+  // 灯下的反光被水面切成细碎亮带，且不越过岸线。
+  this.shape(ctx,[[-7000,324],[7000,324],[7000,6000],[-7000,6000]]);ctx.clip();
+  for(const lamp of this.visibleLamps.filter(l=>l.kind==='port'))for(let i=0;i<20;i++){
+   const y=337+i*7,x=lamp.x+Math.sin(i*2.31+this.time*.52)*9,fade=(1-i/20)*.24;
+   this.line(ctx,[[x-4-i*.35,y],[x+8+i*.35,y]],`rgba(242,211,147,${fade})`,.7);
+  }
+  ctx.restore();
+ }
+ draw(){
+  if(!this.w)return;const ctx=this.ctx;ctx.setTransform(this.dpr,0,0,this.dpr,0,0);ctx.clearRect(0,0,this.w,this.h);ctx.drawImage(this.ground,0,0,this.w,this.h);
+  this.waterReflections(ctx);
+  // 地图保留物流路线，但不添加新的浮层、数字、文案或卡片。
+  const route=paths[0].samples.map(p=>[p.x,p.y,.3]);route.push(route[0]);this.line(ctx,route,this.dark?'#f6a56545':'#dc874440',1.2);
+  const flow=position(paths[0],this.time*32);this.radial(ctx,flow.x,flow.y,7,this.dark?'#eaaa64':'#df9257',.35,1);
+  const traffic=fleet.map(truck=>{const p=position(paths[truck.route],truck.offset+this.time*truck.speed);return{truck,depth:p.x+p.y};});
+  const order=[...this.sprites.map(sprite=>({sprite,depth:sprite.depth})),...traffic].sort((a,b)=>a.depth-b.depth);
+  for(const item of order){if(item.sprite){const s=item.sprite;ctx.drawImage(s.canvas,s.left,s.top,s.size,s.size);}else this.truck(ctx,item.truck);}
+  // 统一的环境光和空气透视位于场景内，正文保护仍由原 Hero 蒙层负责。
+  const ambience=ctx.createLinearGradient(0,0,this.w,this.h);
+  if(this.dark){ambience.addColorStop(0,'#9acde00b');ambience.addColorStop(1,'#020c161d');}else{ambience.addColorStop(0,'#fff8da25');ambience.addColorStop(.55,'#fff9e30a');ambience.addColorStop(1,'#567c9812');}
+  ctx.fillStyle=ambience;ctx.fillRect(0,0,this.w,this.h);
+ }
+ setTheme(dark){if(this.dark===dark)return;this.dark=dark;this.rebuild();}
+ setPaused(paused){this.paused=paused;this.clock();}
+ clock(){
+  cancelAnimationFrame(this.frame);this.frame=0;this.last=0;this.draw();
+  if(this.paused||this.motion.matches||document.hidden||!this.visible)return;
+  const tick=now=>{if(this.last)this.time+=Math.min((now-this.last)/1000,.05);this.last=now;this.draw();this.frame=requestAnimationFrame(tick);};this.frame=requestAnimationFrame(tick);
+ }
+ dispose(){cancelAnimationFrame(this.frame);this.resizeObserver.disconnect();this.intersection.disconnect();document.removeEventListener('visibilitychange',this.onVisibility);this.motion.removeEventListener('change',this.onMotion);this.sprites=[];}
+}
+
+/* --- 原 UI 复用：Hero 的文案、图片和交互都由正式组件提供，原型只注入背景 --- */
+function Background({isDark,paused}){
+ const ref=useRef(null),engine=useRef(null);
+ useEffect(()=>{const scene=new PortScene(ref.current,isDark);engine.current=scene;scene.setPaused(paused);return()=>{scene.dispose();engine.current=null;};},[]);
+ useEffect(()=>engine.current?.setTheme(isDark),[isDark]);useEffect(()=>engine.current?.setPaused(paused),[paused]);
+ return h('canvas',{ref,className:'preview-canvas','aria-hidden':true});
+}
+function Preview(){
+ const {isDark,toggleTheme}=useTheme(),[backgroundOnly,setBackgroundOnly]=useState(false),[paused,setPaused]=useState(false),[reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
+ useEffect(()=>{const query=matchMedia('(prefers-reduced-motion: reduce)'),change=()=>setReduced(query.matches);query.addEventListener('change',change);return()=>query.removeEventListener('change',change);},[]);
+ return h('div',{className:backgroundOnly?'background-only':''},
+  h('header',{className:'fixed left-0 right-0 top-0 z-40 bg-bg'},h('div',{className:'relative flex h-14 items-center justify-between px-4 md:px-6'},
+   h('a',{href:'/ygb',className:'flex items-center gap-2','aria-label':'返回云柜宝页面'},h('img',{src:logo,alt:'企丰科技',className:'h-8 w-8 rounded-sm object-cover'}),h('span',{className:'select-none text-sm font-medium'},'企丰科技')),
+   h('button',{type:'button',className:'inline-flex btn-icon btn-icon-md btn-icon-muted',onClick:toggleTheme,'aria-label':isDark?'切换到浅色模式':'切换到深色模式'},h('i',{className:isDark?'ri-sun-line text-lg':'ri-moon-clear-line text-lg','aria-hidden':true}))
+  )),
+  h('main',{className:'pt-14'},h('div',{id:'hero-preview'},h(ReactYgbHero,{background:h(Background,{isDark,paused})})),
+   h('div',{className:'preview-tools','aria-label':'背景验收控制'},h('span',null,'背景预览'),h('button',{type:'button','aria-pressed':backgroundOnly,onClick:()=>setBackgroundOnly(!backgroundOnly)},backgroundOnly?'显示原文字与卡片':'仅看背景'),h('button',{type:'button','aria-pressed':paused||reduced,disabled:reduced,onClick:()=>setPaused(!paused)},paused||reduced?'继续背景动画':'暂停背景动画'))
+  )
+ );
+}
+createRoot(document.getElementById('preview-root')).render(h(ThemeProvider,null,h(Preview)));
 </script>
 </body>
 </html>
