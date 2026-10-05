@@ -44,7 +44,7 @@ function YgbHero() {
   };
   const shift = (step: number) => setActive((value) => (value + step + heroCards.length) % heroCards.length);
   return <section className="react-ygb-hero relative overflow-hidden border-b border-edge py-8 md:py-14">
-    <ReactYgbRoadMapBg />
+    <div className="pointer-events-none absolute inset-0"><ReactYgbRoadMapBg /></div>
     <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,.1),rgba(246,245,244,.02)_40%,rgba(246,245,244,.12)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)_40%,rgba(255,255,255,.06)_100%)]" />
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(112%_92%_at_14%_8%,rgba(246,245,244,.9),rgba(246,245,244,.6)_34%,rgba(246,245,244,.18)_62%,transparent_90%)] dark:bg-[radial-gradient(112%_92%_at_14%_8%,rgba(25,24,28,.93),rgba(25,24,28,.75)_34%,rgba(25,24,28,.34)_62%,transparent_90%)]" />
     <div className="relative mx-auto grid w-full max-w-360 gap-8 px-6 lg:grid-cols-2 lg:items-end lg:px-14">

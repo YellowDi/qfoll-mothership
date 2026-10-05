@@ -1,5 +1,5 @@
 /**
- * [INPUT]: 依赖云柜宝 Hero 图片、首页预览布局和 React Router
+ * [INPUT]: 依赖云柜宝 Hero 图片、路线图 Canvas、首页预览布局和 React Router
  * [OUTPUT]: 对外提供 ReactYgbPreview，展示首页客户案例主卡
  * [POS]: React 首页客户案例区的主视觉，复用云柜宝产品语义但不耦合专题页状态
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import hero01 from "../../assets/ygb-assets/hero-01.webp";
 import hero02 from "../../assets/ygb-assets/hero-02.webp";
 import hero03 from "../../assets/ygb-assets/hero-03.webp";
+import { ReactYgbRoadMapBg } from "./ReactYgbRoadMapBg";
 
 const heroCards = [
   {
@@ -41,7 +42,7 @@ export function ReactYgbPreview() {
   return (
     <Link to="/ygb" className="react-ygb-preview group block rounded-md">
       <div className="relative overflow-hidden rounded-md border border-edge bg-bg/95 p-8 select-none max-md:p-5">
-        <div className="react-ygb-roadmap" aria-hidden="true" />
+        <div className="react-ygb-roadmap pointer-events-none" aria-hidden="true"><ReactYgbRoadMapBg /></div>
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,0.08),rgba(246,245,244,0.02)_40%,rgba(246,245,244,0.08)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015)_40%,rgba(255,255,255,0.03)_100%)]" />
         <div className="relative z-10 grid min-h-128 gap-8 lg:grid-cols-[minmax(0,.92fr)_minmax(0,1.08fr)] lg:items-end">
           <div className="min-w-0">
