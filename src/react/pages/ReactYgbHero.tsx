@@ -54,27 +54,80 @@ function useTypedPain() {
   return pain;
 }
 
+const HERO_AUTO_PLAY_INTERVAL_MS = 4200;
+const HERO_AUTO_PLAY_START_DELAY_MS = 360;
+
 function useHeroCarousel(homePreview: boolean) {
   const stackRef = useRef<HTMLDivElement>(null);
+  const autoPlayRef = useRef<number | null>(null);
+  const autoPlayDelayRef = useRef<number | null>(null);
   const [active, setActive] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [inView, setInView] = useState(false);
   const [visible, setVisible] = useState(() => !document.hidden);
+  const [reducedMotion, setReducedMotion] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  const clearAutoPlay = () => {
+    if (autoPlayRef.current !== null) window.clearInterval(autoPlayRef.current);
+    autoPlayRef.current = null;
+  };
+  const clearAutoPlayDelay = () => {
+    if (autoPlayDelayRef.current !== null) window.clearTimeout(autoPlayDelayRef.current);
+    autoPlayDelayRef.current = null;
+  };
+  const canAutoPlay = () => !homePreview && !hovered && inView && visible && !reducedMotion;
+  const startAutoPlay = (immediate = false) => {
+    clearAutoPlay();
+    clearAutoPlayDelay();
+    if (!canAutoPlay()) return;
+    const startInterval = () => {
+      autoPlayRef.current = window.setInterval(() => {
+        setActive((value) => (value + 1) % heroCards.length);
+      }, HERO_AUTO_PLAY_INTERVAL_MS);
+    };
+    if (immediate) {
+      startInterval();
+      return;
+    }
+    autoPlayDelayRef.current = window.setTimeout(() => {
+      autoPlayDelayRef.current = null;
+      if (canAutoPlay()) startInterval();
+    }, HERO_AUTO_PLAY_START_DELAY_MS);
+  };
   useEffect(() => {
     const node = stackRef.current;
     if (!node) return;
     const observer = new IntersectionObserver(([entry]) => setInView(Boolean(entry?.isIntersecting)), { threshold: .25, rootMargin: "0px 0px -10% 0px" });
     const onVisibility = () => setVisible(!document.hidden);
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onReducedMotionChange = () => setReducedMotion(reducedMotionQuery.matches);
     observer.observe(node);
     document.addEventListener("visibilitychange", onVisibility);
-    return () => { observer.disconnect(); document.removeEventListener("visibilitychange", onVisibility); };
+    reducedMotionQuery.addEventListener("change", onReducedMotionChange);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      reducedMotionQuery.removeEventListener("change", onReducedMotionChange);
+      clearAutoPlay();
+      clearAutoPlayDelay();
+    };
   }, []);
   useEffect(() => {
-    if (homePreview || hovered || !inView || !visible || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setTimeout(() => setActive((value) => (value + 1) % heroCards.length), 4200);
-    return () => window.clearTimeout(timer);
-  }, [active, homePreview, hovered, inView, visible]);
-  return { stackRef, active, setActive, setHovered };
+    startAutoPlay();
+    return () => {
+      clearAutoPlay();
+      clearAutoPlayDelay();
+    };
+  }, [homePreview, hovered, inView, visible, reducedMotion]);
+  const select = (index: number) => {
+    setActive(index);
+    startAutoPlay(true);
+  };
+  const shift = (step: number) => {
+    setActive((value) => (value + step + heroCards.length) % heroCards.length);
+    startAutoPlay(true);
+  };
+  return { stackRef, active, select, shift, setHovered };
 }
 
 function heroPosition(index: number, active: number) {
@@ -86,8 +139,7 @@ function heroPosition(index: number, active: number) {
 
 export function ReactYgbHero({ homePreview = false }: { homePreview?: boolean }) {
   const pain = useTypedPain();
-  const { stackRef, active, setActive, setHovered } = useHeroCarousel(homePreview);
-  const shift = (step: number) => setActive((value) => (value + step + heroCards.length) % heroCards.length);
+  const { stackRef, active, select, shift, setHovered } = useHeroCarousel(homePreview);
   return <section className="w-full">
     <div className={`relative overflow-hidden bg-bg/95 select-none dark:bg-zinc-900/90 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] ${homePreview ? "rounded-md border border-edge p-8 max-md:p-5" : "border-0 rounded-none"}`}>
       <div className="pointer-events-none absolute inset-0 opacity-[0.96]"><ReactYgbRoadMapBg /></div>
@@ -106,12 +158,12 @@ export function ReactYgbHero({ homePreview = false }: { homePreview?: boolean })
             <div className="mt-7 flex flex-wrap items-center gap-3">{homePreview ? <span className="btn-primary btn-md gap-2 px-5">了解更多<i className="ri-arrow-right-line text-base" aria-hidden="true" /></span> : <><button type="button" className="btn-primary btn-md gap-2 px-5" onClick={() => document.getElementById("download")?.scrollIntoView({ behavior: "smooth", block: "start" })}>下载 App<i className="ri-download-2-line text-base" aria-hidden="true" /></button><a href="https://www.ygbonline.com/admin/#/login" target="_blank" rel="noreferrer" className="btn-base btn-md gap-2 border border-edge bg-surface px-5 text-primary hover:bg-black/4 dark:hover:bg-white/8">管理后台<i className="ri-arrow-right-line text-base" aria-hidden="true" /></a></>}</div>
           </div>
           {!homePreview && <div className="relative z-20 w-full min-w-0 lg:self-end"><div ref={stackRef} className="relative h-[26.5rem] w-full min-w-0 md:h-[34rem]" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            {heroCards.map((card, index) => <article key={card.title} className={`ygbHeroCard absolute left-0 right-0 top-0 mx-auto w-full overflow-hidden rounded-t-2xl rounded-b-none border border-edge bg-surface shadow-[0_18px_50px_rgba(17,17,17,0.12)] md:left-auto md:right-0 md:mx-0 dark:shadow-[0_18px_52px_rgba(0,0,0,0.35)] ${heroPosition(index, active)} ${active !== index ? "h-[2.9rem] md:h-[3.1rem]" : ""}`}>
-              <button type="button" onClick={() => setActive(index)} aria-label={`切换到第 ${index + 1} 张`} className="flex w-full items-center justify-between border-b border-line bg-black/3 px-4 py-2 text-left dark:bg-white/6"><span className="text-sm font-medium text-primary">{card.badge}</span><i className="ri-arrow-right-up-line text-sm text-secondary" aria-hidden="true" /></button>
+            {heroCards.map((card, index) => <article key={card.title} onClick={() => select(index)} className={`ygbHeroCard absolute left-0 right-0 top-0 mx-auto w-full cursor-pointer overflow-hidden rounded-t-2xl rounded-b-none border border-edge bg-surface shadow-[0_18px_50px_rgba(17,17,17,0.12)] md:left-auto md:right-0 md:mx-0 dark:shadow-[0_18px_52px_rgba(0,0,0,0.35)] ${heroPosition(index, active)} ${active !== index ? "h-[2.9rem] md:h-[3.1rem]" : ""}`}>
+              <div className="flex w-full items-center justify-between border-b border-line bg-black/3 px-4 py-2 text-left dark:bg-white/6"><span className="text-sm font-medium text-primary">{card.badge}</span><i className="ri-arrow-right-up-line text-sm text-secondary" aria-hidden="true" /></div>
               <div className="px-4 pt-3 pb-2"><h3 className="text-lg leading-[1.28] font-medium text-primary max-md:text-[17px]">{card.title}</h3><p className="mt-1 text-sm leading-[1.7] text-secondary">{card.desc}</p></div>
               <div className="px-4 pb-4"><div className="overflow-hidden rounded-lg border border-edge bg-black/3 dark:bg-white/5"><img src={card.image} sizes="(max-width: 768px) 88vw, (max-width: 1280px) 52vw, 46vw" alt={card.title} className="block h-auto w-full" loading="lazy" decoding="async" /></div></div>
             </article>)}
-            <div className="absolute bottom-3 left-1/2 z-70 flex -translate-x-1/2 items-center gap-2 rounded-full border border-edge bg-surface/95 px-2 py-1 shadow-[0_4px_16px_rgba(17,17,17,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.3)]"><button type="button" className="inline-flex btn-icon btn-icon-sm btn-icon-muted" onClick={() => shift(-1)} aria-label="上一张"><i className="ri-arrow-left-line" aria-hidden="true" /></button><div className="flex items-center gap-1">{heroCards.map((card, index) => <button key={card.title} type="button" className={`h-1.5 rounded-full transition-[width,background-color] duration-200 motion-reduce:transition-none ${active === index ? "w-5 bg-ink/85" : "w-2 bg-ink/24 hover:bg-ink/35"}`} onClick={() => setActive(index)} aria-label={`切换到第 ${index + 1} 张`} />)}</div><button type="button" className="inline-flex btn-icon btn-icon-sm btn-icon-muted" onClick={() => shift(1)} aria-label="下一张"><i className="ri-arrow-right-line" aria-hidden="true" /></button></div>
+            <div className="absolute bottom-3 left-1/2 z-70 flex -translate-x-1/2 items-center gap-2 rounded-full border border-edge bg-surface/95 px-2 py-1 shadow-[0_4px_16px_rgba(17,17,17,0.08)] dark:shadow-[0_8px_20px_rgba(0,0,0,0.3)]"><button type="button" className="inline-flex btn-icon btn-icon-sm btn-icon-muted" onClick={() => shift(-1)} aria-label="上一张"><i className="ri-arrow-left-line" aria-hidden="true" /></button><div className="flex items-center gap-1">{heroCards.map((card, index) => <button key={card.title} type="button" className={`h-1.5 rounded-full transition-[width,background-color] duration-200 motion-reduce:transition-none ${active === index ? "w-5 bg-ink/85" : "w-2 bg-ink/24 hover:bg-ink/35"}`} onClick={() => select(index)} aria-label={`切换到第 ${index + 1} 张`} />)}</div><button type="button" className="inline-flex btn-icon btn-icon-sm btn-icon-muted" onClick={() => shift(1)} aria-label="下一张"><i className="ri-arrow-right-line" aria-hidden="true" /></button></div>
           </div></div>}
         </div>
       </div>
