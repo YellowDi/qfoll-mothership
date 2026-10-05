@@ -14,9 +14,9 @@ SiteFooter.vue: 站点页脚和返回顶部入口。
 TagMarqueeSection.vue: 品牌标签滚动展示，封装响应式和性能策略。
 TwinkleDotMatrixBg.vue: Canvas 点阵动画背景。
 WaterEnvHeroSection.vue: 水环境产品 Hero 和 KPI 展示。
-WaterSurfaceBg.vue: 水环境页面 WebGL 背景。
+WaterSurfaceBg.vue: 水环境页面 WebGL 背景，委托 visuals/waterSurface 共享原始着色器。
 YgbHeroSection.vue: 云柜宝 Hero 轮播和预览展示。
-YgbRoadMapBg.vue: 云柜宝路线图 Canvas 背景，复杂动画需独立维护。
+YgbRoadMapBg.vue: 云柜宝路线图适配器，委托 visuals/roadMap 共享原始地图渲染。
 
 法则: 组件通过 Props 接收业务数据，不直接读取页面路由数据；浏览器事件必须在生命周期清理。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md

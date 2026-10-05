@@ -1,64 +1,32 @@
 /**
- * [INPUT]: 依赖 ReactYgbPage 的路线图容器、Hero 卡片状态类
- * [OUTPUT]: 对外提供云柜宝专题 Hero 的叠层与背景视觉规则
- * [POS]: 云柜宝产品页的局部视觉层，不改变全局设计令牌
+ * [INPUT]: 依赖云柜宝下载展台的结构类名与主题变量
+ * [OUTPUT]: 对外提供下载展台的材质背景样式
+ * [POS]: React 云柜宝页面的局部视觉样式，与 Vue 原版 download-material 同源
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-.react-ygb-hero {
-  background: #f6f5f4;
+.download-material {
+  background:
+    radial-gradient(78rem 38rem at -10% -24%, rgb(255 153 74 / 0.34), transparent 56%),
+    radial-gradient(66rem 36rem at 114% -14%, rgb(98 156 255 / 0.32), transparent 60%),
+    radial-gradient(36rem 22rem at 52% 118%, rgb(255 255 255 / 0.14), transparent 72%),
+    linear-gradient(138deg, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0.02));
 }
 
-.dark .react-ygb-hero {
-  background: #19181c;
+.download-material::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.075) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(74% 56% at 50% 42%, black 52%, transparent 100%);
+  opacity: 0.48;
 }
 
-.react-ygb-hero-card {
-  transform-origin: center top;
-  transition: transform 300ms ease, opacity 300ms ease, height 300ms ease;
-}
-
-.react-ygb-hero-card[data-position="active"] {
-  z-index: 30;
-  opacity: 1;
-  transform: translateY(7.8rem) scale(1);
-}
-
-.react-ygb-hero-card[data-position="next"] {
-  z-index: 20;
-  opacity: .92;
-  transform: translateY(4.2rem) scale(.86);
-}
-
-.react-ygb-hero-card[data-position="last"] {
-  z-index: 10;
-  opacity: .8;
-  transform: translateY(.8rem) scale(.74);
-}
-
-.react-ygb-hero-card[data-position="mobile-active"] {
-  z-index: 30;
-  opacity: 1;
-  transform: translateY(4.2rem) scale(1);
-}
-
-.react-ygb-hero-card[data-position="mobile-next"] {
-  z-index: 20;
-  opacity: .88;
-  transform: translateY(2.25rem) scale(.9);
-}
-
-.react-ygb-hero-card[data-position="mobile-last"] {
-  z-index: 10;
-  opacity: .75;
-  transform: translateY(.45rem) scale(.8);
-}
-
-@media (max-width: 767px) {
-  .react-ygb-hero-card[data-position="active"] { transform: translateY(4.2rem) scale(1); }
-  .react-ygb-hero-card[data-position="next"] { transform: translateY(2.25rem) scale(.9); }
-  .react-ygb-hero-card[data-position="last"] { transform: translateY(.45rem) scale(.8); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .react-ygb-hero-card { transition: none; }
+.download-material::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(92% 72% at 50% 16%, transparent 32%, rgb(0 0 0 / 0.56) 100%);
 }

@@ -1,8 +1,8 @@
 # qfoll-mothership - 企丰科技内容型官网
-Vite + Vue 3 + Vue Router + Tailwind CSS + Markdown/Canvas/WebGL + 本地内容数据
+Vite + React 19 + TypeScript + React Router + Vue 3 兼容入口 + Tailwind CSS + Markdown/Canvas/WebGL + 本地内容数据
 
 <directory>
-src/ - 浏览器应用源码 (9个关键模块: components、views、composables、data、react、layouts、router、styles、content)
+src/ - 浏览器应用源码 (10个关键模块: components、views、composables、data、react、visuals、layouts、router、styles、content)
 scripts/ - 构建前数据生成与 SPA 部署后处理 (3个脚本)
 public/ - 不经源码导入的静态资源 (项目图片、站点图标与 manifest)
 </directory>

@@ -15,8 +15,9 @@ ReactShowcasePage.tsx: Showcase 自动横向轮播页面，暂停逻辑只由卡
 ReactShowcasePage.module.css: Showcase 轮播轨道和卡片的局部动画样式。
 ReactDetailPage.tsx: 项目与新闻详情共用的标题、正文、元信息和相关推荐页面。
 ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和相关演示页面。
-ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载轮播。
-ReactYgbPage.css: 云柜宝 Hero 路线图、叠层卡片和响应式过渡样式。
+ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载展台。
+ReactYgbPage.css: 云柜宝下载展台的网格、渐变和暗色材质背景，与 Vue 原版 download-material 同源。
+ReactYgbHero.tsx: 云柜宝专题与首页预览共用的 Hero、打字机文案和原版叠卡轮播。
 ReactYgbRoadMapBg.tsx: Canvas 路线网络、地块、水系与运输节点装饰层。
 ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
 ReactWaterEnvPage.css: 水环境 Hero 的渐变基底与明暗主题色彩。
@@ -25,6 +26,7 @@ ReactHomePage.tsx: 首页品牌、案例、新闻和能力标签墙编排。
 ReactHomePage.css: 首页品牌光栅和能力标签横向动画样式。
 ReactAboutSection.tsx: 首页与关于页共享的品牌首屏、内联图标和特性列表。
 ReactAboutSection.css: 品牌点阵、渐隐和内联图标视觉规则。
+ReactTwinkleDotMatrixBg.tsx: 品牌点阵的 Canvas 基础点、闪烁点和主题响应。
 ReactYgbPreview.tsx: 首页客户案例区的云柜宝主卡与轮播堆叠。
 ReactTagMarqueeSection.tsx: 首页底部斜向标签舞台与品牌收束文案。
 ReactTagMarqueeSection.css: 标签轨道、渐隐和响应式舞台动画。
