@@ -1,0 +1,32 @@
+/*
+ * [INPUT]: 顶栏展示状态及系统减少动画偏好
+ * [OUTPUT]: 标题与目录独立的进入/退出过渡样式
+ * [POS]: 顶栏局部样式边界，保留 Tailwind 横向定位且不污染全局选择器
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.title, .toc {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.title {
+  translate: 0 -4px;
+  transition: opacity 220ms ease, translate 220ms ease, visibility 220ms, left 300ms ease-out;
+}
+/* 隐藏移动端标题时同步折叠，避免固定顶栏高度空白。 */
+@media (max-width: 767.98px) {
+  .title:not(.visible) { display: none; }
+}
+.toc {
+  translate: 0 -8px;
+  transition: opacity 180ms ease, translate 180ms ease, visibility 180ms;
+}
+.visible {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .title, .toc { transition: none; }
+}

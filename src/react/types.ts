@@ -12,8 +12,3 @@ export type ThemeContextValue = {
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
 };
-
-export type RouteMeta = {
-  path: string;
-  title: string;
-};

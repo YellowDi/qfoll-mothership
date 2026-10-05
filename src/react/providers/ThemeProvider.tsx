@@ -1,7 +1,7 @@
 /**
- * [INPUT]: 依赖 React Context、浏览器媒体查询和 document 根节点
+ * [INPUT]: 依赖 React Context、浏览器媒体查询、localStorage 和 document 根节点
  * [OUTPUT]: 对外提供 ThemeProvider 与 useTheme
- * [POS]: React 应用的全局主题状态边界，替代 Vue useTheme composable
+ * [POS]: React 应用的全局主题状态边界，保持 Vue 系统主题优先规则，手动切换仅保存当次选择
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import {
@@ -10,6 +10,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useLayoutEffect,
   useState,
   type PropsWithChildren,
 } from "react";
@@ -27,7 +28,7 @@ const getPreferredTheme = (): Theme =>
 export function ThemeProvider({ children }: PropsWithChildren) {
   const [theme, setThemeState] = useState<Theme>(getPreferredTheme);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     root.style.colorScheme = theme;
