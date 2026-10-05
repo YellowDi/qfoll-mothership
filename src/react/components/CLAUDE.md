@@ -9,6 +9,7 @@ ReactRelatedContentSection.tsx: 详情页底部相关项目、新闻和 Showcase
 ReactArticleSpeechPlayer.tsx: 基于浏览器 SpeechSynthesis 的文章朗读控制器。
 RouteEffects.tsx: 常驻路由副作用，处理页面标题、hash 定位和历史滚动恢复。
 ReactSiteFooter.tsx: React 迁移层页脚，复用备案、版本和返回顶部约定。
+ReactCoverImage.tsx: React 内容卡片统一封面、视频预览、加载状态和图标降级。
 
 法则: 组件只处理 React 迁移层的呈现和事件回调，不直接读取 Vue 状态。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md

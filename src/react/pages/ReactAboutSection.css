@@ -1,0 +1,65 @@
+/**
+ * [INPUT]: 依赖 ReactAboutSection 的点阵、渐隐和内联图标类名
+ * [OUTPUT]: 对外提供品牌首屏的背景和图标视觉规则
+ * [POS]: React 首页与关于页共享的局部视觉层
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.react-about {
+  background: rgb(var(--color-bg) / 1);
+}
+
+.react-about-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+  background-image: radial-gradient(circle, rgb(228 228 231 / 0.92) 1.15px, transparent 1.3px);
+  background-size: 7px 7px;
+  mask-image: linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+}
+
+.dark .react-about-grid {
+  background-image: radial-gradient(circle, rgb(82 82 91 / 0.58) 1.15px, transparent 1.3px);
+}
+
+.react-about-fades {
+  background-image:
+    linear-gradient(to bottom, rgb(var(--color-bg) / 0) 0%, rgb(var(--color-bg) / 0.75) 62%, rgb(var(--color-bg) / 1) 100%),
+    linear-gradient(to right, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 0) 9%, rgb(var(--color-bg) / 0) 91%, rgb(var(--color-bg) / 1) 100%);
+}
+
+.react-inline-icon {
+  --icon-rotate: 0deg;
+  --icon-y: -4px;
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  margin: 0 0.375rem;
+  vertical-align: middle;
+  border: 2px solid rgb(255 255 255 / 0.92);
+  border-radius: 9px;
+  object-fit: cover;
+  transform: translateY(var(--icon-y)) rotate(var(--icon-rotate));
+  box-shadow: 0 7px 16px rgb(17 24 39 / 0.24);
+  transition: transform 180ms ease-out, box-shadow 180ms ease-out;
+}
+
+.react-inline-icon:hover {
+  z-index: 5;
+  transform: translateY(var(--icon-y)) rotate(var(--icon-rotate)) scale(1.2);
+  box-shadow: 0 10px 22px rgb(17 24 39 / 0.3);
+}
+
+.react-inline-icon--qf { --icon-rotate: -7deg; }
+.react-inline-icon--a { --icon-rotate: -10deg; }
+.react-inline-icon--b { --icon-rotate: 4deg; }
+.react-inline-icon--c { --icon-rotate: -3deg; }
+
+@media (max-width: 768px) {
+  .react-inline-icon {
+    --icon-y: -2px;
+    width: 40px;
+    height: 40px;
+    margin-inline: 0.25rem;
+    border-radius: 8px;
+  }
+}

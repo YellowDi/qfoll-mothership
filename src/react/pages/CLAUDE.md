@@ -19,6 +19,11 @@ ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 A
 ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
 ReactHomePage.tsx: 首页品牌、案例、新闻和能力标签墙编排。
 ReactHomePage.css: 首页品牌光栅和能力标签横向动画样式。
+ReactAboutSection.tsx: 首页与关于页共享的品牌首屏、内联图标和特性列表。
+ReactAboutSection.css: 品牌点阵、渐隐和内联图标视觉规则。
+ReactYgbPreview.tsx: 首页客户案例区的云柜宝主卡与轮播堆叠。
+ReactTagMarqueeSection.tsx: 首页底部斜向标签舞台与品牌收束文案。
+ReactTagMarqueeSection.css: 标签轨道、渐隐和响应式舞台动画。
 ReactDesignSpecPage.tsx: 设计规范图文、媒体轮播和内联视频页面。
 ReactDesignSpecPage.css: 设计规范宽媒体与响应式比例样式。
 ReactTrashDutyPage.tsx: 内部值日表摘要、排班表和维护说明。

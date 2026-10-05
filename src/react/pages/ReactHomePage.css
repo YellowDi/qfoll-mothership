@@ -11,3 +11,16 @@
 .home-tag-track span:nth-child(even) { color: rgb(var(--color-ink) / .1); }
 @keyframes home-tag-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .home-tag-track { animation: none; } }
+
+.react-cover-media { container-type: inline-size; }
+.react-cover-icon { font-size: calc(clamp(1.25rem, 50cqw, 10rem) * var(--cover-icon-scale, 1)); }
+.react-cover-play { right: clamp(.5rem, 2cqw, 1rem); top: clamp(.5rem, 2cqw, 1rem); width: clamp(1.5rem, 7.5cqw, 2.5rem); height: clamp(1.5rem, 7.5cqw, 2.5rem); font-size: clamp(.75rem, 3.75cqw, 1.25rem); }
+.react-ygb-preview { color: inherit; }
+.react-ygb-roadmap { position: absolute; inset: 0; opacity: .88; background: radial-gradient(circle at 16% 18%, rgb(255 130 84 / .16), transparent 30%), repeating-linear-gradient(132deg, transparent 0 18px, rgb(255 255 255 / .35) 19px 20px, transparent 21px 46px), repeating-linear-gradient(42deg, transparent 0 36px, rgb(135 120 255 / .15) 37px 39px, transparent 40px 82px); mask-image: radial-gradient(100% 90% at 25% 18%, black 0%, rgb(0 0 0 / .8) 50%, transparent 92%); }
+.dark .react-ygb-roadmap { opacity: .7; filter: saturate(.7) brightness(.65); }
+.react-ygb-card { position: absolute; inset: 0; overflow: hidden; border: 1px solid rgb(var(--color-edge) / 1); border-radius: 1rem 1rem 0 0; background: rgb(var(--color-surface) / .96); box-shadow: 0 18px 50px rgb(17 17 17 / .12); transition: transform .3s ease, opacity .3s ease; }
+.react-ygb-card.is-active { z-index: 30; opacity: 1; transform: translateY(6.1rem) scale(1); }
+.react-ygb-card.is-next { z-index: 20; opacity: .95; transform: translateY(4.2rem) scale(.86); }
+.react-ygb-card.is-last { z-index: 10; opacity: .85; transform: translateY(2.45rem) scale(.74); }
+@media (min-width: 768px) { .react-ygb-card.is-active { transform: translateY(7.8rem) scale(1); } .react-ygb-card.is-next { transform: translateY(5.25rem) scale(.88); } .react-ygb-card.is-last { transform: translateY(3.1rem) scale(.76); } }
+@media (max-width: 767px) { .react-ygb-card.is-active { transform: translateY(5rem) scale(1); } .react-ygb-preview > div { padding: 1.25rem; } }

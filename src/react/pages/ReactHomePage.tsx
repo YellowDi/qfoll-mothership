@@ -1,19 +1,68 @@
 /**
- * [INPUT]: 依赖项目、新闻索引和品牌产品文案
- * [OUTPUT]: 对外提供 ReactHomePage，呈现首页品牌、案例、动态和能力标签
- * [POS]: 根路由首页编排边界，内容事实来源继续由 data 层提供
+ * [INPUT]: 依赖项目、新闻索引、React 内容媒体和首页品牌区块
+ * [OUTPUT]: 对外提供 ReactHomePage，复刻首页品牌、案例、动态和标签舞台
+ * [POS]: 根路由首页编排边界，保持 Vue 首页的信息密度与视觉层级
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Link } from "react-router-dom";
 import { newsList } from "../../data/news";
 import { projectList } from "../../data/projects";
+import { ReactCoverImage } from "../components/ReactCoverImage";
+import { ReactAboutSection } from "./ReactAboutSection";
+import { ReactTagMarqueeSection } from "./ReactTagMarqueeSection";
+import { ReactYgbPreview } from "./ReactYgbPreview";
 import "./ReactHomePage.css";
 
-const tags = ["远程监控", "SaaS", "货运管理", "水站监控", "数据大屏", "产品目录", "在线表单", "设备巡检", "在线教育", "品牌升级", "仓管系统", "在线商城", "车辆轨迹", "票务核销", "场景模板", "会员体系", "大数据分析", "微信小程序", "兑换核销", "在线视频", "企业管理", "设计框架", "流程引擎", "可视化报表"];
-const imageSrc = (value: string) => String(value || "").match(/url\((['"]?)(.*?)\1\)/)?.[2] || value;
+const toNumber = (value: unknown, fallback: number) => {
+  const number = Number.parseInt(String(value ?? ""), 10);
+  return Number.isFinite(number) ? number : fallback;
+};
 
 export function ReactHomePage() {
-  const projects = [...projectList].filter((item) => item.id !== "ygb").slice(0, 3);
-  const news = [...newsList].sort((a, b) => b.publishedTimestamp - a.publishedTimestamp).slice(0, 6);
-  return <div className="w-full px-6 pb-16 pt-14 md:px-14"><section className="home-brand relative overflow-hidden rounded-md border border-edge"><div className="home-brand-grid" aria-hidden="true" /><div className="relative mx-auto max-w-290 px-6 py-16 md:px-14 md:py-24"><h1 className="max-w-245 text-[clamp(2rem,4vw,3.25rem)] font-medium leading-[1.25] tracking-[-0.03em]">我们是企丰科技，一家以技术驱动为核心，专注企业信息化系统开发与技术服务的团队。</h1><p className="mt-8 max-w-208 text-lg leading-[1.8] text-secondary">无论是初创企业开拓市场，还是成熟品牌系统升级，我们以创意融合技术，助力商业持续增长。</p><div className="mt-10 flex flex-wrap gap-3"><Link to="/about" className="btn-primary btn-md gap-2 px-5">了解我们<i className="ri-arrow-right-line" aria-hidden="true" /></Link><Link to="/projects" className="btn-secondary btn-md px-5">客户案例</Link></div></div></section><section className="mx-auto mt-16 w-full max-w-360"><div className="flex items-center justify-between"><h2 className="text-lg font-medium">客户案例</h2><Link className="btn-text text-sm" to="/projects">查看全部</Link></div><div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">{projects.map((item) => <Link key={item.id} to={`/project/${item.id}`} className="group"><div className="aspect-square overflow-hidden rounded-md bg-zinc-100 dark:bg-zinc-800/35"><img src={imageSrc(item.cover)} srcSet={item.coverSrcSet || undefined} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" /></div><h3 className="mt-3 text-xl font-medium">{item.title}</h3><div className="mt-3 flex gap-2 text-sm"><span className="font-medium">{item.tag}</span><span className="text-secondary">{item.yearLabel || item.year}</span></div></Link>)}</div></section><section className="mx-auto mt-16 w-full max-w-360"><div className="flex items-center justify-between"><h2 className="text-lg font-medium">最新动态</h2><Link className="btn-text text-sm" to="/news">查看更多</Link></div><div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">{news.map((item) => <Link key={item.id} to={`/news/${item.id}`} className="group grid grid-cols-[9rem_1fr] items-center gap-4"><div className="aspect-square overflow-hidden rounded-md bg-zinc-100 dark:bg-zinc-800/35"><img src={imageSrc(item.cover)} srcSet={item.coverSrcSet || undefined} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" /></div><div><h3 className="text-lg font-medium">{item.title}</h3><div className="mt-4 flex gap-2 text-sm"><span className="font-medium">{item.category}</span><span className="text-secondary">{item.publishedAt}</span></div></div></Link>)}</div></section><section className="home-tag-wall mx-auto mt-16 w-full max-w-360 overflow-hidden rounded-md py-16"><div className="home-tag-track">{[...tags, ...tags].map((tag, index) => <span key={`${tag}-${index}`}>{tag}</span>)}</div><div className="relative mx-auto mt-12 max-w-245 px-6"><p className="text-[clamp(1.6rem,3vw,2.75rem)] font-medium leading-[1.25]">每个专业领域都各有特色，<br />您的想法，我们心领神会</p><p className="mt-8 max-w-208 text-lg leading-[1.88] text-secondary">以智能化与标准化为底座，我们为企业构建更高效、更低成本的数字运营体系。</p></div></section></div>;
+  const sortedProjects = [...projectList].sort((a, b) => toNumber(b.year, -Infinity) - toNumber(a.year, -Infinity) || toNumber(b.startMonth, 0) - toNumber(a.startMonth, 0) || String(a.title).localeCompare(String(b.title), "zh-Hans-CN"));
+  const sideProjects = sortedProjects.filter((item) => item.id !== "ygb").slice(0, 3);
+  const latestNews = [...newsList].sort((a, b) => b.publishedTimestamp - a.publishedTimestamp).slice(0, 6);
+
+  return (
+    <div className="w-full px-14 pb-20 pt-14 max-lg:px-6 max-md:px-5 max-md:pb-12 max-md:pt-14">
+      <h1 className="sr-only">企丰科技</h1>
+      <ReactAboutSection />
+
+      <section className="mx-auto mt-16 w-full max-w-360">
+        <div className="flex w-full items-center justify-between"><h2 className="text-lg font-medium">客户案例</h2><Link className="btn-text text-sm" to="/projects">查看全部</Link></div>
+        <div className="w-full pb-10 pt-6 max-md:pb-8">
+          <div className="grid grid-cols-12 gap-6 max-md:gap-4">
+            <div className="col-span-12 self-start min-[1280px]:sticky min-[1280px]:top-17 min-[1280px]:col-span-8"><ReactYgbPreview /></div>
+            <div className="col-span-12 hidden grid-cols-3 gap-6 max-[1279px]:grid min-[1280px]:col-span-4 min-[1280px]:flex min-[1280px]:flex-col max-md:hidden">
+              {sideProjects.map((item) => <ProjectCard key={item.id} item={item} />)}
+            </div>
+          </div>
+          <div className="mt-4 hidden grid-cols-1 gap-6 max-md:grid">{sideProjects.map((item) => <ProjectCard key={`mobile-${item.id}`} item={item} />)}</div>
+          <div className="mt-16 flex justify-center max-md:mt-6"><Link to="/projects" className="btn-neutral btn-neutral-primary">查看更多</Link></div>
+        </div>
+      </section>
+
+      <section className="mx-auto mt-16 w-full max-w-360">
+        <div className="flex w-full items-center justify-between"><h2 className="text-lg font-medium">最新动态</h2><Link className="btn-text btn-text-primary text-sm" to="/news">查看更多</Link></div>
+        <div className="w-full pt-6">
+          <div className="grid grid-flow-row grid-cols-1 gap-y-6 lg:grid-cols-2 lg:gap-x-6 xl:gap-x-10 xl:gap-y-8">
+            {latestNews.map((item) => <NewsCard key={item.id} item={item} />)}
+          </div>
+          <div className="mt-6 flex justify-center xl:mt-16"><Link to="/news" className="btn-neutral btn-neutral-primary">查看更多</Link></div>
+        </div>
+      </section>
+
+      <ReactTagMarqueeSection />
+    </div>
+  );
+}
+
+type CardItem = (typeof projectList)[number];
+function ProjectCard({ item }: { item: CardItem }) {
+  return <Link to={`/project/${item.id}`} className="group block"><div className="aspect-square overflow-hidden rounded-md"><ReactCoverImage src={item.cover} srcSet={item.coverSrcSet} videoSrc={item.coverVideo} iconClass={item.coverIcon} enableVideoCover className="rounded-md" sizes="(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw" alt={item.title} imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03]" /></div><div className="pt-3 text-left"><div className="text-xl font-medium leading-[1.3] text-primary max-md:text-lg">{item.title}</div><div className="mt-4 flex items-center gap-2 text-sm"><span className="font-medium text-primary">{item.tag}</span><span className="text-secondary">{item.yearLabel || item.year}</span></div></div></Link>;
+}
+
+type NewsItem = (typeof newsList)[number];
+function NewsCard({ item }: { item: NewsItem }) {
+  return <Link to={`/news/${item.id}`} className="group grid grid-cols-[minmax(0,9rem)_1fr] items-center gap-2 lg:grid-cols-[minmax(0,12rem)_1fr] lg:gap-4"><div className="aspect-square overflow-hidden rounded-md"><ReactCoverImage src={item.cover} srcSet={item.coverSrcSet} videoSrc={item.coverVideo} iconClass={item.coverIcon} enableVideoCover className="rounded-md" sizes="(max-width: 1023px) 9rem, 12rem" alt={item.title} imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03]" /></div><div className="flex min-h-full flex-col justify-center py-1.5 pl-2 pr-6 text-left lg:max-w-[36rem] lg:py-2 lg:pl-4 lg:pr-8 xl:pr-10"><div className="text-base font-medium leading-[1.3] text-primary lg:text-lg">{item.title}</div><div className="mt-4 flex items-center gap-2 text-sm"><span className="font-medium text-primary">{item.category}</span><span className="text-secondary">{item.publishedAt}</span></div></div></Link>;
 }

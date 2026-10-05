@@ -1,0 +1,38 @@
+/**
+ * [INPUT]: 依赖 ReactTagMarqueeSection 的轨道和内容层类名
+ * [OUTPUT]: 对外提供标签舞台、渐隐和响应式轨道动画
+ * [POS]: React 首页底部品牌展示视觉层
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.react-tilt-wall-section { content-visibility: visible; }
+.react-tilt-wall {
+  --wall-height: 46rem;
+  --word-size: clamp(7.8rem, 9.1vw, 9.8rem);
+  position: relative;
+  height: var(--wall-height);
+  overflow: hidden;
+  background: linear-gradient(155deg, rgb(var(--color-bg) / 1), rgb(var(--color-bg) / 0.96));
+}
+.react-tilt-scene { position: absolute; inset: 0; overflow: hidden; }
+.react-tilt-stripe { position: absolute; top: calc(2% + (var(--stripe-index) * 19%)); left: -70%; width: 240%; transform: rotate(0deg); white-space: nowrap; }
+.react-tilt-track { display: flex; width: max-content; gap: 2.2rem; animation: react-tilt-slide var(--tilt-duration) linear infinite var(--tilt-direction); }
+.react-tilt-word { color: rgb(42 54 72 / 0.2); font-size: var(--word-size); font-weight: 900; line-height: .92; letter-spacing: -.03em; transition: color .22s ease, opacity .22s ease; }
+.dark .react-tilt-word { color: rgb(255 255 255 / .13); }
+.react-tilt-word:hover { color: rgb(58 72 92 / .38); }
+.dark .react-tilt-word:hover { color: rgb(236 242 252 / .5); }
+.react-tilt-grain { position: absolute; inset: 0; opacity: .006; background-image: radial-gradient(circle at 1px 1px, rgb(20 28 40 / .42) .7px, transparent .8px); background-size: 2px 2px; }
+.react-tilt-edge { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgb(var(--color-bg) / .98) 0%, transparent 9%, transparent 82%, rgb(var(--color-bg) / .98) 100%); }
+.react-tilt-content { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 3.75rem 1.25rem; }
+.react-tilt-title-muted { color: rgb(var(--color-ink) / .4); }
+.react-tilt-title-main { color: rgb(var(--color-ink) / .95); }
+.dark .react-tilt-title-muted { color: rgb(255 255 255 / .46); }
+.dark .react-tilt-title-main { color: white; }
+.react-tilt-body { color: rgb(31 41 55 / .72); }
+.react-tilt-body strong { color: rgb(10 14 20 / .94); }
+.dark .react-tilt-body { color: rgb(255 255 255 / .72); }
+.dark .react-tilt-body strong { color: white; }
+@keyframes react-tilt-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 1280px) { .react-tilt-wall { --wall-height: 40rem; } }
+@media (max-width: 768px) { .react-tilt-wall { --wall-height: 34rem; --word-size: clamp(6.1rem, 10vw, 7.3rem); } }
+@media (max-width: 430px) { .react-tilt-wall { --wall-height: 31rem; --word-size: clamp(5.2rem, 12.8vw, 6.2rem); } }
+@media (prefers-reduced-motion: reduce) { .react-tilt-track { animation: none; } }
