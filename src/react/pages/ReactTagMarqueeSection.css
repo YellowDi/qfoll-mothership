@@ -1,38 +1,313 @@
 /**
- * [INPUT]: 依赖 ReactTagMarqueeSection 的轨道和内容层类名
- * [OUTPUT]: 对外提供标签舞台、渐隐和响应式轨道动画
- * [POS]: React 首页底部品牌展示视觉层
+ * [INPUT]: 依赖 ReactTagMarqueeSection 的标签轨道和主题变量
+ * [OUTPUT]: 对外提供原版标签舞台、渐隐和响应式轨道动画
+ * [POS]: React 首页底部品牌展示视觉层，与 Vue TagMarqueeSection 共用设计参数
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-.react-tilt-wall-section { content-visibility: visible; }
-.react-tilt-wall {
+.tilt-wall-section {
+  content-visibility: visible;
+}
+
+.tilt-wall {
+  --tilt-angle: 0deg;
   --wall-height: 46rem;
+  --scene-width: 100%;
+  --scene-height: 100%;
+  --stripe-left: -70%;
+  --stripe-width: 240%;
+  --stripe-gap: 2.2rem;
   --word-size: clamp(7.8rem, 9.1vw, 9.8rem);
+  --stripe-start: 2%;
+  --stripe-step: 19%;
+  --wall-glow: rgba(255, 255, 255, 0);
+  --wall-bg-start: #ffffff;
+  --wall-bg-mid: #ffffff;
+  --wall-bg-end: #ffffff;
+  --grain-dot: rgba(20, 28, 40, 0.42);
+  --grain-opacity: 0.006;
+  --vignette-center: rgba(255, 255, 255, 0);
+  --vignette-edge: rgba(255, 255, 255, 0);
+  --vignette-side: rgba(255, 255, 255, 0);
+  --vignette-top: rgba(255, 255, 255, 0);
+  --vignette-bottom: rgba(255, 255, 255, 0);
+  --word-color: rgba(42, 54, 72, 0.2);
+  --word-opacity: 0.18;
+  --word-shadow: none;
+  --word-hover-color: rgba(58, 72, 92, 0.32);
+  --word-hover-opacity: 0.3;
+  --word-hover-shadow: 0 0 3px rgba(120, 136, 160, 0.1);
+  --title-muted-color: rgba(17, 24, 39, 0.4);
+  --title-main-color: rgba(16, 23, 35, 0.95);
+  --body-color: rgba(31, 41, 55, 0.72);
+  --body-strong-color: rgba(10, 14, 20, 0.94);
+  --edge-blend-color: rgba(255, 255, 255, 0.98);
+  --edge-blend-top: 0%;
+  --edge-blend-x: 12%;
+  --edge-blend-y: 15%;
   position: relative;
   height: var(--wall-height);
   overflow: hidden;
-  background: linear-gradient(155deg, rgb(var(--color-bg) / 1), rgb(var(--color-bg) / 0.96));
+  contain: layout paint;
+  background:
+    radial-gradient(72% 62% at 52% 44%, var(--wall-glow), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(155deg, var(--wall-bg-start) 0%, var(--wall-bg-mid) 44%, var(--wall-bg-end) 100%);
 }
-.react-tilt-scene { position: absolute; inset: 0; overflow: hidden; }
-.react-tilt-stripe { position: absolute; top: calc(2% + (var(--stripe-index) * 19%)); left: -70%; width: 240%; transform: rotate(0deg); white-space: nowrap; }
-.react-tilt-track { display: flex; width: max-content; gap: 2.2rem; animation: react-tilt-slide var(--tilt-duration) linear infinite var(--tilt-direction); }
-.react-tilt-word { color: rgb(42 54 72 / 0.2); font-size: var(--word-size); font-weight: 900; line-height: .92; letter-spacing: -.03em; transition: color .22s ease, opacity .22s ease; }
-.dark .react-tilt-word { color: rgb(255 255 255 / .13); }
-.react-tilt-word:hover { color: rgb(58 72 92 / .38); }
-.dark .react-tilt-word:hover { color: rgb(236 242 252 / .5); }
-.react-tilt-grain { position: absolute; inset: 0; opacity: .006; background-image: radial-gradient(circle at 1px 1px, rgb(20 28 40 / .42) .7px, transparent .8px); background-size: 2px 2px; }
-.react-tilt-edge { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, rgb(var(--color-bg) / .98) 0%, transparent 9%, transparent 82%, rgb(var(--color-bg) / .98) 100%); }
-.react-tilt-content { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 3.75rem 1.25rem; }
-.react-tilt-title-muted { color: rgb(var(--color-ink) / .4); }
-.react-tilt-title-main { color: rgb(var(--color-ink) / .95); }
-.dark .react-tilt-title-muted { color: rgb(255 255 255 / .46); }
-.dark .react-tilt-title-main { color: white; }
-.react-tilt-body { color: rgb(31 41 55 / .72); }
-.react-tilt-body strong { color: rgb(10 14 20 / .94); }
-.dark .react-tilt-body { color: rgb(255 255 255 / .72); }
-.dark .react-tilt-body strong { color: white; }
-@keyframes react-tilt-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (max-width: 1280px) { .react-tilt-wall { --wall-height: 40rem; } }
-@media (max-width: 768px) { .react-tilt-wall { --wall-height: 34rem; --word-size: clamp(6.1rem, 10vw, 7.3rem); } }
-@media (max-width: 430px) { .react-tilt-wall { --wall-height: 31rem; --word-size: clamp(5.2rem, 12.8vw, 6.2rem); } }
-@media (prefers-reduced-motion: reduce) { .react-tilt-track { animation: none; } }
+
+.tilt-wall.tilt-wall--dark {
+  --wall-glow: rgba(255, 255, 255, 0);
+  --wall-bg-start: rgb(var(--color-bg) / 1);
+  --wall-bg-mid: rgb(var(--color-bg) / 1);
+  --wall-bg-end: rgb(var(--color-bg) / 1);
+  --grain-dot: rgba(255, 255, 255, 0.58);
+  --grain-opacity: 0.007;
+  --vignette-center: rgba(0, 0, 0, 0);
+  --vignette-edge: rgba(0, 0, 0, 0);
+  --vignette-side: rgba(0, 0, 0, 0);
+  --vignette-top: rgba(0, 0, 0, 0);
+  --vignette-bottom: rgba(0, 0, 0, 0);
+  --word-color: rgba(255, 255, 255, 0.16);
+  --word-opacity: 0.1;
+  --word-shadow: none;
+  --word-hover-color: rgba(236, 242, 252, 0.52);
+  --word-hover-opacity: 0.38;
+  --word-hover-shadow: 0 0 4px rgba(220, 232, 255, 0.12);
+  --title-muted-color: rgba(255, 255, 255, 0.46);
+  --title-main-color: rgba(255, 255, 255, 1);
+  --body-color: rgba(255, 255, 255, 0.72);
+  --body-strong-color: rgba(255, 255, 255, 1);
+  --edge-blend-color: rgb(var(--color-bg) / 0.98);
+  --edge-blend-top: 9%;
+}
+
+.tilt-wall__scene {
+  position: absolute;
+  inset: 0;
+  width: var(--scene-width);
+  height: var(--scene-height);
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.tilt-wall__text-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.tilt-wall__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: radial-gradient(circle at 1px 1px, var(--grain-dot) 0.7px, transparent 0.8px);
+  background-size: 2px 2px;
+}
+
+.tilt-wall__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 105% at 50% 50%, var(--vignette-center) 48%, var(--vignette-edge) 100%),
+    linear-gradient(to right, var(--vignette-side) 0%, rgba(2, 3, 6, 0) 16%, rgba(2, 3, 6, 0) 84%, var(--vignette-side) 100%),
+    linear-gradient(to bottom, var(--vignette-top) 0%, rgba(2, 3, 6, 0) 16%, rgba(2, 3, 6, 0) 84%, var(--vignette-bottom) 100%);
+}
+
+.tilt-wall__edge-blend {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--edge-blend-color) 0%,
+    transparent var(--edge-blend-top),
+    transparent calc(100% - var(--edge-blend-y)),
+    var(--edge-blend-color) 100%
+  );
+}
+
+.tilt-wall__stripe {
+  position: absolute;
+  top: calc(var(--stripe-start) + (var(--stripe-index) * var(--stripe-step)));
+  left: var(--stripe-left);
+  width: var(--stripe-width);
+  transform: rotate(var(--tilt-angle));
+  white-space: nowrap;
+}
+
+.tilt-wall__track {
+  display: flex;
+  gap: var(--stripe-gap);
+  width: max-content;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+  animation-name: tilt-slide;
+  animation-duration: var(--tilt-duration, 96s);
+  animation-delay: var(--tilt-delay, 0s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: var(--tilt-direction, normal);
+}
+
+.tilt-wall.tilt-wall--paused .tilt-wall__track {
+  animation-play-state: paused;
+}
+
+.tilt-wall.tilt-wall--lite .tilt-wall__text-layer {
+  pointer-events: none;
+}
+
+.tilt-wall.tilt-wall--lite .tilt-wall__word {
+  transition: none;
+}
+
+.tilt-wall__word-line {
+  font-size: var(--word-size);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  font-weight: 900;
+  color: var(--word-color);
+  opacity: var(--word-opacity);
+  user-select: none;
+  text-transform: none;
+  white-space: nowrap;
+  padding-right: var(--stripe-gap);
+}
+
+.tilt-wall__word {
+  position: relative;
+  font-size: var(--word-size);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  font-weight: 900;
+  color: var(--word-color);
+  opacity: var(--word-opacity);
+  user-select: none;
+  text-transform: none;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease;
+}
+
+.tilt-wall__content {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.75rem 1.25rem;
+  pointer-events: none;
+}
+
+.tilt-wall__content-inner {
+  width: min(100%, 1160px);
+}
+
+.tilt-wall__title-muted {
+  color: var(--title-muted-color);
+}
+
+.tilt-wall__title-main {
+  color: var(--title-main-color);
+}
+
+.tilt-wall__title-line {
+  white-space: nowrap;
+}
+
+.tilt-wall__body {
+  color: var(--body-color);
+}
+
+.tilt-wall__body-strong {
+  color: var(--body-strong-color);
+}
+
+@keyframes tilt-slide {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1280px) {
+  .tilt-wall {
+    --wall-height: 40rem;
+    --stripe-start: 2%;
+    --stripe-step: 22%;
+  }
+}
+
+@media (max-width: 768px) {
+  .tilt-wall-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 620px;
+  }
+
+  .tilt-wall {
+    --wall-height: 34rem;
+    --word-size: clamp(6.1rem, 10vw, 7.3rem);
+    --stripe-start: 2%;
+    --stripe-step: 18%;
+  }
+
+  .tilt-wall__content {
+    padding: 2rem 1.25rem;
+  }
+
+  .tilt-wall__title-line {
+    font-size: clamp(1.32rem, 6.8vw, 2.05rem);
+    line-height: 1.22;
+  }
+
+  .tilt-wall__headline {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .tilt-wall {
+    --wall-height: 31rem;
+    --word-size: clamp(5.2rem, 12.8vw, 6.2rem);
+    --stripe-start: 3%;
+    --stripe-step: 21%;
+  }
+}
+
+@media (pointer: coarse) {
+  .tilt-wall__text-layer {
+    pointer-events: none;
+  }
+
+  .tilt-wall__word {
+    transition: none;
+  }
+}
+
+@media (pointer: fine) {
+  .tilt-wall:not(.tilt-wall--lite) .tilt-wall__stripe:hover .tilt-wall__track {
+    animation-play-state: paused;
+  }
+
+  .tilt-wall:not(.tilt-wall--lite) .tilt-wall__word:hover {
+    color: var(--word-hover-color);
+    opacity: var(--word-hover-opacity);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-wall__track {
+    animation: none;
+    transform: translateX(0);
+  }
+}
