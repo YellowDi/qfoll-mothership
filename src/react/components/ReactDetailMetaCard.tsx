@@ -5,6 +5,7 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Link } from "react-router-dom";
+import { ReactSanitizedHtml } from "./ReactSanitizedHtml";
 
 type TagLink = { label: string; to: { path: string; query?: Record<string, string> } };
 type Props = { infoTagLinks?: TagLink[]; company?: string; infoPanelHtml?: string };
@@ -24,7 +25,7 @@ export function ReactDetailMetaCard({ infoTagLinks = [], company = "", infoPanel
             {infoTagLinks.map((tag) => <li key={tag.label}><Link to={toHref(tag.to)} className="btn-chip">{tag.label}</Link></li>)}
           </ul>}
           {company && <div className="text-sm leading-[1.8] text-primary">{company}</div>}
-          {infoPanelHtml && <div className="info-panel-content text-sm leading-[1.8] text-secondary" dangerouslySetInnerHTML={{ __html: infoPanelHtml }} />}
+          {infoPanelHtml && <ReactSanitizedHtml className="info-panel-content text-sm leading-[1.8] text-secondary" html={infoPanelHtml} />}
         </div>
       </div>
     </div>
