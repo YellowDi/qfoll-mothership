@@ -1,0 +1,22 @@
+/**
+ * [INPUT]: React 入口挂载的 Markdown 媒体 DOM 与系统减少动态偏好
+ * [OUTPUT]: 为 React 媒体提供减少动态覆盖规则
+ * [POS]: 仅由 React main.tsx 加载的动画适配层，避免影响 Vue 对照版
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+@media (prefers-reduced-motion: reduce) {
+  .md-video-center-ring {
+    animation: none !important;
+  }
+
+  .md-carousel-video,
+  .md-video-ui,
+  .md-video-center-btn,
+  .md-video-center-ring,
+  .md-video-more-menu,
+  .md-video-menu-item,
+  .lightbox-fade-enter-active,
+  .lightbox-fade-leave-active {
+    transition: none !important;
+  }
+}

@@ -1332,20 +1332,3 @@
     justify-self: center;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .md-video-center-ring {
-    animation: none !important;
-  }
-
-  .md-carousel-video,
-  .md-video-ui,
-  .md-video-center-btn,
-  .md-video-center-ring,
-  .md-video-more-menu,
-  .md-video-menu-item,
-  .lightbox-fade-enter-active,
-  .lightbox-fade-leave-active {
-    transition: none !important;
-  }
-}

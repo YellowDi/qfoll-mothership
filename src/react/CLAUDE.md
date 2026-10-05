@@ -10,6 +10,7 @@ pages/ - 已迁移的 React 业务页面与静态文章模板
 providers/ - React Context 边界，提供主题与详情顶栏状态
 App.tsx - React 根组件，组合 BrowserRouter、ThemeProvider 和路由树
 main.tsx - React 默认应用启动入口，初始化根组件和全局样式
+motion.css - 仅由 React 入口加载的媒体减少动态规则，隔离 Vue 对照版的动画行为
 router.tsx - 覆盖现有 URL 拓扑的 React Router 路由树
 navigation.ts - URL、页面标题、导航归属和项目排序的共享语义
 types.ts - React 迁移层共享类型
