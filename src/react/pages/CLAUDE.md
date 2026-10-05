@@ -16,7 +16,11 @@ ReactShowcasePage.module.css: Showcase 轮播轨道和卡片的局部动画样�
 ReactDetailPage.tsx: 项目与新闻详情共用的标题、正文、元信息和相关推荐页面。
 ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和相关演示页面。
 ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载轮播。
+ReactYgbPage.css: 云柜宝 Hero 路线图、叠层卡片和响应式过渡样式。
+ReactYgbRoadMapBg.tsx: Canvas 路线网络、地块、水系与运输节点装饰层。
 ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
+ReactWaterEnvPage.css: 水环境 Hero 的渐变基底与明暗主题色彩。
+ReactWaterSurfaceBg.tsx: Canvas 水面波纹与主题光晕装饰层。
 ReactHomePage.tsx: 首页品牌、案例、新闻和能力标签墙编排。
 ReactHomePage.css: 首页品牌光栅和能力标签横向动画样式。
 ReactAboutSection.tsx: 首页与关于页共享的品牌首屏、内联图标和特性列表。

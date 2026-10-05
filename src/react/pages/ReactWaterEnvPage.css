@@ -1,0 +1,21 @@
+/**
+ * [INPUT]: 依赖 ReactWaterEnvPage 的水面 Hero 容器
+ * [OUTPUT]: 对外提供水环境 Hero 的浅色与深色基底
+ * [POS]: 水环境产品页的页面局部样式
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.react-water-hero {
+  background:
+    radial-gradient(ellipse 90% 70% at 75% 5%, rgba(129, 140, 248, .25), transparent 55%),
+    radial-gradient(ellipse 70% 90% at 15% 25%, rgba(59, 130, 246, .2), transparent 55%),
+    radial-gradient(ellipse 80% 50% at 88% 55%, rgba(34, 211, 238, .15), transparent 50%),
+    #d4ebf7;
+}
+
+.dark .react-water-hero {
+  background:
+    radial-gradient(ellipse 90% 70% at 75% 5%, rgba(129, 140, 248, .28), transparent 55%),
+    radial-gradient(ellipse 70% 90% at 15% 25%, rgba(59, 130, 246, .22), transparent 55%),
+    radial-gradient(ellipse 80% 50% at 88% 55%, rgba(34, 211, 238, .16), transparent 50%),
+    #0f2847;
+}

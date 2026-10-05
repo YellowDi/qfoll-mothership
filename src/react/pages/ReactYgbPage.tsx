@@ -6,6 +6,8 @@
  */
 import { useEffect, useRef, useState } from "react";
 
+import "./ReactYgbPage.css";
+
 import dashboardImage from "../../assets/ygb-assets/dashboard.webp";
 import governanceImage from "../../assets/ygb-assets/governance.webp";
 import app01 from "../../assets/ygb-assets/app-01-d.webp";
@@ -16,6 +18,7 @@ import app05 from "../../assets/ygb-assets/app-05-d.webp";
 import hero01 from "../../assets/ygb-assets/hero-01.webp";
 import hero02 from "../../assets/ygb-assets/hero-02.webp";
 import hero03 from "../../assets/ygb-assets/hero-03.webp";
+import { ReactYgbRoadMapBg } from "./ReactYgbRoadMapBg";
 
 const heroCards = [
   { badge: "全流程可视化管理", title: "智能系统追踪，实时掌控业务状态", desc: "实时、精准的车辆 GPS 定位，确保运输透明可控。用户可查询货物流转，系统自动记录关键节点，实时定位车辆，并智能校正数据，提升运营效率。", image: hero01 },
@@ -35,8 +38,25 @@ function YgbHero() {
   const [active, setActive] = useState(0); const [pain, setPain] = useState("效率低下");
   useEffect(() => { const timer = window.setInterval(() => setPain((value) => heroPains[(heroPains.indexOf(value) + 1) % heroPains.length]), 2200); return () => window.clearInterval(timer); }, []);
   useEffect(() => { const timer = window.setInterval(() => setActive((value) => (value + 1) % heroCards.length), 4200); return () => window.clearInterval(timer); }, []);
-  const card = heroCards[active];
-  return <section className="relative overflow-hidden border-b border-edge bg-[radial-gradient(ellipse_85%_90%_at_10%_5%,rgba(255,184,115,.22),transparent_60%),radial-gradient(ellipse_70%_70%_at_90%_20%,rgba(140,104,255,.12),transparent_60%)] py-8 dark:bg-[radial-gradient(ellipse_85%_90%_at_10%_5%,rgba(157,79,36,.28),transparent_60%),radial-gradient(ellipse_70%_70%_at_90%_20%,rgba(90,66,180,.2),transparent_60%)] md:py-14"><div className="mx-auto grid w-full max-w-360 gap-8 px-6 lg:grid-cols-2 lg:items-end lg:px-14"><div><div className="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/80 px-3 py-1 text-sm text-secondary"><i className="ri-shining-line" aria-hidden="true" />车货智能匹配 · 全球定位 · 实时预警</div><p className="mt-5 text-[clamp(2rem,3.4vw,3.6rem)] font-medium leading-[1.08] tracking-[-0.03em] text-orange-400">云柜宝</p><h1 className="mt-1 text-[clamp(2rem,3.4vw,3.6rem)] font-medium leading-[1.08] tracking-[-0.03em]">智能集卡物流平台</h1><p className="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] font-medium leading-tight">让运输管理更简单、更高效</p><p className="mt-1 text-[clamp(1rem,1.9vw,1.8rem)] font-medium leading-tight">物流运输管理再也不会 <span className="bg-linear-to-r from-[#ff6f5f] via-[#fe8348] to-[#8f48ff] bg-clip-text text-transparent">{pain}</span></p><p className="mt-4 max-w-136 text-sm leading-relaxed text-primary/85">云柜宝立足国际物流运输场景，融合物流网络与大数据技术，围绕车货匹配、在途监管、时间节点记录和异常预警，构建一体化运输管理能力。</p><div className="mt-7 flex flex-wrap gap-3"><button type="button" className="btn-primary btn-md gap-2 px-5" onClick={() => document.getElementById("download")?.scrollIntoView({ behavior: "smooth" })}>下载 App <i className="ri-download-2-line" aria-hidden="true" /></button><a href="https://www.ygbonline.com/admin/#/login" target="_blank" rel="noreferrer" className="btn-base btn-md gap-2 border border-edge bg-surface px-5 text-primary">管理后台 <i className="ri-arrow-right-line" aria-hidden="true" /></a></div></div><div className="relative min-h-104 overflow-hidden rounded-t-2xl border border-edge bg-surface/80 shadow-xl md:min-h-136"><div className="border-b border-line bg-black/3 px-4 py-2 text-sm font-medium dark:bg-white/6">{card.badge}</div><div className="p-4"><h2 className="text-lg font-medium">{card.title}</h2><p className="mt-1 text-sm leading-[1.7] text-secondary">{card.desc}</p><img src={card.image} alt={card.title} className="mt-4 w-full rounded-lg border border-edge" /></div><div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-edge bg-surface/95 px-2 py-1">{heroCards.map((item, index) => <button key={item.title} type="button" aria-label={`切换到第 ${index + 1} 张`} className={`h-1.5 rounded-full transition-all ${active === index ? "w-5 bg-ink/85" : "w-2 bg-ink/24"}`} onClick={() => setActive(index)} />)}</div></div></div></section>;
+  const positionFor = (index: number) => {
+    const offset = (index - active + heroCards.length) % heroCards.length;
+    return offset === 0 ? "active" : offset === 1 ? "next" : "last";
+  };
+  const shift = (step: number) => setActive((value) => (value + step + heroCards.length) % heroCards.length);
+  return <section className="react-ygb-hero relative overflow-hidden border-b border-edge py-8 md:py-14">
+    <ReactYgbRoadMapBg />
+    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,245,244,.1),rgba(246,245,244,.02)_40%,rgba(246,245,244,.12)_100%)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)_40%,rgba(255,255,255,.06)_100%)]" />
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(112%_92%_at_14%_8%,rgba(246,245,244,.9),rgba(246,245,244,.6)_34%,rgba(246,245,244,.18)_62%,transparent_90%)] dark:bg-[radial-gradient(112%_92%_at_14%_8%,rgba(25,24,28,.93),rgba(25,24,28,.75)_34%,rgba(25,24,28,.34)_62%,transparent_90%)]" />
+    <div className="relative mx-auto grid w-full max-w-360 gap-8 px-6 lg:grid-cols-2 lg:items-end lg:px-14">
+      <div className="relative z-40 lg:self-start"><div className="inline-flex items-center gap-2 rounded-full border border-edge bg-surface/90 px-3 py-1 text-sm text-secondary"><i className="ri-shining-line" aria-hidden="true" />车货智能匹配 · 全球定位 · 实时预警</div><p className="mt-5 text-[clamp(2rem,3.4vw,3.6rem)] font-medium leading-[1.08] tracking-[-0.03em] text-orange-400">云柜宝</p><h1 className="mt-1 whitespace-nowrap text-[clamp(2rem,3.4vw,3.6rem)] font-medium leading-[1.08] tracking-[-0.03em]">智能集卡物流平台</h1><p className="mt-3 text-[clamp(1.15rem,1.9vw,1.8rem)] font-medium leading-tight">让运输管理更简单、更高效</p><p className="mt-1 text-[clamp(1rem,1.9vw,1.8rem)] font-medium leading-tight">物流运输管理再也不会 <span className="bg-linear-to-r from-[#ff6f5f] via-[#fe8348] to-[#8f48ff] bg-clip-text text-transparent">{pain}</span></p><p className="mt-4 max-w-136 text-sm leading-relaxed text-primary/85">云柜宝立足国际物流运输场景，融合物流网络与大数据技术，围绕车货匹配、在途监管、时间节点记录和异常预警，构建一体化运输管理能力。</p><div className="mt-7 flex flex-wrap gap-3"><button type="button" className="btn-primary btn-md gap-2 px-5" onClick={() => document.getElementById("download")?.scrollIntoView({ behavior: "smooth" })}>下载 App <i className="ri-download-2-line" aria-hidden="true" /></button><a href="https://www.ygbonline.com/admin/#/login" target="_blank" rel="noreferrer" className="btn-base btn-md gap-2 border border-edge bg-surface px-5 text-primary">管理后台 <i className="ri-arrow-right-line" aria-hidden="true" /></a></div></div>
+      <div className="relative z-20 h-112 w-full min-w-0 md:h-136">
+        <div className="relative h-full w-full">
+          {heroCards.map((item, index) => <article key={item.title} className="react-ygb-hero-card absolute left-0 right-0 top-0 mx-auto w-full overflow-hidden rounded-t-2xl border border-edge bg-surface shadow-[0_18px_50px_rgba(17,17,17,.12)] dark:shadow-[0_18px_52px_rgba(0,0,0,.35)]" data-position={positionFor(index)}><div className="flex items-center justify-between border-b border-line bg-black/3 px-4 py-2 dark:bg-white/6"><div className="text-sm font-medium">{item.badge}</div><i className="ri-arrow-right-up-line text-sm text-secondary" aria-hidden="true" /></div><div className="px-4 pt-3 pb-2"><h2 className="text-lg font-medium leading-[1.28]">{item.title}</h2><p className="mt-1 text-sm leading-[1.7] text-secondary">{item.desc}</p></div><div className="px-4 pb-4"><div className="overflow-hidden rounded-lg border border-edge bg-black/3 dark:bg-white/5"><img src={item.image} alt={item.title} className="block h-auto w-full" loading="lazy" /></div></div></article>)}
+          <div className="absolute bottom-3 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-full border border-edge bg-surface/95 px-2 py-1 shadow-sm"><button type="button" className="btn-icon btn-icon-sm btn-icon-muted" onClick={() => shift(-1)} aria-label="上一张"><i className="ri-arrow-left-line" aria-hidden="true" /></button>{heroCards.map((item, index) => <button key={item.title} type="button" aria-label={`切换到第 ${index + 1} 张`} className={`h-1.5 rounded-full transition-all ${active === index ? "w-5 bg-ink/85" : "w-2 bg-ink/24"}`} onClick={() => setActive(index)} />)}<button type="button" className="btn-icon btn-icon-sm btn-icon-muted" onClick={() => shift(1)} aria-label="下一张"><i className="ri-arrow-right-line" aria-hidden="true" /></button></div>
+        </div>
+      </div>
+    </div>
+  </section>;
 }
 
 export function ReactYgbPage() {

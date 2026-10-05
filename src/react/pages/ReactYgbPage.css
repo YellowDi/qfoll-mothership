@@ -1,0 +1,64 @@
+/**
+ * [INPUT]: 依赖 ReactYgbPage 的路线图容器、Hero 卡片状态类
+ * [OUTPUT]: 对外提供云柜宝专题 Hero 的叠层与背景视觉规则
+ * [POS]: 云柜宝产品页的局部视觉层，不改变全局设计令牌
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.react-ygb-hero {
+  background: #f6f5f4;
+}
+
+.dark .react-ygb-hero {
+  background: #19181c;
+}
+
+.react-ygb-hero-card {
+  transform-origin: center top;
+  transition: transform 300ms ease, opacity 300ms ease, height 300ms ease;
+}
+
+.react-ygb-hero-card[data-position="active"] {
+  z-index: 30;
+  opacity: 1;
+  transform: translateY(7.8rem) scale(1);
+}
+
+.react-ygb-hero-card[data-position="next"] {
+  z-index: 20;
+  opacity: .92;
+  transform: translateY(4.2rem) scale(.86);
+}
+
+.react-ygb-hero-card[data-position="last"] {
+  z-index: 10;
+  opacity: .8;
+  transform: translateY(.8rem) scale(.74);
+}
+
+.react-ygb-hero-card[data-position="mobile-active"] {
+  z-index: 30;
+  opacity: 1;
+  transform: translateY(4.2rem) scale(1);
+}
+
+.react-ygb-hero-card[data-position="mobile-next"] {
+  z-index: 20;
+  opacity: .88;
+  transform: translateY(2.25rem) scale(.9);
+}
+
+.react-ygb-hero-card[data-position="mobile-last"] {
+  z-index: 10;
+  opacity: .75;
+  transform: translateY(.45rem) scale(.8);
+}
+
+@media (max-width: 767px) {
+  .react-ygb-hero-card[data-position="active"] { transform: translateY(4.2rem) scale(1); }
+  .react-ygb-hero-card[data-position="next"] { transform: translateY(2.25rem) scale(.9); }
+  .react-ygb-hero-card[data-position="last"] { transform: translateY(.45rem) scale(.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .react-ygb-hero-card { transition: none; }
+}

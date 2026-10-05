@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { projectList } from "../../data/projects";
 import { newsList } from "../../data/news";
+import { ReactCoverImage } from "../components/ReactCoverImage";
 
 type ListItem = {
   id: string;
@@ -22,6 +23,8 @@ type ListItem = {
   publishedTimestamp?: number;
   cover?: string;
   coverSrcSet?: string;
+  coverVideo?: string;
+  coverIcon?: string;
 };
 type ListKind = "projects" | "news";
 
@@ -136,5 +139,5 @@ function FilterPanel({ tags, years, selectedTags, selectedYears, onTag, onYear, 
 }
 function CheckGroup({ title, options, selected, onChange, suffix = "" }: { title: string; options: string[]; selected: string[]; onChange: (event: ChangeEvent<HTMLInputElement>) => void; suffix?: string }) { const selectedSet = new Set(selected); return <div><div className="mb-3 text-sm text-secondary">{title}</div><div className="max-h-55 space-y-2 overflow-auto pr-2">{options.map((option) => <label key={option} className="flex items-center gap-3 text-[15px]"><input type="checkbox" className="h-4 w-4 rounded border-edge bg-transparent text-primary" value={option} checked={selectedSet.has(option)} onChange={onChange} /><span>{option}{suffix}</span></label>)}</div></div>; }
 function SortOption({ label, checked, onClick }: { label: string; checked: boolean; onClick: () => void }) { return <button type="button" className="flex w-full items-center gap-3 py-1.5" role="menuitemradio" aria-checked={checked} onClick={onClick}><span className="flex h-4 w-4 items-center justify-center rounded-full border border-edge"><span className={checked ? "h-2.5 w-2.5 rounded-full bg-ink" : ""} /></span>{label}</button>; }
-function GridCard({ item, kind }: { item: ListItem; kind: ListKind }) { const primary = kind === "projects" ? item.tag : item.category; const secondary = kind === "projects" ? item.yearLabel || item.year : item.publishedAt; return <Link to={`/${kind === "projects" ? "project" : "news"}/${item.id}`} className="group"><div className="overflow-hidden rounded-sm"><img src={item.cover} srcSet={item.coverSrcSet || undefined} alt={item.title || "内容"} className="aspect-square w-full rounded-sm object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" loading="lazy" decoding="async" /></div><div className="pt-3 text-left"><div className="text-lg font-medium leading-[1.3] text-primary max-md:text-base">{item.title}</div><div className="mt-4 flex items-center gap-2 text-sm"><span className="font-medium text-primary">{primary}</span><span className="text-secondary">{secondary}</span></div></div></Link>; }
+function GridCard({ item, kind }: { item: ListItem; kind: ListKind }) { const primary = kind === "projects" ? item.tag : item.category; const secondary = kind === "projects" ? item.yearLabel || item.year : item.publishedAt; return <Link to={`/${kind === "projects" ? "project" : "news"}/${item.id}`} className="group"><div className="overflow-hidden rounded-sm"><ReactCoverImage src={item.cover} srcSet={item.coverSrcSet} videoSrc={item.coverVideo} iconClass={item.coverIcon} enableVideoCover className="aspect-square rounded-sm" sizes="(max-width: 768px) 92vw, (max-width: 1024px) 45vw, 30vw" alt={item.title || "内容"} imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03]" /></div><div className="pt-3 text-left"><div className="text-lg font-medium leading-[1.3] text-primary max-md:text-base">{item.title}</div><div className="mt-4 flex items-center gap-2 text-sm"><span className="font-medium text-primary">{primary}</span><span className="text-secondary">{secondary}</span></div></div></Link>; }
 function ListRow({ item, kind }: { item: ListItem; kind: ListKind }) { const primary = kind === "projects" ? item.tag || "客户案例" : item.category || "最新动态"; const secondary = kind === "projects" ? item.yearLabel || item.year : item.publishedAt; return <Link to={`/${kind === "projects" ? "project" : "news"}/${item.id}`} className="group grid grid-cols-12 gap-6 border-b border-line py-7 transition-colors hover:border-primary/55 hover:text-primary"><div className="col-span-12 text-sm text-secondary md:col-span-3"><div className="text-[15px] font-medium text-primary">{primary}</div><div className="mt-2 text-sm text-secondary">{secondary}</div></div><div className="col-span-12 md:col-span-9"><div className="text-[17px] font-medium text-primary">{item.title}</div><div className="mt-2 text-sm text-secondary">{item.lead}</div></div></Link>; }
