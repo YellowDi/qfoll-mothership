@@ -105,7 +105,7 @@ export function AboutProjectsCarousel() {
         <div className="mb-8 text-center"><h2 className="text-lg font-medium tracking-[-0.02em] text-primary md:text-3xl">信任我们的企业与伙伴</h2></div>
         <div className="grid min-w-0 grid-cols-4 gap-6 max-lg:grid-cols-2">
           {slots.map((slot, index) => (
-            <Link key={index} to={`/project/${slot.current.id}`} className="group block min-w-0">
+            <Link key={`${slot.current.id}-${slot.next.id}`} to={`/project/${slot.current.id}`} className="group block min-w-0">
               <div className="relative min-w-0 overflow-hidden">
                 <div className="invisible aspect-square w-full" aria-hidden="true" />
                 <div className="invisible h-[5.5rem]" aria-hidden="true" />
