@@ -7,7 +7,7 @@ components/ - 可复用视觉和交互组件，向页面与布局提供稳定 Pr
 composables/ - 基于 Vue 生命周期和浏览器 API 的共享交互逻辑
 content/ - 新闻与项目的 Markdown 原文，数据解析由 data 层负责
 data/ - 项目、新闻、产品与解析器数据入口，禁止在组件内复制内容索引逻辑
-visuals/ - 框架无关的原版 Canvas/WebGL 与文字避让引擎，保证 React/Vue 视觉同源
+visuals/ - 框架无关的原版 Canvas/WebGL 与文字避让引擎，保证 React/Vue 视觉同源；ygbPort/ 为云柜宝港区新引擎
 react/ - React + TypeScript 默认运行时，承接全站路由与页面
 layouts/ - 应用壳层，组织侧栏、顶栏、主内容和页脚
 router/ - URL 到页面组件的唯一映射，集中处理标题、重定向和滚动策略

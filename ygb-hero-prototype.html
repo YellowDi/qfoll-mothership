@@ -1,8 +1,8 @@
 <!doctype html>
 <!--
-[INPUT]: 依赖 React 原 Hero/主题/样式、Canvas 2D 和浏览器可见性/减弱动态偏好
-[OUTPUT]: 提供全幅港口背景试验：道路退界、建筑/堆场/油罐分区、码头吊机横移、昼夜照明、车灯与水面反光
-[POS]: 根目录的 React 背景验收页；通过共享 ReactYgbPortBackground 复用正式 Hero 的场景，不改变 Vue
+[INPUT]: 依赖 React 原 Hero/主题/样式与 src/visuals/ygbPort 的 mountYgbPort 新港区引擎
+[OUTPUT]: 提供港口背景调试页：仅看背景、暂停、倍速 (观察岸桥逐贝装卸与整机平移)、昼夜切换
+[POS]: 根目录的独立调试台；新引擎在此验收，正式 Hero 仍使用 ReactYgbPortBackground，验收后再接入
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 -->
 <html lang="zh-CN">
@@ -28,27 +28,37 @@
 <body>
 <div id="preview-root"></div>
 <script type="module">
-import {createElement as h,useEffect,useState} from 'react';
+import {createElement as h,useEffect,useRef,useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {ReactYgbHero} from '/src/react/pages/ReactYgbHero.tsx';
-import {ReactYgbPortBackground} from '/src/react/pages/ReactYgbPortBackground.tsx';
+import {mountYgbPort} from '/src/visuals/ygbPort/index.js';
 import {ThemeProvider,useTheme} from '/src/react/providers/ThemeProvider.tsx';
 import logo from '/src/assets/logo.webp';
 import '/src/style.css';
 import '/src/styles/remixicon-used.css';
 import '/src/react/motion.css';
 
+/* --- 新引擎挂载：只在本调试页生效，暴露 window.__port 便于控制台调参 --- */
+function PortCanvas({isDark,paused,speed}){
+ const ref=useRef(null),api=useRef(null);
+ useEffect(()=>{api.current=mountYgbPort(ref.current,{dark:isDark,paused});window.__port=api.current.scene;return()=>{api.current.dispose();api.current=null;};},[]);
+ useEffect(()=>api.current?.setTheme(isDark),[isDark]);
+ useEffect(()=>api.current?.setPaused(paused),[paused]);
+ useEffect(()=>api.current?.setSpeed(speed),[speed]);
+ return h('canvas',{ref,className:'preview-canvas','aria-hidden':true});
+}
+
 /* --- 原 UI 复用：Hero 的文案、图片和叠卡由正式组件提供，原型只承载背景验收控制 --- */
 function Preview(){
- const {isDark,toggleTheme}=useTheme(),[backgroundOnly,setBackgroundOnly]=useState(false),[paused,setPaused]=useState(false),[reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
+ const {isDark,toggleTheme}=useTheme(),[backgroundOnly,setBackgroundOnly]=useState(false),[paused,setPaused]=useState(false),[speed,setSpeed]=useState(1),[reduced,setReduced]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
  useEffect(()=>{const query=matchMedia('(prefers-reduced-motion: reduce)'),change=()=>setReduced(query.matches);query.addEventListener('change',change);return()=>query.removeEventListener('change',change);},[]);
  return h('div',{className:backgroundOnly?'background-only':''},
   h('header',{className:'fixed left-0 right-0 top-0 z-40 bg-bg'},h('div',{className:'relative flex h-14 items-center justify-between px-4 md:px-6'},
    h('a',{href:'/ygb',className:'flex items-center gap-2','aria-label':'返回云柜宝页面'},h('img',{src:logo,alt:'企丰科技',className:'h-8 w-8 rounded-sm object-cover'}),h('span',{className:'select-none text-sm font-medium'},'企丰科技')),
    h('button',{type:'button',className:'inline-flex btn-icon btn-icon-md btn-icon-muted',onClick:toggleTheme,'aria-label':isDark?'切换到浅色模式':'切换到深色模式'},h('i',{className:isDark?'ri-sun-line text-lg':'ri-moon-clear-line text-lg','aria-hidden':true}))
   )),
-   h('main',{className:'pt-14'},h('div',{id:'hero-preview'},h(ReactYgbHero,{background:h(ReactYgbPortBackground,{isDark,paused,className:'preview-canvas'})})),
-   h('div',{className:'preview-tools','aria-label':'背景验收控制'},h('span',null,'背景预览'),h('button',{type:'button','aria-pressed':backgroundOnly,onClick:()=>setBackgroundOnly(!backgroundOnly)},backgroundOnly?'显示原文字与卡片':'仅看背景'),h('button',{type:'button','aria-pressed':paused||reduced,disabled:reduced,onClick:()=>setPaused(!paused)},paused||reduced?'继续背景动画':'暂停背景动画'))
+   h('main',{className:'pt-14'},h('div',{id:'hero-preview'},h(ReactYgbHero,{background:h(PortCanvas,{isDark,paused,speed})})),
+   h('div',{className:'preview-tools','aria-label':'背景验收控制'},h('span',null,'背景预览'),h('button',{type:'button','aria-pressed':backgroundOnly,onClick:()=>setBackgroundOnly(!backgroundOnly)},backgroundOnly?'显示原文字与卡片':'仅看背景'),h('button',{type:'button','aria-pressed':paused||reduced,disabled:reduced,onClick:()=>setPaused(!paused)},paused||reduced?'继续背景动画':'暂停背景动画'),[1,4,12].map(v=>h('button',{key:v,type:'button','aria-pressed':speed===v,onClick:()=>setSpeed(v)},`${v}× 速度`)))
   )
  );
 }
