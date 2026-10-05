@@ -199,6 +199,7 @@ export class CraneWork {
   }
   get bay() { return this.bays[this.bayStep]; }
 
+
   pickRow(bay) {
     const s = this.ship, rows = [...Array(14).keys()];
     if (this.mode === "unload") return rows.filter((j) => s.height(bay, j) > 1).sort((a, b) => s.height(bay, b) - s.height(bay, a) || b - a)[0] ?? -1;
@@ -217,12 +218,14 @@ export class CraneWork {
   plan() {
     if (this.movesLeft <= 0) {
       this.bayStep++;
+      this.movesLeft = 4;
+      /* 走完一轮：原地掉头，先在当前贝转为装船，不跳过脚下这一贝 */
       if (this.bayStep >= this.bays.length) {
         this.mode = this.mode === "unload" ? "load" : "unload";
         this.bays = [...this.bays].reverse();
-        this.bayStep = 1;
+        this.bayStep = 0;
+        return [];
       }
-      this.movesLeft = 4;
       return [{ k: "trolley", to: PARK_Y }, { k: "gantry", to: this.ship.bays[this.bay].cx }];
     }
     this.movesLeft--;

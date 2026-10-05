@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 ./iso 的 obox/tone/alpha，./palette 的集装箱与车身配色索引
- * [OUTPUT]: 对外提供 VEHICLE 尺寸表、drawVehicle 绘制函数与 parkedVehicle 静态物件工厂
+ * [OUTPUT]: 对外提供 VEHICLE 尺寸表、drawVehicle 绘制函数与 parkedVehicle 静态物件工厂 (保留 vehicle 数据供车队/派单配图读取)
  * [POS]: visuals/ygbPort 的车辆外观库；行驶车辆 (traffic) 与停放车辆 (city/terminal) 共用同一外观
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -112,7 +112,7 @@ function lamps(ctx, iso, L, front, back, z, dark, braking) {
 export function parkedVehicle(v) {
   const r = VEHICLE[v.type].half + 2;
   return {
-    x0: v.x - r, y0: v.y - r, z0: 0, x1: v.x + r, y1: v.y + r, z1: 13, depth: v.x + v.y,
+    x0: v.x - r, y0: v.y - r, z0: 0, x1: v.x + r, y1: v.y + r, z1: 13, depth: v.x + v.y, vehicle: v,
     draw: (ctx, iso, c, dark, colors) => drawVehicle(ctx, iso, c, colors, { ...v, parked: true }, dark),
   };
 }

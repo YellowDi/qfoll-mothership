@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 ./layout 的道路坐标常量
- * [OUTPUT]: 对外提供 network (节点/路段/信号/让行/闸口)、routes 车辆线路、buildPath 车道级路径、sample 路径采样、signalAt 信号相位、CRANE_LOOP/TRUCK_PARK 场站坐标
+ * [OUTPUT]: 对外提供 network (节点/路段/信号/让行/闸口)、routes 车辆线路 (含追踪运单的固定终点 waypoints)、buildPath 车道级路径、sample 路径采样、signalAt 信号相位、CRANE_LOOP/TRUCK_PARK 场站坐标
  * [POS]: visuals/ygbPort 的交通拓扑；ground 依它画路面与标线，traffic 依它跑车，二者同源不漂移
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -147,6 +147,8 @@ export const routes = {
   gateTrucks: {
     nodes: [[X660, Y620], [X660, M], [X360, M], [GATE.x, GATE.y], [X360, P], [AISLES[5], P], [AISLES[5], YARD_LANES[1]], [AISLES[4], YARD_LANES[1]], [AISLES[4], P], [GATE.x, GATE.y], [X360, M], [X360, Y620]],
     prefer: 0, fleet: ["truck", "truck", "truck", "truck"], tracked: 0,
+    /* 运单固定终点：去程到堆场交箱，回程到物流园提箱；追踪路线只画到下一个终点 */
+    waypoints: [{ role: "drop", at: [-220, YARD_LANES[1]], label: "堆场交箱点", arrive: "抵达堆场 · 交箱" }, { role: "pickup", at: [-500, Y620], label: "物流园提箱点", arrive: "抵达物流园 · 提箱" }],
   },
   /* 停车场集卡：主干道右进、场内通道、东侧街道右出 */
   truckPark: {

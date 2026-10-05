@@ -227,7 +227,6 @@ export class Ship {
     const deck = seaEdge(this.outline(DECK_Z));
     const h = DECK_Z + 4 * TEU.h - WATER_Z;
     ctx.save();
-    ctx.filter = `blur(${3 * iso.s}px)`;
     iso.poly(ctx, [...deck.map(([x, y]) => [x, y, WATER_Z]), ...deck.slice().reverse().map(([x, y]) => [x + h * SUN.x, y + h * SUN.y, WATER_Z])], alpha(c.shadowSoft, 0.28));
     ctx.restore();
   }

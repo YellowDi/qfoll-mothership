@@ -8,16 +8,15 @@ import { SUN, alpha, mix, rng, tone } from "./iso";
 
 /*
  * 静态物件契约：
- *   { x0,y0,z0,x1,y1,z1 世界包围盒, depth 排序深度, draw(ctx,iso,c,dark,colors), shadow?(ctx,iso,c), light?(ctx,iso,c), beacon?[x,y,z] }
- * shadow 在白天烘焙到地面层；light 在夜间以 screen 合成烘焙为灯池。
+ *   { x0,y0,z0,x1,y1,z1 世界包围盒, depth 排序深度, draw(ctx,iso,c,dark,colors), shadow?(ctx,iso,c), light?(ctx,iso,c), beacon?[x,y,z], pad? 精灵外扩 (默认 3，带光晕的灯具更大) }
+ * shadow 白天画在统一阴影层 (锐利多边形)，场景整体模糊一次再叠到地面；light 在夜间写入光照图。
  */
 const item = (x0, y0, z0, x1, y1, z1, draw, extra) => ({ x0, y0, z0, x1, y1, z1, depth: (x0 + x1) / 2 + (y0 + y1) / 2, draw, ...extra });
 
-/* 太阳投影：盒体底面沿 SUN 方向拉伸成软影 */
+/* 太阳投影：盒体底面沿 SUN 方向拉伸；柔化由场景对整层阴影统一模糊完成 */
 export function boxShadow(ctx, iso, c, x, y, w, d, h, a = 0.23) {
   const dx = h * SUN.x, dy = h * SUN.y;
   ctx.save();
-  ctx.filter = `blur(${1.6 * iso.s}px)`;
   iso.poly(ctx, [[x, y + d], [x + w, y + d], [x + w, y], [x + w + dx, y + dy], [x + w + dx, y + d + dy], [x + dx, y + d + dy]], alpha(c.shadowSoft, a));
   ctx.restore();
   iso.poly(ctx, [[x + 1, y + 1], [x + w + 2, y + 1], [x + w + 2, y + d + 2.5], [x + 1, y + d + 2.5]], alpha(c.shadow, 0.16));
@@ -145,7 +144,6 @@ export function canopy({ x, y, w, d, h = 16, band = "orange", columns = 2, light
     depth: x + w + y + d,
     shadow: (ctx, iso, c) => {
       ctx.save();
-      ctx.filter = `blur(${2 * iso.s}px)`;
       const dx = h * SUN.x, dy = h * SUN.y;
       iso.rect(ctx, x + dx, y + dy, x + w + dx, y + d + dy, alpha(c.shadowSoft, 0.2));
       ctx.restore();
@@ -170,7 +168,6 @@ export function tank({ x, y, r, h }) {
   }, {
     shadow: (ctx, iso, c) => {
       ctx.save();
-      ctx.filter = `blur(${1.8 * iso.s}px)`;
       iso.poly(ctx, ring.map(([px, py]) => [px + h * SUN.x * 0.9, py + h * SUN.y * 0.9]), alpha(c.shadowSoft, 0.22));
       ctx.restore();
     },
@@ -206,12 +203,12 @@ export function tree(x, y, size = 1) {
 
 /* ─── 路灯：灯臂伸向车道，夜间灯池在地面层烘焙 ─── */
 export function streetLamp(x, y, ax, ay, h = 22) {
-  return item(x - 2, y - 2, 0, x + 2, y + 2, h + 2, (ctx, iso, c, dark) => {
+  return item(x - 2 + Math.min(0, ax), y - 2 + Math.min(0, ay), 0, x + 2 + Math.max(0, ax), y + 2 + Math.max(0, ay), h + 2, (ctx, iso, c, dark) => {
     iso.line(ctx, [[x, y, 0], [x, y, h]], dark ? "#88a1a2" : "#7b9193", 1);
     iso.line(ctx, [[x, y, h], [x + ax, y + ay, h + 1]], c.metal, 0.9);
     iso.box(ctx, x + ax - 1.6, y + ay - 1.6, h, 3.2, 3.2, 1, dark ? "#e8d9b4" : "#c5d0c9", { end: c.metal });
     if (dark) iso.glow(ctx, x + ax, y + ay, h, 9, "#ffdea4", 0.3, 1);
-  }, { light: (ctx, iso) => iso.pool(ctx, x + ax * 1.4, y + ay * 1.4, 0, 30, "#ffc67c", 0.42) });
+  }, { pad: 10, light: (ctx, iso) => iso.pool(ctx, x + ax * 1.4, y + ay * 1.4, 0, 30, "#ffc67c", 0.42) });
 }
 
 /* ─── 高杆灯：堆场照明，顶部环形灯盘 ─── */
@@ -226,6 +223,7 @@ export function highMast(x, y, h = 92) {
       if (dark) iso.glow(ctx, x + dx, y + dy, h - 1, 8, "#fff1d0", 0.32, 1);
     }
   }, {
+    pad: 10,
     shadow: (ctx, iso, c) => iso.line(ctx, [[x, y], [x + h * SUN.x, y + h * SUN.y]], alpha(c.shadowSoft, 0.18), 1.4),
     light: (ctx, iso) => iso.pool(ctx, x, y, 0, 112, "#ffd49a", 0.42),
   });

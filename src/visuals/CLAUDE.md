@@ -9,6 +9,6 @@ roadMap.js: 原 Canvas 静态缓存与车辆动画，控制设备像素比、帧
 waterSurface.js: 原水面 WebGL 着色器和主题 uniform，同步尺寸与动画生命周期。
 twinkleDots.js: 原品牌点阵动画，支持文字排除、随机冷却、指针轨迹与减少动画偏好。
 textExclusions.js: 品牌文字行的 DOM 几何合并，提供点阵避让区域。
-ygbPort/: 云柜宝港区 Canvas 引擎 (16 文件)，岸桥逐贝装卸、车道级车流与信号、靠泊船、拖船与直升机；当前由原型页验收，正式 Hero 尚未接入。
+ygbPort/: 云柜宝港区 Canvas 引擎 (16 文件 + figures 配图子模块)，岸桥逐贝装卸、车道级车流与信号、靠泊船、拖船与直升机；正式 Hero 经 ReactYgbPortBackground 挂载，原型页用于调试。
 
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md

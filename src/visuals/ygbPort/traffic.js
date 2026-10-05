@@ -1,11 +1,11 @@
 /**
  * [INPUT]: 依赖 ./roads 的 routes/buildPath/sample/signalAt/network，./vehicles 的尺寸与绘制，./palette 的权重，./iso 的随机与色彩
- * [OUTPUT]: 对外提供 Traffic：车辆跟驰/信号停车/让行/道闸停靠/岸桥停靠仿真，信号灯与道闸动态物件，追踪车辆路线高亮
+ * [OUTPUT]: 对外提供 plateOf 车牌、Traffic (gate/arrive 事件)：车辆跟驰/信号停车/让行/道闸停靠/岸桥停靠仿真，信号灯与道闸动态物件，追踪车辆运单段 leg() (固定终点) 与规划路线高亮
  * [POS]: visuals/ygbPort 的交通动力学；车辆位置按时间积分，路口排队与放行自然发生，不再是固定循环
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { alpha, rng } from "./iso";
-import { CRANE_LANE_Y } from "./layout";
+import { CRANE_LANE_Y, GATE } from "./layout";
 import { BOX_WEIGHTS, CAR_WEIGHTS, pick } from "./palette";
 import { buildPath, network, routes, sample, signalAt, CRANE_LOOP } from "./roads";
 import { VEHICLE, drawVehicle } from "./vehicles";
@@ -17,6 +17,7 @@ const LIGHT = { g: "#45e08f", y: "#ffc04a", r: "#ff4f3f" };
 export class Traffic {
   constructor(craneWork) {
     this.crane = craneWork;
+    this.emit = () => {};
     this.vehicles = [];
     this.barriers = new Map();
     this.time = 0;
@@ -31,6 +32,12 @@ export class Traffic {
         path.laneX = path.pts.find((p) => p.s === path.laneStart).x;
         path.resetS = path.pts.filter((p) => p.x > CRANE_LOOP.east - 2 && p.y < CRANE_LANE_Y - 20)[0].s;
       }
+      /* 固定终点：取路径上离锚点最近的采样里程 */
+      path.waypoints = (route.waypoints || []).map((wp) => {
+        let best = path.pts[0];
+        for (const p of path.pts) if ((p.x - wp.at[0]) ** 2 + (p.y - wp.at[1]) ** 2 < (best.x - wp.at[0]) ** 2 + (best.y - wp.at[1]) ** 2) best = p;
+        return { ...wp, s: best.s, x: best.x, y: best.y };
+      });
       route.fleet.forEach((type, i) => {
         const n = route.fleet.length;
         this.vehicles.push({
@@ -80,7 +87,11 @@ export class Traffic {
             blocked = true;
             if (gap < 1.2 && v.v < 0.4) {
               v.dwell += dt;
-              if (v.dwell > 1.8) { v.cleared = st; v.dwell = 0; }
+              if (v.dwell > 1.8) {
+                v.cleared = st;
+                v.dwell = 0;
+                this.emit("gate", { id: v.id, plate: plateOf(v.id), type: v.type, cargo: v.cargo, ...gateLabel(st) });
+              }
             }
           }
         } else if (st.kind === "yield") {
@@ -128,6 +139,7 @@ export class Traffic {
         if (v.occupying.node.occupant === v) v.occupying.node.occupant = null;
         v.occupying = null;
       }
+      if (v.tracked) for (const wp of v.path.waypoints) if (crossed(before, v.s, wp.s, L)) this.emit("arrive", { id: v.id, plate: plateOf(v.id), role: wp.role, label: wp.label, text: wp.arrive });
       if (v.name === "crane" && crossed(before, v.s, v.path.resetS, L)) {
         v.served = false;
         v.cargo = this.crane.mode === "load" ? pick(this.R, BOX_WEIGHTS) : null;
@@ -213,20 +225,37 @@ export class Traffic {
     return out;
   }
 
-  /* ─── 追踪车辆：云柜宝 GPS 在途监管的视觉隐喻，前方路线 + 定位脉冲 ─── */
+  /* 当前运单段：上一个终点 → 下一个终点 (都是路径上的固定里程) */
+  leg(v) {
+    const wps = v.path.waypoints, L = v.path.length;
+    if (!wps?.length) return null;
+    let next = wps[0], prev = wps[wps.length - 1], best = Infinity;
+    wps.forEach((wp, i) => {
+      const ahead = (wp.s - v.s + L) % L;
+      if (ahead < best) { best = ahead; next = wp; prev = wps[(i - 1 + wps.length) % wps.length]; }
+    });
+    return { prev, next, ahead: best, behind: (v.s - prev.s + L) % L };
+  }
+
+  /* ─── 追踪车辆：云柜宝 GPS 在途监管的视觉隐喻，规划路线锚定到固定终点 + 定位脉冲 ─── */
   drawTracking(ctx, iso, dark) {
     const v = this.vehicles.find((o) => o.tracked);
     if (!v) return;
+    const leg = this.leg(v), span = leg ? leg.ahead : 320;
     const pts = [], cursor = { i: 0 };
-    for (let d = 0; d < 320; d += 6) {
+    for (let d = 0; d < span; d += 6) {
       const p = sample(v.path, v.s + d, cursor);
       pts.push([p.x, p.y, 0.4]);
     }
+    const end = leg ? [leg.next.x, leg.next.y, 0.4] : pts[pts.length - 1];
+    pts.push(end);
     const col = dark ? "#f6a565" : "#dc8744";
     iso.line(ctx, pts, alpha(col, dark ? 0.22 : 0.2), 3.2);
     iso.line(ctx, pts, alpha(col, dark ? 0.75 : 0.85), 0.9, [5, 6]);
-    const end = pts[pts.length - 1];
-    iso.dot(ctx, end[0], end[1], 0.5, 1.6, alpha(col, 0.9));
+    /* 终点：固定的落地标记 */
+    iso.dot(ctx, end[0], end[1], 0.5, 2.4, alpha(col, 0.95));
+    iso.line(ctx, [[end[0], end[1], 0], [end[0], end[1], 14]], alpha(col, 0.9), 0.8);
+    iso.poly(ctx, [[end[0], end[1], 14], [end[0] + 7, end[1] - 7, 12], [end[0], end[1], 9]], alpha(col, 0.95));
     const pulse = (this.time * 0.8) % 1;
     ctx.save();
     ctx.translate(iso.X(v.x, v.y), iso.Y(v.x, v.y));
@@ -238,6 +267,18 @@ export class Traffic {
     ctx.stroke();
     ctx.restore();
   }
+}
+
+/* 车牌：按车辆编号确定性生成，同一辆车在各配图里保持一致 */
+export function plateOf(id) {
+  const L = "ABCDEFGHJKLMNPQRSTUVWXYZ", n = (id * 7919 + 1301) % 100000;
+  return `浙B·${L[(id * 13) % L.length]}${String(n).padStart(5, "0").slice(0, 4)}`;
+}
+/* 道闸语义：港区闸口进/出港，停车场入/出场 */
+function gateLabel(st) {
+  const k = st.node.k;
+  if (k === `${GATE.x},${GATE.y}`) return { gate: "港区闸口", dir: st.dir === "0,1" ? "进港" : "出港" };
+  return { gate: "集卡停车场", dir: st.dir === "1,0" ? "出场" : "入场" };
 }
 
 const crossed = (a, b, mark, L) => {

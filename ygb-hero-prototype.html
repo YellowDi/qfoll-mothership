@@ -1,8 +1,8 @@
 <!doctype html>
 <!--
 [INPUT]: 依赖 React 原 Hero/主题/样式与 src/visuals/ygbPort 的 mountYgbPort 新港区引擎
-[OUTPUT]: 提供港口背景调试页：仅看背景、暂停、倍速 (观察岸桥逐贝装卸与整机平移)、昼夜切换
-[POS]: 根目录的独立调试台；新引擎在此验收，正式 Hero 仍使用 ReactYgbPortBackground，验收后再接入
+[OUTPUT]: 提供港口背景调试页：仅看背景、暂停、倍速、昼夜切换；下方挂载 react/pages/ygbStory 的六章杂志式介绍 (集卡实时配图 + 镜头飞行)
+[POS]: 根目录的独立调试台；与正式 Hero (ReactYgbPortBackground) 共用同一引擎，额外暴露倍速与 window.__port 调参
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 -->
 <html lang="zh-CN">
@@ -32,6 +32,7 @@ import {createElement as h,useEffect,useRef,useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {ReactYgbHero} from '/src/react/pages/ReactYgbHero.tsx';
 import {mountYgbPort} from '/src/visuals/ygbPort/index.js';
+import {YgbStory} from '/src/react/pages/ygbStory/YgbStory.tsx';
 import {ThemeProvider,useTheme} from '/src/react/providers/ThemeProvider.tsx';
 import logo from '/src/assets/logo.webp';
 import '/src/style.css';
@@ -58,7 +59,8 @@ function Preview(){
    h('button',{type:'button',className:'inline-flex btn-icon btn-icon-md btn-icon-muted',onClick:toggleTheme,'aria-label':isDark?'切换到浅色模式':'切换到深色模式'},h('i',{className:isDark?'ri-sun-line text-lg':'ri-moon-clear-line text-lg','aria-hidden':true}))
   )),
    h('main',{className:'pt-14'},h('div',{id:'hero-preview'},h(ReactYgbHero,{background:h(PortCanvas,{isDark,paused,speed})})),
-   h('div',{className:'preview-tools','aria-label':'背景验收控制'},h('span',null,'背景预览'),h('button',{type:'button','aria-pressed':backgroundOnly,onClick:()=>setBackgroundOnly(!backgroundOnly)},backgroundOnly?'显示原文字与卡片':'仅看背景'),h('button',{type:'button','aria-pressed':paused||reduced,disabled:reduced,onClick:()=>setPaused(!paused)},paused||reduced?'继续背景动画':'暂停背景动画'),[1,4,12].map(v=>h('button',{key:v,type:'button','aria-pressed':speed===v,onClick:()=>setSpeed(v)},`${v}× 速度`)))
+   h('div',{className:'preview-tools','aria-label':'背景验收控制'},h('span',null,'背景预览'),h('button',{type:'button','aria-pressed':backgroundOnly,onClick:()=>setBackgroundOnly(!backgroundOnly)},backgroundOnly?'显示原文字与卡片':'仅看背景'),h('button',{type:'button','aria-pressed':paused||reduced,disabled:reduced,onClick:()=>setPaused(!paused)},paused||reduced?'继续背景动画':'暂停背景动画'),[1,4,12].map(v=>h('button',{key:v,type:'button','aria-pressed':speed===v,onClick:()=>setSpeed(v)},`${v}× 速度`))),
+   h(YgbStory,{isDark})
   )
  );
 }
