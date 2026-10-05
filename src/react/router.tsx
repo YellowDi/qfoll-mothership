@@ -16,6 +16,8 @@ import { ReactNewsPage, ReactProjectsPage } from "./pages/ReactListPage";
 import { ReactShowcasePage } from "./pages/ReactShowcasePage";
 import { ReactNewsDetailPage, ReactProjectDetailPage } from "./pages/ReactDetailPage";
 import { ReactShowcaseDetailPage } from "./pages/ReactShowcaseDetailPage";
+import { ReactYgbPage } from "./pages/ReactYgbPage";
+import { ReactWaterEnvPage } from "./pages/ReactWaterEnvPage";
 
 function AppFrame() {
   const { pathname, search, hash } = useLocation();
@@ -33,7 +35,9 @@ export function AppRoutes() {
             : path === "/about" ? <AboutPage />
               : path === "/projects" ? <ReactProjectsPage />
                 : path === "/news" ? <ReactNewsPage />
-                  : path === "/showcase" ? <ReactShowcasePage />
+              : path === "/showcase" ? <ReactShowcasePage />
+                : path === "/ygb" ? <ReactYgbPage />
+                  : path === "/water-env" ? <ReactWaterEnvPage />
                 : <ReactRoutePlaceholder title={title} />;
           return <Route key={path} path={path} element={element} />;
         })}

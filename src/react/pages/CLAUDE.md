@@ -15,6 +15,8 @@ ReactShowcasePage.tsx: Showcase 自动横向轮播页面，暂停逻辑只由卡
 ReactShowcasePage.module.css: Showcase 轮播轨道和卡片的局部动画样式。
 ReactDetailPage.tsx: 项目与新闻详情共用的标题、正文、元信息和相关推荐页面。
 ReactShowcaseDetailPage.tsx: Showcase 详情 Hero、能力说明、技术栈和相关演示页面。
+ReactYgbPage.tsx: 云柜宝产品专题，包含能力卡片、后台截图和 App 下载轮播。
+ReactWaterEnvPage.tsx: 水环境产品专题，包含 KPI Hero 和明暗主题功能截图。
 
 法则: 页面只编排稳定内容与数据，不复制布局外壳；复杂交互页面继续按独立页面边界迁移。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
