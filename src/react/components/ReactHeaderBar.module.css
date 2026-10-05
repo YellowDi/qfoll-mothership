@@ -17,9 +17,15 @@
 @media (max-width: 767.98px) {
   .title:not(.visible) { display: none; }
 }
+@media (min-width: 768px) {
+  /* Tailwind 的 -translate-x-1/2 与过渡用 translate 属性同源，显式合并两轴避免标题偏右。 */
+  .title { translate: -50% -4px; }
+  .title.visible { translate: -50% 0; }
+}
 .toc {
   translate: 0 -8px;
   transition: opacity 180ms ease, translate 180ms ease, visibility 180ms;
+  box-shadow: 0 14px 34px rgb(38 37 30 / 0.14), 0 3px 10px rgb(38 37 30 / 0.08);
 }
 .visible {
   opacity: 1;
@@ -29,4 +35,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .title, .toc { transition: none; }
+}
+
+:global(.dark) .toc {
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.34), 0 3px 12px rgb(0 0 0 / 0.22);
 }

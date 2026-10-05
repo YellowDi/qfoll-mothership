@@ -45,7 +45,7 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
     <div
       className={`${styles.title} ${detail.show ? styles.visible : ""} ${mobile
         ? "relative px-3 py-1.5 md:hidden"
-        : `absolute hidden text-sm text-primary md:flex md:items-center -translate-x-1/2 max-w-[56vw] ${sidebarCollapsed ? "left-1/2" : "left-1/2 md:left-[calc(50%+6.25rem)]"}`}`}
+        : "absolute left-1/2 hidden max-w-[56vw] -translate-x-1/2 text-sm text-primary md:flex md:items-center"}`}
       aria-hidden={!detail.show}
       inert={!detail.show}
     >

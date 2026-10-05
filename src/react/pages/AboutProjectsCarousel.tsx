@@ -7,6 +7,7 @@
 import { useEffect, useMemo, useRef, useState, type TransitionEvent } from "react";
 import { Link } from "react-router-dom";
 import { projectList } from "../../data/projects";
+import styles from "./AboutPage.module.css";
 
 type Project = {
   id: string;
@@ -132,7 +133,7 @@ function Cover({ face, active, resetting, delay, onTransitionEnd }: { face: Proj
   const itemMeta = meta(face);
   return (
     <div
-      className={`absolute inset-0 flex flex-col transition-[transform,opacity] duration-500 ease-in-out ${active ? "translate-y-0 opacity-100" : "translate-y-[18%] opacity-0"} ${resetting ? "!transition-none" : ""}`}
+      className={`${styles.projectCover} absolute inset-0 flex flex-col ${active ? styles.projectCoverActive : styles.projectCoverInactive} ${resetting ? styles.projectCoverReset : ""}`}
       style={{ transitionDelay: `${delay}s` }}
       onTransitionEnd={onTransitionEnd}
     >

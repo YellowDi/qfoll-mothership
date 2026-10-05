@@ -1,7 +1,7 @@
 /*
  * [INPUT]: 关于页轮播与二维码的状态 class、指针 CSS 变量和系统动画偏好
- * [OUTPUT]: 对外提供关于页局部过渡、倾斜卡片和高光样式
- * [POS]: 关于页视觉交互边界，不改变全局 Markdown 和 Tailwind 令牌
+ * [OUTPUT]: 对外提供伙伴轮播过渡、二维码倾斜卡片和高光样式
+ * [POS]: 关于页视觉交互边界，集中管理自动轮播与联系区反馈，不改变全局 Markdown 和 Tailwind 令牌
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 .qrTiltCard {
@@ -21,7 +21,31 @@
   transition: opacity 180ms ease;
 }
 
+.projectCover {
+  --project-cover-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  transition:
+    transform 620ms var(--project-cover-ease),
+    opacity 620ms var(--project-cover-ease);
+  will-change: transform, opacity;
+}
+
+.projectCoverActive {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.projectCoverInactive {
+  transform: translateY(10%);
+  opacity: 0;
+}
+
+.projectCoverReset {
+  transition: none !important;
+}
+
 @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
   .qrTiltCard { transform: none !important; transition: none; filter: none; }
   .qrTiltGlare { display: none; }
+  .projectCover { transition: opacity 220ms ease-out; transform: none; }
+  .projectCoverInactive { opacity: 0; }
 }
