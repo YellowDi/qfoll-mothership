@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: Markdown 文章 DOM、媒体控制状态与全局颜色 token
+ * [OUTPUT]: 对外提供代码块、表格、视频、图片轮播和灯箱的跨框架样式
+ * [POS]: Vue 与 React 共用的富媒体表现层，保持两套路由的阅读节奏一致
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 @reference "../style.css";
 
 /* Non-home markdown and rich-media styles (route-level import) */
@@ -1324,5 +1330,22 @@
     margin-left: auto;
     margin-right: auto;
     justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-video-center-ring {
+    animation: none !important;
+  }
+
+  .md-carousel-video,
+  .md-video-ui,
+  .md-video-center-btn,
+  .md-video-center-ring,
+  .md-video-more-menu,
+  .md-video-menu-item,
+  .lightbox-fade-enter-active,
+  .lightbox-fade-leave-active {
+    transition: none !important;
   }
 }
