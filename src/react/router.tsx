@@ -5,7 +5,7 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { internalDutyPath, staticPages } from "./navigation";
+import { staticPages } from "./navigation";
 import { DetailHeaderProvider } from "./providers/DetailHeaderProvider";
 import { ReactAppLayout } from "./layouts/ReactAppLayout";
 import { ReactRoutePlaceholder } from "./components/ReactRoutePlaceholder";
@@ -20,7 +20,6 @@ import { ReactYgbPage } from "./pages/ReactYgbPage";
 import { ReactWaterEnvPage } from "./pages/ReactWaterEnvPage";
 import { ReactHomePage } from "./pages/ReactHomePage";
 import { ReactDesignSpecPage } from "./pages/ReactDesignSpecPage";
-import { ReactTrashDutyPage } from "./pages/ReactTrashDutyPage";
 
 function AppFrame() {
   const { pathname, search, hash } = useLocation();
@@ -43,7 +42,6 @@ export function AppRoutes() {
                 : path === "/ygb" ? <ReactYgbPage />
                   : path === "/water-env" ? <ReactWaterEnvPage />
                     : path === "/design-spec" ? <ReactDesignSpecPage />
-                      : path === internalDutyPath ? <ReactTrashDutyPage />
                 : <ReactRoutePlaceholder title={title} />;
           return <Route key={path} path={path} element={element} />;
         })}

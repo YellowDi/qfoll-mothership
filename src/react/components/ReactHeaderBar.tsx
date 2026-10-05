@@ -1,13 +1,12 @@
 /**
  * [INPUT]: 依赖 React Router、主题 Props、详情标题/目录 Provider 与品牌 Logo
- * [OUTPUT]: 对外提供 ReactHeaderBar，包含导航开关、目录联动与三击内部入口
- * [POS]: 应用外壳顶栏，消费详情快照并管理菜单关闭、键盘与秘密入口定时器
+ * [OUTPUT]: 对外提供 ReactHeaderBar，包含品牌链接、导航开关与目录联动
+ * [POS]: 应用外壳顶栏，消费详情快照并管理菜单关闭与键盘交互
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { useEffect, useRef, type MouseEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import logoImage from "../../assets/logo.webp";
-import { internalDutyPath, secretTapWindowMs } from "../navigation";
 import { useDetailHeaderController, useHeaderBarDetailTitle } from "../providers/DetailHeaderProvider";
 import styles from "./ReactHeaderBar.module.css";
 
@@ -18,12 +17,9 @@ type Props = {
   onToggleTheme: () => void;
 };
 export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggleTheme }: Props) {
-  const navigate = useNavigate();
   const detail = useHeaderBarDetailTitle();
   const controller = useDetailHeaderController();
   const rootRef = useRef<HTMLElement>(null);
-  const tapCount = useRef(0);
-  const tapTimer = useRef<number | null>(null);
   const hasToc = detail.items.length > 0;
   useEffect(() => {
     const onPointerDown = (event: PointerEvent) => {
@@ -43,24 +39,8 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
     return () => {
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
-      if (tapTimer.current !== null) window.clearTimeout(tapTimer.current);
     };
   }, [controller]);
-  const handleSecretEntry = (event?: MouseEvent<HTMLButtonElement>) => {
-    event?.preventDefault();
-    tapCount.current += 1;
-    if (tapTimer.current !== null) window.clearTimeout(tapTimer.current);
-    if (tapCount.current >= 3) {
-      tapCount.current = 0;
-      tapTimer.current = null;
-      navigate(internalDutyPath);
-      return;
-    }
-    tapTimer.current = window.setTimeout(() => {
-      tapCount.current = 0;
-      tapTimer.current = null;
-    }, secretTapWindowMs);
-  };
   const renderDetailTitle = (mobile: boolean) => (
     <div
       className={`${styles.title} ${detail.show ? styles.visible : ""} ${mobile
@@ -116,16 +96,10 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
       <div className="relative flex h-14 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Link to="/" aria-label="返回首页">
-            <img src={logoImage} alt="企丰科技" className="h-8 w-8 rounded-sm object-cover" />
+            <Link to="/" aria-label="返回首页" className="flex items-center gap-2">
+              <img src={logoImage} alt="企丰科技" className="h-8 w-8 rounded-sm object-cover" />
+              <span className="select-none text-sm font-medium">企丰科技</span>
             </Link>
-            <button
-              type="button"
-              className="select-none border-0 bg-transparent p-0 text-sm font-medium text-primary"
-              onClick={handleSecretEntry}
-            >
-              企丰科技
-            </button>
           </div>
           <button className="hidden btn-icon btn-icon-md btn-icon-muted md:inline-flex" type="button" onClick={onToggleNav} aria-label="切换侧边导航">
             <i className="ri-layout-left-2-line text-lg" aria-hidden="true" />

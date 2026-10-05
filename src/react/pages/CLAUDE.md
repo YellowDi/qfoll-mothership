@@ -32,7 +32,6 @@ ReactTagMarqueeSection.tsx: 首页底部斜向标签舞台与品牌收束文案�
 ReactTagMarqueeSection.css: 标签轨道、渐隐和响应式舞台动画。
 ReactDesignSpecPage.tsx: 设计规范图文、媒体轮播和内联视频页面。
 ReactDesignSpecPage.css: 设计规范宽媒体与响应式比例样式。
-ReactTrashDutyPage.tsx: 内部值日表摘要、排班表和维护说明。
 
 法则: 页面只编排稳定内容与数据，不复制布局外壳；复杂交互页面继续按独立页面边界迁移。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md

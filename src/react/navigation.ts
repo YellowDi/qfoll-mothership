@@ -11,8 +11,6 @@ import { showcaseById } from "../data/showcase";
 export const brand = "企丰科技";
 export const mobileNavMediaQuery = "(max-width: 767.98px)";
 export const headerOffset = 72;
-export const secretTapWindowMs = 900;
-export const internalDutyPath = "/internal/trash-duty-9f3k";
 export const staticPages = [
   { path: "/", title: brand },
   { path: "/projects", title: "客户案例" },
@@ -25,7 +23,6 @@ export const staticPages = [
   { path: "/careers", title: "工作机会" },
   { path: "/design-spec", title: "设计规范" },
   { path: "/changelog", title: "更新日志" },
-  { path: internalDutyPath, title: "内部值日表" },
 ];
 export const companyMenu = [
   { path: "/about", label: "关于我们" },
