@@ -76,7 +76,7 @@ export function ReactYgbPage() {
     return "w-[19.8rem] opacity-100 max-md:w-[13.2rem]";
   };
   const shot = screenshots[activeShot];
-  return <div className="w-full bg-bg pb-16">
+  return <div className="w-full bg-bg pt-14 pb-16">
     <ReactYgbHero />
     <section className="mx-auto mt-8 w-full max-w-360 px-6 md:px-14"><div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       {summaryCards.map(([title, stats, desc, icon]) => <article key={title} className="group relative overflow-hidden rounded-lg border border-edge bg-surface p-4 shadow-[0_1px_0_rgba(17,17,17,0.02)] transition-[background-color,border-color] duration-300 hover:border-orange-400 hover:bg-orange-400 dark:shadow-[0_10px_28px_rgba(0,0,0,0.28)]">
