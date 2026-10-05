@@ -13,7 +13,7 @@ postcss.config.js - Tailwind/PostCSS 处理配置
 tsconfig.json - React 迁移层 TypeScript 编译约束
 tailwind.config.js - 设计令牌和 Tailwind 扩展
 index.html - 应用挂载文档壳
-ygb-hero-prototype.html - 复用原 React Hero 的港口背景原型，验证全幅地图与昼夜照明，不接入正式路由
+ygb-hero-prototype.html - 复用原 React Hero 的港口背景原型，验证道路退界、港区分区与昼夜照明，不接入正式路由
 </config>
 法则: 极简·稳定·导航·版本精确
 

@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
 [INPUT]: 依赖 React 原 Hero/主题/样式、Canvas 2D 和浏览器可见性/减弱动态偏好
-[OUTPUT]: 提供全幅港口背景试验：日照投影、街道路灯、港口泛光灯、车灯与水面反光
+[OUTPUT]: 提供全幅港口背景试验：道路退界、建筑/堆场/油罐分区、码头吊机横移、昼夜照明、车灯与水面反光
 [POS]: 根目录的 React 背景原型；通过背景插槽复用原文案/截图/叠卡，不改变正式页面或 Vue
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 -->
@@ -43,10 +43,11 @@ const palettes={
  night:{land:'#233339',water:'#102831',waterDeep:'#0c1d27',road:'#304048',curb:'#3e545c',mark:'#6c7f85',roof:'#4c5d62',wall:'#334b54',shade:'#243741',glass:'#b0baa0',tree:'#3e6659',orange:'#965e3e',cyan:'#3e717f',white:'#81958f',truck:'#c97e4b',cab:'#a7b8b3',metal:'#587880',yard:'#26383e',parking:'#28383c',park:'#426859',path:'#56665d',tank:'#68706a'}
 };
 const routes=[
- [[-650,-470],[450,-470],[450,180],[-650,180]],
- [[-210,-910],[670,-910],[670,-30],[-210,-30]],
- [[-870,-250],[230,-250],[230,180],[-870,180]],
- [[-1090,-910],[-430,-910],[-430,-30],[-1090,-30]]
+ // 车辆只沿道路中心线循环，路线坐标与下方 streetsX / streetsY 保持同源。
+ [[-740,-510],[860,-510],[860,130],[-740,130]],
+ [[-100,-830],[1180,-830],[1180,-190],[-100,-190]],
+ [[-1380,-190],[540,-190],[540,130],[-1380,130]],
+ [[-1700,-1150],[-420,-1150],[-420,-830],[-1700,-830]]
 ];
 function roundedRoute(points,r=31){
  const samples=[];
@@ -60,6 +61,11 @@ function roundedRoute(points,r=31){
  return{samples,length};
 }
 const paths=routes.map(points=>roundedRoute(points));
+const serviceRoads=[
+ [[-100,-510],[-70,-480],[-70,-440],[-40,-420]],
+ [[220,-190],[250,-225]],
+ [[540,-190],[575,-220],[590,-245]]
+];
 function position(route,distance){
  const d=((distance%route.length)+route.length)%route.length,s=route.samples;let i=0;
  while(i<s.length-1&&s[i+1].distance<d)i++;
@@ -70,37 +76,41 @@ const fleet=Array.from({length:14},(_,i)=>({route:i%4,offset:i*233+80,speed:22+i
 const buildings=[],trees=[],lamps=[],yards=[],parkingLots=[],parks=[],tanks=[];
 const streetsX=Array.from({length:12},(_,i)=>-1700+i*320);
 const streetsY=Array.from({length:10},(_,i)=>-2750+i*320);
-function building(x,y,w,d,height,type=0){buildings.push({x,y,w,d,height,type});}
+const ROAD_CLEARANCE=23;
+function intersectsRoad(x,y,w,d){return streetsX.some(line=>line>x-ROAD_CLEARANCE&&line<x+w+ROAD_CLEARANCE)||streetsY.some(line=>line>y-ROAD_CLEARANCE&&line<y+d+ROAD_CLEARANCE);}
+function safeLot(x,y,w,d){return !intersectsRoad(x,y,w,d);}
+function building(x,y,w,d,height,type=0){if(intersectsRoad(x,y,w,d))return;buildings.push({x,y,w,d,height,type});}
 /* 港区采用“开阔堆场—少量仓库—城市边界”的真实密度，建筑不再铺满每个街区。 */
 const warehouseBlocks=[
- [-1380,-520,280,160,36],[-1010,-380,240,145,31],[-560,-610,305,175,42],[-50,-470,250,155,34],
- [480,-590,290,174,39],[980,-350,260,148,33],[-1450,-160,230,142,29],[-770,-300,275,160,35],
- [-90,-260,238,150,31],[640,-315,275,164,36],[1190,-170,250,145,30]
+ [-680,-160,235,180,36],[600,-160,235,180,34],
+ [-680,-470,235,180,31],[920,-470,235,180,30]
 ];
 warehouseBlocks.forEach(([x,y,w,d,height])=>building(x,y,w,d,height,0));
 const skylineBlocks=[
- [-1230,-720,92,84,94],[-930,-650,118,106,128],[-620,-760,88,96,110],[-300,-680,112,92,82],
- [40,-790,96,88,136],[330,-680,118,103,108],[650,-760,88,90,122],[930,-650,124,110,98],
- [1230,-560,92,90,112],[-1500,-420,82,77,86],[1380,-390,110,94,100]
+ [-40,-800,92,84,94],[280,-800,118,106,128],[600,-800,88,96,110],[920,-800,112,92,82],
+ [600,-1120,96,88,136],[920,-1120,118,103,108],[1240,-1120,88,90,122]
 ];
 skylineBlocks.forEach(([x,y,w,d,height])=>building(x,y,w,d,height,1));
+const serviceBlocks=[[-360,-800,150,110,26]];
+serviceBlocks.forEach(([x,y,w,d,height])=>building(x,y,w,d,height,0));
 const addYard=(x,y,w,d,rows,cols)=>{
- yards.push({x,y,w,d});
- for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
-  const stackX=x+24+col*((w-48)/cols),stackY=y+24+row*((d-48)/rows);
-  building(stackX,stackY,Math.max(30,(w-78)/cols),Math.max(12,(d-72)/rows*.62),12+(col+row)%3*8,2+(col+2*row)%3);
- }
+ if(!safeLot(x,y,w,d))return;
+ yards.push({x,y,w,d,rows,cols});
 };
-addYard(-930,-200,520,340,5,6);addYard(-240,-120,430,300,4,6);addYard(460,-250,470,360,5,5);
-parkingLots.push({x:-560,y:210,w:250,d:130},{x:250,y:100,w:260,d:150},{x:-120,y:-700,w:270,d:150});
-parks.push({x:-1180,y:-90,w:250,d:170,pond:true},{x:350,y:-470,w:260,d:210,pond:false},{x:700,y:35,w:240,d:165,pond:true});
+addYard(-660,-800,210,220,4,4);addYard(-300,-140,170,120,3,4);addYard(250,-470,250,240,4,4);addYard(250,-1120,250,240,4,4);
+parkingLots.push(...[
+ {x:-40,y:-160,w:235,d:180},{x:280,y:-160,w:235,d:180},{x:-40,y:-470,w:235,d:180},{x:1240,y:-800,w:235,d:180}
+].filter(({x,y,w,d})=>safeLot(x,y,w,d)));
+parks.push(...[
+ {x:-360,y:-470,w:235,d:180,pond:true},{x:600,y:-470,w:235,d:180,pond:false},{x:1240,y:-470,w:235,d:180,pond:true}
+].filter(({x,y,w,d})=>safeLot(x,y,w,d)));
 parks.forEach(({x,y,w,d})=>{for(let row=0;row<3;row++)for(let col=0;col<4;col++)trees.push([x+28+col*(w-56)/3,y+28+row*(d-56)/2]);});
-tanks.push({x:-330,y:-470,r:72,height:45},{x:-145,y:-430,r:58,height:42},{x:350,y:-250,r:66,height:52},{x:505,y:-220,r:48,height:38});
+for(const tank of [{x:330,y:-300,r:48,height:52},{x:475,y:-300,r:36,height:38}])if(safeLot(tank.x-tank.r,tank.y-tank.r,tank.r*2,tank.r*2))tanks.push(tank);
 for(const y of streetsY)for(let x=-1910;x<1610;x+=110)lamps.push({x,y:y-23,height:30,kind:'street',direction:1});
 for(const x of streetsX)for(let y=-3000;y<150;y+=110)lamps.push({x:x+23,y,height:30,kind:'street',direction:2});
 for(let x=-1840;x<1600;x+=220)lamps.push({x,y:247,height:74,kind:'port',direction:0});
-const cranes=Array.from({length:8},(_,i)=>({x:-1340+i*330,y:291}));
-const ships=[{x:-650,y:464,scale:.9},{x:230,y:486,scale:1.18},{x:1040,y:472,scale:.72}];
+const cranes=Array.from({length:8},(_,i)=>({x:-1340+i*330,y:291,travel:18+(i%3)*5,phase:i*.72}));
+const ships=[{x:-260,y:360,scale:1.18},{x:-650,y:360,scale:.7}];
 const tone=(hex,f)=>{const n=parseInt(hex.slice(1),16);return`rgb(${[16,8,0].map(s=>Math.min(255,Math.round((n>>s&255)*f))).join(',')})`;};
 
 /* --- 渲染边界：地面/光照、立体物件、车辆分层；静态对象缓存为局部精灵 --- */
@@ -119,7 +129,7 @@ class PortScene{
   this.w=rect.width;this.h=rect.height;this.dpr=Math.min(devicePixelRatio||1,2);
   for(const canvas of [this.canvas,this.ground]){canvas.width=Math.round(this.w*this.dpr);canvas.height=Math.round(this.h*this.dpr);}
   // 正交镜头固定；自适应画幅但不随车辆或鼠标摇晃。
-  this.scale=Math.max(.64,Math.min(1.28,this.w/1250));this.cx=this.w*.55;this.cy=this.h*.44;
+  this.scale=Math.max(.64,Math.min(1.28,this.w/1250));this.cx=this.w*.55;this.cy=this.h*.54;
   this.rebuild();
  }
  p(x,y,z=0){return{x:this.cx+(x-y)*.74*this.scale,y:this.cy+(x+y)*.365*this.scale-z*this.scale};}
@@ -153,6 +163,24 @@ class PortScene{
   if(w>d)this.line(ctx,[[x,y+d/2,.2],[x+w,y+d/2,.2]],c.mark,.65,[7,12]);
   else this.line(ctx,[[x+w/2,y,.2],[x+w/2,y+d,.2]],c.mark,.65,[7,12]);
  }
+ routeRoad(ctx,points,width=26){
+  const c=this.c;
+  this.line(ctx,points,c.curb,width+7);
+  this.line(ctx,points,c.road,width);
+  this.line(ctx,points,c.mark,.62,[7,12]);
+ }
+ drawIntersection(ctx,x,y){
+  const c=this.c;
+  // 路口用短斑马线和转角导流线打破“十字方块”，车辆仍沿原有中心线通过。
+  for(const offset of [-13,0,13]){
+   this.line(ctx,[[x+offset,y-29,.4],[x+offset,y-21,.4]],c.mark,1.05);
+   this.line(ctx,[[x+offset,y+21,.4],[x+offset,y+29,.4]],c.mark,1.05);
+   this.line(ctx,[[x-29,y+offset,.4],[x-21,y+offset,.4]],c.mark,1.05);
+   this.line(ctx,[[x+21,y+offset,.4],[x+29,y+offset,.4]],c.mark,1.05);
+  }
+  this.line(ctx,[[x-34,y-34,.4],[x-22,y-42,.4],[x-8,y-42,.4]],this.dark?'#9bb7b75c':'#dce5daaa',.7);
+  this.line(ctx,[[x+34,y+34,.4],[x+22,y+42,.4],[x+8,y+42,.4]],this.dark?'#9bb7b75c':'#dce5daaa',.7);
+ }
  drawBuilding(ctx,b){
   const {x,y,w,d,height,type}=b,c=this.c;
   let top=c.roof,left=c.wall,right=c.shade;
@@ -175,21 +203,27 @@ class PortScene{
    for(let a=5;a<w-2;a+=5)this.line(ctx,[[x+a,y+1,height+.1],[x+a,y+d-1,height+.1]],this.dark?'#ffffff08':'#ffffff22',.35);
   }
  }
- crane(ctx,{x,y}){
+ crane(ctx,{x,y,travel=22,phase=0}){
   const c=this.c,metal=c.metal,beam=this.dark?'#946b4b':'#d79b6f';
+  const shift=this.craneShift({travel,phase}),baseX=x+shift;
+  const trolley=baseX+28+Math.sin(this.time*.72+phase*.8)*9;
   for(const offset of [0,56]){
-   this.box(ctx,x+offset-6,y-2,17,19,5,c.wall,c.shade,c.shade);
-   this.box(ctx,x+offset,y,5,14,89,metal,tone(metal,.8),tone(metal,.68));
-   this.line(ctx,[[x+offset,y,5],[x+offset,y+15,81]],metal,1);
+   this.box(ctx,baseX+offset-6,y-2,17,19,5,c.wall,c.shade,c.shade);
+   this.box(ctx,baseX+offset,y,5,14,89,metal,tone(metal,.8),tone(metal,.68));
+   this.line(ctx,[[baseX+offset,y,5],[baseX+offset,y+15,81]],metal,1);
   }
-  this.box(ctx,x-3,y-3,67,16,8,beam,tone(beam,.86),tone(beam,.66),89);
-  this.line(ctx,[[x+28,y,97],[x+28,y+129,97]],metal,5);
-  this.line(ctx,[[x+28,y,131],[x+28,y+127,97],[x+28,y,91],[x+28,y-31,97],[x+28,y,131]],metal,1.6);
-  this.line(ctx,[[x+28,y+105,97],[x+28,y+105,27]],this.dark?'#658794':'#556f7a',.75);
-  this.box(ctx,x+16,y+98,24,13,3,beam,metal,metal,25);
-  this.box(ctx,x+18,y+14,23,20,11,c.roof,c.wall,c.shade,80);
-  if(this.dark){for(const offset of [0,56])this.lightHead(ctx,x+offset,y+8,97,'#ffe0ac',1.7);this.lightHead(ctx,x+28,y,132,'#fa8a69',1);}
+  this.box(ctx,baseX-3,y-3,67,16,8,beam,tone(beam,.86),tone(beam,.66),89);
+  this.line(ctx,[[trolley,y,97],[trolley,y+129,97]],metal,5);
+  this.line(ctx,[[trolley,y,131],[trolley,y+127,97],[trolley,y,91],[trolley,y-31,97],[trolley,y,131]],metal,1.6);
+  const loadY=y+36;
+  this.line(ctx,[[trolley,loadY,97],[trolley,loadY,27]],this.dark?'#658794':'#556f7a',.75);
+  this.box(ctx,trolley-12,loadY-6,24,13,3,beam,metal,metal,25);
+  const loadColor=[c.orange,c.cyan,c.white][Math.floor((phase*3)%3)];
+  this.box(ctx,trolley-10,loadY-5,20,11,8,loadColor,tone(loadColor,.82),tone(loadColor,.66),17);
+  this.box(ctx,baseX+18,y+14,23,20,11,c.roof,c.wall,c.shade,80);
+  if(this.dark){for(const offset of [0,56])this.lightHead(ctx,baseX+offset,y+8,97,'#ffe0ac',1.7);this.lightHead(ctx,trolley,y,132,'#fa8a69',1);}
  }
+ craneShift({travel=22,phase=0}){return Math.sin(this.time*.48+phase)*travel;}
  tree(ctx,[x,y]){const c=this.c;this.box(ctx,x,y,2,2,11,c.tree,c.shade,c.shade);for(const [dx,dy,z,r] of [[0,0,15,7],[-4,3,14,5],[4,2,17,5]]){const p=this.p(x+dx,y+dy,z);const g=ctx.createRadialGradient(p.x-r*this.scale*.3,p.y-r*this.scale*.5,0,p.x,p.y,r*this.scale);g.addColorStop(0,this.dark?'#527969':'#85b29a');g.addColorStop(1,c.tree);ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r*this.scale,0,Math.PI*2);ctx.fill();}}
  lightHead(ctx,x,y,z,color,size=1.1){const p=this.p(x,y,z);this.radial(ctx,x,y,12,color,.19,1,z);ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,size*this.scale,0,Math.PI*2);ctx.fill();}
  lamp(ctx,lamp){
@@ -206,13 +240,24 @@ class PortScene{
    for(const offset of [-10,0,10]){this.box(ctx,x+offset-2,y-2,4,5,3,c.roof,c.metal,c.shade,height);if(this.dark)this.lightHead(ctx,x+offset,y,height,'#fff1d0',1.4);}
   }
  }
- yard(ctx,{x,y,w,d}){
+ yard(ctx,{x,y,w,d,rows=3,cols=4}){
   const c=this.c;
   this.polygon(ctx,[[x,y],[x+w,y],[x+w,y+d],[x,y+d]],c.yard);
   this.line(ctx,[[x,y],[x+w,y],[x+w,y+d],[x,y+d],[x,y]],this.dark?'#b1c3bd42':'#788e8e70',1);
   for(let offset=32;offset<w;offset+=75)this.line(ctx,[[x+offset,y+12],[x+offset,y+d-12]],this.dark?'#66818a38':'#eef0df70',.7,[5,7]);
   for(let offset=30;offset<d;offset+=74)this.line(ctx,[[x+12,y+offset],[x+w-12,y+offset]],this.dark?'#66818a28':'#eef0df55',.7,[8,8]);
   this.line(ctx,[[x+13,y+d-28],[x+w-13,y+d-28]],c.orange,1.4,[4,5]);
+  for(let offset=18;offset<w-10;offset+=42){
+   this.box(ctx,x+offset,y-2,2,3,4,c.metal,tone(c.metal,.82),tone(c.metal,.68),1);
+   this.box(ctx,x+offset,y+d-1,2,3,4,c.metal,tone(c.metal,.82),tone(c.metal,.68),1);
+  }
+  // 集装箱只在堆场内生成，留出四周安全退界，不会落到道路或建筑屋顶。
+  for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
+   const stackX=x+24+col*((w-48)/cols),stackY=y+24+row*((d-48)/rows);
+   const stackW=Math.max(30,(w-78)/cols),stackD=Math.max(12,(d-72)/rows*.62),height=12+(col+row)%3*8;
+   const color=[c.orange,c.cyan,c.white][(col+2*row)%3];
+   this.box(ctx,stackX,stackY,stackW,stackD,height,color,tone(color,.83),tone(color,.68),1);
+  }
  }
  parking(ctx,{x,y,w,d}){
   const c=this.c;
@@ -282,10 +327,17 @@ class PortScene{
   for(const y of streetsY)this.road(ctx,-2400,y-18,4700,36);
   for(const x of streetsX)this.road(ctx,x-18,-3350,36,3560);
   for(const y of streetsY)for(const x of streetsX)this.polygon(ctx,[[x-18,y-18],[x+18,y-18],[x+18,y+18],[x-18,y+18]],c.road);
+  for(const y of streetsY)for(const x of streetsX)if(this.isVisible(x,y,0,520))this.drawIntersection(ctx,x,y);
+  for(const path of serviceRoads)this.routeRoad(ctx,path,15);
   this.road(ctx,-2400,246,4700,29);
   for(let x=-2300;x<2100;x+=24)this.polygon(ctx,[[x,312],[x+11,312],[x+15,319],[x+4,319]],c.orange);
   for(let x=-2300;x<2100;x+=85){this.box(ctx,x,320,6,7,4,c.metal,c.shade,c.shade);this.line(ctx,[[x,299],[x+29,299]],this.dark?'#77897c':'#efe5b7',.7);}
   for(let y=356;y<1900;y+=24)for(let x=-2100;x<1900;x+=86)this.line(ctx,[[x,y],[x+21+(x%11),y]],this.dark?'#68858b11':'#d8ecdf24',.65);
+  // 岸桥两条轨道固定在码头内侧，吊机只沿轨道做小幅横移。
+  for(const crane of cranes){
+   this.line(ctx,[[crane.x-92,crane.y+16,1],[crane.x+150,crane.y+16,1]],this.dark?'#9bb6b852':'#607b8268',1.15);
+   this.line(ctx,[[crane.x-92,crane.y+34,1],[crane.x+150,crane.y+34,1]],this.dark?'#9bb6b852':'#607b8268',1.15);
+  }
   // 太阳投影先于建筑绘制；灯池也在地面层，避免穿透屋顶。
   this.visibleBuildings=buildings.filter(b=>this.isVisible(b.x+b.w/2,b.y+b.d/2,b.height,210));
   for(const b of this.visibleBuildings)this.shadow(ctx,b);
@@ -298,7 +350,8 @@ class PortScene{
    for(const b of this.visibleBuildings)if(b.type===0)for(let x=b.x+24;x<b.x+b.w-10;x+=44)this.radial(ctx,x,b.y+b.d+8,22,'#ffde9a',.12,.5);
    ctx.restore();
   }
-  this.objects=[...this.visibleBuildings.map(b=>({depth:b.x+b.y+(b.w+b.d)/2,x:b.x,y:b.y,kind:'building',value:b})),...trees.filter(([x,y])=>this.isVisible(x,y,20,20)).map(v=>({depth:v[0]+v[1],x:v[0],y:v[1],kind:'tree',value:v})),...this.visibleLamps.map(v=>({depth:v.x+v.y,x:v.x,y:v.y,kind:'lamp',value:v})),...tanks.filter(v=>this.isVisible(v.x,v.y,v.height,130)).map(v=>({depth:v.x+v.y+v.r,x:v.x,y:v.y,kind:'tank',value:v})),...cranes.filter(v=>this.isVisible(v.x,v.y,132,130)).map(v=>({depth:v.x+v.y+48,x:v.x,y:v.y,kind:'crane',value:v})),...ships.filter(v=>this.isVisible(v.x,v.y,42,280)).map(v=>({depth:v.x+v.y+120,x:v.x,y:v.y,kind:'ship',value:v}))];
+  this.visibleCranes=cranes.filter(v=>this.isVisible(v.x,v.y,132,130));
+  this.objects=[...this.visibleBuildings.map(b=>({depth:b.x+b.y+(b.w+b.d)/2,x:b.x,y:b.y,kind:'building',value:b})),...trees.filter(([x,y])=>this.isVisible(x,y,20,20)).map(v=>({depth:v[0]+v[1],x:v[0],y:v[1],kind:'tree',value:v})),...this.visibleLamps.map(v=>({depth:v.x+v.y,x:v.x,y:v.y,kind:'lamp',value:v})),...tanks.filter(v=>this.isVisible(v.x,v.y,v.height,130)).map(v=>({depth:v.x+v.y+v.r,x:v.x,y:v.y,kind:'tank',value:v})),...ships.filter(v=>this.isVisible(v.x,v.y,42,280)).map(v=>({depth:v.x+v.y+120,x:v.x,y:v.y,kind:'ship',value:v}))];
   this.sprites=this.objects.map(object=>this.sprite(object));this.draw();
  }
  isVisible(x,y,z=0,margin=80){const p=this.p(x,y,z);return p.x>-margin&&p.x<this.w+margin&&p.y>-margin&&p.y<this.h+margin;}
@@ -348,8 +401,13 @@ class PortScene{
   const route=paths[0].samples.map(p=>[p.x,p.y,.3]);route.push(route[0]);this.line(ctx,route,this.dark?'#f6a56545':'#dc874440',1.2);
   const flow=position(paths[0],this.time*32);this.radial(ctx,flow.x,flow.y,7,this.dark?'#eaaa64':'#df9257',.35,1);
   const traffic=fleet.map(truck=>{const p=position(paths[truck.route],truck.offset+this.time*truck.speed);return{truck,depth:p.x+p.y};});
-  const order=[...this.sprites.map(sprite=>({sprite,depth:sprite.depth})),...traffic].sort((a,b)=>a.depth-b.depth);
-  for(const item of order){if(item.sprite){const s=item.sprite;ctx.drawImage(s.canvas,s.left,s.top,s.size,s.size);}else this.truck(ctx,item.truck);}
+  const craneItems=this.visibleCranes.map(crane=>({crane,depth:crane.x+crane.y+48+this.craneShift(crane)}));
+  const order=[...this.sprites.map(sprite=>({sprite,depth:sprite.depth})),...craneItems,...traffic].sort((a,b)=>a.depth-b.depth);
+  for(const item of order){
+   if(item.sprite){const s=item.sprite;ctx.drawImage(s.canvas,s.left,s.top,s.size,s.size);}
+   else if(item.crane)this.crane(ctx,item.crane);
+   else this.truck(ctx,item.truck);
+  }
   // 统一的环境光和空气透视位于场景内，正文保护仍由原 Hero 蒙层负责。
   const ambience=ctx.createLinearGradient(0,0,this.w,this.h);
   if(this.dark){ambience.addColorStop(0,'#9acde00b');ambience.addColorStop(1,'#020c161d');}else{ambience.addColorStop(0,'#fff8da25');ambience.addColorStop(.55,'#fff9e30a');ambience.addColorStop(1,'#567c9812');}
