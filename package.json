@@ -30,7 +30,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^7.3.6",
-    "vite-imagetools": "^9.0.3",
+    "vite-imagetools": "^12.0.1",
     "vite-plugin-image-optimizer": "^2.0.3"
   },
   "packageManager": "pnpm@10.30.3"
