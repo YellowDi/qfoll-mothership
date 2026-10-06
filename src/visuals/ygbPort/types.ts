@@ -10,12 +10,8 @@ import type { Palette, ThemeColors } from "./palette";
 /* 地面层绘制函数：city/terminal 各自收集，由 ground 在静态地面烘焙时依次调用 */
 export type SurfacePainter = (ctx: Ctx, iso: Iso, c: Palette, dark: boolean) => void;
 
-/*
- * 物件收集器 (city/terminal 的 add)：接受单个物件或数组。
- * 历史遗留：个别调用 add(a, b) 传入多个物件，实际只有第一个生效；类型保留多余参数以维持原行为，
- * 修正会改变画面，需单独评估。
- */
-export type AddItem = (o: StaticItem | StaticItem[], ...ignored: unknown[]) => number;
+/* 物件收集器 (city/terminal 的 add)：接受任意个物件或物件数组，返回收集器当前的物件总数 */
+export type AddItem = (...items: Array<StaticItem | StaticItem[]>) => number;
 
 /* 停放车辆：静态物件里的车辆数据，配图为其补稳定编号与停放地点后读取 */
 export interface ParkedVehicle extends VehicleLook {
