@@ -44,7 +44,7 @@ export function ReactWaterEnvPage() {
 
   return (
     <div className="water-page w-full">
-      <section ref={heroRef} className="react-water-hero relative flex min-h-[clamp(36rem,76vh,48rem)] flex-col items-center overflow-hidden py-12 md:py-20">
+      <section ref={heroRef} className="react-water-hero relative flex flex-col items-center overflow-hidden py-12 md:py-20">
         <video
           ref={videoRef}
           className="react-water-hero-video"
@@ -54,13 +54,13 @@ export function ReactWaterEnvPage() {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           disablePictureInPicture
           aria-hidden="true"
           tabIndex={-1}
         />
         {/* 涟漪层只覆盖 Hero 首屏 (与 section 的 min-h 同值)，夹在视频与正文之间；底部页面背景渐变 (::after, z-1) 会自然把它盖掉 */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[clamp(36rem,76vh,48rem)]" aria-hidden="true"><ReactDotRippleBg excludeRects={excludeRects} /></div>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[var(--water-hero-height)]" aria-hidden="true"><ReactDotRippleBg excludeRects={excludeRects} /></div>
         <div className="react-water-hero-content relative z-10 mx-auto w-full max-w-240 px-6">
           <div data-dot-avoid className="react-water-hero-kicker inline-flex items-center gap-2 rounded-full border border-zinc-300/50 bg-white/60 px-3 py-1 text-sm text-secondary dark:border-white/20 dark:bg-white/10 dark:text-on-dark">
             <i className="ri-drop-line text-sky-500" aria-hidden="true" />

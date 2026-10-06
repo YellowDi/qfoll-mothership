@@ -4,8 +4,6 @@
  * [POS]: React 应用外壳的底部公共区域，保持现有备案与版本入口
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { Link } from "react-router-dom";
-import pkg from "../../../package.json";
 
 export function ReactSiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -25,12 +23,6 @@ export function ReactSiteFooter() {
             浙ICP备2022008031号-1
           </a>
           <span className="mx-2 text-secondary max-lg:hidden">·</span>
-          <Link
-            to="/changelog"
-            className="pointer-events-auto block text-secondary transition-colors hover:text-primary max-lg:mt-1 lg:inline"
-          >
-            v{pkg.version}
-          </Link>
         </div>
         <button
           type="button"

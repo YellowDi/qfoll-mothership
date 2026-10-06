@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "vite",
     "dev:vue": "vite --mode vue",
-    "build": "node scripts/generateChangelog.js && pnpm typecheck && vite build && node scripts/createSpaFallback.js",
-    "build:vue": "node scripts/generateChangelog.js && vite build --mode vue && node scripts/createSpaFallback.js",
-    "generate:changelog": "node scripts/generateChangelog.js",
+    "build": "pnpm typecheck && vite build && node scripts/createSpaFallback.js",
+    "build:vue": "pnpm typecheck && vite build --mode vue && node scripts/createSpaFallback.js",
+    "check:routes": "node scripts/checkReactRouteCoverage.js",
     "preview": "vite preview",
     "preview:vue": "vite preview --mode vue",
     "dev:react": "vite --mode react",
     "typecheck": "tsc --noEmit",
-    "build:react": "pnpm typecheck && vite build --mode react && node scripts/createSpaFallback.js dist-react",
+    "build:react": "pnpm typecheck && pnpm check:routes && vite build --mode react && node scripts/createSpaFallback.js dist-react",
     "preview:react": "vite preview --mode react"
   },
   "dependencies": {

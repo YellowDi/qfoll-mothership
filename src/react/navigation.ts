@@ -6,7 +6,6 @@
  */
 import { projects, projectList } from "../data/projects";
 import { newsArticles } from "../data/news";
-import { showcaseById } from "../data/showcase";
 
 export const brand = "企丰科技";
 export const mobileNavMediaQuery = "(max-width: 767.98px)";
@@ -14,7 +13,6 @@ export const headerOffset = 72;
 export const staticPages = [
   { path: "/", title: brand },
   { path: "/projects", title: "客户案例" },
-  { path: "/showcase", title: "Showcase" },
   { path: "/news", title: "最新动态" },
   { path: "/ygb", title: "云柜宝" },
   { path: "/water-env", title: "水环境智慧监控" },
@@ -22,7 +20,6 @@ export const staticPages = [
   { path: "/pricing", title: "定价" },
   { path: "/careers", title: "工作机会" },
   { path: "/design-spec", title: "设计规范" },
-  { path: "/changelog", title: "更新日志" },
 ];
 export const companyMenu = [
   { path: "/about", label: "关于我们" },
@@ -49,14 +46,14 @@ export function resolvePageTitle(pathname: string): string {
   const path = pathname.replace(/\/$/, "") || "/";
   const exactTitle = staticPages.find((page) => page.path === path.toLowerCase())?.title;
   if (exactTitle) return exactTitle;
-  const detail = /^\/(project|news|showcase)\/([^/]+)$/i.exec(path);
+  const detail = /^\/(project|news)\/([^/]+)$/i.exec(path);
   if (!detail) return "页面不存在";
   const domain = detail[1].toLowerCase();
   let id = detail[2];
   try { id = decodeURIComponent(id); } catch { /* 保留无效编码，使用领域标题兜底。 */ }
   const index: Record<string, { title?: string }> =
-    domain === "project" ? projects : domain === "news" ? newsArticles : showcaseById;
-  const fallback = domain === "project" ? "客户案例" : domain === "news" ? "最新动态" : "Showcase";
+    domain === "project" ? projects : newsArticles;
+  const fallback = domain === "project" ? "客户案例" : "最新动态";
   return Object.hasOwn(index, id) ? index[id]?.title || fallback : fallback;
 }
 export const documentTitleForPath = (path: string) => {

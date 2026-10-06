@@ -10,12 +10,9 @@ import { DetailHeaderProvider } from "./providers/DetailHeaderProvider";
 import { ReactAppLayout } from "./layouts/ReactAppLayout";
 import { ReactRoutePlaceholder } from "./components/ReactRoutePlaceholder";
 import { CareersPage, PricingPage } from "./pages/ReactArticlePage";
-import { ReactChangelogPage } from "./pages/ReactChangelogPage";
 import { AboutPage } from "./pages/AboutPage";
 import { ReactNewsPage, ReactProjectsPage } from "./pages/ReactListPage";
-import { ReactShowcasePage } from "./pages/ReactShowcasePage";
 import { ReactNewsDetailPage, ReactProjectDetailPage } from "./pages/ReactDetailPage";
-import { ReactShowcaseDetailPage } from "./pages/ReactShowcaseDetailPage";
 import { ReactYgbPage } from "./pages/ReactYgbPage";
 import { ReactWaterEnvPage } from "./pages/ReactWaterEnvPage";
 import { ReactHomePage } from "./pages/ReactHomePage";
@@ -34,11 +31,9 @@ export function AppRoutes() {
           const element = path === "/" ? <ReactHomePage />
             : path === "/pricing" ? <PricingPage />
             : path === "/careers" ? <CareersPage />
-              : path === "/changelog" ? <ReactChangelogPage />
             : path === "/about" ? <AboutPage />
               : path === "/projects" ? <ReactProjectsPage />
                 : path === "/news" ? <ReactNewsPage />
-              : path === "/showcase" ? <ReactShowcasePage />
                 : path === "/ygb" ? <ReactYgbPage />
                   : path === "/water-env" ? <ReactWaterEnvPage />
                     : path === "/design-spec" ? <ReactDesignSpecPage />
@@ -46,7 +41,6 @@ export function AppRoutes() {
           return <Route key={path} path={path} element={element} />;
         })}
       <Route path="/project/:id" element={<ReactProjectDetailPage />} />
-      <Route path="/showcase/:id" element={<ReactShowcaseDetailPage />} />
       <Route path="/news/:id" element={<ReactNewsDetailPage />} />
       <Route path="/company" element={<Navigate to="/about" replace />} />
       <Route path="/cloud-cabinet" element={<Navigate to="/ygb" replace />} />
