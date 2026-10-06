@@ -33,7 +33,7 @@ src/
 ├── data/           # Content parsing and metadata (projects.ts, news.ts, contentParserShared.ts, types.ts)
 ├── react/          # React app: router, layout shell, pages, hooks, providers
 ├── styles/         # Markdown media and icon-font styles
-├── visuals/        # Framework-agnostic Canvas/WebGL engines (ygbPort, dotRipple, roadMap, ...)
+├── visuals/        # Framework-agnostic Canvas/WebGL engines (ygbPort, dotRipple, twinkleDots, ...)
 └── style.css       # Design tokens, Tailwind base layer
 scripts/            # Post-build SPA fallback (404.html)
 public/             # Static assets served as-is (project images, icons, water-env video)
