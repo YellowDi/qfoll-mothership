@@ -26,6 +26,7 @@
   },
   "include": [
     "src/data/**/*.ts",
+    "src/composables/**/*.ts",
     "src/react/**/*.ts",
     "src/react/**/*.tsx"
   ]
