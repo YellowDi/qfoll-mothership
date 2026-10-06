@@ -30,7 +30,7 @@ src/
 ├── content/        # Markdown content
 │   ├── projects/   # Case studies
 │   └── news/       # News articles
-├── data/           # Content parsing and metadata (projects.js, news.js, contentParserShared.js)
+├── data/           # Content parsing and metadata (projects.ts, news.ts, contentParserShared.ts, types.ts)
 ├── react/          # React app: router, layout shell, pages, hooks, providers
 ├── styles/         # Markdown media and icon-font styles
 ├── visuals/        # Framework-agnostic Canvas/WebGL engines (ygbPort, dotRipple, roadMap, ...)

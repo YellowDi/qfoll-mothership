@@ -5,10 +5,9 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef } from "react";
-import { mountYgbPort } from "../../visuals/ygbPort";
+import { mountYgbPort, type PortHandle } from "../../visuals/ygbPort";
 import { useTheme } from "../providers/ThemeProvider";
 
-type PortHandle = ReturnType<typeof mountYgbPort>;
 
 export interface ReactYgbPortBackgroundProps {
   isDark?: boolean;

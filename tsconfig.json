@@ -25,6 +25,7 @@
     ]
   },
   "include": [
+    "src/data/**/*.ts",
     "src/react/**/*.ts",
     "src/react/**/*.tsx"
   ]

@@ -1,15 +1,17 @@
 /**
  * [INPUT]: 依赖静态媒体资源路径约定
- * [OUTPUT]: 对外提供内容封面与媒体资源映射
+ * [OUTPUT]: 对外提供 SQUARE_COVER_SIZES、resolveCoverAsset、resolveCoverVideoAsset
  * [POS]: 内容数据与 public/src assets 之间的资源适配层
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-const coverImages = import.meta.glob("../assets/covers/*.webp", {
+import type { CoverAsset } from "./types";
+
+const coverImages = import.meta.glob<string>("../assets/covers/*.webp", {
   eager: true,
   import: "default",
 });
 
-const coverSrcSets = import.meta.glob(
+const coverSrcSets = import.meta.glob<string>(
   "../assets/covers/*.webp?w=320;480;640;800;960;1200&format=webp&as=srcset",
   {
     eager: true,
@@ -17,40 +19,35 @@ const coverSrcSets = import.meta.glob(
   }
 );
 
-const coverVideos = import.meta.glob("../assets/covers/*.{mp4,webm,mov,m4v}", {
+const coverVideos = import.meta.glob<string>("../assets/covers/*.{mp4,webm,mov,m4v}", {
   eager: true,
   import: "default",
 });
 
-const toPublicCoverPath = (fullPath) => {
+const toPublicCoverPath = (fullPath: string) => {
   const fileName = String(fullPath || "").split("/").pop();
   return fileName ? `/covers/${fileName}` : "";
 };
 
-const COVER_BY_PATH = Object.fromEntries(
-  Object.entries(coverImages)
-    .map(([fullPath, src]) => {
-      const publicPath = toPublicCoverPath(fullPath);
-      if (!publicPath) return null;
+const COVER_BY_PATH: Record<string, CoverAsset> = Object.fromEntries(
+  Object.entries(coverImages).flatMap(([fullPath, src]) => {
+    const publicPath = toPublicCoverPath(fullPath);
+    if (!publicPath) return [];
 
-      const srcSetPath = `${fullPath}?w=320;480;640;800;960;1200&format=webp&as=srcset`;
-      const srcSet = coverSrcSets[srcSetPath] || "";
-      return [publicPath, { src, srcSet }];
-    })
-    .filter(Boolean)
+    const srcSetPath = `${fullPath}?w=320;480;640;800;960;1200&format=webp&as=srcset`;
+    const srcSet = coverSrcSets[srcSetPath] || "";
+    return [[publicPath, { src, srcSet }]];
+  })
 );
 
-const COVER_VIDEO_BY_PATH = Object.fromEntries(
-  Object.entries(coverVideos)
-    .map(([fullPath, src]) => {
-      const publicPath = toPublicCoverPath(fullPath);
-      if (!publicPath) return null;
-      return [publicPath, src];
-    })
-    .filter(Boolean)
+const COVER_VIDEO_BY_PATH: Record<string, string> = Object.fromEntries(
+  Object.entries(coverVideos).flatMap(([fullPath, src]) => {
+    const publicPath = toPublicCoverPath(fullPath);
+    return publicPath ? [[publicPath, src]] : [];
+  })
 );
 
-const extractCoverPath = (value) => {
+const extractCoverPath = (value: unknown) => {
   const raw = String(value || "").trim();
   if (!raw) return "";
   const urlMatches = [...raw.matchAll(/url\((['"]?)(.*?)\1\)/g)];
@@ -63,7 +60,7 @@ const extractCoverPath = (value) => {
 export const SQUARE_COVER_SIZES =
   "(max-width: 768px) 72vw, (max-width: 1280px) 33vw, 26vw";
 
-export const resolveCoverAsset = (value) => {
+export const resolveCoverAsset = (value: unknown): CoverAsset => {
   const coverPath = extractCoverPath(value);
   if (!coverPath) {
     return { src: "", srcSet: "" };
@@ -73,7 +70,7 @@ export const resolveCoverAsset = (value) => {
   return { src: coverPath, srcSet: "" };
 };
 
-export const resolveCoverVideoAsset = (value) => {
+export const resolveCoverVideoAsset = (value: unknown): string => {
   const videoPath = extractCoverPath(value);
   if (!videoPath) return "";
   const mapped = COVER_VIDEO_BY_PATH[videoPath];
