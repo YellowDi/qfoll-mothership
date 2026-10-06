@@ -7,8 +7,6 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "allowJs": true,
-    "checkJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -25,11 +23,7 @@
     ]
   },
   "include": [
-    "src/data/**/*.ts",
-    "src/composables/**/*.ts",
-    "src/visuals/*.ts",
-    "src/visuals/dotRipple/**/*.ts",
-    "src/react/**/*.ts",
-    "src/react/**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ]
 }

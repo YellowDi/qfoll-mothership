@@ -1,18 +1,37 @@
 /**
  * [INPUT]: 依赖 ./common 的时钟/车牌；订阅 PortScene 帧与 gate/arrive 事件
- * [OUTPUT]: 对外提供 mountUplink(scene, onState)：集卡运单/轨迹/进出港/结算数据向监测平台上报的数据包与校验记录
+ * [OUTPUT]: 对外提供 mountUplink(scene, onState)：集卡运单/轨迹/进出港/结算数据向监测平台上报的数据包与校验记录；UplinkInfo 载荷类型
  * [POS]: 杂志第 05 章"政府监管"配图的状态源；每条记录都来自世界里真实发生的集卡事件
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
+import type { PortScene } from "../scene";
 import { clock, plateOf } from "./common";
+
+interface UplinkRecord {
+  id: number;
+  /* 记录产生时的交通时钟，据此计算数据包在途进度 */
+  born: number;
+  time: string;
+  kind: string;
+  ref: string;
+  detail: string;
+  sig: string;
+}
+
+export interface UplinkInfo {
+  total: number;
+  latency: string;
+  packets: { id: number; kind: string; p: number }[];
+  rows: Array<UplinkRecord & { ok: boolean }>;
+}
 
 const FLIGHT = 1.4;
 
-export function mountUplink(scene, onState) {
-  const records = [];
+export function mountUplink(scene: PortScene, onState: (state: UplinkInfo) => void): () => void {
+  const records: UplinkRecord[] = [];
   let serial = 0, lastTrack = scene.traffic.time, last = 0;
-  const hash = (n) => ((n * 2654435761) >>> 0).toString(16).padStart(8, "0").slice(0, 8).toUpperCase();
-  const push = (t, kind, ref, detail) => {
+  const hash = (n: number) => ((n * 2654435761) >>> 0).toString(16).padStart(8, "0").slice(0, 8).toUpperCase();
+  const push = (t: number, kind: string, ref: string, detail: string) => {
     serial++;
     records.unshift({ id: serial, born: t, time: clock(t), kind, ref, detail, sig: hash(serial + 977) });
     if (records.length > 24) records.length = 24;

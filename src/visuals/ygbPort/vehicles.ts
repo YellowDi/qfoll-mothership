@@ -1,13 +1,25 @@
 /**
  * [INPUT]: 依赖 ./iso 的 obox/tone/alpha，./palette 的集装箱与车身配色索引
- * [OUTPUT]: 对外提供 VEHICLE 尺寸表、drawVehicle 绘制函数与 parkedVehicle 静态物件工厂 (保留 vehicle 数据供车队/派单配图读取)
+ * [OUTPUT]: 对外提供 VEHICLE 尺寸表、drawVehicle 绘制函数与 parkedVehicle 静态物件工厂 (保留 vehicle 数据供车队/派单配图读取)；VehicleType/VehicleLook 类型在 ./types
  * [POS]: visuals/ygbPort 的车辆外观库；行驶车辆 (traffic) 与停放车辆 (city/terminal) 共用同一外观
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { alpha, tone } from "./iso";
+import { alpha, tone, type Ctx, type Iso, type OboxOpts } from "./iso";
+import type { Palette, ThemeColors } from "./palette";
+import type { StaticItem, VehicleLook, VehicleType } from "./types";
+
+/* 局部坐标到世界坐标：lx 沿车头、ly 沿车身右侧 */
+type LocalToWorld = (lx: number, ly: number) => [number, number];
+
+interface VehicleSpec {
+  half: number;
+  width: number;
+  /* 货箱中心的局部 x (仅集卡/拖车) */
+  cargo?: number;
+}
 
 /* 局部坐标：+lx 车头方向，+ly 车身右侧；参考点为货箱中心附近 */
-export const VEHICLE = {
+export const VEHICLE: Record<VehicleType, VehicleSpec> = {
   truck: { half: 18, width: 5.4, cargo: -5.2 },
   tractor: { half: 16, width: 5, cargo: -3.5 },
   car: { half: 4.6, width: 4.2 },
@@ -19,10 +31,10 @@ export const VEHICLE = {
  * v: { type, x, y, h (朝向弧度), cargo (集装箱色索引|null), color (车身色索引), cab (车头色索引), braking }
  * colors: { box: [], car: [], cab: [] } 当前主题的索引表
  */
-export function drawVehicle(ctx, iso, c, colors, v, dark) {
+export function drawVehicle(ctx: Ctx, iso: Iso, c: Palette, colors: ThemeColors, v: VehicleLook, dark: boolean) {
   const cos = Math.cos(v.h), sin = Math.sin(v.h);
-  const B = (lx0, lx1, ly0, ly1, z0, z1, color, o) => iso.obox(ctx, v.x, v.y, cos, sin, lx0, lx1, ly0, ly1, z0, z1, color, o);
-  const L = (lx, ly) => [v.x + lx * cos - ly * sin, v.y + lx * sin + ly * cos];
+  const B = (lx0: number, lx1: number, ly0: number, ly1: number, z0: number, z1: number, color: string, o?: OboxOpts) => iso.obox(ctx, v.x, v.y, cos, sin, lx0, lx1, ly0, ly1, z0, z1, color, o);
+  const L: LocalToWorld = (lx, ly) => [v.x + lx * cos - ly * sin, v.y + lx * sin + ly * cos];
   const spec = VEHICLE[v.type];
   /* 接触影 */
   const hl = spec.half, hw = spec.width / 2;
@@ -37,7 +49,7 @@ export function drawVehicle(ctx, iso, c, colors, v, dark) {
     for (const lx of truck ? [-15, -11.5, 4, 13.5] : [-13, -9.5, 11.5]) for (const ly of [-2.7, 2.1]) B(lx - 1.2, lx + 1.2, ly, ly + 0.6, 0, 2.4, "#26343b");
     B(back, truck ? 11 : 9.5, -2.3, 2.3, 1.8, 3, "#3e555d");
     if (v.cargo != null) {
-      const box = colors.box[v.cargo], cx = spec.cargo;
+      const box = colors.box[v.cargo], cx = spec.cargo!;
       B(cx - 12.2, cx + 12.2, -2.45, 2.45, 3, 8.2, box);
       ribs(ctx, iso, L, cx, box, dark);
     }
@@ -74,7 +86,7 @@ export function drawVehicle(ctx, iso, c, colors, v, dark) {
   lamps(ctx, iso, L, spec.half, -spec.half, van ? 3 : 2, lit, v.braking);
 }
 
-function ribs(ctx, iso, L, cx, box, dark) {
+function ribs(ctx: Ctx, iso: Iso, L: LocalToWorld, cx: number, box: string, dark: boolean) {
   const col = dark ? alpha("#ffffff", 0.08) : alpha(tone(box, 1.12), 0.6);
   for (let a = -10.5; a <= 10.5; a += 3) {
     for (const ly of [2.46, -2.46]) {
@@ -85,7 +97,7 @@ function ribs(ctx, iso, L, cx, box, dark) {
 }
 
 /* 夜间：车头光锥以 screen 合成铺在路面上 */
-function headlights(ctx, iso, L, front, spread) {
+function headlights(ctx: Ctx, iso: Iso, L: LocalToWorld, front: number, spread: number) {
   ctx.save();
   ctx.globalCompositeOperation = "screen";
   for (const ly of [-spread, spread]) {
@@ -98,7 +110,7 @@ function headlights(ctx, iso, L, front, spread) {
   }
   ctx.restore();
 }
-function lamps(ctx, iso, L, front, back, z, dark, braking) {
+function lamps(ctx: Ctx, iso: Iso, L: LocalToWorld, front: number, back: number, z: number, dark: boolean, braking?: boolean) {
   for (const ly of [-1.6, 1.6]) {
     const f = L(front + 0.2, ly), r = L(back - 0.2, ly);
     iso.dot(ctx, f[0], f[1], z + 1.2, dark ? 0.75 : 0.45, dark ? "#fff2cf" : "#f5f4e6");
@@ -109,7 +121,7 @@ function lamps(ctx, iso, L, front, back, z, dark, braking) {
 }
 
 /* 停放车辆：静态物件，复用行驶车辆外观 */
-export function parkedVehicle(v) {
+export function parkedVehicle(v: VehicleLook): StaticItem {
   const r = VEHICLE[v.type].half + 2;
   return {
     x0: v.x - r, y0: v.y - r, z0: 0, x1: v.x + r, y1: v.y + r, z1: 13, depth: v.x + v.y, vehicle: v,

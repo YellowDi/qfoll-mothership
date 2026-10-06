@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 无外部依赖
- * [OUTPUT]: 对外提供 palettes(day/night)、集装箱/车辆配色索引表与 pick 权重抽样
+ * [OUTPUT]: 对外提供 palettes(day/night)、Palette 类型 (由日间表推出)、ThemeColors 当前主题的配色索引表类型、集装箱/车辆配色索引表与 pick 权重抽样
  * [POS]: visuals/ygbPort 的材质表；物件只保存颜色索引，主题切换时换表不换布局
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -40,20 +40,30 @@ export const boxColors = {
   day: ["#d98e5b", "#74a7af", "#dce5db", "#5f7f9a", "#b5675a", "#9aa6a8", "#93aa8c", "#c7b07a"],
   night: ["#80513a", "#386370", "#6c7e79", "#344b62", "#6a423c", "#525d60", "#4e604f", "#73684f"],
 };
-export const BOX_WEIGHTS = [2.2, 1.8, 1.9, 2, 1.4, 1.4, 0.9, 0.6];
+export const BOX_WEIGHTS: number[] = [2.2, 1.8, 1.9, 2, 1.4, 1.4, 0.9, 0.6];
 
 /* --- 车辆：社会车辆偏中性色，牵引车头与港内拖车用功能色 --- */
 export const carColors = {
   day: ["#eef0ea", "#c9d1d0", "#4a5a62", "#2f3b42", "#b45b4c", "#6f8fa8", "#d7cfb8"],
   night: ["#97a6a3", "#76868a", "#26343b", "#1a252b", "#6d3e37", "#3d5367", "#857e6c"],
 };
-export const CAR_WEIGHTS = [3, 2.4, 1.6, 1.8, 0.7, 0.8, 0.6];
+export const CAR_WEIGHTS: number[] = [3, 2.4, 1.6, 1.8, 0.7, 0.8, 0.6];
 export const cabColors = {
   day: ["#e87f46", "#eef0e6", "#5f7f9a", "#c8574a", "#e0b25a"],
   night: ["#c97e4b", "#a7b8b3", "#3d5670", "#7c4038", "#8f7442"],
 };
 
-export function pick(random, weights) {
+/* 昼夜两张表键集相同，类型以日间表为准 */
+export type Palette = typeof palettes.day;
+
+/* 当前主题下的箱/车/车头配色索引表 (scene.colors) */
+export interface ThemeColors {
+  box: string[];
+  car: string[];
+  cab: string[];
+}
+
+export function pick(random: () => number, weights: number[]): number {
   let total = 0;
   for (const w of weights) total += w;
   let r = random() * total;

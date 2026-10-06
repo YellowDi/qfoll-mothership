@@ -1,20 +1,23 @@
 /**
  * [INPUT]: 依赖 ./iso 的投影原语、tone/mix/alpha 与种子随机
- * [OUTPUT]: 对外提供静态物件工厂：warehouse/tower/slab/controlTower/shed/canopy/tank/tree/streetLamp/highMast/fence/booth
+ * [OUTPUT]: 对外提供静态物件工厂：warehouse/tower/slab/controlTower/shed/canopy/tank/tree/streetLamp/highMast/fence/booth，以及 boxShadow 太阳投影；物件契约 StaticItem 在 ./types
  * [POS]: visuals/ygbPort 的建筑与街道家具库；city/terminal 只负责摆放，物件外观在此统一
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { SUN, alpha, mix, rng, tone } from "./iso";
+import { SUN, alpha, mix, rng, tone, type Ctx, type Iso, type Pt } from "./iso";
+import type { Palette } from "./palette";
+import type { Xy } from "./roads";
+import type { StaticItem } from "./types";
 
 /*
  * 静态物件契约：
  *   { x0,y0,z0,x1,y1,z1 世界包围盒, depth 排序深度, draw(ctx,iso,c,dark,colors), shadow?(ctx,iso,c), light?(ctx,iso,c), beacon?[x,y,z], pad? 精灵外扩 (默认 3，带光晕的灯具更大) }
  * shadow 白天画在统一阴影层 (锐利多边形)，场景整体模糊一次再叠到地面；light 在夜间写入光照图。
  */
-const item = (x0, y0, z0, x1, y1, z1, draw, extra) => ({ x0, y0, z0, x1, y1, z1, depth: (x0 + x1) / 2 + (y0 + y1) / 2, draw, ...extra });
+const item = (x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, draw: StaticItem["draw"], extra?: Partial<StaticItem>): StaticItem => ({ x0, y0, z0, x1, y1, z1, depth: (x0 + x1) / 2 + (y0 + y1) / 2, draw, ...extra });
 
 /* 太阳投影：盒体底面沿 SUN 方向拉伸；柔化由场景对整层阴影统一模糊完成 */
-export function boxShadow(ctx, iso, c, x, y, w, d, h, a = 0.23) {
+export function boxShadow(ctx: Ctx, iso: Iso, c: Palette, x: number, y: number, w: number, d: number, h: number, a = 0.23) {
   const dx = h * SUN.x, dy = h * SUN.y;
   ctx.save();
   iso.poly(ctx, [[x, y + d], [x + w, y + d], [x + w, y], [x + w + dx, y + dy], [x + w + dx, y + d + dy], [x + dx, y + d + dy]], alpha(c.shadowSoft, a));
@@ -23,7 +26,7 @@ export function boxShadow(ctx, iso, c, x, y, w, d, h, a = 0.23) {
 }
 
 /* ─── 仓库：屋面肋条与采光带，南立面装卸月台 ─── */
-export function warehouse({ x, y, w, d, h = 22, seed = 1, docks = true, solar = false }) {
+export function warehouse({ x, y, w, d, h = 22, seed = 1, docks = true, solar = false }: { x: number; y: number; w: number; d: number; h?: number; seed?: number; docks?: boolean; solar?: boolean }) {
   const R = rng(seed);
   const units = Array.from({ length: 2 + Math.floor(R() * 3) }, () => [x + 10 + R() * (w - 30), y + 8 + R() * (d - 24)]);
   return item(x, y, 0, x + w, y + d, h + 6, (ctx, iso, c, dark) => {
@@ -55,7 +58,7 @@ export function warehouse({ x, y, w, d, h = 22, seed = 1, docks = true, solar = 
 }
 
 /* ─── 写字楼：裙房 + 玻璃幕墙塔身 + 设备层冠顶 ─── */
-export function tower({ x, y, w, d, h, seed = 1, podium = 10, tint = 0 }) {
+export function tower({ x, y, w, d, h, seed = 1, podium = 10, tint = 0 }: { x: number; y: number; w: number; d: number; h: number; seed?: number; podium?: number; tint?: number }) {
   const R = rng(seed);
   const inset = 5 + Math.floor(R() * 4), crown = 6 + R() * 6;
   const litMap = Array.from({ length: 400 }, () => R() < 0.42);
@@ -91,7 +94,7 @@ export function tower({ x, y, w, d, h, seed = 1, podium = 10, tint = 0 }) {
 }
 
 /* ─── 住宅板楼：窗格 + 阳台横线 ─── */
-export function slab({ x, y, w, d, h, seed = 1 }) {
+export function slab({ x, y, w, d, h, seed = 1 }: { x: number; y: number; w: number; d: number; h: number; seed?: number }) {
   const R = rng(seed);
   const litMap = Array.from({ length: 300 }, () => R() < 0.5);
   return item(x, y, 0, x + w, y + d, h + 4, (ctx, iso, c, dark) => {
@@ -109,7 +112,7 @@ export function slab({ x, y, w, d, h, seed = 1 }) {
 }
 
 /* ─── 港务控制塔：竖井 + 外挑玻璃指挥室 ─── */
-export function controlTower({ x, y }) {
+export function controlTower({ x, y }: { x: number; y: number }) {
   const w = 14, h = 62;
   return item(x - 4, y - 4, 0, x + w + 4, y + w + 4, h + 20, (ctx, iso, c, dark) => {
     iso.box(ctx, x, y, 0, w, w, h, c.white, { side: mix(c.white, c.wall, 0.4), end: c.shade });
@@ -126,16 +129,16 @@ export function controlTower({ x, y }) {
 }
 
 /* ─── 小型构筑：门卫亭、配电房、维修棚 ─── */
-export function shed({ x, y, w, d, h, color, roof }) {
+export function shed({ x, y, w, d, h, color, roof }: { x: number; y: number; w: number; d: number; h: number; color?: keyof Palette; roof?: keyof Palette }) {
   return item(x, y, 0, x + w, y + d, h + 1, (ctx, iso, c) => {
     iso.box(ctx, x, y, 0, w, d, h, roof ? c[roof] : c.roof, { side: color ? c[color] : c.wall, end: color ? tone(c[color], 0.8) : c.shade });
   }, { shadow: (ctx, iso, c) => boxShadow(ctx, iso, c, x, y, w, d, h, 0.18) });
 }
 
 /* ─── 雨棚：加油站与闸口；薄板置于立柱之上，夜间向下打光 ─── */
-export function canopy({ x, y, w, d, h = 16, band = "orange", columns = 2, lightRows = 2 }) {
+export function canopy({ x, y, w, d, h = 16, band = "orange", columns = 2, lightRows = 2 }: { x: number; y: number; w: number; d: number; h?: number; band?: keyof Palette; columns?: number; lightRows?: number }) {
   return item(x, y, 0, x + w, y + d, h + 2.5, (ctx, iso, c, dark) => {
-    const cols = [];
+    const cols: number[] = [];
     for (let i = 0; i < columns; i++) cols.push(x + 6 + (i * (w - 12)) / Math.max(1, columns - 1));
     for (const cx of cols) for (const cy of [y + d * 0.3, y + d * 0.7]) iso.box(ctx, cx - 1, cy - 1, 0, 2, 2, h, c.steel);
     iso.box(ctx, x, y, h, w, d, 2.4, c.roof, { side: c[band], end: tone(c[band], 0.8) });
@@ -153,11 +156,11 @@ export function canopy({ x, y, w, d, h = 16, band = "orange", columns = 2, light
 }
 
 /* ─── 储罐：环形立面按法线受光，罐顶检修平台 ─── */
-export function tank({ x, y, r, h }) {
-  const ring = Array.from({ length: 28 }, (_, i) => [x + Math.cos((i / 28) * Math.PI * 2) * r, y + Math.sin((i / 28) * Math.PI * 2) * r]);
+export function tank({ x, y, r, h }: { x: number; y: number; r: number; h: number }) {
+  const ring = Array.from({ length: 28 }, (_, i): Pt => [x + Math.cos((i / 28) * Math.PI * 2) * r, y + Math.sin((i / 28) * Math.PI * 2) * r]);
   return item(x - r, y - r, 0, x + r, y + r, h + 10, (ctx, iso, c, dark) => {
     iso.prism(ctx, ring, 0, h, c.tank, { top: tone(c.tank, 1.04) });
-    iso.line(ctx, ring.map(([px, py]) => [px, py, h * 0.5]), dark ? alpha("#dfd2a7", 0.12) : alpha("#ffffff", 0.35), 0.5);
+    iso.line(ctx, ring.map(([px, py]): Pt => [px, py, h * 0.5]), dark ? alpha("#dfd2a7", 0.12) : alpha("#ffffff", 0.35), 0.5);
     iso.line(ctx, [[x, y, h], [x, y, h + 8]], c.metal, 0.9);
     iso.box(ctx, x - 5, y - 4, h + 0.5, 10, 8, 1.6, c.metal);
     /* 盘梯 */
@@ -168,7 +171,7 @@ export function tank({ x, y, r, h }) {
   }, {
     shadow: (ctx, iso, c) => {
       ctx.save();
-      iso.poly(ctx, ring.map(([px, py]) => [px + h * SUN.x * 0.9, py + h * SUN.y * 0.9]), alpha(c.shadowSoft, 0.22));
+      iso.poly(ctx, ring.map(([px, py]): Pt => [px + h * SUN.x * 0.9, py + h * SUN.y * 0.9]), alpha(c.shadowSoft, 0.22));
       ctx.restore();
     },
     light: (ctx, iso) => iso.glow(ctx, x, y, h + 1, r * 0.9, "#ffe0a0", 0.14, 0.45),
@@ -176,7 +179,7 @@ export function tank({ x, y, r, h }) {
 }
 
 /* ─── 行道树：三团树冠，带接触影 ─── */
-export function tree(x, y, size = 1) {
+export function tree(x: number, y: number, size = 1) {
   const r = 6 * size;
   return item(x - r, y - r, 0, x + r, y + r, 20 * size, (ctx, iso, c) => {
     iso.box(ctx, x - 0.8, y - 0.8, 0, 1.6, 1.6, 9 * size, c.dark);
@@ -202,7 +205,7 @@ export function tree(x, y, size = 1) {
 }
 
 /* ─── 路灯：灯臂伸向车道，夜间灯池在地面层烘焙 ─── */
-export function streetLamp(x, y, ax, ay, h = 22) {
+export function streetLamp(x: number, y: number, ax: number, ay: number, h = 22) {
   return item(x - 2 + Math.min(0, ax), y - 2 + Math.min(0, ay), 0, x + 2 + Math.max(0, ax), y + 2 + Math.max(0, ay), h + 2, (ctx, iso, c, dark) => {
     iso.line(ctx, [[x, y, 0], [x, y, h]], dark ? "#88a1a2" : "#7b9193", 1);
     iso.line(ctx, [[x, y, h], [x + ax, y + ay, h + 1]], c.metal, 0.9);
@@ -212,7 +215,7 @@ export function streetLamp(x, y, ax, ay, h = 22) {
 }
 
 /* ─── 高杆灯：堆场照明，顶部环形灯盘 ─── */
-export function highMast(x, y, h = 92) {
+export function highMast(x: number, y: number, h = 92) {
   return item(x - 6, y - 6, 0, x + 6, y + 6, h + 4, (ctx, iso, c, dark) => {
     iso.box(ctx, x - 1.5, y - 1.5, 0, 3, 3, 3, c.metal);
     iso.line(ctx, [[x, y, 0], [x, y, h]], dark ? "#7d969b" : "#7b9193", 1.6);
@@ -230,18 +233,18 @@ export function highMast(x, y, h = 92) {
 }
 
 /* ─── 围网：按段切块，参与深度排序 ─── */
-export function fence(x0, y0, x1, y1, h = 7) {
-  const out = [];
+export function fence(x0: number, y0: number, x1: number, y1: number, h = 7): StaticItem[] {
+  const out: StaticItem[] = [];
   const horizontal = y0 === y1, len = horizontal ? x1 - x0 : y1 - y0;
   for (let a = 0; a < len; a += 40) {
     const b = Math.min(len, a + 40);
-    const p = horizontal ? [[x0 + a, y0], [x0 + b, y0]] : [[x0, y0 + a], [x0, y0 + b]];
+    const p: [Xy, Xy] = horizontal ? [[x0 + a, y0], [x0 + b, y0]] : [[x0, y0 + a], [x0, y0 + b]];
     out.push(item(p[0][0], p[0][1], 0, p[1][0], p[1][1], h, (ctx, iso, c, dark) => {
       const col = dark ? alpha("#8aa3a8", 0.35) : alpha(c.fence, 0.55);
       iso.poly(ctx, [[...p[0], 0], [...p[1], 0], [...p[1], h], [...p[0], h]], dark ? alpha("#8aa3a8", 0.05) : alpha(c.fence, 0.1));
       iso.line(ctx, [[...p[0], h], [...p[1], h]], col, 0.6);
       for (let t = 0; t <= b - a; t += 10) {
-        const q = horizontal ? [p[0][0] + t, p[0][1]] : [p[0][0], p[0][1] + t];
+        const q: Xy = horizontal ? [p[0][0] + t, p[0][1]] : [p[0][0], p[0][1] + t];
         iso.line(ctx, [[...q, 0], [...q, h]], col, 0.55);
       }
     }));
@@ -250,7 +253,7 @@ export function fence(x0, y0, x1, y1, h = 7) {
 }
 
 /* ─── 岗亭：闸口与停车场出入口 ─── */
-export function booth(x, y, w = 4, d = 5) {
+export function booth(x: number, y: number, w = 4, d = 5) {
   return item(x, y, 0, x + w, y + d, 9, (ctx, iso, c, dark) => {
     iso.box(ctx, x - 0.6, y - 0.6, 0, w + 1.2, d + 1.2, 0.8, c.yellow);
     iso.box(ctx, x, y, 0.8, w, d, 6.4, c.white, { side: dark ? alpha(c.lit, 0.9) : c.glass, end: dark ? tone(c.lit, 0.8) : c.glassDark });
