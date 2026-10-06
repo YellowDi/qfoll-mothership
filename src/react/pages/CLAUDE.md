@@ -21,8 +21,8 @@ ReactYgbPortBackground.tsx: 云柜宝港区背景的 React 适配器，只负责
 ygbStory/: 云柜宝六章杂志式介绍 (实色面板 + 港区镜头飞行 + 集卡实时配图)，由 ReactYgbPage 正式挂载，原型页同步用于调试，见 ygbStory/CLAUDE.md。
 ReactYgbHero.css: 云柜宝 Hero 叠卡的精确位移、透明度和高度过渡，集中处理减少动画偏好。
 ReactYgbRoadMapBg.tsx: Canvas 路线网络、地块、水系与运输节点装饰层。
-ReactWaterEnvPage.tsx: 水环境产品专题；Hero (Codex 式居中视频 + 点阵涟漪 + 首张大幅地图) 保持不动，其下按 01 地图总览 → 02 闭环四步 → 03 能力切换展台 → 04 八模块 → 收束标语 编排，全页不设按钮，文案全部来自 waterEnvStory；视频进入视口自动循环、离屏或后台暂停，Hero 文案以 data-dot-avoid、首张地图以 data-dot-block 标记避让。
-ReactWaterEnvPage.css: 水环境 Hero 的满幅视频与收束渐变 (中点对齐首张地图)，以及 water-* 章节样式：截图细边框、编号眉题、闭环横线圆点、展台 grid-rows 展开与截图交叉淡入、模块发丝网格；章节只靠底色与发丝线组织层次。
+ReactWaterEnvPage.tsx: 水环境产品专题；Hero (Codex 式居中视频 + 点阵涟漪 + 首张大幅地图) 保持不动，其下按 01 地图总览 → 02 闭环四步 → 03 能力陈列 (文字吸顶) → 04 八模块 → 收束标语 编排，全页不设按钮，文案全部来自 waterEnvStory；视频进入视口自动循环、离屏或后台暂停，Hero 文案以 data-dot-avoid、首张地图以 data-dot-block 标记避让。
+ReactWaterEnvPage.css: 水环境 Hero 的满幅视频与收束渐变 (中点对齐首张地图)，以及 water-* 章节样式：截图细边框、编号眉题、闭环横线圆点、模块发丝网格；章节只靠底色与发丝线组织层次。
 ReactDotRippleBg.tsx: 点阵涟漪 React 适配器，只负责挂载 visuals/dotRipple 并同步避让区域；视频明暗主题下是同一段素材，字符恒为白，不感知主题。
 ReactHomePage.tsx: 首页品牌、案例、新闻和能力标签墙编排。
 ReactHomePage.css: 首页品牌光栅和能力标签横向动画样式。

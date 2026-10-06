@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 ReactWaterEnvPage 的视频 Hero 与五个内容章节，依赖全局 --color-bg / --color-ink / --color-edge 令牌
- * [OUTPUT]: 对外提供 Hero 满幅视频与收束渐变、首张大幅地图框，以及 water-* 章节样式 (容器节奏、眉题、闭环横线、能力展台交叉淡入、模块发丝网格)
+ * [OUTPUT]: 对外提供 Hero 满幅视频与收束渐变、首张大幅地图框，以及 water-* 章节样式 (容器节奏、眉题、闭环横线、模块发丝网格)
  * [POS]: 水环境产品页的局部样式；Hero 层叠 (视频 → 涟漪 → 渐变 → 正文) 独立于下方章节，章节只靠页面底色与发丝线组织，不用卡片阴影堆层次
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -124,43 +124,6 @@
   background: rgb(14 165 233);
 }
 
-/* ==================== 03 能力展台 ==================== */
-.water-tab {
-  cursor: pointer;
-}
-
-.water-tab:focus-visible {
-  outline: 2px solid rgb(14 165 233);
-  outline-offset: 4px;
-  border-radius: 4px;
-}
-
-/* 说明文字用 grid 行高 0fr → 1fr 展开，高度无需测量 */
-.water-tab-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows .35s cubic-bezier(.2, .7, .2, 1);
-}
-
-.water-tab-body[data-open="true"] {
-  grid-template-rows: 1fr;
-}
-
-/* 截图原位叠放，第一张撑开高度，其余绝对定位交叉淡入 */
-.water-panel {
-  opacity: 0;
-  transition: opacity .45s ease;
-}
-
-.water-panel:not(:first-child) {
-  position: absolute;
-  inset: 0;
-}
-
-.water-panel.is-active {
-  opacity: 1;
-}
-
 /* ==================== 04 模块：发丝线网格 ==================== */
 .water-modules {
   border-top: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
@@ -170,16 +133,5 @@
 .water-modules > li {
   border-right: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
   border-bottom: 1px solid rgb(var(--color-edge) / var(--color-edge-opacity));
-  transition: background-color .2s ease;
 }
 
-.water-modules > li:hover {
-  background: rgb(var(--color-ink) / .025);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .water-tab-body,
-  .water-panel {
-    transition: none;
-  }
-}

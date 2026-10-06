@@ -1,10 +1,10 @@
 /**
  * [INPUT]: 依赖 data/waterEnvFeatures 的 waterEnvStory 叙事数据，依赖 public/water-env 的视频和首帧封面，依赖 ReactDotRippleBg 点阵涟漪与 useTextExclusions 避让采集
- * [OUTPUT]: 对外提供 ReactWaterEnvPage：居中视频 Hero (叠加鼠标点阵涟漪 + 首张大幅地图) → 地图总览 → 闭环四步 → 核心能力切换展台 → 八模块 → 收束标语
+ * [OUTPUT]: 对外提供 ReactWaterEnvPage：居中视频 Hero (叠加鼠标点阵涟漪 + 首张大幅地图) → 地图总览 → 闭环四步 → 核心能力陈列 → 八模块 → 收束标语
  * [POS]: 产品专题路由 /water-env 的 React 页面边界，负责 Hero 可见性播放与内容区编排；文案全部来自 waterEnvStory，页面不持有内容
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { waterEnvStory } from "../../data/waterEnvFeatures";
 import { useTextExclusions } from "../hooks/useTextExclusions";
 import { ReactDotRippleBg } from "./ReactDotRippleBg";
@@ -154,55 +154,23 @@ function Loop() {
   );
 }
 
-/* ---- 03 核心能力：左侧能力列表切换，右侧截图原位交叉淡入 ---- */
+/* ---- 03 核心能力：三项能力依次陈列，桌面端文字吸顶陪截图滚过 ---- */
 function Showcase() {
-  const [active, setActive] = useState(0);
   return (
     <section id={showcase.id} className="water-container water-section">
       <SectionHead index="03" eyebrow={showcase.eyebrow} title={showcase.title} />
-      <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-12 lg:gap-14">
-        <div role="tablist" aria-label={showcase.eyebrow} className="flex flex-col lg:col-span-4">
-          {showcase.items.map((item, index) => {
-            const selected = index === active;
-            return (
-              <button
-                key={item.id}
-                id={`water-tab-${item.id}`}
-                type="button"
-                role="tab"
-                aria-selected={selected}
-                aria-controls={`water-panel-${item.id}`}
-                onClick={() => setActive(index)}
-                className="water-tab group border-t border-edge py-5 text-left last:border-b"
-              >
-                <span className="flex items-center justify-between gap-4">
-                  <span className={`text-lg font-medium tracking-[-0.02em] transition-colors ${selected ? "text-primary" : "text-secondary group-hover:text-primary"}`}>{item.label}</span>
-                  <span className={`font-mono text-xs transition-colors ${selected ? "text-sky-500" : "text-secondary"}`}>{String(index + 1).padStart(2, "0")}</span>
-                </span>
-                <span className="water-tab-body" data-open={selected}>
-                  <span className="block overflow-hidden">
-                    <span className="block pt-3 text-sm leading-[1.75] text-secondary">{item.desc}</span>
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="relative lg:col-span-8">
-          {showcase.items.map((item, index) => (
-            <div
-              key={item.id}
-              id={`water-panel-${item.id}`}
-              role="tabpanel"
-              aria-labelledby={`water-tab-${item.id}`}
-              aria-hidden={index !== active}
-              className={`water-panel ${index === active ? "is-active" : ""}`}
-            >
-              <Shot screen={item} alt={item.label} />
+      <ol className="mt-12 flex flex-col gap-16 lg:mt-16 lg:gap-24">
+        {showcase.items.map((item, index) => (
+          <li key={item.id} id={item.id} className="grid gap-6 border-t border-edge pt-6 lg:grid-cols-12 lg:gap-14 lg:pt-8">
+            <div className="lg:sticky lg:top-24 lg:col-span-4 lg:self-start">
+              <p className="font-mono text-xs text-sky-500">{String(index + 1).padStart(2, "0")}</p>
+              <h3 className="mt-3 text-[clamp(1.375rem,2vw,1.75rem)] font-medium tracking-[-0.03em]">{item.label}</h3>
+              <p className="mt-4 text-sm leading-[1.75] text-secondary md:text-[.9375rem]">{item.desc}</p>
             </div>
-          ))}
-        </div>
-      </div>
+            <Shot screen={item} alt={item.label} className="lg:col-span-8" />
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }
