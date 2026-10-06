@@ -17,7 +17,7 @@ export function ReactDesignSpecPage() {
   return (
 
   <div className="design-spec-page">
-    <section className="mx-auto w-full max-w-360 px-14 pt-24 pb-20 max-lg:px-6">
+    <section className="mx-auto w-full max-w-360 px-14 pt-10 pb-20 max-lg:px-6">
       <div className="mx-auto w-full max-w-208">
         <div className="mb-8 flex items-center justify-center text-sm">
           <span className="text-secondary">公司</span>

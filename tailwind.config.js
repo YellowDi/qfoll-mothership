@@ -4,6 +4,10 @@ export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      // 固定顶栏高度：布局用它给 Outlet 留位，吸顶/锚点类偏移也只认它 (pt-header、top-header、scroll-mt-header)
+      spacing: {
+        header: "var(--header-h)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", "sans-serif"],
         display: ["Space Grotesk", "IBM Plex Sans", "sans-serif"],

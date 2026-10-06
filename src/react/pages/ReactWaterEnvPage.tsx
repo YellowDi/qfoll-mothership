@@ -63,8 +63,7 @@ export function ReactWaterEnvPage() {
 
   return (
     <div className="water-page w-full">
-      {/* 移动端顶栏 fixed 且布局不留位：pt-26 = 顶栏 pt-14 + 原留白 12，视频仍从 0 起铺到顶栏背后 */}
-      <section ref={heroRef} className="react-water-hero relative flex flex-col items-center overflow-hidden pb-12 pt-26 md:py-20">
+      <section ref={heroRef} className="react-water-hero relative flex flex-col items-center overflow-hidden pb-12 pt-12 md:pb-20 md:pt-6">
         <video
           ref={videoRef}
           className="react-water-hero-video"

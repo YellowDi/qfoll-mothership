@@ -8,7 +8,7 @@ import { YgbStory } from "./ygbStory/YgbStory";
 
 /* 页面只做编排；#dashboard/#governance/#download 等锚点由 YgbStory 按章节滚动位置提供 */
 export function ReactYgbPage() {
-  return <div className="w-full bg-bg pt-14">
+  return <div className="w-full bg-bg">
     <YgbStory />
   </div>;
 }

@@ -24,7 +24,7 @@ export function ReactHomePage() {
   const latestNews = [...newsList].sort((a, b) => b.publishedTimestamp - a.publishedTimestamp).slice(0, 6);
 
   return (
-    <div className="w-full px-14 pb-20 pt-14 max-lg:px-6 max-md:px-5 max-md:pb-12 max-md:pt-14">
+    <div className="w-full px-14 pb-20 max-lg:px-6 max-md:px-5 max-md:pb-12">
       <h1 className="sr-only">企丰科技</h1>
       <ReactAboutSection />
 

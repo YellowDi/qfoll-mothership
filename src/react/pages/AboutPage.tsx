@@ -15,7 +15,7 @@ import { QrContactCard } from "./QrContactCard";
 
 export function AboutPage() {
   return <>
-    <section className="mx-auto w-full max-w-360 px-6 pb-10 pt-20 md:px-14 md:pb-16 md:pt-24">
+    <section className="mx-auto w-full max-w-360 px-6 pb-10 pt-6 md:px-14 md:pb-16 md:pt-10">
       <div className="flex w-full flex-col items-end gap-10 md:flex-row md:gap-8 lg:gap-12 xl:gap-x-16">
         <div className="order-1 flex min-w-0 flex-col md:flex-1 md:justify-end">
           <div className="mb-5 text-sm"><span className="text-secondary">关于我们</span></div>

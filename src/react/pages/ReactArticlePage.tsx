@@ -14,7 +14,7 @@ type Props = {
 
 export function ReactArticlePage({ title, description, children }: Props) {
   return (
-    <section className="mx-auto w-full max-w-360 px-6 pb-20 pt-24 md:px-14">
+    <section className="mx-auto w-full max-w-360 px-6 pb-20 pt-10 md:px-14">
       <div className="mx-auto w-full max-w-208">
         <div className="mb-8 flex items-center justify-center text-sm">
           <span className="text-secondary">公司</span>

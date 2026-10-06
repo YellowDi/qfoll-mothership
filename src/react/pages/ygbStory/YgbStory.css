@@ -1,12 +1,12 @@
 /**
- * [INPUT]: 依赖全局设计令牌 (--color-bg/--color-ink/--color-text-*) 与暗色 .dark 根类
+ * [INPUT]: 依赖全局设计令牌 (--color-bg/--color-ink/--color-text-*、顶栏高度 --header-h) 与暗色 .dark 根类
  * [OUTPUT]: 对外提供 ys-* 样式契约：粘性舞台、封面 (品牌标题/入口/目录)、实色杂志面板、六种实时配图与手机展台；视口分档 (大屏/矮屏/竖屏平板/手机/矮手机/横屏手机) 与配图容器查询 (≤560/540/420/400)
- * [POS]: react/pages/ygbStory 的唯一样式边界；瑞士网格排版，面板与港口背景严格分区，不用渐变遮罩
+ * [POS]: react/pages/ygbStory 的唯一样式边界；舞台吸顶线、舞台高度与锚点偏移只认 --header-h，.ys 的 scroll-margin-top 兼作 JS 读取吸顶线像素值的通道；瑞士网格排版，面板与港口背景严格分区，不用渐变遮罩
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 
 /* ═══ 舞台与面板 ═══ */
-.ys{position:relative;--ys-accent:#f97316;--ys-line:rgb(var(--color-ink)/.12);--ys-muted:rgb(var(--color-text-secondary)/var(--color-text-secondary-opacity))}
+.ys{position:relative;scroll-margin-top:var(--header-h);--ys-accent:#f97316;--ys-line:rgb(var(--color-ink)/.12);--ys-muted:rgb(var(--color-text-secondary)/var(--color-text-secondary-opacity))}
 /*
  * 舞台定位不用 sticky：iOS Safari 的吸顶位置与主线程同步，画布逐帧重绘时会与滚动错帧抖动。
  * 改为三态：区间前贴故事区顶部 (absolute)，区间内相对视口固定 (fixed，完全由合成线程处理)，区间后贴底部。
@@ -14,10 +14,10 @@
  * 舞台高度跟随 iOS 地址栏 (dvh)；画布固定为最大视口高度 (lvh)，地址栏伸缩不触发引擎重建。
  * 容器查询以舞台为基准 (fixed 元素不能有带布局约束的祖先)，面板宽度按故事区宽度计算。
  */
-.ys-stage{position:absolute;top:0;left:0;right:0;height:calc(100vh - 3.5rem);height:calc(100dvh - 3.5rem);overflow:hidden;background:rgb(var(--color-bg));container-type:inline-size;will-change:transform}
-.ys-stage[data-pin="pinned"]{position:fixed;top:3.5rem;left:var(--ys-left,0px);right:auto;width:var(--ys-width,100%)}
+.ys-stage{position:absolute;top:0;left:0;right:0;height:calc(100vh - var(--header-h));height:calc(100dvh - var(--header-h));overflow:hidden;background:rgb(var(--color-bg));container-type:inline-size;will-change:transform}
+.ys-stage[data-pin="pinned"]{position:fixed;top:var(--header-h);left:var(--ys-left,0px);right:auto;width:var(--ys-width,100%)}
 .ys-stage[data-pin="after"]{top:auto;bottom:0}
-.ys-stage>canvas{display:block;width:100%;height:calc(100vh - 3.5rem);height:calc(100lvh - 3.5rem)}
+.ys-stage>canvas{display:block;width:100%;height:calc(100vh - var(--header-h));height:calc(100lvh - var(--header-h))}
 .ys-panel{position:absolute;top:0;bottom:0;z-index:2;width:clamp(540px,46cqw,780px);display:flex;flex-direction:column;padding:clamp(28px,4.2vh,52px) clamp(32px,3.6vw,64px) clamp(24px,3.4vh,40px);background:rgb(var(--color-bg));color:rgb(var(--color-text-primary));transition:transform 1s cubic-bezier(.76,0,.2,1)}
 .ys-panel[data-side="left"]{left:0;transform:translateX(-101%);box-shadow:1px 0 0 var(--ys-line)}
 .ys-panel[data-side="right"]{right:0;transform:translateX(101%);box-shadow:-1px 0 0 var(--ys-line)}
@@ -26,7 +26,7 @@
 .ys-panel[data-active="true"] [data-r]{opacity:1;translate:0 0;transition-delay:calc(.42s + var(--d,0) * 80ms)}
 
 /* 章节锚点：落在该章滚动区间正中，顶部让出固定顶栏 */
-.ys-anchor{position:absolute;left:0;width:1px;height:1px;scroll-margin-top:3.5rem;pointer-events:none}
+.ys-anchor{position:absolute;left:0;width:1px;height:1px;scroll-margin-top:var(--header-h);pointer-events:none}
 /* 触屏吸附：iOS 惯性滚动轻划就能越过一整章，强制每次滑动停在下一格；桌面滚轮与触控板不受影响 */
 @media (pointer:coarse){
   html.ys-snap-root{scroll-snap-type:y mandatory}

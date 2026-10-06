@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 visuals/ygbPort 的 mountYgbPort 港区引擎、./storyFigures 的实时配图与手机展台、hooks/useTypedPain、ThemeProvider 主题
  * [OUTPUT]: 对外提供 YgbStory：封面 (品牌标题/入口/目录) + 滚动驱动的六章杂志式介绍 (实色面板左右交替 + 同一港区世界的镜头飞行)，每章锚点 #network/#dispatch/#assurance/#dashboard/#governance/#download
- * [POS]: react/pages/ygbStory 的编排入口；章节文案与镜头落点集中在 CHAPTERS，STACKED 与 CSS 竖排查询同源，横排镜头随视口宽度等比缩放
+ * [POS]: react/pages/ygbStory 的编排入口；章节文案与镜头落点集中在 CHAPTERS，STACKED 与 CSS 竖排查询同源，横排镜头随视口宽度等比缩放；吸顶线从 .ys 的 scroll-margin-top 读取 (源自 --header-h)，不硬编码顶栏高度
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
@@ -91,7 +91,7 @@ const SECTION_VH = SLOTS * 110 + 40;
  * 吸顶区间 = 故事高度 − 舞台高度 (100svh − 顶栏)。iOS 滚动时地址栏伸缩会改变 innerHeight，
  * 章节判定与锚点都只用这条稳定的长度，否则章节边界会在手指下来回移动，镜头被反复打断。
  */
-const anchorTop = (slot: number) => `calc((${SECTION_VH}vh - 100svh + 3.5rem) * ${((slot + 0.5) / SLOTS).toFixed(4)})`;
+const anchorTop = (slot: number) => `calc((${SECTION_VH}vh - 100svh + var(--header-h)) * ${((slot + 0.5) / SLOTS).toFixed(4)})`;
 /* 回差：越过格边界 6% 才切换，避免停在边界附近时来回横跳 */
 const HYSTERESIS = 0.06;
 const COVER_CAM: Camera = { s: 0.8, x: -170, y: 30, ax: 0.72, ay: 0.52 };
@@ -201,7 +201,10 @@ export function YgbStory({ isDark }: { isDark?: boolean }) {
   useEffect(() => {
     const el = sectionRef.current, stage = stageRef.current;
     if (!el || !stage) return;
+    // 舞台吸顶线 = 顶栏高度；经 .ys 的 scroll-margin-top 把 --header-h 解析成像素，JS 不再持有 56
+    let pinTop = 0;
     const syncBox = () => {
+      pinTop = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
       const r = el.getBoundingClientRect();
       stage.style.setProperty("--ys-left", `${r.left}px`);
       stage.style.setProperty("--ys-width", `${r.width}px`);
@@ -211,7 +214,7 @@ export function YgbStory({ isDark }: { isDark?: boolean }) {
     syncBox();
     const onScroll = () => {
       noteScroll();
-      const rect = el.getBoundingClientRect(), top = rect.top - 56, span = rect.height - stage.offsetHeight;
+      const rect = el.getBoundingClientRect(), top = rect.top - pinTop, span = rect.height - stage.offsetHeight;
       const pin = top > 0 ? "before" : top < -span ? "after" : "pinned";
       if (stage.dataset.pin !== pin) stage.dataset.pin = pin;
       if (top > 2) return setSlot(0);

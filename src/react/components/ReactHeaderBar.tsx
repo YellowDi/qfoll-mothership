@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React Router、主题 Props、详情标题/目录 Provider 与品牌 Logo
  * [OUTPUT]: 对外提供 ReactHeaderBar，包含品牌链接、导航开关与目录联动
- * [POS]: 应用外壳顶栏，消费详情快照并管理菜单关闭与键盘交互；左右内边距让出 iPhone 横屏灵动岛安全区
+ * [POS]: 应用外壳顶栏，消费详情快照并管理菜单关闭与键盘交互；左右内边距让出 iPhone 横屏灵动岛安全区；主行高度取 h-header (--header-h)，与布局留位、吸顶偏移同源
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef } from "react";
@@ -93,7 +93,7 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
   );
   return (
     <header ref={rootRef} className="fixed left-0 right-0 top-0 z-40 bg-bg">
-      <div className="relative flex h-14 items-center justify-between pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:pl-[max(1.5rem,env(safe-area-inset-left))] md:pr-[max(1.5rem,env(safe-area-inset-right))]">
+      <div className="relative flex h-header items-center justify-between pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:pl-[max(1.5rem,env(safe-area-inset-left))] md:pr-[max(1.5rem,env(safe-area-inset-right))]">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Link to="/" aria-label="返回首页" className="flex items-center gap-2">

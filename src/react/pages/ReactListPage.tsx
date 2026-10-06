@@ -119,7 +119,7 @@ function ReactListPage({ kind, title, items }: { kind: ListKind; title: string; 
     });
   }, [activeFilter, items, kind, selectedTagSet, selectedYearSet, sortMode]);
 
-  return <section className="mx-auto w-full max-w-360 px-6 pb-20 pt-24 md:px-14">
+  return <section className="mx-auto w-full max-w-360 px-6 pb-20 pt-10 md:px-14">
     <div className="mb-6 flex items-center justify-between"><h1 className="text-4xl font-medium tracking-tight">{title}</h1></div>
     <div className="relative"><div className="flex flex-wrap items-center justify-between gap-4 text-sm">
       <div className="relative min-w-0 max-md:w-full"><div ref={categoryRef} className="no-scrollbar flex items-center gap-6 overflow-x-auto whitespace-nowrap" role="group" aria-label={kind === "projects" ? "案例分类" : "动态分类"}>{filterTabs.map((item) => <button key={item} type="button" className={`shrink-0 transition-colors ${activeFilter === item ? "font-medium text-primary" : "text-secondary hover:text-primary"}`} aria-pressed={activeFilter === item} onClick={() => replaceQuery({ filter: item, tags: selectedTags, years: selectedYears })}>{item}</button>)}</div>{categoryFade.left && <span className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-linear-to-r from-bg to-transparent" aria-hidden="true" />}{categoryFade.right && <span className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-bg to-transparent" aria-hidden="true" />}</div>

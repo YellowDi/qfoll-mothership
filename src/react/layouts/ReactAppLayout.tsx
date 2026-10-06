@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React Router、共享导航元数据、主题上下文、触摸保护、顶栏和页脚组件
  * [OUTPUT]: 对外提供 React 迁移层应用布局
- * [POS]: React 应用的公共外壳，承接侧栏、移动端遮罩和主内容，页面副作用由常驻 RouteEffects 承担；横向裁切用 overflow-x-clip，保证页面内 sticky 以 window 为滚动容器
+ * [POS]: React 应用的公共外壳，承接侧栏、移动端遮罩和主内容，页面副作用由常驻 RouteEffects 承担；Outlet 容器以 pt-header 为 fixed 顶栏留位，页面只写自身留白、不再感知顶栏；横向裁切用 overflow-x-clip，保证页面内 sticky 以 window 为滚动容器
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState } from "react";
@@ -57,7 +57,7 @@ export function ReactAppLayout() {
           mobileNavOpen ? "max-md:translate-x-0" : "max-md:-translate-x-full"
         } ${desktopCollapsed ? "md:-translate-x-[110%]" : "md:translate-x-0"}`}
       >
-        <div className="flex w-full flex-col gap-6 px-4 py-6 md:mt-46.75 max-md:mt-0 max-md:pt-16">
+        <div className="flex w-full flex-col gap-6 px-4 py-6 md:mt-46.75 max-md:mt-0 max-md:pt-[calc(var(--header-h)+0.5rem)]">
           {navLevel === "root" ? (
             <nav className="flex flex-col gap-2 text-sm font-medium" aria-label="主导航">
               <button
@@ -159,7 +159,7 @@ export function ReactAppLayout() {
       <main
         className={`relative z-10 min-h-screen bg-bg transition-[margin-left] duration-300 motion-reduce:transition-none ${desktopCollapsed ? "md:ml-0" : "md:ml-50"} ${location.pathname === "/" ? "overflow-visible" : "overflow-x-clip"}`}
       >
-        <div className={`flex min-h-screen flex-col items-center transition-transform duration-300 motion-reduce:transition-none max-md:items-start ${mobileNavOpen ? "max-md:translate-x-[334px] max-md:pointer-events-none max-md:pb-[env(safe-area-inset-bottom)] max-md:blur-[3px]" : ""}`}>
+        <div className={`flex min-h-screen flex-col items-center pt-header transition-transform duration-300 motion-reduce:transition-none max-md:items-start ${mobileNavOpen ? "max-md:translate-x-[334px] max-md:pointer-events-none max-md:pb-[env(safe-area-inset-bottom)] max-md:blur-[3px]" : ""}`}>
           <Outlet />
           <ReactSiteFooter />
         </div>

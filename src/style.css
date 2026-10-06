@@ -4,6 +4,8 @@
 @layer base {
 
   :root {
+    /* 固定顶栏高度的唯一来源，Tailwind 侧映射为 spacing.header */
+    --header-h: 3.5rem;
     --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     --color-bg: 255 255 255;
     --color-surface: 255 255 255;

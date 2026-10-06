@@ -21,7 +21,7 @@ export function ReactRoutePlaceholder({ title, description = "页面迁移将在
     contentRootRef,
   });
   return (
-    <section className="mx-auto w-full max-w-240 px-6 py-24 md:px-12">
+    <section className="mx-auto w-full max-w-240 px-6 pb-24 pt-10 md:px-12">
       <div ref={titleSectionRef} className="flex min-h-[55vh] flex-col justify-center">
         <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-secondary">React migration preview</p>
         <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">{title}</h1>
