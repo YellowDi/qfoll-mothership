@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖项目、新闻索引、React 内容媒体和首页品牌区块
  * [OUTPUT]: 对外提供 ReactHomePage，复刻首页品牌、案例、动态和标签舞台
- * [POS]: 根路由首页编排边界，保持 Vue 首页的信息密度与视觉层级
+ * [POS]: 根路由首页编排边界
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Link } from "react-router-dom";

@@ -5,16 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:vue": "vite --mode vue",
     "build": "pnpm typecheck && vite build && node scripts/createSpaFallback.js",
-    "build:vue": "pnpm typecheck && vite build --mode vue && node scripts/createSpaFallback.js",
-    "check:routes": "node scripts/checkReactRouteCoverage.js",
     "preview": "vite preview",
-    "preview:vue": "vite preview --mode vue",
-    "dev:react": "vite --mode react",
-    "typecheck": "tsc --noEmit",
-    "build:react": "pnpm typecheck && pnpm check:routes && vite build --mode react && node scripts/createSpaFallback.js dist-react",
-    "preview:react": "vite preview --mode react"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "dompurify": "^3.3.1",
@@ -23,9 +16,7 @@
     "mermaid": "^11.12.3",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-router-dom": "^7.18.4",
-    "vue": "^3.5.25",
-    "vue-router": "^4.6.4"
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
@@ -33,7 +24,6 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.2.0",
-    "@vitejs/plugin-vue": "^6.0.2",
     "autoprefixer": "^10.4.24",
     "postcss": "^8.5.6",
     "rollup-plugin-visualizer": "^7.0.1",

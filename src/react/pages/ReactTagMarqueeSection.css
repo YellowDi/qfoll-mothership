@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 ReactTagMarqueeSection 的标签轨道和主题变量
  * [OUTPUT]: 对外提供原版标签舞台、渐隐和响应式轨道动画
- * [POS]: React 首页底部品牌展示视觉层，与 Vue TagMarqueeSection 共用设计参数
+ * [POS]: React 首页底部品牌展示视觉层
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 .tilt-wall-section {

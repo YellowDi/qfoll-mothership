@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖品牌标签、关于页跳转、主题上下文和原版标签墙轨道配置
  * [OUTPUT]: 对外提供 ReactTagMarqueeSection，呈现标签舞台和品牌收束文案
- * [POS]: React 首页底部品牌展示区域，与 Vue TagMarqueeSection 保持相同的舞台密度
+ * [POS]: React 首页底部品牌展示区域
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Link } from "react-router-dom";

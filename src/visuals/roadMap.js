@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 roadNetwork 几何图与 Canvas、可见性、设备像素比
  * [OUTPUT]: 对外提供 mountRoadMap，挂载原路线图动画并返回生命周期清理函数
- * [POS]: Vue 与 React 共用的路线图绘制边界，保证背景算法与帧率策略一致
+ * [POS]: 路线图绘制边界，统一背景算法与帧率策略
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { createRoadNetwork } from "./roadNetwork";

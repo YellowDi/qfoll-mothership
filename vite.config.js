@@ -1,30 +1,20 @@
 /**
- * [INPUT]: 依赖 Vite、Vue/React 插件与现有图片处理、产物分析插件
- * [OUTPUT]: 对外提供默认 React 模式和显式 Vue 兼容模式的构建配置
- * [POS]: 构建工具链入口，共享资源处理，按模式选择单一框架及产物目录
+ * [INPUT]: 依赖 Vite、React 插件与图片处理、产物分析插件
+ * [OUTPUT]: 对外提供 React 单一框架的构建配置
+ * [POS]: 构建工具链入口，资源处理与分包策略集中于此
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import vue from "@vitejs/plugin-vue";
 import { imagetools } from "vite-imagetools";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-  const useLegacyVue = mode === "vue";
-  const reactEntryPlugin = {
-    name: "react-migration-entry",
-    transformIndexHtml: {
-      order: "pre",
-      handler: (html) => html.replace("/src/main.js", "/src/react/main.tsx"),
-    },
-  };
-
+export default defineConfig(() => {
   return {
     plugins: [
-      ...(useLegacyVue ? [vue()] : [react(), reactEntryPlugin]),
+      react(),
       imagetools({
         removeMetadata: true,
       }),
@@ -44,7 +34,6 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     build: {
-      outDir: mode === "react" ? "dist-react" : "dist",
       rollupOptions: {
         output: {
           manualChunks(id) {
@@ -57,8 +46,6 @@ export default defineConfig(({ mode }) => {
               id.includes("node_modules/react-router/") ||
               id.includes("node_modules/react-router-dom/")
             ) return "react-router";
-            if (id.includes("node_modules/vue/") || id.includes("node_modules/@vue/")) return "vue";
-            if (id.includes("node_modules/vue-router/")) return "vue-router";
             if (id.includes("node_modules/mermaid/")) return "mermaid";
             if (id.includes("node_modules/highlight.js/")) return "highlight";
             if (id.includes("node_modules/markdown-it/")) return "markdown-it";

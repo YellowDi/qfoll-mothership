@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 ./scene 的 PortScene、./figures 的五个集卡配图
  * [OUTPUT]: 对外提供 mountYgbPort(canvas, { dark, paused })，返回 { setTheme, setPaused, setSpeed, flyTo, subscribe, dispose, scene }；转出 mountTracker/mountDispatch/mountJourney/mountFleet/mountUplink 配图
- * [POS]: visuals/ygbPort 的唯一入口；React/Vue 适配器与原型页只依赖这里，不触碰内部模块
+ * [POS]: visuals/ygbPort 的唯一入口；React 适配器与原型页只依赖这里，不触碰内部模块
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { PortScene } from "./scene";

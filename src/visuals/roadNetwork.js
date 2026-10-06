@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖容器宽高，使用原云柜宝路线图的确定性几何算法
  * [OUTPUT]: 对外提供 createRoadNetwork，返回路网、桥梁、水系、建筑与几何函数
- * [POS]: 框架无关的地图几何层，被 Vue 与 React 共用的 Canvas 引擎消费
+ * [POS]: 框架无关的地图几何层，被 Canvas 引擎消费
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 export function createRoadNetwork(width, height) {

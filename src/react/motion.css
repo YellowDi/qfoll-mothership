@@ -1,7 +1,7 @@
 /**
  * [INPUT]: React 入口挂载的 Markdown 媒体 DOM 与系统减少动态偏好
  * [OUTPUT]: 为 React 媒体提供减少动态覆盖规则
- * [POS]: 仅由 React main.tsx 加载的动画适配层，避免影响 Vue 对照版
+ * [POS]: 仅由 React main.tsx 加载的动画适配层
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 @media (prefers-reduced-motion: reduce) {

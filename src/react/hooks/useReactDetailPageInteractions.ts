@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖详情 Markdown DOM、浏览器剪贴板、Mermaid、内联视频控制器和主题状态
  * [OUTPUT]: 对外提供分享复制、代码复制、表格增强、媒体轮播、Mermaid 与内联视频生命周期
- * [POS]: React 详情正文的共享浏览器交互编排层，补齐 Vue 正文增强链路
+ * [POS]: React 详情正文的共享浏览器交互编排层
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useState, type RefObject } from "react";

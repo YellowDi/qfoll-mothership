@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React Router、共享静态页面配置、详情 Provider、业务详情页面和迁移兜底页面
  * [OUTPUT]: 对外提供 React 应用路由树
- * [POS]: React 入口的 URL 映射层，覆盖现有 Vue 路由拓扑，每次完整 URL 变化重置外壳交互状态
+ * [POS]: React 入口的 URL 映射层，承载全站路由拓扑，每次完整 URL 变化重置外壳交互状态
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";

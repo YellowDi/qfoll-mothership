@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖关于页图片资源、项目索引、项目轮播和二维码交互组件
  * [OUTPUT]: 对外提供 AboutPage，完整呈现公司介绍与联系区
- * [POS]: 公司信息路由的 React 页面编排边界，复用 React 外壳并保持 Vue 页面信息架构
+ * [POS]: 公司信息路由的 React 页面编排边界，复用 React 外壳
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import type { ReactNode } from "react";

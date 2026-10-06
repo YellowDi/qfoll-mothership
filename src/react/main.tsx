@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React DOM、React 根组件、共享视觉样式和 React 专属动画适配
  * [OUTPUT]: 对外启动 React 应用
- * [POS]: React 默认运行时入口，Vue main.js 仅在兼容构建模式中使用
+ * [POS]: 应用唯一运行时入口，由 index.html 直接加载
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { StrictMode } from "react";

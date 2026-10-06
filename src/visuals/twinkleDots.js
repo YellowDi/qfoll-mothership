@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 Canvas、点阵参数、文字排除区域、指针和主题颜色
  * [OUTPUT]: 对外提供 mountTwinkleDots，挂载原闪烁/轨迹动画并返回清理函数
- * [POS]: 品牌背景的框架无关引擎，保留 Vue 原版点尺寸、冷却与文字避让算法
+ * [POS]: 品牌背景的框架无关引擎，承载点尺寸、冷却与文字避让算法
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 export function mountTwinkleDots(canvas, props) {

@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖项目/新闻索引、React Router 查询参数和列表卡片数据契约
  * [OUTPUT]: 对外提供 ReactProjectsPage 与 ReactNewsPage，统一筛选、排序和布局切换
- * [POS]: 内容列表页共享编排层，保持 Vue 列表的查询同步规则并隔离浏览器监听
+ * [POS]: 内容列表页共享编排层，负责查询同步规则并隔离浏览器监听
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";

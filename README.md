@@ -24,19 +24,13 @@ A brand website built with React + TypeScript + Vite, showcasing company info, c
 
 ```
 src/
-├── components/     # Shared components (HeaderBar, CoverImage, ContentListRow, etc.)
-├── composables/    # Composition logic (theme, detail page interactions, speech synthesis, etc.)
+├── composables/    # Framework-agnostic browser logic (inline video, tag links)
 ├── content/        # Markdown content
 │   ├── projects/   # Case studies
 │   └── news/       # News articles
 ├── data/           # Content parsing and metadata (projects.js, news.js, contentParserShared.js)
-├── layouts/        # Legacy Vue layout and shared shell references
 ├── react/          # React + TypeScript application
-├── router/         # Legacy Vue route config
 ├── styles/         # Global styles and Markdown typography
-├── views/          # Legacy Vue page views
-├── App.vue         # Legacy Vue root
-├── main.js         # Legacy Vue entry (explicit vue mode)
 └── style.css
 ```
 
@@ -61,10 +55,6 @@ Dev server: `http://localhost:5173`
 | `pnpm dev` | Local development |
 | `pnpm build` | Production build |
 | `pnpm preview` | Preview build output |
-| `pnpm dev:vue` | Run the legacy Vue compatibility mode |
-| `pnpm build:vue` | Build the legacy Vue compatibility output |
-| `pnpm dev:react` | Run the React migration mode explicitly |
-| `pnpm build:react` | Build the React migration output to `dist-react/` |
 
 ## Content
 

@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 assets/water-images 的四组明暗产品截图
- * [OUTPUT]: 对外提供 featureSections (Vue 兼容页的四段图文) 与 waterEnvStory (React 页 Hero 以下的总览、闭环、能力展台、模块与收束文案)
- * [POS]: 水环境页面的唯一内容源；截图集中在 screens 一处导入，两套运行时共享同一批素材，文案各自独立互不牵连
+ * [OUTPUT]: 对外提供 waterEnvStory (Hero 以下的总览、闭环、能力展台、模块与收束文案)
+ * [POS]: 水环境页面的唯一内容源；截图集中在 screens 一处导入
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import screen01 from "../assets/water-images/screen-01.webp";
@@ -20,38 +20,6 @@ const screens = {
   remote: { image: screen03, imageDark: screen03Dark },
   device: { image: screen04, imageDark: screen04Dark },
 };
-
-/* ==================== Vue 兼容页：保持原样 ==================== */
-export const featureSections = [
-  {
-    id: "monitoring",
-    chip: "实时监测",
-    title: "地图总览与监测点位",
-    desc: "界面以 GIS 地图为核心，集中展示各区域监测站点的分布与实时状态。支持按区域、类型筛选，点击点位即可快速查看站点详情，形成可协同查看的整体监测视图。",
-    ...screens.map,
-  },
-  {
-    id: "alert",
-    chip: "智能预警",
-    title: "站点详情",
-    desc: "站点详情页可查看站点基本信息、设备报警列表及 AI 智能预测结果。支持对预警事件进行追溯与处置跟踪，为运维决策提供数据支撑。",
-    ...screens.station,
-  },
-  {
-    id: "visualization",
-    chip: "远程运维",
-    title: "远程运维",
-    desc: "支持对站点设备进行远程控制与运维操作，无需现场即可完成设备参数调整、启停控制等操作，提升运维效率、降低现场作业成本。",
-    ...screens.remote,
-  },
-  {
-    id: "integration",
-    chip: "设备管理",
-    title: "设备管理",
-    desc: "集中展示所有监测设备的当前数值、运行状态及历史数据。支持按设备类型、站点筛选，支持趋势回溯与异常排查，实现设备全生命周期管理。",
-    ...screens.device,
-  },
-];
 
 /* ==================== React 页：Hero 以下的叙事 ==================== */
 export const waterEnvStory = {
