@@ -1,19 +1,20 @@
 /**
  * [INPUT]: 依赖项目 Markdown 内容和封面资源索引
- * [OUTPUT]: 对外提供项目索引与派生列表数据
+ * [OUTPUT]: 对外提供 projects (按 id 索引) 与 projectList，条目类型为 ProjectEntry
  * [POS]: 项目内容域的单一数据入口
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { parseMarkdownModule } from "./contentParserShared";
 import { resolveCoverVideoAsset } from "./coverAssets";
+import type { ProjectEntry } from "./types";
 
-const modules = import.meta.glob("../content/projects/*.md", {
+const modules = import.meta.glob<string>("../content/projects/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
 });
 
-const toYearLabel = (value) => {
+const toYearLabel = (value: unknown) => {
   const rawValue = String(value ?? "").trim();
   if (!rawValue) return "";
   const match = rawValue.match(/^(\d{4})\s*年?$/);
@@ -21,7 +22,7 @@ const toYearLabel = (value) => {
   return `${match[1]} 年`;
 };
 
-const parseProject = (raw, path) => {
+const parseProject = (raw: string, path: string): ProjectEntry => {
   const {
     id,
     data,
@@ -73,7 +74,7 @@ const parseProject = (raw, path) => {
   };
 };
 
-const projects = Object.entries(modules).reduce((acc, [path, raw]) => {
+const projects = Object.entries(modules).reduce<Record<string, ProjectEntry>>((acc, [path, raw]) => {
   const project = parseProject(raw, path);
   acc[project.id] = project;
   return acc;

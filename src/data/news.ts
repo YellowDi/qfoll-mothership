@@ -1,25 +1,26 @@
 /**
  * [INPUT]: 依赖新闻 Markdown 内容和封面资源索引
- * [OUTPUT]: 对外提供新闻文章索引与派生列表数据
+ * [OUTPUT]: 对外提供 newsArticles (按 id 索引) 与 newsList，条目类型为 NewsEntry
  * [POS]: 新闻内容域的单一数据入口
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { parseMarkdownModule } from "./contentParserShared";
 import { resolveCoverVideoAsset } from "./coverAssets";
+import type { NewsEntry } from "./types";
 
-const modules = import.meta.glob("../content/news/*.md", {
+const modules = import.meta.glob<string>("../content/news/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
 });
 
-const toDateValue = (value) => {
+const toDateValue = (value: unknown) => {
   const date = new Date(String(value || "").trim());
   const timestamp = date.getTime();
   return Number.isFinite(timestamp) ? timestamp : -Infinity;
 };
 
-const toChineseDateLabel = (value) => {
+const toChineseDateLabel = (value: unknown) => {
   const raw = String(value || "").trim();
   if (!raw) return "";
   const match = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
@@ -38,7 +39,7 @@ const toChineseDateLabel = (value) => {
   return `${year}年${month}月${day}日`;
 };
 
-const toYearLabel = (value) => {
+const toYearLabel = (value: unknown) => {
   const raw = String(value || "").trim();
   if (!raw) return "";
   const match = raw.match(/^(\d{4})/);
@@ -46,7 +47,7 @@ const toYearLabel = (value) => {
   return `${match[1]} 年`;
 };
 
-const parseArticle = (raw, path) => {
+const parseArticle = (raw: string, path: string): NewsEntry => {
   const {
     id,
     data,
@@ -100,7 +101,7 @@ const parseArticle = (raw, path) => {
   };
 };
 
-const newsArticles = Object.entries(modules).reduce((acc, [path, raw]) => {
+const newsArticles = Object.entries(modules).reduce<Record<string, NewsEntry>>((acc, [path, raw]) => {
   const article = parseArticle(raw, path);
   acc[article.id] = article;
   return acc;

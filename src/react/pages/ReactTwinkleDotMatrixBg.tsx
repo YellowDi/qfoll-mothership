@@ -6,8 +6,9 @@
  */
 import { useEffect, useRef } from "react";
 import { mountTwinkleDots } from "../../visuals/twinkleDots";
+import type { ExclusionRect } from "../../visuals/textExclusions";
 import { useTheme } from "../providers/ThemeProvider";
-export type DotExclusion = { x: number; y: number; width: number; height: number };
+export type DotExclusion = ExclusionRect;
 export function ReactTwinkleDotMatrixBg({ excludeRects }: { excludeRects: DotExclusion[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { isDark } = useTheme();

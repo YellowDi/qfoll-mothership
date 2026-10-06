@@ -1,12 +1,13 @@
 /**
  * [INPUT]: 依赖 markdown-it、highlight.js 与 Mermaid 解析能力
- * [OUTPUT]: 对外提供 Markdown 解析和内容增强工具
+ * [OUTPUT]: 对外提供 parseMarkdownModule，返回 ParsedMarkdown
  * [POS]: 项目、新闻和设计规范页面共享的内容转换边界
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
 import { resolveCoverAsset } from "./coverAssets";
+import type { CarouselSlide, CustomCarousel, Frontmatter, ParsedMarkdown } from "./types";
 
 const md = new MarkdownIt({
   html: true,
@@ -14,7 +15,7 @@ const md = new MarkdownIt({
   typographer: true,
 });
 
-const parseValue = (value) => {
+const parseValue = (value: string) => {
   const trimmed = value.trim();
   if (
     (trimmed.startsWith("\"") && trimmed.endsWith("\"")) ||
@@ -25,8 +26,15 @@ const parseValue = (value) => {
   return trimmed;
 };
 
-const parseArray = (lines, startIndex, indent) => {
-  const arr = [];
+/* 仅统计前导空格 (不含 tab)，该正则必然匹配 */
+const indentOf = (line: string) => /^ */.exec(line)![0].length;
+
+const parseArray = (
+  lines: string[],
+  startIndex: number,
+  indent: number
+): { value: Array<string | Record<string, string>>; index: number } => {
+  const arr: Array<string | Record<string, string>> = [];
   let i = startIndex;
   while (i < lines.length) {
     const line = lines[i];
@@ -34,7 +42,7 @@ const parseArray = (lines, startIndex, indent) => {
       i += 1;
       continue;
     }
-    const currentIndent = line.match(/^ */)[0].length;
+    const currentIndent = indentOf(line);
     if (currentIndent < indent || !line.trim().startsWith("- ")) {
       break;
     }
@@ -49,7 +57,7 @@ const parseArray = (lines, startIndex, indent) => {
           i += 1;
           continue;
         }
-        const nextIndent = nextLine.match(/^ */)[0].length;
+        const nextIndent = indentOf(nextLine);
         if (nextIndent <= currentIndent) break;
         const trimmed = nextLine.trim();
         if (trimmed.includes(":")) {
@@ -66,7 +74,7 @@ const parseArray = (lines, startIndex, indent) => {
   return { value: arr, index: i };
 };
 
-const parseFrontmatter = (raw) => {
+const parseFrontmatter = (raw: string): { data: Frontmatter; content: string } => {
   if (!raw.startsWith("---")) {
     return { data: {}, content: raw };
   }
@@ -77,10 +85,10 @@ const parseFrontmatter = (raw) => {
   const fm = raw.slice(3, end).trim();
   const content = raw.slice(end + 4).trim();
   const lines = fm.split("\n");
-  const data = {};
+  const data: Frontmatter = {};
   let i = 0;
   while (i < lines.length) {
-    let line = lines[i];
+    const line = lines[i];
     if (!line.trim()) {
       i += 1;
       continue;
@@ -99,7 +107,7 @@ const parseFrontmatter = (raw) => {
         break;
       }
       const nextLine = lines[i];
-      const nextIndent = nextLine.match(/^ */)[0].length;
+      const nextIndent = indentOf(nextLine);
       if (nextLine.trim().startsWith("- ")) {
         const parsed = parseArray(lines, i, nextIndent);
         data[key.trim()] = parsed.value;
@@ -116,7 +124,7 @@ const parseFrontmatter = (raw) => {
   return { data, content };
 };
 
-const escapeAttr = (value) =>
+const escapeAttr = (value: unknown) =>
   String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("\"", "&quot;")
@@ -124,14 +132,14 @@ const escapeAttr = (value) =>
     .replaceAll(">", "&gt;")
     .replaceAll("'", "&#39;");
 
-const normalizeCodeLanguage = (value) => {
+const normalizeCodeLanguage = (value: unknown) => {
   const trimmed = String(value || "").trim().toLowerCase();
   if (!trimmed) return "text";
   const language = trimmed.split(/\s+/)[0].replace(/^language-/, "");
   return language || "text";
 };
 
-const highlightCode = (code, language, hasExplicitLanguage) => {
+const highlightCode = (code: string, language: string, hasExplicitLanguage: boolean) => {
   const source = String(code || "");
   const normalized = normalizeCodeLanguage(language);
   if (!source) {
@@ -164,7 +172,7 @@ const highlightCode = (code, language, hasExplicitLanguage) => {
   return { language: normalized, html: md.utils.escapeHtml(source) };
 };
 
-const renderMarkdownCodeBlock = (code, language) => {
+const renderMarkdownCodeBlock = (code: string, language: string) => {
   const rawInfo = String(language || "").trim();
   const hasExplicitLanguage = rawInfo.length > 0;
   const normalizedLang = normalizeCodeLanguage(rawInfo);
@@ -193,7 +201,7 @@ md.renderer.rules.code_block = (tokens, idx) => {
   return renderMarkdownCodeBlock(token.content, "text");
 };
 
-const toBackgroundImage = (value) => {
+const toBackgroundImage = (value: unknown) => {
   const raw = String(value ?? "").trim();
   if (!raw) return "";
   if (raw.includes("url(") || raw.includes("linear-gradient(")) {
@@ -202,22 +210,22 @@ const toBackgroundImage = (value) => {
   return `url("${raw}")`;
 };
 
-const isCssBackgroundExpression = (value) => {
+const isCssBackgroundExpression = (value: unknown) => {
   const raw = String(value ?? "").trim();
   if (!raw) return false;
   return raw.includes("url(") || raw.includes("gradient(");
 };
 
-const parseBlockLines = (block) =>
+const parseBlockLines = (block: string) =>
   block
     .split("\n")
     .map((line) => line.trimEnd())
     .filter((line) => line.trim().length);
 
-const parseWideCarouselBlock = (block) => {
+const parseWideCarouselBlock = (block: string): CarouselSlide[] => {
   const lines = parseBlockLines(block);
-  const slides = [];
-  let current = {};
+  const slides: CarouselSlide[] = [];
+  let current: CarouselSlide = {};
   lines.forEach((line) => {
     const trimmed = line.trim();
     if (trimmed.startsWith("- ")) {
@@ -245,7 +253,12 @@ const parseWideCarouselBlock = (block) => {
   return slides.filter((slide) => slide.image || slide.video);
 };
 
-const renderSlide = (slide, carouselId, idx, defaultImageAlt) => {
+const renderSlide = (
+  slide: CarouselSlide,
+  carouselId: string,
+  idx: number,
+  defaultImageAlt: string
+) => {
   const caption = `<div class="md-item-caption">${escapeAttr(slide.caption || "")}</div>`;
   if (slide.video) {
     return `<div class="md-carousel-card is-video is-landscape"><div class="md-carousel-item md-carousel-item-video" data-carousel-id="${carouselId}" data-index="${idx}"><video class="md-carousel-video" data-inline-video="true" data-video-id="${escapeAttr(
@@ -271,7 +284,7 @@ const renderSlide = (slide, carouselId, idx, defaultImageAlt) => {
   )}" loading="lazy" decoding="async" /></div>${caption}</div>`;
 };
 
-const renderSlidesHtml = (slides, carouselId, defaultImageAlt) =>
+const renderSlidesHtml = (slides: CarouselSlide[], carouselId: string, defaultImageAlt: string) =>
   slides
     .map((slide, idx) => renderSlide(slide, carouselId, idx, defaultImageAlt))
     .join("");
@@ -280,9 +293,13 @@ export const parseMarkdownModule = ({
   raw,
   path,
   defaultImageAlt,
-}) => {
+}: {
+  raw: string;
+  path: string;
+  defaultImageAlt: string;
+}): ParsedMarkdown => {
   const { data, content } = parseFrontmatter(raw);
-  const id = data.id || path.split("/").pop()?.replace(".md", "");
+  const id = data.id || path.split("/").pop()!.replace(".md", "");
   let body = content || "";
   let infoPanelHtml = "";
   const infoMatch = body.match(/:::info-panel\n([\s\S]*?)\n:::/);
@@ -291,10 +308,10 @@ export const parseMarkdownModule = ({
     body = body.replace(infoMatch[0], "");
   }
 
-  const customCarousels = [];
+  const customCarousels: CustomCarousel[] = [];
   let carouselIndex = 0;
 
-  body = body.replace(/\[\[media\|([^\]]+)\]\]/g, (_m, payload) => {
+  body = body.replace(/\[\[media\|([^\]]+)\]\]/g, (_m, payload: string) => {
     const parts = payload
       .split(";")
       .map((part) => part.trim())
@@ -315,7 +332,7 @@ export const parseMarkdownModule = ({
     return `\n\n<div class="md-media${singleClass}" data-carousel-id="${carouselId}">${controlsHtml}<div class="md-carousel-track" data-carousel-track="true">${itemsHtml}</div></div>\n\n`;
   });
 
-  body = body.replace(/:::media\n([\s\S]*?)\n:::/g, (_m, block) => {
+  body = body.replace(/:::media\n([\s\S]*?)\n:::/g, (_m, block: string) => {
     const slides = parseWideCarouselBlock(block);
     const carouselId = `carousel-${id}-${carouselIndex}`;
     customCarousels.push({ id: carouselId, slides });

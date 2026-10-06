@@ -5,14 +5,14 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { FLEET_STATES, mountDispatch, mountFleet, mountJourney, mountTracker, mountUplink, type mountYgbPort } from "../../../visuals/ygbPort";
+import { FLEET_STATES, mountDispatch, mountFleet, mountJourney, mountTracker, mountUplink, type DispatchInfo, type FleetInfo, type JourneyInfo, type PortScene, type TrackInfo, type UplinkInfo } from "../../../visuals/ygbPort";
 import app01 from "../../../assets/ygb-assets/app-01-m.webp";
 import app02 from "../../../assets/ygb-assets/app-02-m.webp";
 import app03 from "../../../assets/ygb-assets/app-03-m.webp";
 import app04 from "../../../assets/ygb-assets/app-04-m.webp";
 import app05 from "../../../assets/ygb-assets/app-05-m.webp";
 
-export type PortScene = ReturnType<typeof mountYgbPort>["scene"];
+export type { PortScene };
 type Mount<T> = (scene: PortScene, onState: (state: T) => void) => () => void;
 type CanvasMount<T> = (canvas: HTMLCanvasElement, scene: PortScene, onState: (state: T) => void) => () => void;
 
@@ -64,7 +64,6 @@ type FigureProps = { scene: PortScene | null; active: boolean };
 const cssVar = (name: string, value: string) => ({ [name]: value }) as CSSProperties;
 
 /* ═══ 01 在途追踪 ═══ */
-interface TrackInfo { zone: string; speed: number; heading: string; status: string; time: string; dest: string | null; remain: string | null; events: { time: string; text: string }[] }
 export function TrackerFigure({ scene, active }: FigureProps) {
   const [ref, info] = useCanvasFigure<TrackInfo>(scene, active, mountTracker);
   const cell = (k: string, v?: string | null) => <div><span className="ys-k">{k}</span><b className="ys-v">{v ?? "—"}</b></div>;
@@ -78,7 +77,6 @@ export function TrackerFigure({ scene, active }: FigureProps) {
 }
 
 /* ═══ 02 智能派单 ═══ */
-interface DispatchInfo { no: string; box: string; origin: string; dest: string; phase: string; eta: number; candidates: { plate: string; status: string; km: string; score: number; chosen: boolean }[] }
 export function DispatchFigure({ scene, active }: FigureProps) {
   const [ref, info] = useCanvasFigure<DispatchInfo>(scene, active, mountDispatch);
   const assigned = info?.phase === "已派单";
@@ -96,8 +94,6 @@ export function DispatchFigure({ scene, active }: FigureProps) {
 }
 
 /* ═══ 03 运单全链路 ═══ */
-interface JourneyNode { label: string; place: string; time: string | null; done: boolean; eta: string | null }
-interface JourneyInfo { no: string; plate: string; progress: number; stage: number; nodes: JourneyNode[]; next: { label: string; place: string; km: string }; speed: number; zone: string; moving: boolean; history: { no: string; span: string }[]; speeds: number[]; log: { time: string; text: string }[] }
 /* 车速轨迹：0–80 km/h 映射到固定高度的折线与面积 */
 function Spark({ values }: { values: number[] }) {
   const n = Math.max(2, values.length), pts = values.map((v, i) => `${(i / (n - 1)) * 100},${40 - Math.min(80, v) / 2}`);
@@ -131,7 +127,6 @@ export function JourneyFigure({ scene, active }: FigureProps) {
 
 /* ═══ 04 车队看板 ═══ */
 const FLEET_COLORS: Record<string, string> = { 重车在途: "#f97316", 空车在途: "#3b82f6", 排队进港: "#eab308", 港区作业: "#0ea5e9", 月台装卸: "#a855f7", 路口等待: "#94a3b8", 停车场待命: "#22c55e" };
-interface FleetInfo { total: number; busy: number; rate: number; counts: Record<string, number>; rows: { id: number; plate: string; state: string; zone: string; speed: number; box: string }[] }
 export function FleetFigure({ scene, active }: FigureProps) {
   const info = useFigure<FleetInfo>(scene, active, mountFleet);
   if (!info) return <div className="ys-frame" />;
@@ -147,7 +142,6 @@ export function FleetFigure({ scene, active }: FigureProps) {
 
 /* ═══ 05 监管上报 ═══ */
 const KIND_COLORS: Record<string, string> = { 运单: "#3b82f6", 轨迹: "#8b5cf6", 进出港: "#f97316", 结算: "#16a34a" };
-interface UplinkInfo { total: number; latency: string; packets: { id: number; kind: string; p: number }[]; rows: { id: number; time: string; kind: string; ref: string; detail: string; sig: string; ok: boolean }[] }
 export function UplinkFigure({ scene, active }: FigureProps) {
   const info = useFigure<UplinkInfo>(scene, active, mountUplink);
   if (!info) return <div className="ys-frame" />;

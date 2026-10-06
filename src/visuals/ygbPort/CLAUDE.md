@@ -4,6 +4,7 @@
 云柜宝港区 Canvas 引擎：正交二测视角下的集装箱码头全景。框架无关，唯一入口 index.js；正式 Hero 经 react/pages/ReactYgbPortBackground 挂载，ygb-hero-prototype.html 直接挂载用于调试，二者只调用 mountYgbPort。
 
 成员清单
+index.d.ts: 入口的类型契约，PortCamera/PortScene/PortHandle 与五张配图的状态载荷 (TrackInfo 等)，React 配图层以此为准；PortScene 只暴露外部可见面，引擎内部车流与渲染细节不入契约。
 index.js: 唯一入口 mountYgbPort(canvas,{dark,paused})，返回 setTheme/setPaused/setSpeed/flyTo/subscribe/dispose 与 scene；转出五个配图 mount。
 scene.js: 总装与渲染调度，画布生命周期、静态烘焙 (按最小动态深度决定烘焙或精灵)、精灵图集、整层阴影一次模糊、船体分段精灵、夜间光照图 (白天仅重建时临时分配)、镜头锚点与 flyTo 覆盖镜头飞行 (途中 CSS 缩放一张覆盖起终点的渲染、快照交叉淡化两端且淡出后释放显存、被打断时从屏幕实际视图续飞)、帧订阅与事件总线 (scene.on)、画质档位 (静止保持像素比 2；飞行途中临时 1.5 (仅约 250 万物理像素以上的大舞台，小屏省掉这次额外重建)；静止帧耗时持续超 20ms 则本次会话降到 1.5) 以及全部分层顺序。
 iso.js: 投影与绘制原语 (盒体/有向盒/棱柱/缓存光斑印章)、色彩推导与 SUN/faceShade 光照约定，所有模块共用。

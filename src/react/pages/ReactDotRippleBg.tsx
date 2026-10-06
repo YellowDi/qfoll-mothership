@@ -5,12 +5,12 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef } from "react";
-import { mountDotRipple } from "../../visuals/dotRipple";
+import { mountDotRipple, type DotRippleHandle } from "../../visuals/dotRipple";
 import type { DotExclusion } from "./ReactTwinkleDotMatrixBg";
 
 export function ReactDotRippleBg({ excludeRects }: { excludeRects: DotExclusion[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const apiRef = useRef<ReturnType<typeof mountDotRipple> | null>(null);
+  const apiRef = useRef<DotRippleHandle | null>(null);
   useEffect(() => {
     if (!canvasRef.current) return;
     apiRef.current = mountDotRipple(canvasRef.current);

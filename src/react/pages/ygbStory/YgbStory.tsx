@@ -5,13 +5,13 @@
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { mountYgbPort } from "../../../visuals/ygbPort";
+import { mountYgbPort, type PortCamera, type PortHandle } from "../../../visuals/ygbPort";
 import { useTypedPain } from "../../hooks/useTypedPain";
 import { useTheme } from "../../providers/ThemeProvider";
 import { DispatchFigure, FleetFigure, JourneyFigure, noteScroll, PhoneShowcase, TrackerFigure, UplinkFigure, type PortScene } from "./storyFigures";
 import "./YgbStory.css";
 
-type Camera = { s: number; x: number; y: number; ax?: number; ay?: number } | null;
+type Camera = PortCamera | null;
 interface Chapter {
   side: "left" | "right";
   kicker: string;
@@ -150,7 +150,7 @@ export function YgbStory({ isDark }: { isDark?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const portRef = useRef<ReturnType<typeof mountYgbPort> | null>(null);
+  const portRef = useRef<PortHandle | null>(null);
   const [scene, setScene] = useState<PortScene | null>(null);
   /* slot：0 为封面，i+1 为第 i 章 */
   const [slot, setSlot] = useState(0);
@@ -171,7 +171,7 @@ export function YgbStory({ isDark }: { isDark?: boolean }) {
   useEffect(() => {
     const section = sectionRef.current;
     if (!section || !canvasRef.current) return;
-    let port: ReturnType<typeof mountYgbPort> | null = null, idle = 0, cancelled = false;
+    let port: PortHandle | null = null, idle = 0, cancelled = false;
     const build = () => {
       if (cancelled || port || !canvasRef.current) return;
       port = mountYgbPort(canvasRef.current, { dark: darkRef.current });
