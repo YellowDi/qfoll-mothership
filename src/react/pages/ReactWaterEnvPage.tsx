@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 data/waterEnvFeatures 的 waterEnvStory 叙事数据，依赖 public/water-env 的视频和首帧封面，依赖 ReactDotRippleBg 点阵涟漪与 useTextExclusions 避让采集
- * [OUTPUT]: 对外提供 ReactWaterEnvPage：居中视频 Hero (叠加鼠标点阵涟漪 + 首张大幅地图) → 地图总览 → 闭环四步 → 核心能力陈列 → 八模块 → 收束标语
- * [POS]: 产品专题路由 /water-env 的 React 页面边界，负责 Hero 可见性播放与内容区编排；文案全部来自 waterEnvStory，页面不持有内容
+ * [OUTPUT]: 对外提供 ReactWaterEnvPage：居中视频 Hero (叠加鼠标点阵涟漪 + 首张大幅地图，视频高度实测延伸至首图中线) → 地图总览 → 闭环四步 → 核心能力陈列 → 八模块 → 收束标语
+ * [POS]: 产品专题路由 /water-env 的 React 页面边界，负责 Hero 可见性播放、视频高度对齐首图与内容区编排；文案全部来自 waterEnvStory，页面不持有内容
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, type ReactNode } from "react";
@@ -16,7 +16,26 @@ type Screen = { image: string; imageDark?: string };
 export function ReactWaterEnvPage() {
   const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const leadRef = useRef<HTMLElement>(null);
   const excludeRects = useTextExclusions(heroRef);
+
+  // ---- 视频高度跟随首图：实测首图垂直中线写入 --water-hero-height，CSS 的 clamp 只作首帧兜底 ----
+  useEffect(() => {
+    const hero = heroRef.current;
+    const lead = leadRef.current;
+    if (!hero || !lead) return;
+
+    const syncHeight = () => {
+      const frame = lead.firstElementChild ?? lead;
+      const heroTop = hero.getBoundingClientRect().top;
+      const { top, height } = frame.getBoundingClientRect();
+      hero.style.setProperty("--water-hero-height", `${Math.round(top - heroTop + height / 2)}px`);
+    };
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(lead);
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -44,7 +63,8 @@ export function ReactWaterEnvPage() {
 
   return (
     <div className="water-page w-full">
-      <section ref={heroRef} className="react-water-hero relative flex flex-col items-center overflow-hidden py-12 md:py-20">
+      {/* 移动端顶栏 fixed 且布局不留位：pt-26 = 顶栏 pt-14 + 原留白 12，视频仍从 0 起铺到顶栏背后 */}
+      <section ref={heroRef} className="react-water-hero relative flex flex-col items-center overflow-hidden pb-12 pt-26 md:py-20">
         <video
           ref={videoRef}
           className="react-water-hero-video"
@@ -59,7 +79,7 @@ export function ReactWaterEnvPage() {
           aria-hidden="true"
           tabIndex={-1}
         />
-        {/* 涟漪层只覆盖 Hero 首屏 (与 section 的 min-h 同值)，夹在视频与正文之间；底部页面背景渐变 (::after, z-1) 会自然把它盖掉 */}
+        {/* 涟漪层与视频同高 (--water-hero-height)，夹在视频与正文之间；底部页面背景渐变 (::after, z-1) 会自然把它盖掉 */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[var(--water-hero-height)]" aria-hidden="true"><ReactDotRippleBg excludeRects={excludeRects} /></div>
         <div className="react-water-hero-content relative z-10 mx-auto w-full max-w-240 px-6">
           <div data-dot-avoid className="react-water-hero-kicker inline-flex items-center gap-2 rounded-full border border-zinc-300/50 bg-white/60 px-3 py-1 text-sm text-secondary dark:border-white/20 dark:bg-white/10 dark:text-on-dark">
@@ -79,7 +99,7 @@ export function ReactWaterEnvPage() {
           </p>
         </div>
         {/* 首张地图是 Hero 的收尾：页面背景渐变在它中段收束，整块标记为涟漪禁区 */}
-        <figure id={overview.id} data-dot-block className="water-lead relative z-2 mx-auto mt-20 w-full max-w-360 px-6 md:px-14 lg:mt-28">
+        <figure ref={leadRef} id={overview.id} data-dot-block className="water-lead relative z-2 mx-auto mt-20 w-full max-w-360 px-6 md:px-14 lg:mt-28">
           <Shot screen={overview} alt="水环境监控平台站点地图" eager className="water-lead-frame" />
         </figure>
         <Overview />

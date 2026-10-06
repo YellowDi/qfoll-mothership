@@ -1,15 +1,15 @@
 /**
  * [INPUT]: 依赖 ReactWaterEnvPage 的视频 Hero 与五个内容章节，依赖全局 --color-bg / --color-ink / --color-edge 令牌
- * [OUTPUT]: 对外提供 Hero 满幅视频与收束渐变、首张大幅地图框，以及 water-* 章节样式 (容器节奏、眉题、闭环横线、模块发丝网格)
+ * [OUTPUT]: 对外提供 Hero 满幅视频 (高度至首图中线) 与收束渐变、首张大幅地图框，以及 water-* 章节样式 (容器节奏、眉题、闭环横线、模块发丝网格)
  * [POS]: 水环境产品页的局部样式；Hero 层叠 (视频 → 涟漪 → 渐变 → 正文) 独立于下方章节，章节只靠页面底色与发丝线组织，不用卡片阴影堆层次
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 
 /* ==================== Hero：保持原设计 ==================== */
 .react-water-hero {
+  /* 兜底值；运行时由 ReactWaterEnvPage 实测为首图中线高度 */
   --water-hero-height: clamp(48rem, 90vh, 64rem);
   isolation: isolate;
-  min-height: var(--water-hero-height);
   background: rgb(var(--color-bg));
 }
 
@@ -36,14 +36,13 @@
   left: 0;
   height: var(--water-hero-height);
   pointer-events: none;
-  /* 渐变中点对齐首张地图的中段，地图下半段与总览章节回到页面底色 */
+  /* 视频底边即首图中线：只在最后一段收束，首图两侧仍能看到视频，中线以下回到页面底色 */
   background: linear-gradient(
     to bottom,
     rgb(var(--color-bg) / 0) 0%,
-    rgb(var(--color-bg) / 0) 52%,
-    rgb(var(--color-bg) / .18) 58%,
-    rgb(var(--color-bg) / .78) 66%,
-    rgb(var(--color-bg)) 72%,
+    rgb(var(--color-bg) / 0) 70%,
+    rgb(var(--color-bg) / .35) 84%,
+    rgb(var(--color-bg) / .85) 95%,
     rgb(var(--color-bg)) 100%
   );
 }
