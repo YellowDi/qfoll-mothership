@@ -44,7 +44,13 @@ const KIND: Record<string, string> = {
 export function buildCity(): City {
   const objects: StaticItem[] = [], surfaces: SurfacePainter[] = [], blocks: CityBlockData[] = [];
   const R = rng(20261005);
-  const add: AddItem = (o) => (Array.isArray(o) ? objects.push(...o) : objects.push(o));
+  const add: AddItem = (...items) => {
+    for (const o of items) {
+      if (Array.isArray(o)) objects.push(...o);
+      else objects.push(o);
+    }
+    return objects.length;
+  };
   const parked: Parked = (x, y, h, type, extra = {}) => add(parkedVehicle({ x, y, h, type, cargo: type === "truck" && R() < 0.7 ? pick(R, BOX_WEIGHTS) : null, color: pick(R, CAR_WEIGHTS), cab: Math.floor(R() * 5), ...extra }));
 
   for (const b of cityBlocks) {

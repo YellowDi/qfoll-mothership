@@ -38,7 +38,13 @@ const ROWS = 6, ROW_PITCH = 5.5, TIER = TEU.h;
 export function buildTerminal(): Terminal {
   const objects: StaticItem[] = [], surfaces: SurfacePainter[] = [], blocks: YardBlockData[] = [];
   const R = rng(7341);
-  const add: AddItem = (o) => (Array.isArray(o) ? objects.push(...o) : objects.push(o));
+  const add: AddItem = (...items) => {
+    for (const o of items) {
+      if (Array.isArray(o)) objects.push(...o);
+      else objects.push(o);
+    }
+    return objects.length;
+  };
 
   /* ═══ 箱区：每格记录层数、箱色与 20/40 尺 ═══ */
   for (const yb of yardBlocks) {
