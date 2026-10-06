@@ -52,8 +52,8 @@ button:focus-visible,input:focus-visible{outline:2px solid #38bdf8;outline-offse
  <p id="hint">移动鼠标留下尾迹，点击放出一大团不规则涟漪。画面默认留白，字符只在鼠标扫过与点击处浮现 (. : + #)。</p>
 </aside>
 <script type="module">
-import {mountDotRipple} from '/src/visuals/dotRipple/index.js';
-import {PARAM_SPEC,defaultParams} from '/src/visuals/dotRipple/params.js';
+import {mountDotRipple} from '/src/visuals/dotRipple/index.ts';
+import {PARAM_SPEC,defaultParams} from '/src/visuals/dotRipple/params.ts';
 
 const $=(id)=>document.getElementById(id);
 const params=defaultParams();

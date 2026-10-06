@@ -27,6 +27,7 @@
   "include": [
     "src/data/**/*.ts",
     "src/composables/**/*.ts",
+    "src/visuals/dotRipple/**/*.ts",
     "src/react/**/*.ts",
     "src/react/**/*.tsx"
   ]
