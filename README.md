@@ -39,8 +39,6 @@ scripts/            # Post-build SPA fallback (404.html)
 public/             # Static assets served as-is (project images, icons, water-env video)
 ```
 
-Standalone debug pages at the repo root (not routed in production): `ygb-hero-prototype.html`, `water-prototype.html`, `ygb-hero-react.html`.
-
 ## Requirements
 
 - Node.js 20.19+ or 22.12+ (required by Vite 8)

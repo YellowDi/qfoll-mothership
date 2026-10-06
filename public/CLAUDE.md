@@ -4,7 +4,7 @@
 静态资源直接按路径发布，媒体不经过源码打包。
 
 成员清单
-water-env/: 水环境 Hero 正式视频与首帧封面，以及原型页本地参考素材，见 water-env/CLAUDE.md。
+water-env/: 水环境 Hero 正式视频与首帧封面，见 water-env/CLAUDE.md。
 project-images/: 项目详情媒体，按项目 slug 隔离。
 demo-images/: Showcase 演示封面。
 favicon-16.webp: 浏览器小尺寸站点图标。

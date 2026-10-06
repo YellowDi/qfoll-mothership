@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 无外部依赖
  * [OUTPUT]: 对外提供 PARAM_SPEC (参数元数据：键/标签/范围/默认值)、ParamKey/DotRippleParams 类型 (由 PARAM_SPEC 推出)、defaultParams()、GLYPHS (疏密字符序列)
- * [POS]: dotRipple 的调参契约，引擎取默认值，调试台据此生成滑杆，二者不各自硬编码
+ * [POS]: dotRipple 的调参契约，引擎默认值来自这里，不在渲染层另写一份
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 

@@ -1,7 +1,7 @@
 # ygbPort/
 > L2 | 父级: ../CLAUDE.md
 
-云柜宝港区 Canvas 引擎：正交二测视角下的集装箱码头全景。框架无关，TypeScript 编写，唯一入口 index.ts；正式 Hero 经 react/pages/ReactYgbPortBackground 挂载，ygb-hero-prototype.html 直接挂载用于调试，二者只调用 mountYgbPort。
+云柜宝港区 Canvas 引擎：正交二测视角下的集装箱码头全景。框架无关，TypeScript 编写，唯一入口 index.ts；正式 Hero 经 react/pages/ReactYgbPortBackground 挂载，只调用 mountYgbPort。
 
 成员清单
 index.ts: 唯一入口 mountYgbPort(canvas,{dark,paused})，返回 PortHandle (setTheme/setPaused/setSpeed/flyTo/subscribe/dispose 与 scene)；转出五个配图 mount 及其状态载荷类型 (TrackInfo 等)，React 配图层以此为准；PortScene 类型暴露完整场景供配图状态源读取。

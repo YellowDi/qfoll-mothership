@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 visuals/ygbPort 的 mountYgbPort 港区引擎、ThemeProvider 的主题状态与 React 生命周期
  * [OUTPUT]: 对外提供 ReactYgbPortBackground，挂载云柜宝港区 Canvas 背景并同步主题与暂停
- * [POS]: React 云柜宝 Hero 的背景适配器，绘制逻辑全部位于 visuals/ygbPort，与原型调试页同源
+ * [POS]: React 云柜宝 Hero 的背景适配器，绘制逻辑全部位于 visuals/ygbPort
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef } from "react";

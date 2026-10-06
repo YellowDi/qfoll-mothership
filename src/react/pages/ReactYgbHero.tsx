@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖原云柜宝 Hero 资源、默认共享港区背景或注入背景、hooks/useTypedPain 打字机文案与 React 生命周期
- * [OUTPUT]: 对外提供 ReactYgbHero，供专题页和首页预览共用
- * [POS]: 原 YgbHeroSection 的 React 适配；当前用于首页云柜宝预览与调试页，/ygb 专题已由 ygbStory 封面取代
+ * [OUTPUT]: 对外提供 ReactYgbHero，供首页预览使用
+ * [POS]: 原 YgbHeroSection 的 React 适配；当前用于首页云柜宝预览，/ygb 专题已由 ygbStory 封面取代
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
