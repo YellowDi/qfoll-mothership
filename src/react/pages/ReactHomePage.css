@@ -1,0 +1,17 @@
+/**
+ * [INPUT]: 依赖 ReactHomePage 的品牌、标签墙和响应式类名
+ * [OUTPUT]: 对外提供首页背景光栅与标签横向运动
+ * [POS]: React 首页局部视觉层，避免首页动效侵入公共布局
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.home-brand { background: radial-gradient(circle at 15% 15%, rgb(255 111 79 / .16), transparent 38%), radial-gradient(circle at 85% 20%, rgb(143 72 255 / .1), transparent 40%), rgb(var(--color-bg) / 1); }
+.home-brand-grid { position: absolute; inset: 0; opacity: .3; background-image: radial-gradient(circle, rgb(var(--color-line) / .34) 1px, transparent 1px); background-size: 8px 8px; mask-image: linear-gradient(to bottom, black, transparent 90%); }
+.home-tag-wall { background: linear-gradient(145deg, rgb(var(--color-line) / .07), transparent); }
+.home-tag-track { display: flex; width: max-content; gap: 1.5rem; white-space: nowrap; color: rgb(var(--color-ink) / .18); font-size: clamp(5rem, 10vw, 9rem); font-weight: 800; line-height: .92; animation: home-tag-slide 100s linear infinite; }
+.home-tag-track span:nth-child(even) { color: rgb(var(--color-ink) / .1); }
+@keyframes home-tag-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .home-tag-track { animation: none; } }
+
+.react-cover-media { container-type: inline-size; }
+.react-cover-icon { font-size: calc(clamp(1.25rem, 50cqw, 10rem) * var(--cover-icon-scale, 1)); }
+.react-cover-play { right: clamp(.5rem, 2cqw, 1rem); top: clamp(.5rem, 2cqw, 1rem); width: clamp(1.5rem, 7.5cqw, 2.5rem); height: clamp(1.5rem, 7.5cqw, 2.5rem); font-size: clamp(.75rem, 3.75cqw, 1.25rem); }

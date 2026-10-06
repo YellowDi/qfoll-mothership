@@ -1,0 +1,18 @@
+/**
+ * [INPUT]: 云柜宝 Hero 叠卡的 active 状态 class 与系统动画偏好
+ * [OUTPUT]: 对外提供叠卡的精确位移、透明度和高度过渡
+ * [POS]: ReactYgbHero 的局部动画边界，避免 transition-all 扩散到布局属性
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.ygbHeroCard {
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out,
+    height 300ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ygbHeroCard {
+    transition: none;
+  }
+}

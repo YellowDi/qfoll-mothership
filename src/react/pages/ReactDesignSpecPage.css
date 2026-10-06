@@ -1,0 +1,67 @@
+/*
+ * [INPUT]: 依赖设计规范媒体类名与 --design-landscape-card-width
+ * [OUTPUT]: 对外提供横竖图片的自然比例及平板媒体宽度约束
+ * [POS]: 设计规范页专属样式，区别于一般项目媒体的固定比例
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+
+.design-spec-page .design-spec-media {
+  --design-landscape-card-width: 1103px;
+}
+
+.design-spec-page .design-spec-media .md-carousel-item {
+  aspect-ratio: auto;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.design-spec-page .design-spec-media .md-carousel-card {
+  width: fit-content;
+  max-width: none;
+}
+
+.design-spec-page .design-spec-media .md-carousel-card.is-landscape {
+  width: var(--design-landscape-card-width);
+  max-width: none;
+}
+
+.design-spec-page .design-spec-media .md-carousel-card.is-portrait {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.design-spec-page .design-spec-media .md-carousel-image {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.design-spec-page .design-spec-media .md-carousel-card.is-landscape .md-carousel-image {
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
+}
+
+.design-spec-page .design-spec-media .md-carousel-card.is-portrait .md-carousel-item {
+  width: fit-content;
+}
+
+.design-spec-page .design-spec-media .md-carousel-card.is-portrait .md-carousel-image {
+  width: auto;
+  max-width: 100%;
+  max-height: min(78vh, 56rem);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .markdown-body .md-media {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 24px auto !important;
+  }
+}

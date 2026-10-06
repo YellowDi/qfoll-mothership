@@ -1,0 +1,90 @@
+/**
+ * [INPUT]: 依赖品牌首屏点阵、文字壳与内联图标类名
+ * [OUTPUT]: 对外提供原版的渐隐区域、图标姿态与响应式规则
+ * [POS]: 品牌首屏局部视觉层，集中原始样式值
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+
+.react-about {
+  background: rgb(var(--color-bg) / 1);
+}
+
+.react-about-copy-shell {
+  padding: 0.16rem 0.32rem;
+}
+
+.react-about-features-shell {
+  padding: 0.08rem 0.32rem;
+}
+
+.react-about-fades {
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgb(var(--color-bg) / 0) 0%,
+      rgb(var(--color-bg) / 0.72) 62%,
+      rgb(var(--color-bg) / 1) 100%
+    ),
+    linear-gradient(to right, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 0) 100%),
+    linear-gradient(to left, rgb(var(--color-bg) / 1) 0%, rgb(var(--color-bg) / 0) 100%);
+  background-size: 100% 24%, 8% 100%, 8% 100%;
+  background-position: bottom center, left center, right center;
+  background-repeat: no-repeat;
+}
+
+.react-inline-icon {
+  --icon-rotate: 0deg;
+  --icon-scale: 1;
+  --icon-y: -4px;
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  vertical-align: middle;
+  border-radius: 9px;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  object-fit: cover;
+  transform: translateY(var(--icon-y)) rotate(var(--icon-rotate)) scale(var(--icon-scale));
+  transform-origin: center;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 7px 16px rgba(17, 24, 39, 0.24);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .react-inline-icon:hover {
+    --icon-scale: 1.2;
+    box-shadow: 0 10px 22px rgba(17, 24, 39, 0.3);
+    z-index: 5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .react-inline-icon {
+    transition: none;
+  }
+}
+
+.react-inline-icon--qf {
+  --icon-rotate: -7deg;
+}
+
+.react-inline-icon--a {
+  --icon-rotate: -10deg;
+}
+
+.react-inline-icon--b {
+  --icon-rotate: 4deg;
+}
+
+.react-inline-icon--c {
+  --icon-rotate: -3deg;
+}
+
+@media (max-width: 768px) {
+  .react-inline-icon {
+    --icon-y: -2px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+}

@@ -1,6 +1,6 @@
 # Qifeng Tech Website
 
-A brand website built with Vue 3 + Vite, showcasing company info, case studies, and news.
+A brand website built with React + TypeScript + Vite, showcasing company info, case studies, and news.
 
 ## Overview
 
@@ -12,9 +12,9 @@ A brand website built with Vue 3 + Vite, showcasing company info, case studies, 
 
 | Category | Tech |
 |----------|------|
-| Framework | Vue 3 (Composition API) |
+| Framework | React 19 + TypeScript |
 | Build | Vite 7 |
-| Router | Vue Router 4 |
+| Router | React Router 7 |
 | Styling | Tailwind CSS 4 |
 | Content | Markdown + custom frontmatter |
 | Rendering | markdown-it, Mermaid, highlight.js, KaTeX |
@@ -24,18 +24,13 @@ A brand website built with Vue 3 + Vite, showcasing company info, case studies, 
 
 ```
 src/
-├── components/     # Shared components (HeaderBar, CoverImage, ContentListRow, etc.)
-├── composables/    # Composition logic (theme, detail page interactions, speech synthesis, etc.)
+├── composables/    # Framework-agnostic browser logic (inline video, tag links)
 ├── content/        # Markdown content
 │   ├── projects/   # Case studies
 │   └── news/       # News articles
 ├── data/           # Content parsing and metadata (projects.js, news.js, contentParserShared.js)
-├── layouts/        # Layouts (AppLayout)
-├── router/         # Route config
+├── react/          # React + TypeScript application
 ├── styles/         # Global styles and Markdown typography
-├── views/          # Page views
-├── App.vue
-├── main.js
 └── style.css
 ```
 

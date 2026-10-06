@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: Markdown 文章 DOM、媒体控制状态与全局颜色 token
+ * [OUTPUT]: 对外提供代码块、表格、视频、图片轮播和灯箱的跨框架样式
+ * [POS]: 富媒体表现层，统一详情页阅读节奏
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 @reference "../style.css";
 
 /* Non-home markdown and rich-media styles (route-level import) */

@@ -4,6 +4,10 @@
 @layer base {
 
   :root {
+    /* 固定顶栏高度的唯一来源，Tailwind 侧映射为 spacing.header */
+    --header-h: 3.5rem;
+    /* 移动端详情页滚过标题后，顶栏下方追加的副标题行；固定高度，锚点避让才可静态计算 */
+    --header-subbar-h: 2.75rem;
     --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     --color-bg: 255 255 255;
     --color-surface: 255 255 255;

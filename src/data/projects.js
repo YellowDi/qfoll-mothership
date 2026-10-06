@@ -1,3 +1,9 @@
+/**
+ * [INPUT]: 依赖项目 Markdown 内容和封面资源索引
+ * [OUTPUT]: 对外提供项目索引与派生列表数据
+ * [POS]: 项目内容域的单一数据入口
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
 import { parseMarkdownModule } from "./contentParserShared";
 import { resolveCoverVideoAsset } from "./coverAssets";
 

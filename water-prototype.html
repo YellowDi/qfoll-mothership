@@ -1,0 +1,85 @@
+<!doctype html>
+<!--
+[INPUT]: 依赖 src/visuals/dotRipple 的 mountDotRipple 引擎与 PARAM_SPEC 参数元数据，依赖 public/water-env/hero-bg.mp4 作视频底 (素材取自第三方参考页，上线前须确认授权)
+[OUTPUT]: 提供 ASCII 点阵涟漪调试台：全屏字符场、参数滑杆 (由 PARAM_SPEC 生成)、昼夜/视频底/暂停切换 (字符颜色 ink 由本页按底色决定)、帧率读数、参数 JSON 复制
+[POS]: 根目录的独立调试台，只验收涟漪效果本身；不接入正式路由，也不依赖站点样式，满意后再由 React 适配器接入 /water-env
+[PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>水环境 · 点阵涟漪调试台</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;font:12px/1.4 system-ui,-apple-system,'PingFang SC',sans-serif}
+/* 无视频时的底色取自正式 Hero (ReactWaterEnvPage.css) 的渐变；视频底为参考素材 (public/water-env/hero-bg.mp4) */
+body{background:radial-gradient(ellipse 90% 70% at 75% 5%,rgba(129,140,248,.28),transparent 55%),radial-gradient(ellipse 70% 90% at 15% 25%,rgba(59,130,246,.22),transparent 55%),radial-gradient(ellipse 80% 50% at 88% 55%,rgba(34,211,238,.16),transparent 50%),#0f2847}
+body.light{background:radial-gradient(ellipse 90% 70% at 75% 5%,rgba(129,140,248,.25),transparent 55%),radial-gradient(ellipse 70% 90% at 15% 25%,rgba(59,130,246,.2),transparent 55%),radial-gradient(ellipse 80% 50% at 88% 55%,rgba(34,211,238,.15),transparent 50%),#d4ebf7}
+#bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover}
+#tint{position:fixed;inset:0;background:rgba(8,22,56,.55);transition:background .3s;pointer-events:none}
+body.light #tint{background:transparent}
+body.no-video #bg,body.no-video #tint{display:none}
+#field{position:fixed;inset:0;display:block;width:100%;height:100%}
+#panel{position:fixed;top:16px;right:16px;width:272px;max-height:calc(100% - 32px);overflow:auto;padding:14px 16px;border-radius:14px;color:#e8f4fb;background:rgba(10,30,52,.6);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+body.light #panel{color:#0f2847;background:rgba(255,255,255,.7);border-color:rgba(15,40,71,.16)}
+#panel h1{margin:0 0 10px;font-size:13px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline}
+#fps{font-variant-numeric:tabular-nums;opacity:.7;font-weight:400}
+.row{display:grid;grid-template-columns:1fr 44px;gap:2px 8px;margin:8px 0}
+.row label{grid-column:1}.row output{grid-column:2;text-align:right;font-variant-numeric:tabular-nums;opacity:.75}
+.row input{grid-column:1/3;width:100%;margin:2px 0 0;accent-color:#38bdf8}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+button{font:inherit;color:inherit;cursor:pointer;padding:6px 11px;border-radius:999px;border:1px solid currentColor;background:transparent;opacity:.85}
+button[aria-pressed="true"]{background:#38bdf8;border-color:#38bdf8;color:#04243a;opacity:1}
+button:focus-visible,input:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}
+#hint{margin:10px 0 0;opacity:.6}
+@media(max-width:600px){#panel{left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:46%}}
+</style>
+</head>
+<body>
+<video id="bg" src="/water-env/hero-bg.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+<div id="tint"></div>
+<canvas id="field" aria-label="点阵涟漪"></canvas>
+<aside id="panel">
+ <h1>点阵涟漪 <span id="fps">-- fps</span></h1>
+ <div id="sliders"></div>
+ <div class="tools">
+  <button id="theme" type="button" aria-pressed="false">浅色</button>
+  <button id="video" type="button" aria-pressed="true">视频底</button>
+  <button id="pause" type="button" aria-pressed="false">暂停</button>
+  <button id="copy" type="button">复制参数</button>
+  <button id="reset" type="button">重置</button>
+ </div>
+ <p id="hint">移动鼠标留下尾迹，点击放出一大团不规则涟漪。画面默认留白，字符只在鼠标扫过与点击处浮现 (. : + #)。</p>
+</aside>
+<script type="module">
+import {mountDotRipple} from '/src/visuals/dotRipple/index.js';
+import {PARAM_SPEC,defaultParams} from '/src/visuals/dotRipple/params.js';
+
+const $=(id)=>document.getElementById(id);
+const params=defaultParams();
+const ripple=mountDotRipple($('field'),{params});
+window.__ripple=ripple; // 控制台调参入口：__ripple.setParams({gain:4})
+
+/* --- 滑杆由 PARAM_SPEC 生成，页面不重复声明参数 --- */
+const inputs={};
+for(const {key,label,min,max,step,value} of PARAM_SPEC){
+ const row=document.createElement('div');row.className='row';
+ row.innerHTML=`<label for="p-${key}">${label}</label><output></output><input id="p-${key}" autocomplete="off" type="range" min="${min}" max="${max}" step="${step}" value="${value}">`;
+ const input=row.querySelector('input'),out=row.querySelector('output');
+ const sync=()=>{out.textContent=(+input.value).toString()};
+ input.addEventListener('input',()=>{params[key]=+input.value;sync();ripple.setParams({[key]:params[key]})});
+ sync();inputs[key]={input,sync};$('sliders').append(row);
+}
+
+/* --- 工具栏 --- */
+/* 字符颜色由页面按底色决定：视频底 (紫蓝，深浅主题皆饱和) 与深色主题用白；无视频的浅色主题用深靛 */
+const applyInk=()=>{const b=document.body;ripple.setInk(b.classList.contains('no-video')&&b.classList.contains('light')?[67,56,202]:[255,255,255])};
+$('theme').addEventListener('click',(e)=>{const light=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',light);document.body.classList.toggle('light',light);applyInk()});
+$('video').addEventListener('click',(e)=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);document.body.classList.toggle('no-video',!on);applyInk()});
+$('pause').addEventListener('click',(e)=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);ripple.setPaused(on)});
+$('copy').addEventListener('click',async(e)=>{try{await navigator.clipboard.writeText(JSON.stringify(params,null,2));e.target.textContent='已复制'}catch{e.target.textContent='复制失败'}setTimeout(()=>e.target.textContent='复制参数',1200)});
+$('reset').addEventListener('click',()=>{const d=defaultParams();Object.assign(params,d);for(const k in d){inputs[k].input.value=d[k];inputs[k].sync()}ripple.setParams(d)});
+setInterval(()=>{$('fps').textContent=`${Math.round(ripple.getFps())} fps`},500);
+</script>
+</body>
+</html>

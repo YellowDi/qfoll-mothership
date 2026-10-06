@@ -1,0 +1,57 @@
+/*
+ * [INPUT]: 顶栏展示状态及系统减少动画偏好
+ * [OUTPUT]: 标题与目录独立的进入/退出过渡样式
+ * [POS]: 顶栏局部样式边界，保留 Tailwind 横向定位且不污染全局选择器
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+.title, .toc {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.title {
+  translate: 0 -4px;
+  transition:
+    opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    translate 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 220ms,
+    left 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top center;
+}
+/* 隐藏移动端标题时同步折叠，避免固定顶栏高度空白。 */
+@media (max-width: 767.98px) {
+  .title:not(.visible) { display: none; }
+}
+@media (min-width: 768px) {
+  /* Tailwind 的 -translate-x-1/2 与过渡用 translate 属性同源，显式合并两轴避免标题偏右。 */
+  .title { translate: -50% -4px; }
+  .title.visible { translate: -50% 0; }
+  /* 目录也以标题中心为锚点，避免被自身的纵向过渡覆盖横向定位。 */
+  .toc { translate: -50% -8px; }
+  .toc.visible { translate: -50% 0; }
+}
+.toc {
+  translate: 0 -8px;
+  scale: 0.98;
+  transform-origin: top center;
+  transition:
+    opacity 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    translate 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    scale 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 180ms;
+  box-shadow: 0 14px 34px rgb(38 37 30 / 0.14), 0 3px 10px rgb(38 37 30 / 0.08);
+}
+.visible {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  scale: 1;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .title, .toc { transition: none; }
+}
+
+:global(.dark) .toc {
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.34), 0 3px 12px rgb(0 0 0 / 0.22);
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<!--
+[INPUT]: 依赖正式 ReactYgbHero、ThemeProvider 与站点样式，不注入试验港区引擎
+[OUTPUT]: 提供当前 React 云柜宝 Hero 的独立展示入口，可导出为资源内嵌的静态 HTML
+[POS]: 根目录的正式 Hero 展示页；与 ygb-hero-prototype.html 的背景调试台独立
+[PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>云柜宝 · React Hero 独立展示</title>
+</head>
+<body>
+  <div id="hero-root"></div>
+  <script type="module">
+    import { createElement as h } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { ReactYgbHero } from '/src/react/pages/ReactYgbHero.tsx';
+    import { ThemeProvider, useTheme } from '/src/react/providers/ThemeProvider.tsx';
+    import logo from '/src/assets/logo.webp';
+    import '/src/style.css';
+    import '/src/styles/remixicon-used.css';
+    import '/src/react/motion.css';
+
+    /* --- 展示外壳：仅保留品牌与主题切换，Hero 直接使用正式组件的默认背景 --- */
+    function HeroDisplay() {
+      const { isDark, toggleTheme } = useTheme();
+      return h('div', null,
+        h('header', { className: 'fixed left-0 right-0 top-0 z-40 bg-bg' },
+          h('div', { className: 'relative flex h-14 items-center justify-between px-4 md:px-6' },
+            h('a', { href: 'http://127.0.0.1:5173/ygb', className: 'flex items-center gap-2', 'aria-label': '查看完整云柜宝页面' },
+              h('img', { src: logo, alt: '企丰科技', className: 'h-8 w-8 rounded-sm object-cover' }),
+              h('span', { className: 'select-none text-sm font-medium' }, '企丰科技')
+            ),
+            h('button', { type: 'button', className: 'inline-flex btn-icon btn-icon-md btn-icon-muted', onClick: toggleTheme, 'aria-label': isDark ? '切换到浅色模式' : '切换到深色模式' },
+              h('i', { className: isDark ? 'ri-sun-line text-lg' : 'ri-moon-clear-line text-lg', 'aria-hidden': true })
+            )
+          )
+        ),
+        h('main', { className: 'pt-14', onClickCapture: (event) => {
+          /* 独立页没有下载区；保留按钮入口，转到正式专题页的下载锚点。 */
+          const button = event.target.closest('button');
+          if (button?.textContent.includes('下载 App')) window.location.assign('http://127.0.0.1:5173/ygb#download');
+        } }, h(ReactYgbHero))
+      );
+    }
+    createRoot(document.getElementById('hero-root')).render(h(ThemeProvider, null, h(HeroDisplay)));
+  </script>
+</body>
+</html>
