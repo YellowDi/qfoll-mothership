@@ -1,11 +1,13 @@
 /**
  * [INPUT]: 依赖 ../layout 的地块与港区常量、../roads 的 network；读取 PortScene 的 statics/traffic/dark
- * [OUTPUT]: 对外提供 MapView：俯视地图底图 (海陆/街坊/堆场/建筑/道路/车队点) 与标注原语 (线/图钉/定位点/标签)
+ * [OUTPUT]: 对外提供 MapView：俯视地图底图 (海陆/街坊/堆场/建筑/道路/车队点) 与标注原语 (线/图钉/定位点/标签)；MapColors 配色类型
  * [POS]: figures 的共享地图渲染器；追踪与派单两张配图共用同一底图与视觉语言
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { FENCE_Y, QUAY_Y, SHIP, cityBlocks, yardBlocks } from "../layout";
-import { network } from "../roads";
+import { network, type RoadEdge } from "../roads";
+import type { PortScene } from "../scene";
+import type { StaticItem } from "../types";
 import { isTruck } from "./common";
 
 const MAP = {
@@ -13,10 +15,29 @@ const MAP = {
   night: { land: "#1a2428", city: "#1f2a2f", park: "#1f3a31", port: "#1d272b", yard: "#243036", sea: "#0f2730", road: "#33454c", casing: "#141d21", building: "#2a383d", ship: "#4d5f66", accent: "#5b8cff", fleet: "#5f6f74", truck: "#c97e4b", label: "#e8ecea", labelBg: "rgba(16,24,28,.92)", halo: "#0e171b" },
 };
 
+export type MapColors = typeof MAP.day;
+
 export class MapView {
-  constructor(canvas, scene) {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  scene: PortScene;
+  buildings: StaticItem[];
+  roads: RoadEdge[];
+  ro: ResizeObserver;
+  /* resize() 在构造期调用；begin() 每帧写入当前主题配色与世界→画布换算 */
+  w!: number;
+  h!: number;
+  dpr!: number;
+  c!: MapColors;
+  cx!: number;
+  cy!: number;
+  px!: number;
+  X!: (x: number) => number;
+  Y!: (y: number) => number;
+  inView!: (x0: number, y0: number, x1: number, y1: number) => boolean;
+  constructor(canvas: HTMLCanvasElement, scene: PortScene) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+    this.ctx = canvas.getContext("2d")!;
     this.scene = scene;
     this.buildings = scene.statics.filter((o) => o.z1 > 12 && o.x1 - o.x0 > 12 && o.y1 - o.y0 > 12 && (o.x1 - o.x0) * (o.y1 - o.y0) > 500);
     this.roads = [...new Set(network.edges.values())];
@@ -34,13 +55,13 @@ export class MapView {
   dispose() { this.ro.disconnect(); }
 
   /* 底图：以 (cx,cy) 为中心、px 为每单位像素；返回本帧坐标换算 */
-  begin(cx, cy, px, { fleet = true } = {}) {
+  begin(cx: number, cy: number, px: number, { fleet = true }: { fleet?: boolean } = {}) {
     const { ctx, w, h } = this, sc = this.scene, c = (this.c = MAP[sc.dark ? "night" : "day"]);
     this.cx = cx; this.cy = cy; this.px = px;
-    const X = (this.X = (x) => (x - cx) * px + w / 2), Y = (this.Y = (y) => (y - cy) * px + h / 2);
+    const X = (this.X = (x: number) => (x - cx) * px + w / 2), Y = (this.Y = (y: number) => (y - cy) * px + h / 2);
     const vx0 = cx - w / 2 / px - 60, vx1 = cx + w / 2 / px + 60, vy0 = cy - h / 2 / px - 60, vy1 = cy + h / 2 / px + 60;
-    const inView = (this.inView = (x0, y0, x1, y1) => x1 > vx0 && x0 < vx1 && y1 > vy0 && y0 < vy1);
-    const rect = (x0, y0, x1, y1, fill) => { if (!inView(x0, y0, x1, y1)) return; ctx.fillStyle = fill; ctx.fillRect(X(x0), Y(y0), (x1 - x0) * px, (y1 - y0) * px); };
+    const inView = (this.inView = (x0: number, y0: number, x1: number, y1: number) => x1 > vx0 && x0 < vx1 && y1 > vy0 && y0 < vy1);
+    const rect = (x0: number, y0: number, x1: number, y1: number, fill: string) => { if (!inView(x0, y0, x1, y1)) return; ctx.fillStyle = fill; ctx.fillRect(X(x0), Y(y0), (x1 - x0) * px, (y1 - y0) * px); };
     ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
     ctx.fillStyle = c.land;
     ctx.fillRect(0, 0, w, h);
@@ -74,14 +95,14 @@ export class MapView {
     return this;
   }
 
-  dot(x, y, r, color) {
+  dot(x: number, y: number, r: number, color: string) {
     const ctx = this.ctx;
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(this.X(x), this.Y(y), r, 0, Math.PI * 2);
     ctx.fill();
   }
-  line(pts, width, color, dash) {
+  line(pts: Array<{ x: number; y: number }>, width: number, color: string, dash?: number[]) {
     const ctx = this.ctx;
     ctx.beginPath();
     pts.forEach((p, i) => (i ? ctx.lineTo(this.X(p.x), this.Y(p.y)) : ctx.moveTo(this.X(p.x), this.Y(p.y))));
@@ -93,7 +114,7 @@ export class MapView {
     ctx.stroke();
     ctx.setLineDash([]);
   }
-  pin(x, y, color, label) {
+  pin(x: number, y: number, color: string, label?: string) {
     const ctx = this.ctx, X = this.X(x), Y = this.Y(y);
     ctx.fillStyle = color;
     ctx.beginPath();
@@ -107,7 +128,7 @@ export class MapView {
     ctx.fill();
     if (label) this.label(X + 9, Y - 22, label);
   }
-  label(X, Y, text, color) {
+  label(X: number, Y: number, text: string, color?: string) {
     const ctx = this.ctx;
     ctx.font = "600 11px system-ui, -apple-system, sans-serif";
     const tw = ctx.measureText(text).width;
@@ -117,7 +138,7 @@ export class MapView {
     ctx.fillText(text, X + 6, Y + 13);
   }
   /* 定位点：脉冲圈 + 朝向楔形 */
-  marker(x, y, h, color, pulse) {
+  marker(x: number, y: number, h: number, color: string, pulse?: number | null) {
     const ctx = this.ctx, X = this.X(x), Y = this.Y(y);
     if (pulse != null) {
       ctx.strokeStyle = color;

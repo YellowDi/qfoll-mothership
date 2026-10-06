@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 ./layout 的道路坐标常量
- * [OUTPUT]: 对外提供 network (节点/路段/信号/让行/闸口)、routes 车辆线路 (含追踪运单的固定终点 waypoints)、buildPath 车道级路径、sample 路径采样、signalAt 信号相位、CRANE_LOOP/TRUCK_PARK 场站坐标
+ * [OUTPUT]: 对外提供 network (节点/路段/信号/让行/闸口)、routes 车辆线路 (含追踪运单的固定终点 waypoints)、buildPath 车道级路径、sample 路径采样、signalAt 信号相位、CRANE_LOOP/TRUCK_PARK 场站坐标，以及 RoadSpec/RoadNode/RoadEdge/Route/Waypoint/RoadPath/PathPoint/PathNodeInfo/Stop/PathSample/FleetKind 等类型
  * [POS]: visuals/ygbPort 的交通拓扑；ground 依它画路面与标线，traffic 依它跑车，二者同源不漂移
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -9,10 +9,137 @@ import {
   STREET_X, STREET_Y, CITY_TOP, WORLD_X, YARD_LANES, YARD_LANE_HALF,
 } from "./layout";
 
+export type Xy = [number, number];
+export type Axis = "x" | "y";
+export type Turn = "straight" | "u" | "right" | "left";
+export type RoadKind = "arterial" | "street" | "gate" | "yard" | "apron" | "lot";
+/* 车辆编组类型：线路的 fleet 用它指定每辆车的外观与动力学 */
+export type FleetKind = "car" | "van" | "truck" | "tractor";
+
+export interface RoadSpec {
+  kind: RoadKind;
+  half: number;
+  lanes: number[];
+  speed: number;
+  public?: boolean;
+  oneway?: boolean;
+}
+
+/* 节点：轴对齐路段相交或相接处；signal/yield/gate 由拓扑构建后期打标 */
+export interface RoadNode {
+  k: string;
+  x: number;
+  y: number;
+  edges: RoadEdge[];
+  signal: boolean;
+  yield: boolean;
+  phase: number;
+  gate?: boolean;
+  /* 让行路口的占用方 (traffic 写入的车辆) 与其行驶轴向 */
+  occupant?: object | null;
+  occupantAxis?: Axis;
+}
+
+export interface RoadEdge {
+  a: RoadNode;
+  b: RoadNode;
+  spec: RoadSpec;
+  horizontal: boolean;
+}
+
+/* 追踪运单的固定终点：role 区分去程交箱与回程提箱 */
+export interface Waypoint {
+  role: "drop" | "pickup";
+  at: Xy;
+  label: string;
+  arrive: string;
+}
+
+export interface Route {
+  nodes: Xy[];
+  prefer: number;
+  fleet: FleetKind[];
+  tracked?: number;
+  waypoints?: Waypoint[];
+  /* traffic 初始化时挂上构建好的路径 */
+  path?: RoadPath;
+}
+
+/* 固定终点在路径上的落点：最近采样的里程与坐标 */
+export interface PathWaypoint extends Waypoint {
+  s: number;
+  x: number;
+  y: number;
+}
+
+/* s (累计里程) 与 h (朝向) 在路径构建的第二阶段补齐 */
+export interface PathPoint {
+  x: number;
+  y: number;
+  lim: number;
+  s: number;
+  h: number;
+}
+
+interface Dir {
+  x: number;
+  y: number;
+}
+
+/* 线路中每个节点处的转向、进出路段与进出半径；车道偏移与点位下标在后续阶段补齐 */
+export interface PathNodeInfo {
+  node: RoadNode;
+  din: Dir;
+  dout: Dir;
+  turn: Turn;
+  ein: RoadEdge;
+  eout: RoadEdge;
+  rin: number;
+  rout: number;
+  oStart: number;
+  oEnd: number;
+  oIn: number;
+  entryIndex: number;
+  exitIndex: number;
+}
+
+export type Stop =
+  | { kind: "signal"; s: number; node: RoadNode; axis: Axis }
+  | { kind: "gate"; s: number; node: RoadNode; dir: string; lane: number }
+  | { kind: "yield"; s: number; node: RoadNode; exitS: number; axis: Axis };
+
+export interface RoadPath {
+  pts: PathPoint[];
+  length: number;
+  stops: Stop[];
+  info: PathNodeInfo[];
+  /* 以下由 traffic 在初始化时补充：岸桥车道起点/回车点与运单终点落点 */
+  laneStart?: number;
+  laneX?: number;
+  resetS?: number;
+  waypoints?: PathWaypoint[];
+}
+
+export interface PathSample {
+  x: number;
+  y: number;
+  h: number;
+  lim: number;
+}
+
+type SpecName = "arterial" | "street" | "gate" | "yard" | "aisle" | "back" | "apron" | "transfer" | "drive";
+export type RouteName = "cityEast" | "cityWest" | "cityInner" | "gateTrucks" | "truckPark" | "crane" | "yardA" | "yardB";
+
+interface RoadDef {
+  a: Xy;
+  b: Xy;
+  spec: RoadSpec;
+}
+
 /* ════════════════════════════════════════════════════════════════════
  * 路段规格：half 为半幅宽，lanes 为行车方向右侧的车道中心偏移
  * ════════════════════════════════════════════════════════════════════ */
-const SPEC = {
+const SPEC: Record<SpecName, RoadSpec> = {
   arterial: { kind: "arterial", half: MAIN_ROAD.half, lanes: [7.5, 16.5], speed: 44, public: true },
   street: { kind: "street", half: STREET_HALF, lanes: [6], speed: 32, public: true },
   gate: { kind: "gate", half: GATE.half, lanes: [6.5, 19.5], speed: 20, public: true },
@@ -24,8 +151,8 @@ const SPEC = {
   drive: { kind: "lot", half: 8, lanes: [4], speed: 12 },
 };
 
-const roads = [];
-const road = (a, b, spec) => roads.push({ a, b, spec });
+const roads: RoadDef[] = [];
+const road = (a: Xy, b: Xy, spec: RoadSpec) => roads.push({ a, b, spec });
 
 /* 疏港主干道 + 城市方格网 */
 road([WORLD_X[0], MAIN_ROAD.y], [WORLD_X[1], MAIN_ROAD.y], SPEC.arterial);
@@ -51,13 +178,13 @@ road([TRUCK_PARK.entryX, TRUCK_PARK.aisleY], [STREET_X[6], TRUCK_PARK.aisleY], S
 /* ════════════════════════════════════════════════════════════════════
  * 拓扑构建：轴对齐路段相交/相接处自动打断成节点
  * ════════════════════════════════════════════════════════════════════ */
-const key = (x, y) => `${x},${y}`;
-const nodes = new Map();
-const edges = new Map();
-const nodeAt = (x, y) => {
+const key = (x: number, y: number) => `${x},${y}`;
+const nodes = new Map<string, RoadNode>();
+const edges = new Map<string, RoadEdge>();
+const nodeAt = (x: number, y: number): RoadNode => {
   const k = key(x, y);
   if (!nodes.has(k)) nodes.set(k, { k, x, y, edges: [], signal: false, yield: false, phase: 0 });
-  return nodes.get(k);
+  return nodes.get(k)!;
 };
 for (const r of roads) {
   const horizontal = r.a[1] === r.b[1];
@@ -75,8 +202,8 @@ for (const r of roads) {
   const sorted = [...cuts].sort((p, q) => p - q);
   const forward = horizontal ? r.b[0] > r.a[0] : r.b[1] > r.a[1];
   for (let i = 0; i < sorted.length - 1; i++) {
-    const p = horizontal ? [sorted[i], fixed] : [fixed, sorted[i]];
-    const q = horizontal ? [sorted[i + 1], fixed] : [fixed, sorted[i + 1]];
+    const p: Xy = horizontal ? [sorted[i], fixed] : [fixed, sorted[i]];
+    const q: Xy = horizontal ? [sorted[i + 1], fixed] : [fixed, sorted[i + 1]];
     const [a, b] = forward ? [p, q] : [q, p];
     const na = nodeAt(a[0], a[1]), nb = nodeAt(b[0], b[1]);
     const edge = { a: na, b: nb, spec: r.spec, horizontal };
@@ -96,7 +223,7 @@ for (const n of nodes.values()) {
   } else n.yield = true;
 }
 /* 闸口/停车场道闸：在既有路段中插入节点，车辆在栏杆前停靠核验 */
-function insertNode(x, y) {
+function insertNode(x: number, y: number): RoadNode {
   for (const e of new Set(edges.values())) {
     const lo = e.horizontal ? Math.min(e.a.x, e.b.x) : Math.min(e.a.y, e.b.y), hi = e.horizontal ? Math.max(e.a.x, e.b.x) : Math.max(e.a.y, e.b.y);
     const on = e.horizontal ? e.a.y === y && x > lo && x < hi : e.a.x === x && y > lo && y < hi;
@@ -124,7 +251,7 @@ export const network = { nodes, edges };
 
 /* 信号相位：32s 周期，x 向与 y 向交替放行，含黄灯与全红清空 */
 const SIGNAL_CYCLE = 32;
-export function signalAt(node, t, axis) {
+export function signalAt(node: RoadNode, t: number, axis: Axis): "g" | "y" | "r" {
   const p = ((t + node.phase) % SIGNAL_CYCLE + SIGNAL_CYCLE) % SIGNAL_CYCLE;
   if (axis === "x") return p < 13 ? "g" : p < 15.5 ? "y" : "r";
   return p >= 16 && p < 29 ? "g" : p >= 29 && p < 31.5 ? "y" : "r";
@@ -136,7 +263,7 @@ export function signalAt(node, t, axis) {
 const [X960, X660, X360, X60, X240, X540, X840] = [STREET_X[4], STREET_X[5], STREET_X[6], STREET_X[7], STREET_X[8], STREET_X[9], STREET_X[10]];
 const [Y620, Y920, Y1220] = STREET_Y;
 const M = MAIN_ROAD.y, P = PERIMETER.y;
-export const routes = {
+export const routes: Record<RouteName, Route> = {
   /* 主干道东行 + 城区北环 (左转环) */
   cityEast: { nodes: [[X960, M], [X540, M], [X540, Y620], [X960, Y620]], prefer: 0, fleet: ["car", "truck", "car", "van", "car", "truck"] },
   /* 主干道西行 + 城区右转环 */
@@ -161,29 +288,29 @@ export const routes = {
   yardA: { nodes: [[AISLES[3], YARD_LANES[0]], [AISLES[6], YARD_LANES[0]], [AISLES[6], YARD_LANES[3]], [AISLES[3], YARD_LANES[3]]], prefer: 0, fleet: ["tractor", "tractor"] },
   yardB: { nodes: [[AISLES[8], YARD_LANES[2]], [AISLES[5], YARD_LANES[2]], [AISLES[5], YARD_LANES[0]], [AISLES[8], YARD_LANES[0]]], prefer: 0, fleet: ["tractor", "tractor"] },
 };
-nodes.get(key(X360, TRUCK_PARK.aisleY)).yield = true;
+nodes.get(key(X360, TRUCK_PARK.aisleY))!.yield = true;
 
 /* ════════════════════════════════════════════════════════════════════
  * 路径构建：车道偏移 + 路口弧线 + 停止线/闸口/让行点
  * ════════════════════════════════════════════════════════════════════ */
 const STEP = 3;
-const unit = (a, b) => {
+const unit = (a: Dir, b: Dir): Dir => {
   const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy);
   return { x: dx / l, y: dy / l };
 };
-const right = (d) => ({ x: -d.y, y: d.x });
-const turnOf = (din, dout) => {
+const right = (d: Dir): Dir => ({ x: -d.y, y: d.x });
+const turnOf = (din: Dir, dout: Dir): Turn => {
   const dot = din.x * dout.x + din.y * dout.y;
   if (dot > 0.9) return "straight";
   if (dot < -0.9) return "u";
   return din.x * dout.y - din.y * dout.x > 0 ? "right" : "left";
 };
-const perpHalf = (node, d) => {
+const perpHalf = (node: RoadNode, d: Dir) => {
   let h = 0;
   for (const e of node.edges) if (e.horizontal !== (d.y === 0)) h = Math.max(h, e.spec.half);
   return h;
 };
-const laneOffset = (edge, turn, prefer) => {
+const laneOffset = (edge: RoadEdge, turn: Turn, prefer: number) => {
   const lanes = edge.spec.lanes;
   if (lanes.length === 1) return lanes[0];
   if (turn === "right") return lanes[lanes.length - 1];
@@ -191,11 +318,11 @@ const laneOffset = (edge, turn, prefer) => {
   return lanes[Math.min(prefer, lanes.length - 1)];
 };
 
-export function buildPath(route) {
-  const list = route.nodes.map(([x, y]) => nodes.get(key(x, y)));
+export function buildPath(route: Route): RoadPath {
+  const list = route.nodes.map(([x, y]) => nodes.get(key(x, y))!);
   const n = list.length;
   /* 展开中间节点：线路只列转折点，直行经过的节点在此补齐 */
-  const seq = [];
+  const seq: RoadNode[] = [];
   for (let i = 0; i < n; i++) {
     const a = list[i], b = list[(i + 1) % n];
     seq.push(a);
@@ -216,14 +343,15 @@ export function buildPath(route) {
     const prev = seq[(i - 1 + m) % m], next = seq[(i + 1) % m];
     const din = unit(prev, node), dout = unit(node, next);
     const turn = turnOf(din, dout);
-    const ein = edges.get(`${prev.k}|${node.k}`), eout = edges.get(`${node.k}|${next.k}`);
+    const ein = edges.get(`${prev.k}|${node.k}`)!, eout = edges.get(`${node.k}|${next.k}`)!;
     let rin = 0, rout = 0;
     if (turn === "straight") rin = rout = perpHalf(node, din) ? perpHalf(node, din) + 3 : 0;
     else if (turn !== "u") {
       rin = eout.spec.half + 3;
       rout = ein.spec.half + 3;
     }
-    return { node, din, dout, turn, ein, eout, rin, rout };
+    /* oStart/oEnd/oIn 与进出点下标在下面的循环里补齐 */
+    return { node, din, dout, turn, ein, eout, rin, rout } as PathNodeInfo;
   });
   /* 每段起止车道：起点继承上个路口转向，终点服从下个路口转向 */
   for (let i = 0; i < m; i++) {
@@ -232,8 +360,9 @@ export function buildPath(route) {
     cur.oEnd = laneOffset(cur.eout, nxt.turn, route.prefer);
     nxt.oIn = cur.oEnd;
   }
-  const pts = [], stops = [];
-  const push = (x, y, lim) => pts.push({ x, y, lim });
+  const pts: PathPoint[] = [], stops: Stop[] = [];
+  /* s/h 在累计里程阶段补齐 */
+  const push = (x: number, y: number, lim: number) => pts.push({ x, y, lim } as PathPoint);
   for (let i = 0; i < m; i++) {
     const c = info[i], nx = info[(i + 1) % m], node = c.node;
     const rIn = right(c.din), rOut = right(c.dout);
@@ -302,7 +431,7 @@ export function buildPath(route) {
 }
 
 /* 路径采样：游标单调前进，避免每帧线性扫描 */
-export function sample(path, s, cursor = { i: 0 }) {
+export function sample(path: RoadPath, s: number, cursor = { i: 0 }): PathSample {
   const pts = path.pts, L = path.length;
   s = ((s % L) + L) % L;
   let i = cursor.i;
@@ -313,7 +442,7 @@ export function sample(path, s, cursor = { i: 0 }) {
   const seg = ((b.s - a.s + L) % L) || 1, t = (s - a.s) / seg;
   return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, h: a.h + angleDelta(a.h, b.h) * t, lim: a.lim + (b.lim - a.lim) * t };
 }
-const angleDelta = (a, b) => {
+const angleDelta = (a: number, b: number) => {
   let d = b - a;
   while (d > Math.PI) d -= Math.PI * 2;
   while (d < -Math.PI) d += Math.PI * 2;

@@ -1,11 +1,35 @@
 /**
  * [INPUT]: 依赖 ./common 的时钟/车牌/位置语义、../layout 的闸口坐标；订阅 PortScene 帧与 gate/arrive 事件
- * [OUTPUT]: 对外提供 mountJourney(scene, onState)：被追踪集卡当前运单的五节点链路 (提箱/进港/交箱/出港/回单)、连续进度、ETA、节点日志、车速轨迹与已完成运单
+ * [OUTPUT]: 对外提供 mountJourney(scene, onState)：被追踪集卡当前运单的五节点链路 (提箱/进港/交箱/出港/回单)、连续进度、ETA、节点日志、车速轨迹与已完成运单；JourneyInfo/JourneyNode 载荷类型
  * [POS]: 杂志第 03 章"全链路节点"配图的状态源；节点边界取自真实路径上的固定终点与闸口停止线，进度随车辆里程连续推进
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { GATE } from "../layout";
+import type { PortScene } from "../scene";
 import { clock, plateOf, zoneOf } from "./common";
+
+export interface JourneyNode {
+  label: string;
+  place: string;
+  time: string | null;
+  done: boolean;
+  eta: string | null;
+}
+
+export interface JourneyInfo {
+  no: string;
+  plate: string;
+  progress: number;
+  stage: number;
+  nodes: JourneyNode[];
+  next: { label: string; place: string; km: string };
+  speed: number;
+  zone: string;
+  moving: boolean;
+  history: { no: string; span: string }[];
+  speeds: number[];
+  log: { time: string; text: string }[];
+}
 
 const NODES = [
   { label: "提箱", place: "物流园提箱点" },
@@ -15,22 +39,22 @@ const NODES = [
   { label: "回单", place: "物流园 · 电子回单" },
 ];
 
-export function mountJourney(scene, onState) {
-  const v = scene.traffic.vehicles.find((o) => o.tracked), path = v.path, L = path.length;
+export function mountJourney(scene: PortScene, onState: (state: JourneyInfo) => void): () => void {
+  const v = scene.traffic.vehicles.find((o) => o.tracked)!, path = v.path, L = path.length;
   const gateKey = `${GATE.x},${GATE.y}`;
-  const pickup = path.waypoints.find((w) => w.role === "pickup"), drop = path.waypoints.find((w) => w.role === "drop");
-  const gateIn = path.stops.find((s) => s.kind === "gate" && s.node.k === gateKey && s.dir === "0,1");
-  const gateOut = path.stops.find((s) => s.kind === "gate" && s.node.k === gateKey && s.dir === "0,-1");
+  const pickup = path.waypoints!.find((w) => w.role === "pickup")!, drop = path.waypoints!.find((w) => w.role === "drop")!;
+  const gateIn = path.stops.find((s) => s.kind === "gate" && s.node.k === gateKey && s.dir === "0,1")!;
+  const gateOut = path.stops.find((s) => s.kind === "gate" && s.node.k === gateKey && s.dir === "0,-1")!;
   /* 以提箱点为起点的累计里程边界 */
-  const rel = (s) => (s - pickup.s + L) % L;
+  const rel = (s: number) => (s - pickup.s + L) % L;
   const bounds = [0, rel(gateIn.s), rel(drop.s), rel(gateOut.s), L];
-  let serial = 41, times = [null, null, null, null, null], history = [], lastInfo = 0, lastSpeed = 0;
-  const speeds = [], log = [];
-  const note = (t, text) => {
+  let serial = 41, times: Array<string | null> = [null, null, null, null, null], history: JourneyInfo["history"] = [], lastInfo = 0, lastSpeed = 0;
+  const speeds: number[] = [], log: JourneyInfo["log"] = [];
+  const note = (t: number, text: string) => {
     log.unshift({ time: clock(t), text });
     if (log.length > 5) log.length = 5;
   };
-  const start = (t) => {
+  const start = (t: number) => {
     serial++;
     times = [clock(t), null, null, null, null];
   };

@@ -1,19 +1,21 @@
 /**
  * [INPUT]: 依赖 ./layout 的分区常量、./roads 的 network 拓扑、./city 与 ./terminal 的地块绘制函数
- * [OUTPUT]: 对外提供 paintGround()，在静态地面层绘制海陆、港内铺装、公共道路、路口标线、码头前沿与岸壁
+ * [OUTPUT]: 对外提供 paintGround()，在静态地面层绘制海陆、港内铺装、公共道路、路口标线、码头前沿与岸壁；city/terminal 的地块与地面绘制函数在其间被调用
  * [POS]: visuals/ygbPort 的地面画家；只画 z≈0 的平面信息，立体物件交给场景深度排序
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { alpha, mix, tone } from "./iso";
+import { alpha, mix, tone, type Ctx, type Iso } from "./iso";
 import {
   APRON_LANES, BACK_ROAD, CITY_TOP, FENCE_Y, GATE, MAIN_ROAD, PERIMETER, QUAY_Y, RAIL_LAND, RAIL_SEA, WATER_Z, WORLD_X,
 } from "./layout";
-import { network } from "./roads";
-import { arrow } from "./city";
+import { network, type RoadEdge, type RoadNode, type Xy } from "./roads";
+import { arrow, type City } from "./city";
+import type { Palette } from "./palette";
+import type { Terminal } from "./terminal";
 
 const [WX0, WX1] = WORLD_X;
 
-export function paintGround(ctx, iso, c, dark, { city, terminal, w, h }) {
+export function paintGround(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, { city, terminal, w, h }: { city: City; terminal: Terminal; w: number; h: number }) {
   /* ─── 1. 底色：全画幅铺陆地，画面边界不露空白 ─── */
   const land = ctx.createLinearGradient(0, 0, w, h);
   land.addColorStop(0, c.landHi);
@@ -47,7 +49,7 @@ export function paintGround(ctx, iso, c, dark, { city, terminal, w, h }) {
 
   /* ─── 5. 港内道路：环路、堆场车道、过道、后方道路 ─── */
   const yardRoad = mix(c.road, c.concrete, dark ? 0.3 : 0.42);
-  const internal = [];
+  const internal: RoadEdge[] = [];
   for (const e of new Set(network.edges.values())) {
     if (e.spec.public || e.spec.kind === "lot" || e.spec.kind === "apron") continue;
     internal.push(e);
@@ -76,24 +78,24 @@ export function paintGround(ctx, iso, c, dark, { city, terminal, w, h }) {
 }
 
 /* 节点处被横向道路占用的半宽 */
-const perpHalf = (node, horizontal) => {
+const perpHalf = (node: RoadNode, horizontal: boolean) => {
   let h = 0;
   for (const e of node.edges) if (e.horizontal !== horizontal) h = Math.max(h, e.spec.half);
   return h;
 };
 
-function publicMarkings(ctx, iso, c, dark) {
+function publicMarkings(ctx: Ctx, iso: Iso, c: Palette, dark: boolean) {
   const white = dark ? alpha("#9fb2b5", 0.55) : c.mark, yellow = dark ? alpha("#c9ad6a", 0.45) : c.yellow;
   for (const e of new Set(network.edges.values())) {
     if (!e.spec.public) continue;
     const H = e.horizontal, a = e.a, b = e.b;
-    const along = (n) => (H ? n.x : n.y);
+    const along = (n: RoadNode) => (H ? n.x : n.y);
     const lo = along(a) < along(b) ? a : b, hi = lo === a ? b : a;
-    const clear = (n) => (n.signal ? perpHalf(n, H) + 12 : perpHalf(n, H) ? perpHalf(n, H) + 3 : 0);
+    const clear = (n: RoadNode) => (n.signal ? perpHalf(n, H) + 12 : perpHalf(n, H) ? perpHalf(n, H) + 3 : 0);
     const s0 = along(lo) + clear(lo), s1 = along(hi) - clear(hi);
     if (s1 - s0 < 6) continue;
-    const P = (s, o) => (H ? [s, a.y + o] : [a.x + o, s]);
-    const seg = (o, color, width, dash, from = s0, to = s1) => iso.line(ctx, [P(from, o), P(to, o)], color, width, dash);
+    const P = (s: number, o: number): Xy => (H ? [s, a.y + o] : [a.x + o, s]);
+    const seg = (o: number, color: string, width: number, dash?: number[] | null, from = s0, to = s1) => iso.line(ctx, [P(from, o), P(to, o)], color, width, dash);
     if (e.spec.kind === "street") {
       /* 双向两车道：路口前 28 单位黄实线禁止跨越，其余黄虚线 */
       const solid = 28;
@@ -118,7 +120,7 @@ function publicMarkings(ctx, iso, c, dark) {
       const other = e.a === n ? e.b : e.a;
       const d = { x: Math.sign(other.x - n.x), y: Math.sign(other.y - n.y) };
       const half = e.spec.half, h = perpHalf(n, d.y === 0);
-      const at = (s, o) => [n.x + d.x * s - d.y * o, n.y + d.y * s + d.x * o];
+      const at = (s: number, o: number): Xy => [n.x + d.x * s - d.y * o, n.y + d.y * s + d.x * o];
       /* 斑马线：条纹平行于车流方向 */
       for (let o = -half + 2; o <= half - 2; o += 3.2) iso.line(ctx, [at(h + 3, o), at(h + 9.5, o)], white, 1.4);
       /* 停止线覆盖驶入方向半幅：驶入车辆右侧在 (d.y, -d.x) 方向 */
@@ -129,7 +131,7 @@ function publicMarkings(ctx, iso, c, dark) {
   }
 }
 
-function internalMarkings(ctx, iso, c, dark, internal) {
+function internalMarkings(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, internal: RoadEdge[]) {
   const white = dark ? alpha("#93a8ab", 0.35) : alpha(c.paint, 0.9);
   const yellow = dark ? alpha("#c9ad6a", 0.3) : alpha(c.yellow, 0.85);
   for (const e of internal) {
@@ -138,13 +140,13 @@ function internalMarkings(ctx, iso, c, dark, internal) {
     const s0 = lo + perpHalf(H ? (e.a.x === lo ? e.a : e.b) : (e.a.y === lo ? e.a : e.b), H) + 2;
     const s1 = hi - perpHalf(H ? (e.a.x === hi ? e.a : e.b) : (e.a.y === hi ? e.a : e.b), H) - 2;
     if (s1 - s0 < 8) continue;
-    const P = (s, o) => (H ? [s, e.a.y + o] : [e.a.x + o, s]);
+    const P = (s: number, o: number): Xy => (H ? [s, e.a.y + o] : [e.a.x + o, s]);
     iso.line(ctx, [P(s0, 0), P(s1, 0)], white, 0.55, [7, 8]);
     for (const o of [-hw + 1.2, hw - 1.2]) iso.line(ctx, [P(s0, o), P(s1, o)], yellow, 0.5);
   }
 }
 
-function quayEdge(ctx, iso, c, dark) {
+function quayEdge(ctx: Ctx, iso: Iso, c: Palette, dark: boolean) {
   const steel = dark ? alpha("#9bb6b8", 0.42) : alpha(c.rail, 0.7);
   /* 作业车道：车道线 + 两端导向 */
   for (const y of [APRON_LANES[0] - 6, ...APRON_LANES.map((l) => l + 6)]) iso.line(ctx, [[WX0, y], [WX1, y]], dark ? alpha("#93a8ab", 0.28) : alpha(c.paint, 0.85), 0.55, y === APRON_LANES[0] - 6 ? null : [10, 6]);

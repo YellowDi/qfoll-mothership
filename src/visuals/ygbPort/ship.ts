@@ -1,13 +1,25 @@
 /**
  * [INPUT]: 依赖 ./iso 的投影/色彩/随机，./layout 的船位与水位，./terminal 的 container 箱体绘制，./palette 的箱色权重
- * [OUTPUT]: 对外提供 Ship 类：舱位/箱格数据 (take/put/top)、分段精灵渲染 (按作业贝切分)、水面投影与夜灯
+ * [OUTPUT]: 对外提供 Ship 类：舱位/箱格数据 (take/put/top)、分段精灵渲染 (按作业贝切分)、水面投影与夜灯，以及 DECK_Z
  * [POS]: visuals/ygbPort 的靠泊集装箱船；岸桥通过它的箱格接口装卸，版本号变化时场景重绘精灵
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { SUN, alpha, faceShade, mix, rng, tone } from "./iso";
+import { SUN, alpha, faceShade, mix, rng, tone, type Ctx, type Iso, type Pt } from "./iso";
 import { SHIP, TEU, WATER_Z } from "./layout";
-import { BOX_WEIGHTS, pick } from "./palette";
+import { BOX_WEIGHTS, pick, type Palette, type ThemeColors } from "./palette";
+import type { Xy } from "./roads";
 import { container } from "./terminal";
+import type { WorldBox } from "./types";
+
+type PartKind = "stern" | "bay" | "funnel" | "bridge" | "bow";
+/* 非舱位分段的 x 区间 [x0, x1) */
+type ShipParts = Record<Exclude<PartKind, "bay">, [number, number]>;
+
+interface ShipBay {
+  x0: number;
+  x1: number;
+  cx: number;
+}
 
 export const DECK_Z = 20;
 const ROWS = 14, ROW_PITCH = 5.1, BAY = 25;
@@ -15,10 +27,10 @@ const Y0 = SHIP.y0, Y1 = SHIP.y1, YC = (Y0 + Y1) / 2, HALF = (Y1 - Y0) / 2;
 const ROW0 = YC - (ROWS * ROW_PITCH) / 2;
 
 /* 海侧轮廓：自艏尖沿南舷到艉部，遇到靠泊侧即止 */
-function seaEdge(outline) {
+function seaEdge(outline: Xy[]): Xy[] {
   let tip = 0;
   for (let i = 1; i < outline.length; i++) if (outline[i][0] > outline[tip][0]) tip = i;
-  const out = [];
+  const out: Xy[] = [];
   for (let k = 0; k < outline.length; k++) {
     const p = outline[(tip + k) % outline.length];
     if (k > 0 && p[1] < YC - 1) break;
@@ -28,12 +40,18 @@ function seaEdge(outline) {
 }
 
 /* 船体分段：船尾 → A 区 → 机舱/烟囱 → B 区 → 驾驶台 → C 区 → 艏楼 */
-const LAYOUT = [["stern", 22], ["bay", 3], ["funnel", 18], ["bay", 6], ["bridge", 24], ["bay", 6], ["bow", 41]];
+const LAYOUT: Array<[PartKind, number]> = [["stern", 22], ["bay", 3], ["funnel", 18], ["bay", 6], ["bridge", 24], ["bay", 6], ["bow", 41]];
 
 export class Ship {
+  bays: ShipBay[];
+  parts: ShipParts;
+  /* cells[贝][列] 为自下而上的箱色索引 */
+  cells: number[][][];
+  /* 箱格变化计数，场景据此决定是否重绘船体精灵 */
+  version: number;
   constructor() {
     this.bays = [];
-    this.parts = {};
+    this.parts = {} as ShipParts;
     let x = SHIP.x0;
     for (const [kind, n] of LAYOUT) {
       if (kind === "bay") for (let i = 0; i < n; i++, x += BAY) this.bays.push({ x0: x, x1: x + BAY, cx: x + BAY / 2 });
@@ -56,24 +74,24 @@ export class Ship {
   }
 
   /* ─── 箱格接口：岸桥只通过这里改变船上状态 ─── */
-  rowY(j) { return ROW0 + (j + 0.5) * ROW_PITCH; }
-  bayIndexAt(x) { return this.bays.findIndex((b) => x >= b.x0 && x < b.x1); }
-  height(i, j) { return this.cells[i][j].length; }
-  topZ(i, j) { return DECK_Z + 2.5 + this.cells[i][j].length * TEU.h; }
-  take(i, j) {
-    const c = this.cells[i][j].pop();
+  rowY(j: number) { return ROW0 + (j + 0.5) * ROW_PITCH; }
+  bayIndexAt(x: number) { return this.bays.findIndex((b) => x >= b.x0 && x < b.x1); }
+  height(i: number, j: number) { return this.cells[i][j].length; }
+  topZ(i: number, j: number) { return DECK_Z + 2.5 + this.cells[i][j].length * TEU.h; }
+  take(i: number, j: number): number {
+    const c = this.cells[i][j].pop() as number;
     this.version++;
     return c;
   }
-  put(i, j, color) {
+  put(i: number, j: number, color: number) {
     this.cells[i][j].push(color);
     this.version++;
   }
 
   /* ─── 船体外形：甲板线与水线两套轮廓，艏部外飘 ─── */
-  outline(z) {
+  outline(z: number): Xy[] {
     const t = (z - WATER_Z) / (DECK_Z - WATER_Z);
-    const pts = [];
+    const pts: Xy[] = [];
     const sternX = SHIP.x0 + 8 * (1 - t), bowTip = SHIP.x1 - 9 * (1 - t), bowStart = SHIP.x1 - 80;
     const half = HALF * (0.93 + 0.07 * t);
     /* 艉封板：圆角 */
@@ -99,9 +117,9 @@ export class Ship {
   }
 
   /* ─── 精灵绘制：part = "back" (x < split) | "front" (x ≥ split) ─── */
-  draw(ctx, iso, c, dark, colors, split, part) {
-    const inBack = (x) => x < split;
-    const want = (x) => (part === "back" ? inBack(x) : !inBack(x));
+  draw(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, colors: ThemeColors, split: number, part: "back" | "front") {
+    const inBack = (x: number) => x < split;
+    const want = (x: number) => (part === "back" ? inBack(x) : !inBack(x));
     if (part === "back") this.hull(ctx, iso, c, dark);
     const [bx0, bx1] = this.parts.bow;
     if (want(bx0)) this.forecastle(ctx, iso, c, dark);
@@ -120,11 +138,11 @@ export class Ship {
     if (want(rx0)) this.bridge(ctx, iso, c, dark, rx0, rx1);
   }
 
-  hull(ctx, iso, c, dark) {
+  hull(ctx: Ctx, iso: Iso, c: Palette, dark: boolean) {
     const deck = this.outline(DECK_Z), water = this.outline(WATER_Z), boot = this.outline(WATER_Z + 3.4);
     const hullColor = c.hullSide;
     /* 侧壁：逐段四边形，按法线受光；背向镜头的面剔除 */
-    const faces = [];
+    const faces: Array<{ i: number; k: number; nx: number; ny: number; depth: number }> = [];
     for (let i = 0; i < deck.length; i++) {
       const k = (i + 1) % deck.length;
       const ex = deck[k][0] - deck[i][0], ey = deck[k][1] - deck[i][1], len = Math.hypot(ex, ey) || 1;
@@ -139,23 +157,23 @@ export class Ship {
       iso.poly(ctx, [[...water[f.i], WATER_Z], [...water[f.k], WATER_Z], [...boot[f.k], WATER_Z + 3.4], [...boot[f.i], WATER_Z + 3.4]], tone(c.hullRed, s + 0.05));
     }
     /* 舷墙顶线与水线泡沫：只沿海侧 (面向镜头) 从艏尖走到艉部 */
-    iso.line(ctx, seaEdge(deck).map(([x, y]) => [x, y, DECK_Z]), dark ? alpha("#c9d6cf", 0.2) : alpha("#ffffff", 0.75), 0.6);
-    iso.line(ctx, seaEdge(water).map(([x, y]) => [x, y + 0.5, WATER_Z]), dark ? alpha("#9fc0c4", 0.25) : alpha(c.foam, 0.85), 0.8);
+    iso.line(ctx, seaEdge(deck).map(([x, y]): Pt => [x, y, DECK_Z]), dark ? alpha("#c9d6cf", 0.2) : alpha("#ffffff", 0.75), 0.6);
+    iso.line(ctx, seaEdge(water).map(([x, y]): Pt => [x, y + 0.5, WATER_Z]), dark ? alpha("#9fc0c4", 0.25) : alpha(c.foam, 0.85), 0.8);
     /* 吃水标尺 */
     for (const x of [SHIP.x0 + 30, SHIP.x1 - 70]) for (let z = WATER_Z + 1; z < DECK_Z - 6; z += 2.4) iso.line(ctx, [[x, Y1 - 0.2, z], [x + 1.6, Y1 - 0.2, z]], alpha("#ffffff", dark ? 0.15 : 0.55), 0.35);
     /* 甲板 + 舱口盖 */
-    iso.poly(ctx, deck.map(([x, y]) => [x, y, DECK_Z]), c.deck);
+    iso.poly(ctx, deck.map(([x, y]): Pt => [x, y, DECK_Z]), c.deck);
     for (const bay of this.bays) iso.box(ctx, bay.x0 + 0.8, ROW0 - 1.5, DECK_Z, BAY - 1.6, ROWS * ROW_PITCH + 3, 2.5, c.hatch);
     /* 系泊缆：从艏艉与舯部拉向码头系船柱 */
     const lineColor = dark ? alpha("#9fb3b2", 0.3) : alpha("#3d4b50", 0.42);
     for (const [sx, qx] of [[SHIP.x1 - 14, SHIP.x1 + 34], [SHIP.x1 - 22, SHIP.x1 - 60], [SHIP.x0 + 8, SHIP.x0 - 40], [SHIP.x0 + 16, SHIP.x0 + 60], [-40, -90], [-60, -10]]) {
-      const pts = [];
+      const pts: Pt[] = [];
       for (let t = 0; t <= 1; t += 0.125) pts.push([sx + (qx - sx) * t, Y0 + 2 + (318 - Y0 - 2) * t, DECK_Z + (2 - DECK_Z) * t - Math.sin(t * Math.PI) * 3]);
       iso.line(ctx, pts, lineColor, 0.3);
     }
   }
 
-  forecastle(ctx, iso, c, dark) {
+  forecastle(ctx: Ctx, iso: Iso, c: Palette, dark: boolean) {
     const [x0] = this.parts.bow;
     const deck = this.outline(DECK_Z).filter(([x]) => x >= x0 - 1);
     iso.prism(ctx, deck, DECK_Z, DECK_Z + 4, c.hullSide, { top: c.deck, faces: (nx, ny) => tone(c.hullSide, faceShade(nx, ny)) });
@@ -169,7 +187,7 @@ export class Ship {
     iso.poly(ctx, [[SHIP.x1 - 22, Y1 - 9, DECK_Z - 4], [SHIP.x1 - 17, Y1 - 7.4, DECK_Z - 4], [SHIP.x1 - 17, Y1 - 7.4, DECK_Z - 9], [SHIP.x1 - 22, Y1 - 9, DECK_Z - 9]], c.tire);
   }
 
-  sternDeck(ctx, iso, c, dark, x0, x1) {
+  sternDeck(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, x0: number, x1: number) {
     iso.box(ctx, x0 + 6, YC - 12, DECK_Z, 6, 5, 3, c.metal);
     iso.box(ctx, x0 + 6, YC + 8, DECK_Z, 6, 5, 3, c.metal);
     /* 自由降落救生艇 */
@@ -178,12 +196,12 @@ export class Ship {
     iso.line(ctx, [[x0 + 1, YC, DECK_Z], [x0 + 1, YC, DECK_Z + 18]], c.metal, 0.5);
   }
 
-  lashing(ctx, iso, c, x) {
+  lashing(ctx: Ctx, iso: Iso, c: Palette, x: number) {
     iso.box(ctx, x - 0.4, ROW0 - 1, DECK_Z + 2.5, 0.8, ROWS * ROW_PITCH + 2, 10.5, mix(c.steel, c.deck, 0.3), { side: tone(c.steel, 0.78), end: tone(c.steel, 0.66) });
     iso.line(ctx, [[x, ROW0 - 1, DECK_Z + 13.4], [x, Y1 - 4, DECK_Z + 13.4]], c.yellow, 0.45);
   }
 
-  bay(ctx, iso, c, dark, colors, i) {
+  bay(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, colors: ThemeColors, i: number) {
     const bay = this.bays[i], cells = this.cells[i], next = this.cells[i + 1] && this.bays[i + 1].x0 === bay.x1 ? this.cells[i + 1] : null;
     for (let j = 0; j < ROWS; j++) {
       const stack = cells[j], y = ROW0 + j * ROW_PITCH + 0.1;
@@ -195,7 +213,7 @@ export class Ship {
     }
   }
 
-  funnel(ctx, iso, c, dark, x0, x1) {
+  funnel(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, x0: number, x1: number) {
     iso.box(ctx, x0 + 1, YC - 20, DECK_Z, x1 - x0 - 2, 40, 28, c.superstructure, { side: tone(c.superstructure, 0.86), end: tone(c.superstructure, 0.72) });
     iso.box(ctx, x0 + 3, YC - 11, DECK_Z + 28, x1 - x0 - 6, 22, 14, c.superstructure, { side: tone(c.superstructure, 0.86), end: tone(c.superstructure, 0.72) });
     iso.box(ctx, x0 + 3, YC - 11, DECK_Z + 36, x1 - x0 - 6, 22, 4, c.orange);
@@ -203,7 +221,7 @@ export class Ship {
     for (const y of [YC - 6, YC + 4]) iso.box(ctx, x0 + 6, y, DECK_Z + 43.4, 3, 3, 2.5, c.dark);
   }
 
-  bridge(ctx, iso, c, dark, x0, x1) {
+  bridge(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, x0: number, x1: number) {
     const s = c.superstructure, H = 52;
     /* 生活区塔楼 */
     iso.box(ctx, x0 + 3, YC - 24, DECK_Z, x1 - x0 - 6, 48, H, s, { side: tone(s, 0.86), end: tone(s, 0.72), rim: dark ? undefined : alpha("#ffffff", 0.6) });
@@ -223,16 +241,16 @@ export class Ship {
   }
 
   /* ─── 白天：船体与货物投在水面的软影；烘焙到地面层 ─── */
-  shadow(ctx, iso, c) {
+  shadow(ctx: Ctx, iso: Iso, c: Palette) {
     const deck = seaEdge(this.outline(DECK_Z));
     const h = DECK_Z + 4 * TEU.h - WATER_Z;
     ctx.save();
-    iso.poly(ctx, [...deck.map(([x, y]) => [x, y, WATER_Z]), ...deck.slice().reverse().map(([x, y]) => [x + h * SUN.x, y + h * SUN.y, WATER_Z])], alpha(c.shadowSoft, 0.28));
+    iso.poly(ctx, [...deck.map(([x, y]): Pt => [x, y, WATER_Z]), ...deck.slice().reverse().map(([x, y]): Pt => [x + h * SUN.x, y + h * SUN.y, WATER_Z])], alpha(c.shadowSoft, 0.28));
     ctx.restore();
   }
 
   /* ─── 夜间：甲板泛光、驾驶台与航行灯 (随精灵烘焙) ─── */
-  lights(ctx, iso) {
+  lights(ctx: Ctx, iso: Iso) {
     const [bx0, bx1] = this.parts.bridge;
     for (const x of [SHIP.x0 + 40, SHIP.x0 + 140, bx0 - 30, bx1 + 60, SHIP.x1 - 60]) iso.glow(ctx, x, YC, DECK_Z + 30, 40, "#ffe1a2", 0.12, 0.6);
     iso.glow(ctx, (bx0 + bx1) / 2, Y1, DECK_Z + 56, 10, "#5dff8c", 0.45, 1);
@@ -241,7 +259,7 @@ export class Ship {
     iso.glow(ctx, SHIP.x0 + 1, YC, DECK_Z + 18, 7, "#fff6dc", 0.45, 1);
   }
 
-  bounds() {
+  bounds(): WorldBox {
     return [SHIP.x0 - 2, Y0 - 12, WATER_Z, SHIP.x1 + 2, Y1 + 2, DECK_Z + 80];
   }
 }

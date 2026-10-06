@@ -1,21 +1,44 @@
 /**
  * [INPUT]: 依赖 ./layout 的堆场/闸口/港界常量，./structures 的建筑与照明工厂，./vehicles 的停放车辆，./palette 的箱色权重
- * [OUTPUT]: 对外提供 buildTerminal()，返回堆场箱区 (按贝切块)、RTG、闸口雨棚与岗亭、港务配套与围网、地面标线绘制函数
+ * [OUTPUT]: 对外提供 buildTerminal()，返回堆场箱区 (按贝切块)、RTG、闸口雨棚与岗亭、港务配套与围网、地面标线绘制函数，以及 Terminal/YardBlockData/BoxCell 类型与 container 箱体绘制
  * [POS]: visuals/ygbPort 的港内编排者；箱区按贝切块参与深度排序，保证集卡在箱区之间穿行时遮挡正确
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { alpha, mix, rng, tone } from "./iso";
-import { BAY, FENCE_Y, GATE, PERIMETER, TEU, WORLD_X, yardBlocks } from "./layout";
-import { BOX_WEIGHTS, pick } from "./palette";
+import { alpha, mix, rng, tone, type Ctx, type Iso } from "./iso";
+import { BAY, FENCE_Y, GATE, PERIMETER, TEU, WORLD_X, yardBlocks, type YardBlock } from "./layout";
+import { BOX_WEIGHTS, pick, type Palette, type ThemeColors } from "./palette";
 import { boxShadow, booth, canopy, controlTower, fence, highMast, shed, slab, tree, warehouse } from "./structures";
 import { parkedVehicle } from "./vehicles";
+import type { AddItem, StaticItem, SurfacePainter } from "./types";
+
+export type YardKind = "empty" | "reefer" | "laden";
+
+/* 箱位里的一只箱：色索引与是否拆成两个 20 尺 */
+export interface BoxCell {
+  color: number;
+  split: boolean;
+}
+
+/* grid[贝][列] 为自下而上的箱层 */
+export interface YardBlockData extends YardBlock {
+  bx0: number;
+  nBays: number;
+  grid: BoxCell[][][];
+  kind: YardKind;
+}
+
+export interface Terminal {
+  objects: StaticItem[];
+  surfaces: SurfacePainter[];
+  blocks: YardBlockData[];
+}
 
 const ROWS = 6, ROW_PITCH = 5.5, TIER = TEU.h;
 
-export function buildTerminal() {
-  const objects = [], surfaces = [], blocks = [];
+export function buildTerminal(): Terminal {
+  const objects: StaticItem[] = [], surfaces: SurfacePainter[] = [], blocks: YardBlockData[] = [];
   const R = rng(7341);
-  const add = (o) => (Array.isArray(o) ? objects.push(...o) : objects.push(o));
+  const add: AddItem = (o) => (Array.isArray(o) ? objects.push(...o) : objects.push(o));
 
   /* ═══ 箱区：每格记录层数、箱色与 20/40 尺 ═══ */
   for (const yb of yardBlocks) {
@@ -25,7 +48,7 @@ export function buildTerminal() {
     const kind = yb.row === 4 && yb.col % 3 === 1 ? "empty" : yb.row === 3 && yb.col === 6 ? "reefer" : "laden";
     const fill = kind === "empty" ? 0.8 : 0.3 + R() * 0.45;
     const maxTier = kind === "empty" ? 6 : kind === "reefer" ? 3 : 4;
-    const grid = [];
+    const grid: BoxCell[][][] = [];
     for (let i = 0; i < nBays; i++) {
       const bayBias = (R() - 0.5) * 2.2 + (r < 0.18 && i > nBays * 0.6 ? -4 : 0) + (R() < 0.1 ? -6 : 0);
       grid.push(Array.from({ length: ROWS }, (_, j) => {
@@ -37,9 +60,9 @@ export function buildTerminal() {
         }));
       }));
     }
-    const block = { ...yb, bx0, nBays, grid, kind };
+    const block: YardBlockData = { ...yb, bx0, nBays, grid, kind };
     blocks.push(block);
-    const rowY = (j) => yb.y0 + 6 + j * ROW_PITCH;
+    const rowY = (j: number) => yb.y0 + 6 + j * ROW_PITCH;
     for (let i = 0; i < nBays; i++) {
       const x = bx0 + i * BAY;
       const top = Math.max(0, ...grid[i].map((s) => s.length)) * TIER;
@@ -133,7 +156,7 @@ export function buildTerminal() {
 }
 
 /* ─── 单贝箱垛：逐箱绘制，邻格遮挡的面直接剔除 ─── */
-function drawBay(ctx, iso, c, dark, colors, block, i, x, rowY) {
+function drawBay(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, colors: ThemeColors, block: YardBlockData, i: number, x: number, rowY: (j: number) => number) {
   const bay = block.grid[i], next = block.grid[i + 1];
   for (let j = 0; j < ROWS; j++) {
     const stack = bay[j], y = rowY(j);
@@ -147,8 +170,8 @@ function drawBay(ctx, iso, c, dark, colors, block, i, x, rowY) {
   }
 }
 
-export function container(ctx, iso, c, dark, x, y, z, l, w, h, color, split, side, end, top) {
-  const parts = split ? [[x, TEU.l20], [x + l - TEU.l20, TEU.l20]] : [[x, l]];
+export function container(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, x: number, y: number, z: number, l: number, w: number, h: number, color: string, split: boolean, side: boolean, end: boolean, top: boolean) {
+  const parts: Array<[number, number]> = split ? [[x, TEU.l20], [x + l - TEU.l20, TEU.l20]] : [[x, l]];
   for (const [px, pl] of parts) {
     const z1 = z + h;
     if (side) {
@@ -165,9 +188,9 @@ export function container(ctx, iso, c, dark, x, y, z, l, w, h, color, split, sid
 }
 
 /* ─── 查验通道：后墙 → (车) → 前墙 → 顶板，拆成三个深度件 ─── */
-function xrayPortal(x, y, w, d) {
+function xrayPortal(x: number, y: number, w: number, d: number): StaticItem[] {
   const H = 15, T = 4;
-  const wall = (wy, depth) => ({
+  const wall = (wy: number, depth: number): StaticItem => ({
     x0: x, y0: wy, z0: 0, x1: x + w, y1: wy + T, z1: H, depth,
     draw: (ctx, iso, c) => iso.box(ctx, x, wy, 0, w, T, H, c.wall, { top: c.roof, side: tone(c.wall, 0.92), end: c.shade }),
   });
@@ -187,7 +210,7 @@ function xrayPortal(x, y, w, d) {
 }
 
 /* ─── 冷藏箱区供电架：钢平台跨在箱列之间 ─── */
-function reeferRacks(block, rowY) {
+function reeferRacks(block: YardBlockData, rowY: (j: number) => number): StaticItem {
   const x0 = block.bx0, x1 = block.bx0 + block.nBays * BAY;
   return {
     x0, y0: rowY(0), z0: 0, x1, y1: rowY(0) + 1, z1: 18, depth: (x0 + x1) / 2 + rowY(0) - 2,
@@ -199,9 +222,9 @@ function reeferRacks(block, rowY) {
 }
 
 /* ─── RTG：两侧门腿与大梁拆成三个深度件，箱垛夹在中间 ─── */
-function rtg(x, y0, y1) {
+function rtg(x: number, y0: number, y1: number): StaticItem[] {
   const W = 14, H = 36;
-  const side = (y, back) => ({
+  const side = (y: number, back: boolean): StaticItem => ({
     x0: x - 3, y0: y - 1.5, z0: 0, x1: x + W + 3, y1: y + 1.5, z1: H, depth: x + W / 2 + y + (back ? -6 : 0),
     draw: (ctx, iso, c) => {
       const white = c.craneWhite;

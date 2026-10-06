@@ -1,30 +1,42 @@
 /**
  * [INPUT]: 依赖 ./mapView 的底图、./common 的位置语义/时钟/车牌、../roads 的 sample；订阅 PortScene 帧与 arrive/gate 事件
- * [OUTPUT]: 对外提供 mountTracker(canvas, scene, onInfo)：被追踪集卡的 GPS 地图 + 位置/时速/方向/剩余里程/固定终点/节点事件
+ * [OUTPUT]: 对外提供 mountTracker(canvas, scene, onInfo)：被追踪集卡的 GPS 地图 + 位置/时速/方向/剩余里程/固定终点/节点事件；TrackInfo 载荷类型
  * [POS]: 杂志第 01 章"在途追踪"配图；与背景同一辆集卡，终点锚定在运单固定场站
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { sample } from "../roads";
+import { sample, type PathSample } from "../roads";
+import type { PortScene } from "../scene";
 import { MapView } from "./mapView";
 import { clock, zoneOf } from "./common";
 
+export interface TrackInfo {
+  zone: string;
+  speed: number;
+  heading: string;
+  status: string;
+  time: string;
+  dest: string | null;
+  remain: string | null;
+  events: { time: string; text: string }[];
+}
+
 const DIRS = ["东", "东南", "南", "西南", "西", "西北", "北", "东北"];
 
-export function mountTracker(canvas, scene, onInfo) {
+export function mountTracker(canvas: HTMLCanvasElement, scene: PortScene, onInfo: (info: TrackInfo) => void): () => void {
   const map = new MapView(canvas, scene);
-  const events = [];
-  let cam = null, lastInfo = 0, zone = null;
-  const log = (t, text) => {
+  const events: { time: string; text: string }[] = [];
+  let cam: { x: number; y: number } | null = null, lastInfo = 0, zone: string | null = null;
+  const log = (t: number, text: string) => {
     events.unshift({ time: clock(t), text });
     if (events.length > 3) events.length = 3;
   };
-  const isMine = (e) => e.id === scene.traffic.vehicles.find((o) => o.tracked)?.id;
+  const isMine = (e: { id: number }) => e.id === scene.traffic.vehicles.find((o) => o.tracked)?.id;
   const offs = [
     scene.on("arrive", (e) => isMine(e) && log(e.t, e.text)),
     scene.on("gate", (e) => isMine(e) && e.gate === "港区闸口" && log(e.t, e.dir === "进港" ? "进港 · 闸口核验放行" : "出港 · 闸口核验放行")),
   ];
 
-  const draw = (sc) => {
+  const draw = (sc: PortScene) => {
     const v = sc.traffic.vehicles.find((o) => o.tracked);
     if (!v || !map.w) return;
     cam = cam ? { x: cam.x + (v.x - cam.x) * 0.12, y: cam.y + (v.y - cam.y) * 0.12 } : { x: v.x, y: v.y };
@@ -32,8 +44,8 @@ export function mountTracker(canvas, scene, onInfo) {
     map.begin(cam.x, cam.y, Math.max(0.3, Math.min(0.56, map.w / 1300)));
     const c = map.c, leg = sc.traffic.leg(v);
     /* 轨迹：上一终点至今实线，到固定终点的规划虚线 */
-    const trail = (from, to) => {
-      const pts = [], cur = { i: 0 };
+    const trail = (from: number, to: number) => {
+      const pts: PathSample[] = [], cur = { i: 0 };
       for (let d = from; d < to; d += 8) pts.push(sample(v.path, v.s + d, cur));
       pts.push(sample(v.path, v.s + to, cur));
       return pts;

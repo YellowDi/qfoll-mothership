@@ -1,15 +1,45 @@
 /**
  * [INPUT]: 依赖 ./mapView 的底图、./common 的集卡判定/停放集卡/车牌，../layout 的港界；订阅 PortScene 帧
- * [OUTPUT]: 对外提供 mountDispatch(canvas, scene, onInfo)：新货源落点 → 候选集卡实时打分连线 → 派单，回传订单与候选列表
+ * [OUTPUT]: 对外提供 mountDispatch(canvas, scene, onInfo)：新货源落点 → 候选集卡实时打分连线 → 派单，回传订单与候选列表；DispatchInfo 载荷类型
  * [POS]: 杂志第 02 章"智能调度"配图；候选来自世界中真实的停场与在途集卡，位置与空重状态都是实时的
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { FENCE_Y } from "../layout";
+import type { PortScene } from "../scene";
+import type { Vehicle } from "../traffic";
+import type { ParkedVehicle } from "../types";
 import { MapView } from "./mapView";
 import { isTruck, parkedTrucks, plateOf } from "./common";
 
+export interface DispatchInfo {
+  no: string;
+  box: string;
+  origin: string;
+  dest: string;
+  phase: string;
+  eta: number;
+  candidates: { plate: string; status: string; km: string; score: number; chosen: boolean }[];
+}
+
+/* 候选集卡：停车场待命的停放集卡，或港界外的在途集卡 */
+type Candidate = Vehicle | ParkedVehicle;
+
+interface Origin {
+  x: number;
+  y: number;
+  name: string;
+}
+
+interface Order {
+  no: string;
+  box: string;
+  origin: Origin;
+  start: number;
+  ranked: Array<{ v: Candidate; score: number }>;
+}
+
 /* 货源起点：物流园与冷库的装货月台 */
-const ORIGINS = [
+const ORIGINS: Origin[] = [
   { x: -820, y: -425, name: "物流园 A 区 · 3 号月台" },
   { x: 20, y: -440, name: "物流园 B 区 · 冷链月台" },
   { x: 650, y: -456, name: "冷库 C 区 · 1 号门" },
@@ -18,15 +48,15 @@ const ORIGINS = [
 const BOXES = ["40HQ 高柜", "20GP 普柜", "40GP 普柜", "45HQ 高柜"];
 const CYCLE = 8;
 
-export function mountDispatch(canvas, scene, onInfo) {
+export function mountDispatch(canvas: HTMLCanvasElement, scene: PortScene, onInfo: (info: DispatchInfo) => void): () => void {
   const map = new MapView(canvas, scene);
-  let round = -1, order = null, cam = null, lastInfo = 0;
+  let round = -1, order: Order | null = null, cam: { x: number; y: number; px: number } | null = null, lastInfo = 0;
 
-  const statusOf = (v) => (v.parked ? "停车场待命" : v.cargo == null ? "空车在途" : "重车在途");
-  const newOrder = (t) => {
+  const statusOf = (v: Candidate) => (v.parked ? "停车场待命" : v.cargo == null ? "空车在途" : "重车在途");
+  const newOrder = (t: number) => {
     round++;
     const origin = ORIGINS[round % ORIGINS.length];
-    const pool = [
+    const pool: Candidate[] = [
       ...parkedTrucks(scene).filter((v) => v.where === "park"),
       ...scene.traffic.vehicles.filter((v) => isTruck(v) && v.y < FENCE_Y - 10),
     ];
@@ -38,11 +68,11 @@ export function mountDispatch(canvas, scene, onInfo) {
     order = { no: `DD${String(26100500 + round * 37).slice(-8)}`, box: BOXES[round % BOXES.length], origin, start: t, ranked };
   };
 
-  const draw = (sc) => {
+  const draw = (sc: PortScene) => {
     if (!map.w) return;
     const t = sc.traffic.time;
     if (!order || t - order.start >= CYCLE) newOrder(t);
-    const tau = t - order.start, { origin, ranked } = order;
+    const tau = t - order!.start, { origin, ranked } = order!; // newOrder 在闭包内赋值，TS 看不到
     /* 镜头：框住货源与候选车，平滑跟随 */
     let x0 = origin.x, x1 = origin.x, y0 = origin.y, y1 = origin.y;
     for (const { v } of ranked) { x0 = Math.min(x0, v.x); x1 = Math.max(x1, v.x); y0 = Math.min(y0, v.y); y1 = Math.max(y1, v.y); }
@@ -91,7 +121,7 @@ export function mountDispatch(canvas, scene, onInfo) {
       const best = ranked[0];
       const km = best ? (Math.hypot(best.v.x - origin.x, best.v.y - origin.y) * 0.5) / 1000 : 0;
       onInfo({
-        no: order.no, box: order.box, origin: origin.name, dest: "港区闸口 · 进港",
+        no: order!.no, box: order!.box, origin: origin.name, dest: "港区闸口 · 进港",
         phase: tau < 1 ? "新货源" : assigned ? "已派单" : "智能匹配中",
         candidates: ranked.map(({ v, score }, i) => ({
           plate: plateOf(v.id), status: statusOf(v), km: ((Math.hypot(v.x - origin.x, v.y - origin.y) * 0.5) / 1000).toFixed(1),

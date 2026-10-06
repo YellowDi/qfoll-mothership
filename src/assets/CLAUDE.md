@@ -9,5 +9,5 @@ fonts/*: Remix Icon 字体资源。
 water-images/*: 水环境产品页面视觉资源。
 ygb-assets/*: 云柜宝产品页面视觉资源。
 
-法则: 资源按内容域归档，引用路径由 data/coverAssets.js 等适配层集中管理。
+法则: 资源按内容域归档，引用路径由 data/coverAssets.ts 等适配层集中管理。
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md

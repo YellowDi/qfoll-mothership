@@ -1,13 +1,58 @@
 /**
  * [INPUT]: 依赖 ./iso 的投影/色彩/随机/SUN 光照，./ship 的 DECK_Z 与船位，./layout 的船位，./sea 的样条航线
- * [OUTPUT]: 对外提供 Sky：低空巡航直升机 (近距地影 + 旋翼 + 夜间航灯/探照灯)、海鸥盘旋、烟囱尾烟、日间云影漂移、塔顶航标
+ * [OUTPUT]: 对外提供 Sky：低空巡航直升机 (近距地影 + 旋翼 + 夜间航灯/探照灯)、海鸥盘旋、烟囱尾烟、日间云影漂移、塔顶航标；FUNNEL_TOP 烟囱顶位置
  * [POS]: visuals/ygbPort 的最上层动态；全部绘制在场景物件之后，只叠加不遮挡交通逻辑
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { SUN, alpha, rng, tone } from "./iso";
+import { SUN, alpha, rng, tone, type Ctx, type Iso, type OboxOpts, type Pt } from "./iso";
 import { SHIP } from "./layout";
-import { DECK_Z } from "./ship";
+import type { Palette } from "./palette";
+import { DECK_Z, type Ship } from "./ship";
 import { at, spline } from "./sea";
+
+type Pt3 = [number, number, number];
+
+interface Puff {
+  x: number;
+  y: number;
+  z: number;
+  age: number;
+  r: number;
+}
+
+interface Bird {
+  cx: number;
+  cy: number;
+  r: number;
+  z: number;
+  w: number;
+  phase: number;
+  flap: number;
+}
+
+interface Heli {
+  /* 沿航线的里程 */
+  s: number;
+  x: number;
+  y: number;
+  h: number;
+  rotor: number;
+}
+
+interface Cloud {
+  x: number;
+  y: number;
+  blobs: Pt3[];
+}
+
+/* 云影预渲染贴图：相对云心的屏幕偏移 (l, t) 与尺寸 (w, h) */
+interface CloudSprite {
+  cv: HTMLCanvasElement;
+  l: number;
+  t: number;
+  w: number;
+  h: number;
+}
 
 const WIND = { x: 7, y: 2.4 };
 /*
@@ -19,7 +64,15 @@ const HELI_Z = 56;
 const HELI_PATH = spline([[-1700, 620], [-900, 640], [-200, 600], [500, 650], [1200, 700], [1650, 300], [1550, -150], [1100, -430], [400, -450], [-300, -430], [-1000, -440], [-1600, -150], [-1800, 300]], 6);
 
 export class Sky {
-  constructor(funnel) {
+  time: number;
+  funnel: Pt3;
+  puffs: Puff[];
+  emit: number;
+  birds: Bird[];
+  heli: Heli;
+  clouds: Cloud[];
+  cloudSprites?: CloudSprite[];
+  constructor(funnel: Pt3) {
     this.time = 0;
     const R = rng(311);
     this.funnel = funnel;
@@ -27,11 +80,11 @@ export class Sky {
     this.emit = 0;
     this.birds = Array.from({ length: 7 }, (_, i) => ({ cx: -160 + R() * 260, cy: 340 + R() * 140, r: 26 + R() * 40, z: 46 + R() * 50, w: (0.18 + R() * 0.16) * (i % 3 ? 1 : -1), phase: R() * 6.28, flap: 5 + R() * 3 }));
     this.heli = { s: 0.32 * HELI_PATH.length, x: 0, y: 0, h: 0, rotor: 0 };
-    this.clouds = Array.from({ length: 4 }, (_, i) => ({ x: -1400 + i * 760 + R() * 200, y: -900 + R() * 1300, blobs: Array.from({ length: 5 }, () => [R() * 220 - 110, R() * 120 - 60, 60 + R() * 70]) }));
+    this.clouds = Array.from({ length: 4 }, (_, i) => ({ x: -1400 + i * 760 + R() * 200, y: -900 + R() * 1300, blobs: Array.from({ length: 5 }, (): Pt3 => [R() * 220 - 110, R() * 120 - 60, 60 + R() * 70]) }));
     for (let i = 0; i < 60; i++) this.update(0.2);
   }
 
-  update(dt, isVisible = () => true) {
+  update(dt: number, isVisible: (x: number, y: number, z: number) => boolean = () => true) {
     this.time += dt;
     const hp = this.heli;
     hp.s = (hp.s + 34 * dt * (isVisible(hp.x, hp.y, HELI_Z) ? 1 : 4)) % HELI_PATH.length;
@@ -62,20 +115,20 @@ export class Sky {
 
   /* ─── 地面层之上：云影 + 直升机地影 ─── */
   /* 云影印章：每次重建按当前缩放模糊渲染一次，逐帧只平移贴图 */
-  bake(iso, c, dpr) {
+  bake(iso: Iso, c: Palette, dpr: number) {
     const s = iso.s, pad = 40 * s;
     this.cloudSprites = this.clouds.map((cl) => {
       let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
       const pts = cl.blobs.map(([bx, by, rr]) => {
         const X = (bx - by) * 0.74 * s, Y = (bx + by) * 0.365 * s;
         l = Math.min(l, X - rr * s); r = Math.max(r, X + rr * s); t = Math.min(t, Y - rr * s * 0.5); b = Math.max(b, Y + rr * s * 0.5);
-        return [X, Y, rr];
+        return [X, Y, rr] as Pt3;
       });
       l -= pad; t -= pad; r += pad; b += pad;
       const cv = document.createElement("canvas");
       cv.width = Math.ceil((r - l) * dpr);
       cv.height = Math.ceil((b - t) * dpr);
-      const g = cv.getContext("2d");
+      const g = cv.getContext("2d")!;
       g.setTransform(dpr, 0, 0, dpr, -l * dpr, -t * dpr);
       g.filter = `blur(${18 * s}px)`;
       g.fillStyle = alpha(c.shadowSoft, 0.06);
@@ -87,7 +140,7 @@ export class Sky {
       return { cv, l, t, w: r - l, h: b - t };
     });
   }
-  shadows(ctx, iso, c, dark) {
+  shadows(ctx: Ctx, iso: Iso, c: Palette, dark: boolean) {
     if (dark) return;
     this.clouds.forEach((cl, i) => {
       const sp = this.cloudSprites?.[i];
@@ -101,7 +154,7 @@ export class Sky {
   }
 
   /* ─── 顶层：尾烟、海鸥、飞机、塔顶航标 ─── */
-  draw(ctx, iso, c, dark, beacons) {
+  draw(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, beacons: Pt3[]) {
     const t = this.time;
     for (const p of this.puffs) {
       if (!iso.visible(p.x, p.y, 40)) continue;
@@ -141,10 +194,10 @@ export class Sky {
   }
 
   /* ─── 直升机：橙白涂装港务机，主旋翼半透明桨盘 + 两片桨叶，尾桨、滑橇 ─── */
-  helicopter(ctx, iso, c, dark, t) {
+  helicopter(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, t: number) {
     const hp = this.heli, z = HELI_Z + Math.sin(t * 0.7) * 1.2, cos = Math.cos(hp.h), sin = Math.sin(hp.h);
-    const P = (lx, ly, lz) => [hp.x + lx * cos - ly * sin, hp.y + lx * sin + ly * cos, z + lz];
-    const B = (lx0, lx1, ly0, ly1, z0, z1, color, o) => iso.obox(ctx, hp.x, hp.y, cos, sin, lx0, lx1, ly0, ly1, z + z0, z + z1, color, o);
+    const P = (lx: number, ly: number, lz: number): Pt3 => [hp.x + lx * cos - ly * sin, hp.y + lx * sin + ly * cos, z + lz];
+    const B = (lx0: number, lx1: number, ly0: number, ly1: number, z0: number, z1: number, color: string, o?: OboxOpts) => iso.obox(ctx, hp.x, hp.y, cos, sin, lx0, lx1, ly0, ly1, z + z0, z + z1, color, o);
     if (dark) {
       /* 探照灯：斜向前下方打到地面 */
       const gx = hp.x + cos * 24 + HELI_Z * 0.08, gy = hp.y + sin * 24;
@@ -177,7 +230,7 @@ export class Sky {
     const ta = hp.rotor * 2.3;
     iso.line(ctx, [P(-14.6 + Math.cos(ta) * 2, 0.7, 5 + Math.sin(ta) * 2), P(-14.6 - Math.cos(ta) * 2, 0.7, 5 - Math.sin(ta) * 2)], dark ? alpha("#c8d4d2", 0.6) : alpha(c.dark, 0.6), 0.35);
     /* 主旋翼：桨盘 + 桨叶 */
-    const disc = Array.from({ length: 24 }, (_, i) => { const a = (i / 24) * Math.PI * 2; return [hp.x + Math.cos(a) * 12.5, hp.y + Math.sin(a) * 12.5, z + 6.9]; });
+    const disc = Array.from({ length: 24 }, (_, i): Pt => { const a = (i / 24) * Math.PI * 2; return [hp.x + Math.cos(a) * 12.5, hp.y + Math.sin(a) * 12.5, z + 6.9]; });
     iso.poly(ctx, disc, dark ? alpha("#c8d4d2", 0.06) : alpha("#33454c", 0.1));
     for (const k of [0, Math.PI / 2]) {
       const a = hp.rotor + k, dx = Math.cos(a) * 12.5, dy = Math.sin(a) * 12.5;
@@ -192,15 +245,15 @@ export class Sky {
     }
   }
   /* 地影：机身 + 尾梁剪影与淡淡的桨盘阴影 */
-  heliShadow(ctx, iso, c, x, y, h) {
-    const cos = Math.cos(h), sin = Math.sin(h), P = (lx, ly) => [x + lx * cos - ly * sin, y + lx * sin + ly * cos, 0];
+  heliShadow(ctx: Ctx, iso: Iso, c: Palette, x: number, y: number, h: number) {
+    const cos = Math.cos(h), sin = Math.sin(h), P = (lx: number, ly: number): Pt3 => [x + lx * cos - ly * sin, y + lx * sin + ly * cos, 0];
     iso.poly(ctx, [P(6.4, -1.6), P(6.4, 1.6), P(-4.2, 2.3), P(-4.2, 0.6), P(-15, 0.5), P(-15, -0.5), P(-4.2, -0.6), P(-4.2, -2.3)], alpha(c.shadow, 0.18));
-    const disc = Array.from({ length: 20 }, (_, i) => { const a = (i / 20) * Math.PI * 2; return [x + Math.cos(a) * 12.5, y + Math.sin(a) * 12.5, 0]; });
+    const disc = Array.from({ length: 20 }, (_, i): Pt => { const a = (i / 20) * Math.PI * 2; return [x + Math.cos(a) * 12.5, y + Math.sin(a) * 12.5, 0]; });
     iso.poly(ctx, disc, alpha(c.shadow, 0.06));
   }
 }
 
-export const FUNNEL_TOP = (ship) => {
+export const FUNNEL_TOP = (ship: Ship): Pt3 => {
   const [x0, x1] = ship.parts.funnel;
   return [(x0 + x1) / 2, (SHIP.y0 + SHIP.y1) / 2, DECK_Z + 45];
 };

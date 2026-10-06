@@ -1,20 +1,55 @@
 /**
  * [INPUT]: 无外部依赖；接收 Canvas 2D 上下文与港区世界坐标 (x 向东, y 向海, z 向上)
- * [OUTPUT]: 对外提供 Iso 投影/绘制原语 (含缓存光斑印章)、tone/alpha/mix 色彩工具、SUN/faceShade 光照约定、rng 种子随机、smooth 缓动
+ * [OUTPUT]: 对外提供 Iso 投影/绘制原语 (含缓存光斑印章)、tone/alpha/mix 色彩工具、SUN/faceShade 光照约定、rng 种子随机、smooth 缓动，以及 Ctx/Pt/BoxOpts/OboxOpts/PrismOpts/ScreenBounds 类型
  * [POS]: visuals/ygbPort 的几何地基；所有物件共用同一投影、同一光源和同一背面剔除规则
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 
+export type Ctx = CanvasRenderingContext2D;
+/* 世界点 [x, y, z?]：x 向东、y 向海、z 向上，缺省 z 为地面 */
+export type Pt = [number, number, number?];
+
+export interface BoxOpts {
+  top?: string;
+  side?: string;
+  end?: string;
+  /* 顶面前缘描边色 */
+  rim?: string;
+}
+
+export interface OboxOpts {
+  /* 按面法线给色；缺省按 faceShade 对 color 取明暗 */
+  faces?: (nx: number, ny: number) => string;
+  top?: string;
+}
+
+export interface PrismOpts {
+  zb?: (p: Pt) => number;
+  zt?: (p: Pt) => number;
+  faces?: (nx: number, ny: number) => string;
+  /* false 则不画顶面 */
+  top?: string | false;
+}
+
+export interface ScreenBounds {
+  l: number;
+  t: number;
+  r: number;
+  b: number;
+}
+
+type Stops = Array<[number, number]>;
+
 /* ════════════════════════════════════════════════════════════════════
  * 色彩：所有派生色都回到 #rrggbb，允许 tone(tone(c)) 链式推导并缓存
  * ════════════════════════════════════════════════════════════════════ */
-const cache = new Map();
-const hex2 = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
-const rgbOf = (hex) => {
+const cache = new Map<string, string>();
+const hex2 = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
+const rgbOf = (hex: string): [number, number, number] => {
   const n = parseInt(hex.slice(1, 7), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 };
-export function tone(hex, f) {
+export function tone(hex: string, f: number): string {
   const key = `t${hex}${f}`;
   let out = cache.get(key);
   if (!out) {
@@ -24,7 +59,7 @@ export function tone(hex, f) {
   }
   return out;
 }
-export function mix(a, b, t) {
+export function mix(a: string, b: string, t: number): string {
   const key = `m${a}${b}${t}`;
   let out = cache.get(key);
   if (!out) {
@@ -34,22 +69,22 @@ export function mix(a, b, t) {
   }
   return out;
 }
-export function alpha(hex, a) {
+export function alpha(hex: string, a: number): string {
   const [r, g, b] = rgbOf(hex);
   return `rgba(${r},${g},${b},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
 }
 
 /* 光斑印章：按颜色与渐变剖面缓存 */
-const GLOW = [[0, 1], [0.38, 0.36], [1, 0]];
-const POOL = [[0, 1], [0.45, 0.62], [0.8, 0.16], [1, 0]];
-const stamps = new Map();
-function stampOf(color, stops) {
+const GLOW: Stops = [[0, 1], [0.38, 0.36], [1, 0]];
+const POOL: Stops = [[0, 1], [0.45, 0.62], [0.8, 0.16], [1, 0]];
+const stamps = new Map<string, HTMLCanvasElement>();
+function stampOf(color: string, stops: Stops): HTMLCanvasElement {
   const key = color + (stops === POOL ? "p" : "g");
   let cv = stamps.get(key);
   if (!cv) {
     cv = document.createElement("canvas");
     cv.width = cv.height = 128;
-    const g2 = cv.getContext("2d"), g = g2.createRadialGradient(64, 64, 0, 64, 64, 64);
+    const g2 = cv.getContext("2d")!, g = g2.createRadialGradient(64, 64, 0, 64, 64, 64);
     for (const [o, k] of stops) g.addColorStop(o, alpha(color, k));
     g2.fillStyle = g;
     g2.fillRect(0, 0, 128, 128);
@@ -60,10 +95,10 @@ function stampOf(color, stops) {
 
 /* 太阳位于画面上方 (-x,-y)：+y 立面偏亮、+x 立面偏暗，与旧场景的明暗关系一致 */
 export const SUN = { x: 0.63, y: 0.42 };
-export const faceShade = (nx, ny) => 0.75 + 0.08 * (ny - nx);
+export const faceShade = (nx: number, ny: number) => 0.75 + 0.08 * (ny - nx);
 
 /* 确定性随机：布局、集装箱配色与车辆编组每次重建保持一致 */
-export function rng(seed) {
+export function rng(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
@@ -73,12 +108,17 @@ export function rng(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-export const smooth = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+export const smooth = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 
 /* ════════════════════════════════════════════════════════════════════
  * 投影：正交二测；镜头固定，只随画幅缩放
  * ════════════════════════════════════════════════════════════════════ */
 export class Iso {
+  s: number;
+  cx: number;
+  cy: number;
+  w: number;
+  h: number;
   constructor() {
     this.s = 1;
     this.cx = 0;
@@ -86,7 +126,7 @@ export class Iso {
     this.w = 0;
     this.h = 0;
   }
-  set(s, cx, cy, w, h) {
+  set(s: number, cx: number, cy: number, w: number, h: number) {
     this.s = s;
     this.cx = cx;
     this.cy = cy;
@@ -94,27 +134,27 @@ export class Iso {
     this.h = h;
   }
   /* 屏幕可见性：margin 为屏幕像素外扩，z 为物件高度 */
-  visible(x, y, margin = 60, z = 0) {
+  visible(x: number, y: number, margin = 60, z = 0) {
     const X = this.X(x, y), Y = this.Y(x, y, z);
     return X > -margin && X < this.w + margin && Y > -margin && Y < this.h + margin;
   }
-  X(x, y) { return this.cx + (x - y) * 0.74 * this.s; }
-  Y(x, y, z = 0) { return this.cy + ((x + y) * 0.365 - z) * this.s; }
+  X(x: number, y: number) { return this.cx + (x - y) * 0.74 * this.s; }
+  Y(x: number, y: number, z = 0) { return this.cy + ((x + y) * 0.365 - z) * this.s; }
 
-  trace(ctx, pts) {
+  trace(ctx: Ctx, pts: Pt[]) {
     ctx.beginPath();
     for (let i = 0; i < pts.length; i++) {
       const p = pts[i], X = this.X(p[0], p[1]), Y = this.Y(p[0], p[1], p[2] || 0);
       i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
     }
   }
-  poly(ctx, pts, fill) {
+  poly(ctx: Ctx, pts: Pt[], fill: string | CanvasGradient | CanvasPattern) {
     this.trace(ctx, pts);
     ctx.closePath();
     ctx.fillStyle = fill;
     ctx.fill();
   }
-  line(ctx, pts, color, width = 1, dash) {
+  line(ctx: Ctx, pts: Pt[], color: string, width = 1, dash?: number[] | null) {
     this.trace(ctx, pts);
     ctx.strokeStyle = color;
     ctx.lineWidth = width * this.s;
@@ -125,13 +165,13 @@ export class Iso {
     if (dash) ctx.setLineDash([]);
   }
   /* 地面矩形：道路、场地与标线的基本单元 */
-  rect(ctx, x0, y0, x1, y1, fill, z = 0) {
+  rect(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, fill: string, z = 0) {
     this.poly(ctx, [[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]], fill);
   }
   /* 圆角地块：街坊人行道与路缘转角半径由此统一 */
-  roundRect(ctx, x0, y0, x1, y1, r, fill, z = 0) {
-    const pts = [];
-    const corner = (cx, cy, a0) => {
+  roundRect(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, r: number, fill: string, z = 0) {
+    const pts: Pt[] = [];
+    const corner = (cx: number, cy: number, a0: number) => {
       for (let i = 0; i <= 6; i++) {
         const a = a0 + (i / 6) * Math.PI / 2;
         pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r, z]);
@@ -145,7 +185,7 @@ export class Iso {
   }
 
   /* 轴对齐盒体：先铺剪影再盖三面，消除相邻面之间的抗锯齿缝 */
-  box(ctx, x, y, z, w, d, h, color, o) {
+  box(ctx: Ctx, x: number, y: number, z: number, w: number, d: number, h: number, color: string, o?: BoxOpts) {
     const top = o?.top ?? color, side = o?.side ?? tone(color, 0.83), end = o?.end ?? tone(color, 0.67);
     const z1 = z + h;
     this.poly(ctx, [[x, y + d, z], [x + w, y + d, z], [x + w, y, z], [x + w, y, z1], [x, y, z1], [x, y + d, z1]], side);
@@ -155,9 +195,9 @@ export class Iso {
   }
 
   /* 有朝向的盒体：车辆、拖船等转向物件按法线剔除背面并统一受光 */
-  obox(ctx, px, py, cos, sin, lx0, lx1, ly0, ly1, z0, z1, color, o) {
-    const c = (lx, ly, z) => [px + lx * cos - ly * sin, py + lx * sin + ly * cos, z];
-    const faces = [
+  obox(ctx: Ctx, px: number, py: number, cos: number, sin: number, lx0: number, lx1: number, ly0: number, ly1: number, z0: number, z1: number, color: string, o?: OboxOpts) {
+    const c = (lx: number, ly: number, z: number): Pt => [px + lx * cos - ly * sin, py + lx * sin + ly * cos, z];
+    const faces: Array<[number, number, Pt[]]> = [
       [cos, sin, [c(lx1, ly0, z0), c(lx1, ly1, z0), c(lx1, ly1, z1), c(lx1, ly0, z1)]],
       [-cos, -sin, [c(lx0, ly1, z0), c(lx0, ly0, z0), c(lx0, ly0, z1), c(lx0, ly1, z1)]],
       [-sin, cos, [c(lx1, ly1, z0), c(lx0, ly1, z0), c(lx0, ly1, z1), c(lx1, ly1, z1)]],
@@ -171,13 +211,13 @@ export class Iso {
   }
 
   /* 任意平面轮廓的直棱柱：船体、油罐、塔楼等曲面外形共用 */
-  prism(ctx, outline, z0, z1, color, o) {
+  prism(ctx: Ctx, outline: Pt[], z0: number, z1: number, color: string, o?: PrismOpts) {
     let area = 0;
     for (let i = 0; i < outline.length; i++) {
       const a = outline[i], b = outline[(i + 1) % outline.length];
       area += a[0] * b[1] - b[0] * a[1];
     }
-    const sign = area > 0 ? 1 : -1, faces = [];
+    const sign = area > 0 ? 1 : -1, faces: Array<{ depth: number; nx: number; ny: number; a: Pt; b: Pt }> = [];
     for (let i = 0; i < outline.length; i++) {
       const a = outline[i], b = outline[(i + 1) % outline.length];
       let nx = (b[1] - a[1]) * sign, ny = -(b[0] - a[0]) * sign;
@@ -199,13 +239,13 @@ export class Iso {
    * 柔光与灯池：径向渐变预渲染成单色印章并缓存，逐帧只做一次 drawImage；
    * 夜间每帧数百个灯点不再反复创建渐变对象。合成模式由调用方决定。
    */
-  glow(ctx, x, y, z, r, color, a = 0.3, flat = 1) {
+  glow(ctx: Ctx, x: number, y: number, z: number, r: number, color: string, a = 0.3, flat = 1) {
     this.stamp(ctx, x, y, z, r, color, a, flat, GLOW);
   }
-  pool(ctx, x, y, z, r, color, a = 0.4) {
+  pool(ctx: Ctx, x: number, y: number, z: number, r: number, color: string, a = 0.4) {
     this.stamp(ctx, x, y, z, r, color, a, 0.5, POOL);
   }
-  stamp(ctx, x, y, z, r, color, a, flat, stops) {
+  stamp(ctx: Ctx, x: number, y: number, z: number, r: number, color: string, a: number, flat: number, stops: Stops) {
     const R = r * this.s;
     if (R < 0.3 || a <= 0) return;
     const img = stampOf(color, stops), X = this.X(x, y), Y = this.Y(x, y, z);
@@ -214,7 +254,7 @@ export class Iso {
     ctx.drawImage(img, X - R, Y - R * flat, R * 2, R * 2 * flat);
     ctx.globalAlpha = prev;
   }
-  dot(ctx, x, y, z, r, color) {
+  dot(ctx: Ctx, x: number, y: number, z: number, r: number, color: string) {
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(this.X(x, y), this.Y(x, y, z), Math.max(0.35, r * this.s), 0, Math.PI * 2);
@@ -222,7 +262,7 @@ export class Iso {
   }
 
   /* 世界包围盒 → 屏幕包围盒：精灵裁切、可见性与动态占用都基于它 */
-  bounds(x0, y0, z0, x1, y1, z1, pad = 0) {
+  bounds(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, pad = 0): ScreenBounds {
     const l = this.X(x0, y1), r = this.X(x1, y0);
     const t = this.Y(x0, y0, z1), b = this.Y(x1, y1, z0);
     const p = pad * this.s;

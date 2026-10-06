@@ -1,12 +1,37 @@
 /**
  * [INPUT]: 依赖 ./iso 的投影/色彩/缓动，./layout 的轨道与车道常量，./ship 的 DECK_Z 与箱格接口
- * [OUTPUT]: 对外提供 Crane (岸桥几何与分层绘制：back/front/upper/hoist/shadow/glow) 与 CraneWork (唯一作业岸桥的装卸状态机)
+ * [OUTPUT]: 对外提供 Crane (岸桥几何与分层绘制：back/front/upper/hoist/shadow/glow)、CraneWork (唯一作业岸桥的装卸状态机)、Dockable (停靠在岸桥下的车辆需满足的形状) 与 TRAVEL_Z
  * [POS]: visuals/ygbPort 的岸桥；分层绘制让船体夹在门腿与大梁之间，彻底消除穿模；只有一台岸桥在作业
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
-import { SUN, alpha, smooth, tone } from "./iso";
-import { CRANE_LANE_Y, QUAY_Y, RAIL_LAND, RAIL_SEA, TEU } from "./layout";
-import { DECK_Z } from "./ship";
+import { SUN, alpha, smooth, tone, type Ctx, type Iso, type Pt } from "./iso";
+import { CRANE_LANE_Y, QUAY_Y, RAIL_LAND, RAIL_SEA, TEU, type CraneMode, type CraneSpec } from "./layout";
+import type { Palette, ThemeColors } from "./palette";
+import type { Xy } from "./roads";
+import { DECK_Z, type Ship } from "./ship";
+import type { container } from "./terminal";
+import type { WorldBox } from "./types";
+
+/* 停靠在岸桥下作业的车辆：吊具与它交换集装箱，served 表示已服务完毕可以离开 */
+export interface Dockable {
+  cargo: number | null;
+  served: boolean;
+}
+
+/*
+ * 岸桥动作队列：每步在 update 时补上执行期的 t (已用时)、from (起点)、dur (时长)、target (hoist 的求值目标)。
+ * 规划时只给出 PlanStep，取出执行时再按 CraneAction 使用。
+ */
+type PlanStep =
+  | { k: "trolley"; to: number }
+  | { k: "hoist"; to: number | (() => number) }
+  | { k: "gantry"; to: number }
+  | { k: "lock" | "unlock"; where: "ship"; bay: number; row: number }
+  | { k: "lock" | "unlock"; where: "truck" }
+  | { k: "wait"; need: "empty" | "loaded" }
+  | { k: "release" };
+
+type CraneAction = PlanStep & { t: number; from: number; dur: number; target: number };
 
 /* ─── 岸桥尺寸 (1u≈0.5m)：轨距 29m、前伸距 64m、起升高度约 46m ─── */
 const FRAME = 18, PORTAL_Z = 34, LEG_TOP = 92, G0 = 92, G1 = 99;
@@ -15,10 +40,10 @@ export const TRAVEL_Z = 76;
 const PARK_Y = 300;
 
 /* 绕 x 轴旋转的长方体：大梁俯仰用；按 (1,1,0.73) 视向剔除背面 */
-function boomBox(ctx, iso, x0, x1, t0, t1, u0, u1, angle, hy, hz, color) {
+function boomBox(ctx: Ctx, iso: Iso, x0: number, x1: number, t0: number, t1: number, u0: number, u1: number, angle: number, hy: number, hz: number, color: string) {
   const ca = Math.cos(angle), sa = Math.sin(angle);
-  const P = (x, t, u) => [x, hy + t * ca - u * sa, hz + t * sa + u * ca];
-  const faces = [
+  const P = (x: number, t: number, u: number): Pt => [x, hy + t * ca - u * sa, hz + t * sa + u * ca];
+  const faces: Array<[number, number, number, Pt[], number]> = [
     [1, 0, 0, [P(x1, t0, u0), P(x1, t1, u0), P(x1, t1, u1), P(x1, t0, u1)], 0.67],
     [0, ca, sa, [P(x0, t1, u0), P(x1, t1, u0), P(x1, t1, u1), P(x0, t1, u1)], 0.83],
     [0, -sa, ca, [P(x0, t0, u1), P(x1, t0, u1), P(x1, t1, u1), P(x0, t1, u1)], 1],
@@ -28,7 +53,17 @@ function boomBox(ctx, iso, x0, x1, t0, t1, u0, u1, angle, hy, hz, color) {
 }
 
 export class Crane {
-  constructor({ x, mode }) {
+  x: number;
+  mode: CraneMode;
+  /* 大梁俯仰角 (弧度)：0 为放下，约 78° 为扬起 */
+  angle: number;
+  trolleyY: number;
+  spreaderZ: number;
+  sway: number;
+  /* 吊具所携带集装箱的色索引；空吊具为 null */
+  carry: number | null;
+  moving: boolean;
+  constructor({ x, mode }: CraneSpec) {
     this.x = x;
     this.mode = mode;
     this.angle = mode === "raised" ? (78 * Math.PI) / 180 : 0;
@@ -38,11 +73,11 @@ export class Crane {
     this.carry = null;
     this.moving = false;
   }
-  frames() { return [this.x - FRAME, this.x + FRAME]; }
-  boomPoint(t) { return [HINGE_Y + t * Math.cos(this.angle), G1 + t * Math.sin(this.angle)]; }
+  frames(): [number, number] { return [this.x - FRAME, this.x + FRAME]; }
+  boomPoint(t: number): [number, number] { return [HINGE_Y + t * Math.cos(this.angle), G1 + t * Math.sin(this.angle)]; }
 
   /* ─── 陆侧门腿与台车：位于作业车道之后 ─── */
-  back(ctx, iso, c, dark, t) {
+  back(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, t: number) {
     const [f0, f1] = this.frames(), white = c.craneWhite;
     this.bogie(ctx, iso, c, f0, RAIL_LAND, dark, t);
     this.leg(ctx, iso, white, f0, RAIL_LAND);
@@ -53,7 +88,7 @@ export class Crane {
     this.leg(ctx, iso, white, f1, RAIL_LAND);
   }
   /* ─── 门框横梁、斜撑与海侧门腿：位于作业车道之前、船体之后 ─── */
-  front(ctx, iso, c, dark, t) {
+  front(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, t: number) {
     const white = c.craneWhite;
     for (const f of this.frames()) {
       iso.box(ctx, f - 1.8, RAIL_LAND - 1.6, PORTAL_Z, 3.6, RAIL_SEA - RAIL_LAND + 3.2, 5, white, { rim: dark ? undefined : alpha("#ffffff", 0.6) });
@@ -63,10 +98,10 @@ export class Crane {
       this.leg(ctx, iso, white, f, RAIL_SEA);
     }
   }
-  leg(ctx, iso, white, fx, y) {
+  leg(ctx: Ctx, iso: Iso, white: string, fx: number, y: number) {
     iso.box(ctx, fx - 1.7, y - 1.7, 4, 3.4, 3.4, LEG_TOP - 4, white, { side: tone(white, 0.86), end: tone(white, 0.7) });
   }
-  bogie(ctx, iso, c, fx, y, dark, t) {
+  bogie(ctx: Ctx, iso: Iso, c: Palette, fx: number, y: number, dark: boolean, t: number) {
     iso.box(ctx, fx - 8, y - 2, 0, 16, 4, 2.6, c.dark, { top: tone(c.dark, 1.5) });
     iso.box(ctx, fx - 3, y - 2.2, 2.6, 6, 4.4, 1.6, c.crane);
     for (const wx of [-6, -2, 2, 6]) iso.dot(ctx, fx + wx, y + 2.05, 1.1, 0.9, c.tire);
@@ -77,7 +112,7 @@ export class Crane {
   }
 
   /* ─── 上部结构：联系横梁、双主梁 (含俯仰前大梁)、机房、A 字架、拉杆、小车与司机室 ─── */
-  upper(ctx, iso, c, dark, t) {
+  upper(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, t: number) {
     const x = this.x, [f0, f1] = this.frames(), white = c.craneWhite, beam = c.crane;
     for (const y of [RAIL_LAND, RAIL_SEA]) iso.box(ctx, f0 - 2, y - 1.8, LEG_TOP - 4, f1 - f0 + 4, 3.6, 4, white);
     for (const f of this.frames()) iso.box(ctx, f - 1.8, RAIL_LAND - 1.8, LEG_TOP - 4, 3.6, RAIL_SEA - RAIL_LAND + 3.6, 4, white);
@@ -92,11 +127,11 @@ export class Crane {
     }
     /* 主梁桁架斜腹杆与走道栏杆 */
     const L = TIP_Y - HINGE_Y, truss = dark ? alpha("#e3b58e", 0.25) : alpha("#fff3e0", 0.65);
-    const pt = (tt, u) => { const ca = Math.cos(this.angle), sa = Math.sin(this.angle); return [x + 7.05, HINGE_Y + tt * ca - u * sa, G1 + tt * sa + u * ca]; };
-    const zig = [];
+    const pt = (tt: number, u: number): Pt => { const ca = Math.cos(this.angle), sa = Math.sin(this.angle); return [x + 7.05, HINGE_Y + tt * ca - u * sa, G1 + tt * sa + u * ca]; };
+    const zig: Pt[] = [];
     for (let tt = 0, k = 0; tt <= L; tt += 9, k++) zig.push(pt(tt, k % 2 ? -(G1 - G0) + 0.6 : -0.6));
     iso.line(ctx, zig, truss, 0.45);
-    const zigBack = [];
+    const zigBack: Pt[] = [];
     for (let y = BACK_Y, k = 0; y <= HINGE_Y; y += 9, k++) zigBack.push([x + 7.05, y, k % 2 ? G0 + 0.6 : G1 - 0.6]);
     iso.line(ctx, zigBack, truss, 0.45);
     if (this.angle === 0) {
@@ -139,7 +174,7 @@ export class Crane {
   }
 
   /* ─── 吊具：钢丝绳 + 上架 + 伸缩吊具，可带箱 ─── */
-  hoist(ctx, iso, c, dark, colors, container) {
+  hoist(ctx: Ctx, iso: Iso, c: Palette, dark: boolean, colors: ThemeColors, container?: typeof import("./terminal").container) {
     if (this.angle !== 0) return;
     const x = this.x, ty = this.trolleyY, sy = ty + this.sway, z = this.spreaderZ;
     const rope = dark ? alpha("#9fb3b6", 0.6) : alpha("#33454c", 0.75);
@@ -151,24 +186,24 @@ export class Crane {
   hoistOverSea() { return this.trolleyY + this.sway > QUAY_Y; }
 
   /* ─── 白天投影：门腿、门框与大梁的长影落在前沿与水面 ─── */
-  shadow(ctx, iso, c) {
-    const a = alpha(c.shadowSoft, 0.17), s = (x, y, z) => [x + z * SUN.x, y + z * SUN.y];
+  shadow(ctx: Ctx, iso: Iso, c: Palette) {
+    const a = alpha(c.shadowSoft, 0.17), s = (x: number, y: number, z: number): Xy => [x + z * SUN.x, y + z * SUN.y];
     for (const f of this.frames()) for (const y of [RAIL_LAND, RAIL_SEA]) iso.line(ctx, [[f, y], s(f, y, LEG_TOP)], a, 3);
     for (const f of this.frames()) iso.line(ctx, [s(f, RAIL_LAND, PORTAL_Z), s(f, RAIL_SEA, PORTAL_Z)], a, 3.4);
     const [ty, tz] = this.boomPoint(TIP_Y - HINGE_Y);
     iso.poly(ctx, [s(this.x - 7, BACK_Y, G1), s(this.x + 7, BACK_Y, G1), s(this.x + 7, ty, tz), s(this.x - 7, ty, tz)], alpha(c.shadowSoft, 0.12));
   }
   /* ─── 夜间泛光：前沿车道与船舶甲板各一组灯池 ─── */
-  floodGround(ctx, iso) {
+  floodGround(ctx: Ctx, iso: Iso) {
     if (this.mode === "raised") return;
     iso.pool(ctx, this.x, 282, 0, 70, "#ffe6bd", 0.36);
   }
-  floodShip(ctx, iso) {
+  floodShip(ctx: Ctx, iso: Iso) {
     if (this.mode === "working" || this.mode === "active") iso.glow(ctx, this.x, 368, DECK_Z + 34, 54, "#fff0cf", 0.14, 0.55);
     for (const y of [266, 300]) iso.glow(ctx, this.x + 6, y, G0 - 1, 6, "#fff4d6", 0.6, 1);
     if (this.angle === 0) for (const y of [350, 400]) iso.glow(ctx, this.x + 6, y, G0 - 1, 6, "#fff4d6", 0.6, 1);
   }
-  bounds() { return [this.x - 26, BACK_Y, 0, this.x + 26, TIP_Y, APEX_Z + 4]; }
+  bounds(): WorldBox { return [this.x - 26, BACK_Y, 0, this.x + 26, TIP_Y, APEX_Z + 4]; }
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -176,7 +211,20 @@ export class Crane {
  *   动作队列：trolley / hoist / gantry / lock / unlock / wait / release
  * ════════════════════════════════════════════════════════════════════ */
 export class CraneWork {
-  constructor(crane, ship, bays) {
+  crane: Crane;
+  ship: Ship;
+  bays: number[];
+  mode: "unload" | "load";
+  bayStep: number;
+  movesLeft: number;
+  queue: PlanStep[];
+  action: CraneAction | null;
+  /* 当前停靠在岸桥下的车辆 (traffic 写入) */
+  docked: Dockable | null;
+  vel: number;
+  swayV: number;
+  random: number;
+  constructor(crane: Crane, ship: Ship, bays: number[]) {
     this.crane = crane;
     this.ship = ship;
     this.bays = bays;
@@ -200,12 +248,12 @@ export class CraneWork {
   get bay() { return this.bays[this.bayStep]; }
 
 
-  pickRow(bay) {
+  pickRow(bay: number): number {
     const s = this.ship, rows = [...Array(14).keys()];
     if (this.mode === "unload") return rows.filter((j) => s.height(bay, j) > 1).sort((a, b) => s.height(bay, b) - s.height(bay, a) || b - a)[0] ?? -1;
     return rows.filter((j) => s.height(bay, j) < 6).sort((a, b) => s.height(bay, a) - s.height(bay, b) || a - b)[0] ?? -1;
   }
-  deliverToTruck() {
+  deliverToTruck(): PlanStep[] {
     return [
       { k: "trolley", to: CRANE_LANE_Y },
       { k: "wait", need: "empty" },
@@ -215,7 +263,7 @@ export class CraneWork {
       { k: "release" },
     ];
   }
-  plan() {
+  plan(): PlanStep[] {
     if (this.movesLeft <= 0) {
       this.bayStep++;
       this.movesLeft = 4;
@@ -256,13 +304,14 @@ export class CraneWork {
   }
 
   /* 集卡停靠点：货箱中心对准吊具 */
-  dockX(cargoOffset) { return this.crane.x - cargoOffset; }
+  dockX(cargoOffset: number) { return this.crane.x - cargoOffset; }
 
-  update(dt) {
+  update(dt: number) {
     const cr = this.crane;
     if (!this.action) {
       if (!this.queue.length) this.queue.push(...this.plan());
-      const a = this.queue.shift();
+      /* 取出的步骤在下面补上执行期字段后即为 CraneAction */
+      const a = this.queue.shift() as CraneAction | undefined;
       if (!a) return;
       a.t = 0;
       if (a.k === "trolley") { a.from = cr.trolleyY; a.dur = 1.2 + Math.abs(a.to - a.from) / 22; }
@@ -305,7 +354,7 @@ export class CraneWork {
         else if (this.docked) { cr.carry = this.docked.cargo; this.docked.cargo = null; }
       }
       if (a.k === "unlock") {
-        if (a.where === "ship") this.ship.put(a.bay, a.row, cr.carry);
+        if (a.where === "ship") this.ship.put(a.bay, a.row, cr.carry as number);
         else if (this.docked) this.docked.cargo = cr.carry;
         cr.carry = null;
       }
