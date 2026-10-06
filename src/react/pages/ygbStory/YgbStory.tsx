@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 visuals/ygbPort 的 mountYgbPort 港区引擎、./storyFigures 的实时配图与手机展台、hooks/useTypedPain、ThemeProvider 主题
  * [OUTPUT]: 对外提供 YgbStory：封面 (品牌标题/入口/目录) + 滚动驱动的六章杂志式介绍 (实色面板左右交替 + 同一港区世界的镜头飞行)，每章锚点 #network/#dispatch/#assurance/#dashboard/#governance/#download
- * [POS]: react/pages/ygbStory 的编排入口；章节文案与镜头落点集中在 CHAPTERS，STACKED 与 CSS 竖排查询同源，横排镜头随视口宽度等比缩放；吸顶线从 .ys 的 scroll-margin-top 读取 (源自 --header-h)，不硬编码顶栏高度
+ * [POS]: react/pages/ygbStory 的编排入口；章节文案与镜头落点集中在 CHAPTERS，STACKED 与 CSS 竖排查询同源，横排镜头随视口宽度等比缩放；吸顶线从根 scroll-padding-top 读取 (源自 --header-h)，不硬编码顶栏高度
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
@@ -201,10 +201,10 @@ export function YgbStory({ isDark }: { isDark?: boolean }) {
   useEffect(() => {
     const el = sectionRef.current, stage = stageRef.current;
     if (!el || !stage) return;
-    // 舞台吸顶线 = 顶栏高度；经 .ys 的 scroll-margin-top 把 --header-h 解析成像素，JS 不再持有 56
+    // 舞台吸顶线 = 顶栏高度；读根 scroll-padding-top (源自 --header-h) 的像素值，JS 不持有顶栏尺寸
     let pinTop = 0;
     const syncBox = () => {
-      pinTop = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+      pinTop = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
       const r = el.getBoundingClientRect();
       stage.style.setProperty("--ys-left", `${r.left}px`);
       stage.style.setProperty("--ys-width", `${r.width}px`);

@@ -1,0 +1,23 @@
+/**
+ * [INPUT]: 依赖 style.css 的顶栏令牌 --header-h (主行) 与 --header-subbar-h (移动端详情副标题行)
+ * [OUTPUT]: 对外提供顶栏遮挡契约：根滚动的 scroll-padding-top，以及目录锚点 [data-toc-anchor] 的额外 scroll-margin-top
+ * [POS]: ReactAppLayout 的全局规则边界，仅由 React 入口加载；hash 跳转、scrollIntoView 与目录导航都由浏览器按此避让 fixed 顶栏，JS 不再持有顶栏像素
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+
+/* ==================== 根滚动避让 fixed 顶栏主行 ==================== */
+html {
+  scroll-padding-top: var(--header-h);
+}
+
+/* ==================== 目录锚点：落点留 1rem 呼吸，移动端再让出副标题行 ==================== */
+/* 副标题行只在滚过标题后出现，而目录跳转的落点必然处于该状态，所以按"出现后"的遮挡计算 */
+[data-toc-anchor] {
+  scroll-margin-top: 1rem;
+}
+
+@media (max-width: 767.98px) {
+  [data-toc-anchor] {
+    scroll-margin-top: calc(var(--header-subbar-h) + 1rem);
+  }
+}

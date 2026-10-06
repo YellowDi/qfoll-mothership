@@ -9,7 +9,6 @@ import { newsArticles } from "../data/news";
 
 export const brand = "企丰科技";
 export const mobileNavMediaQuery = "(max-width: 767.98px)";
-export const headerOffset = 72;
 export const staticPages = [
   { path: "/", title: brand },
   { path: "/projects", title: "客户案例" },

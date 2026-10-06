@@ -7,6 +7,7 @@ export default {
       // 固定顶栏高度：布局用它给 Outlet 留位，吸顶/锚点类偏移也只认它 (pt-header、top-header、scroll-mt-header)
       spacing: {
         header: "var(--header-h)",
+        "header-subbar": "var(--header-subbar-h)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "sans-serif"],

@@ -1,12 +1,12 @@
 /**
  * [INPUT]: 依赖全局设计令牌 (--color-bg/--color-ink/--color-text-*、顶栏高度 --header-h) 与暗色 .dark 根类
  * [OUTPUT]: 对外提供 ys-* 样式契约：粘性舞台、封面 (品牌标题/入口/目录)、实色杂志面板、六种实时配图与手机展台；视口分档 (大屏/矮屏/竖屏平板/手机/矮手机/横屏手机) 与配图容器查询 (≤560/540/420/400)
- * [POS]: react/pages/ygbStory 的唯一样式边界；舞台吸顶线、舞台高度与锚点偏移只认 --header-h，.ys 的 scroll-margin-top 兼作 JS 读取吸顶线像素值的通道；瑞士网格排版，面板与港口背景严格分区，不用渐变遮罩
+ * [POS]: react/pages/ygbStory 的唯一样式边界；舞台吸顶线与舞台高度只认 --header-h，锚点避让交给根 scroll-padding；瑞士网格排版，面板与港口背景严格分区，不用渐变遮罩
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 
 /* ═══ 舞台与面板 ═══ */
-.ys{position:relative;scroll-margin-top:var(--header-h);--ys-accent:#f97316;--ys-line:rgb(var(--color-ink)/.12);--ys-muted:rgb(var(--color-text-secondary)/var(--color-text-secondary-opacity))}
+.ys{position:relative;--ys-accent:#f97316;--ys-line:rgb(var(--color-ink)/.12);--ys-muted:rgb(var(--color-text-secondary)/var(--color-text-secondary-opacity))}
 /*
  * 舞台定位不用 sticky：iOS Safari 的吸顶位置与主线程同步，画布逐帧重绘时会与滚动错帧抖动。
  * 改为三态：区间前贴故事区顶部 (absolute)，区间内相对视口固定 (fixed，完全由合成线程处理)，区间后贴底部。
@@ -25,8 +25,8 @@
 .ys-panel [data-r]{opacity:0;translate:0 18px;transition:opacity .55s ease,translate .7s cubic-bezier(.2,.7,.2,1)}
 .ys-panel[data-active="true"] [data-r]{opacity:1;translate:0 0;transition-delay:calc(.42s + var(--d,0) * 80ms)}
 
-/* 章节锚点：落在该章滚动区间正中，顶部让出固定顶栏 */
-.ys-anchor{position:absolute;left:0;width:1px;height:1px;scroll-margin-top:var(--header-h);pointer-events:none}
+/* 章节锚点：落在该章滚动区间正中；顶栏避让由根 scroll-padding 负责 */
+.ys-anchor{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
 /* 触屏吸附：iOS 惯性滚动轻划就能越过一整章，强制每次滑动停在下一格；桌面滚轮与触控板不受影响 */
 @media (pointer:coarse){
   html.ys-snap-root{scroll-snap-type:y mandatory}

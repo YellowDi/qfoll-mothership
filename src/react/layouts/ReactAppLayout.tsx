@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React Router、共享导航元数据、主题上下文、触摸保护、顶栏和页脚组件
  * [OUTPUT]: 对外提供 React 迁移层应用布局
- * [POS]: React 应用的公共外壳，承接侧栏、移动端遮罩和主内容，页面副作用由常驻 RouteEffects 承担；Outlet 容器以 pt-header 为 fixed 顶栏留位，页面只写自身留白、不再感知顶栏；横向裁切用 overflow-x-clip，保证页面内 sticky 以 window 为滚动容器
+ * [POS]: React 应用的公共外壳，承接侧栏、移动端遮罩和主内容，页面副作用由常驻 RouteEffects 承担；Outlet 容器以 pt-header 为 fixed 顶栏留位，锚点避让由 ReactAppLayout.css 的 scroll-padding 承担，页面只写自身留白、不再感知顶栏；横向裁切用 overflow-x-clip，保证页面内 sticky 以 window 为滚动容器
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +11,7 @@ import { useMobileScrollGuards } from "../hooks/useMobileScrollGuards";
 import { ReactHeaderBar } from "../components/ReactHeaderBar";
 import { ReactSiteFooter } from "../components/ReactSiteFooter";
 import { useTheme } from "../providers/ThemeProvider";
+import "./ReactAppLayout.css";
 
 export function ReactAppLayout() {
   const location = useLocation();

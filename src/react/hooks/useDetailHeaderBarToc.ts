@@ -1,11 +1,10 @@
 /**
  * [INPUT]: 依赖详情页标题区与内容区引用、内容键及顶栏状态控制器
  * [OUTPUT]: 对外提供 useDetailHeaderBarToc，收集目录并同步滚动标题与活动项
- * [POS]: 详情页 DOM 到 DetailHeaderProvider 的适配器，卸载时清理观察器、RAF 和监听
+ * [POS]: 详情页 DOM 到 DetailHeaderProvider 的适配器，标题打上 data-toc-anchor 交由 ReactAppLayout.css 决定落点，跳转与激活判定都读浏览器锚点偏移；卸载时清理观察器、RAF 和监听
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, type RefObject } from "react";
-import { headerOffset } from "../navigation";
 import { useDetailHeaderController, type TocItem } from "../providers/DetailHeaderProvider";
 
 type Options = {
@@ -34,15 +33,20 @@ export function useDetailHeaderBarToc({ pageTitle, contentKey, titleSectionRef, 
       const text = node.textContent?.trim() || "";
       const id = node.id && !used.has(node.id) ? node.id : headingId(text, index, new Set([...reserved, ...used]));
       node.id = id;
+      node.dataset.tocAnchor = "";
       used.add(id);
       return { id, text, level: Number(node.tagName.slice(1)) };
     });
     let frame: number | null = null;
     let headerHidden = false;
+    // 激活线 = 浏览器锚点落点 (根 scroll-padding + 锚点 scroll-margin)，与跳转同源；+1 吸收亚像素误差
+    const anchorLine = (node: HTMLElement) =>
+      parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + parseFloat(getComputedStyle(node).scrollMarginTop) + 1;
     const sync = () => {
       let active: HTMLElement | undefined;
+      const line = headings[0] ? anchorLine(headings[0]) : 0;
       for (const node of headings) {
-        if (node.getBoundingClientRect().top > headerOffset) break;
+        if (node.getBoundingClientRect().top > line) break;
         active = node;
       }
       if (titleSection) headerHidden = titleSection.getBoundingClientRect().bottom <= 0;
@@ -59,9 +63,8 @@ export function useDetailHeaderBarToc({ pageTitle, contentKey, titleSectionRef, 
     controller.registerNavigation((id) => {
       const target = headings.find((node) => node.id === id);
       if (!target) return;
-      const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
       const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-      window.scrollTo({ top: Math.max(0, top), behavior });
+      target.scrollIntoView({ behavior, block: "start" });
       window.history.replaceState(window.history.state, "", `#${encodeURIComponent(id)}`);
     });
     observer?.observe(titleSection!);

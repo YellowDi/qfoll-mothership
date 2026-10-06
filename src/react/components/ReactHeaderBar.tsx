@@ -1,7 +1,7 @@
 /**
  * [INPUT]: 依赖 React Router、主题 Props、详情标题/目录 Provider 与品牌 Logo
  * [OUTPUT]: 对外提供 ReactHeaderBar，包含品牌链接、导航开关与目录联动
- * [POS]: 应用外壳顶栏，消费详情快照并管理菜单关闭与键盘交互；左右内边距让出 iPhone 横屏灵动岛安全区；主行高度取 h-header (--header-h)，与布局留位、吸顶偏移同源
+ * [POS]: 应用外壳顶栏，消费详情快照并管理菜单关闭与键盘交互；左右内边距让出 iPhone 横屏灵动岛安全区；主行高度取 h-header (--header-h)，移动端详情副标题行固定为 h-header-subbar，两者是锚点避让可静态计算的前提
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { useEffect, useRef } from "react";
@@ -44,7 +44,7 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
   const renderDetailTitle = (mobile: boolean) => (
     <div
       className={`${styles.title} ${detail.show ? styles.visible : ""} ${mobile
-        ? "relative px-3 py-1.5 md:hidden"
+        ? "relative flex h-header-subbar items-center px-3 md:hidden"
         : `absolute hidden max-w-[56vw] -translate-x-1/2 text-sm text-primary md:flex md:items-center ${sidebarCollapsed ? "left-1/2" : "left-[calc(50%+6.25rem)]"}`}`}
       aria-hidden={!detail.show}
       inert={!detail.show}
@@ -63,7 +63,7 @@ export function ReactHeaderBar({ isDark, sidebarCollapsed, onToggleNav, onToggle
           <span className="truncate">{detail.title}</span>
           <i className={`ri-arrow-down-s-line text-base transition-transform duration-200 ${detail.open ? "rotate-180" : ""}`} aria-hidden="true" />
         </button>
-      ) : <div className={`truncate px-2 py-1 text-sm font-medium text-primary ${mobile ? "text-center" : "max-w-full"}`}>{detail.title}</div>}
+      ) : <div className={`truncate px-2 py-1 text-sm font-medium text-primary ${mobile ? "w-full text-center" : "max-w-full"}`}>{detail.title}</div>}
       <div
         id={mobile ? "header-toc-mobile" : "header-toc-desktop"}
         className={`${styles.toc} ${detail.open && hasToc ? styles.visible : ""} ${mobile
