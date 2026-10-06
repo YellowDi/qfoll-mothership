@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 无外部依赖，纯数值计算
- * [OUTPUT]: 对外提供 createShocks(cols, rows, cellAspect)，返回 { add, update, blend }
+ * [OUTPUT]: 对外提供 createShocks(cols, rows, cellAspect)，返回 { add, update, blend }；Shocks 类型由返回值推出
  * [POS]: dotRipple 的点击层：每次点击放出一组向外扩散的不规则冲击环，轮廓、偏斜、浓淡分段均随机；解析计算，与跟随尾迹的速度、尺度互不牵制；index.js 每帧把它 max 合入字符强度
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
@@ -16,7 +16,7 @@ const HARMONICS = [[2, 0.2], [3, 0.15], [5, 0.1], [7, 0.07], [11, 0.04]];
 const TAU = Math.PI * 2;
 
 /* 小型确定性随机源：同一 seed 得到同一形状，减少动画偏好下的定格帧不随刷新漂移 */
-const mulberry32 = (seed) => () => {
+const mulberry32 = (seed: number) => () => {
   seed = (seed + 0x6d2b79f5) | 0;
   let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
   t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
@@ -30,7 +30,7 @@ const mulberry32 = (seed) => () => {
  *   3. 浓淡：环上各弧段强弱不一，有的弧段近乎消失，才像"一团一团"
  * 角度相关量每帧只算 BINS 个并查表，逐格只需一次 atan2。
  * ------------------------------------------------------------------ */
-const makeShape = (random) => ({
+const makeShape = (random: () => number) => ({
   harmonics: HARMONICS.map(([k, amp]) => ({ k, amp: amp * (0.6 + 0.8 * random()), phase: random() * TAU, omega: (random() - 0.5) * 1.2 })),
   skewAngle: random() * Math.PI,
   stretch: 0.72 + random() * 0.66,
@@ -38,19 +38,30 @@ const makeShape = (random) => ({
   densityOmega: (random() - 0.5) * 0.8,
 });
 
-export function createShocks(cols, rows, cellAspect) {
-  let list = [];
+type Shape = ReturnType<typeof makeShape>;
+interface Shock {
+  x: number;
+  y: number;
+  amp: number;
+  t: number;
+  shape: Shape;
+}
+
+export type Shocks = ReturnType<typeof createShocks>;
+
+export function createShocks(cols: number, rows: number, cellAspect: number) {
+  let list: Shock[] = [];
   const radiusScale = new Float32Array(BINS);
   const density = new Float32Array(BINS);
 
-  const add = (x, y, amp, seed = (Math.random() * 4294967296) >>> 0) => {
+  const add = (x: number, y: number, amp: number, seed: number = (Math.random() * 4294967296) >>> 0) => {
     list.push({ x, y, amp, t: 0, shape: makeShape(mulberry32(seed)) });
     if (list.length > MAX_SHOCKS) list.shift();
   };
 
-  const update = (dt) => { list = list.filter((s) => (s.t += dt) < LIFE); };
+  const update = (dt: number) => { list = list.filter((s) => (s.t += dt) < LIFE); };
 
-  const fillTables = (shape, t) => {
+  const fillTables = (shape: Shape, t: number) => {
     for (let b = 0; b < BINS; b++) {
       const theta = (b / BINS) * TAU;
       let wobble = 0;
@@ -60,7 +71,7 @@ export function createShocks(cols, rows, cellAspect) {
     }
   };
 
-  const blend = (out, reach) => {
+  const blend = (out: Float32Array, reach: number) => {
     const norm = 1 - Math.exp(-EXPAND * LIFE);
     for (const s of list) {
       const radius = (reach * (1 - Math.exp(-EXPAND * s.t))) / norm;

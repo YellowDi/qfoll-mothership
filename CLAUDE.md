@@ -10,7 +10,7 @@ public/ - 不经源码导入的静态资源 (项目图片、站点图标、manif
 package.json - 依赖与 dev/build/preview/typecheck 命令，build 串联类型检查、Vite 构建与 404 fallback
 vite.config.js - Vite 8 (Rolldown) + React 插件、图片优化、manualChunks 分包与产物分析 (stats.html)
 postcss.config.js - Tailwind/PostCSS 处理配置
-tsconfig.json - src/react、src/data 与 src/composables 的 TypeScript 编译约束 (仅 noEmit 类型检查)；visuals 引擎保持 JS，经同名 .d.ts 暴露类型
+tsconfig.json - src/react、src/data、src/composables 与 src/visuals/dotRipple 的 TypeScript 编译约束 (仅 noEmit 类型检查)；其余 visuals 引擎仍为 JS，经同名 .d.ts 暴露类型
 tailwind.config.js - 设计令牌和 Tailwind 扩展
 index.html - 应用挂载文档壳
 ygb-hero-prototype.html - 港区引擎 (src/visuals/ygbPort，正式 Hero 同源) 调试台，复用原 React Hero 文案与叠卡，提供仅看背景/暂停/倍速；不接入正式路由

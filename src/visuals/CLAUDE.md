@@ -11,7 +11,7 @@ twinkleDots.d.ts: mountTwinkleDots 与 TwinkleDotsProps 的类型契约。
 twinkleDots.js: 原品牌点阵动画，支持文字排除、随机冷却、指针轨迹与减少动画偏好。
 textExclusions.d.ts: ExclusionRect 与 collectTextExclusions 的类型契约，矩形相对 root 左上角。
 textExclusions.js: 品牌文字行的 DOM 几何合并，提供点阵避让区域。
-dotRipple/: ASCII 点阵尾迹引擎 (5 文件)，鼠标尾迹 + 点击冲击环涟漪驱动 . : + # 字符显影，默认留白；water-prototype.html 调试，正式 /water-env Hero 在视频之上经 ReactDotRippleBg 挂载。
+dotRipple/: ASCII 点阵尾迹引擎 (4 个 TS 文件，visuals 中首个转 TS 的引擎)，鼠标尾迹 + 点击冲击环涟漪驱动 . : + # 字符显影，默认留白；water-prototype.html 调试，正式 /water-env Hero 在视频之上经 ReactDotRippleBg 挂载。
 ygbPort/: 云柜宝港区 Canvas 引擎 (17 文件 + figures 配图子模块)，岸桥逐贝装卸、车道级车流与信号、靠泊船、拖船与直升机；正式 Hero 经 ReactYgbPortBackground 挂载，原型页用于调试。
 
 [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
